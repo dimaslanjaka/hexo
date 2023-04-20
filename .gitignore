@@ -9,3 +9,8 @@ package-lock.json
 coverage/
 .tmp*
 .vscode
+## yarn
+**/.yarn/cache/**
+**/.yarn/unplugged/**
+**/.yarn/*.gz
+**/.yarn/version*
