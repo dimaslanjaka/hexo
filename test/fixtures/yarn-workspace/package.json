@@ -12,16 +12,11 @@
     "name": "Dimas Lanjaka",
     "url": "https://www.webmanajemen.com"
   },
-  "license": "ISC",
-  "scripts": {
-    "local": "yarn add hexo@file:../../../",
-    "git": "yarn add hexo@https://github.com/dimaslanjaka/hexo/tarball/private"
-  },
+  "main": "",
+  "license": "MIT",
   "packageManager": "yarn@3.5.0",
   "workspaces": [
-    "packages/theme"
-  ],
-  "dependencies": {
-    "hexo": "file:../../../"
-  }
+    "packages/theme",
+    "site"
+  ]
 }
