@@ -1,0 +1,5 @@
+title: Hexo Yarn Workspace Test
+description: Hexo Yarn Workspace Test
+
+# set hexo-theme-test from packages/theme/package.json
+theme: test

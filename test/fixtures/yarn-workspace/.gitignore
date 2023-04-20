@@ -1,0 +1,3 @@
+# keep current test lock file
+!yarn.lock
+db.json
