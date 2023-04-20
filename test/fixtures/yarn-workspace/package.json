@@ -17,5 +17,8 @@
   "workspaces": [
     "packages/theme",
     "../../../"
-  ]
+  ],
+  "dependencies": {
+    "hexo": "workspace:^"
+  }
 }
