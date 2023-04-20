@@ -14,7 +14,7 @@
   },
   "license": "ISC",
   "scripts": {
-    "local": "yarn add hexo@../../../",
+    "local": "yarn add hexo@file:../../../",
     "git": "yarn add hexo@https://github.com/dimaslanjaka/hexo/tarball/private"
   },
   "packageManager": "yarn@3.5.0",
@@ -22,6 +22,6 @@
     "packages/theme"
   ],
   "dependencies": {
-    "hexo": "https://github.com/dimaslanjaka/hexo/tarball/private"
+    "hexo": "file:../../../"
   }
 }
