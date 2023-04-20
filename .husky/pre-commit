@@ -2,3 +2,6 @@
 . "$(dirname "$0")/_/husky.sh"
 
 npx lint-staged
+
+# emptying yarn.lock yarn workspace test
+echo \# > test/fixtures/yarn-workspace/yarn.lock
