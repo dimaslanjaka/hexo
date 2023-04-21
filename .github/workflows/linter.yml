@@ -1,18 +1,6 @@
 name: Linter
 
-on:
-  push:
-    branches:
-      - "master"
-    paths:
-      - "lib/**"
-      - "test/**"
-      - ".github/workflows/linter.yml"
-  pull_request:
-    paths:
-      - "lib/**"
-      - "test/**"
-      - ".github/workflows/linter.yml"
+on: [push, pull_request, workflow_dispatch]
 
 permissions:
   contents: read

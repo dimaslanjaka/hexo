@@ -1,22 +1,6 @@
 name: Tester
 
-on:
-  push:
-    branches:
-      - "master"
-    paths:
-      - "lib/**"
-      - "test/**"
-      - "package.json"
-      - "tsconfig.json"
-      - ".github/workflows/tester.yml"
-  pull_request:
-    paths:
-      - "lib/**"
-      - "test/**"
-      - "package.json"
-      - "tsconfig.json"
-      - ".github/workflows/tester.yml"
+on: [push, pull_request, workflow_dispatch]
 
 permissions:
   contents: read
