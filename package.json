@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "packages/hexo/dist/hexo/index.js",
   "devDependencies": {
     "mocha": "^10.2.0"
   },
