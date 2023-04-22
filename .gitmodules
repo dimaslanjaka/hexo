@@ -10,3 +10,7 @@
 	path = packages/hexo-front-matter
 	url = https://github.com/dimaslanjaka/hexo-front-matter
 	branch = monorepo
+[submodule "bin"]
+	path = bin
+	url = https://github.com/dimaslanjaka/bin.git
+	branch = master
