@@ -17,7 +17,7 @@
 [submodule "packages/hexo-asset-link"]
 	path = packages/hexo-asset-link
 	url = https://github.com/dimaslanjaka/hexo-asset-link
-	branch = master
+	branch = monorepo
 [submodule "test/hexo-theme-test"]
 	path = test/hexo-theme-test
 	url = https://github.com/dimaslanjaka/hexo-theme-unit-test
