@@ -1,0 +1,25 @@
+{
+  "name": "site",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "local": "yarn add hexo@file:../../../../",
+    "git": "yarn add hexo@https://github.com/dimaslanjaka/hexo/tarball/private"
+  },
+  "keywords": [
+    "hexo",
+    "hexo-site",
+    "yarn-workspace",
+    "hexo-test"
+  ],
+  "author": {
+    "email": "dimaslanjaka@gmail.com",
+    "name": "Dimas Lanjaka",
+    "url": "https://www.webmanajemen.com"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "hexo": "file:../../../../"
+  }
+}

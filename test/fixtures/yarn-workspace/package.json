@@ -1,0 +1,22 @@
+{
+  "name": "yarn-workspace",
+  "version": "1.0.0",
+  "description": "test site with yarn workspace",
+  "keywords": [
+    "hexo",
+    "hexo-test",
+    "yarn-workspace"
+  ],
+  "author": {
+    "email": "dimaslanjaka@gmail.com",
+    "name": "Dimas Lanjaka",
+    "url": "https://www.webmanajemen.com"
+  },
+  "main": "",
+  "license": "MIT",
+  "packageManager": "yarn@3.5.0",
+  "workspaces": [
+    "packages/theme",
+    "site"
+  ]
+}
