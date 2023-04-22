@@ -26,6 +26,8 @@
   "workspaces": [
     "packages/hexo",
     "packages/warehouse",
-    "packages/hexo-front-matter"
+    "packages/hexo-front-matter",
+    "packages/hexo-asset-link",
+    "test/hexo-theme-test"
   ]
 }
