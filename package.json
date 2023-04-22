@@ -9,7 +9,8 @@
   },
   "scripts": {
     "test": "mocha",
-    "postinstall": "yarn workspace warehouse run build && yarn workspace hexo run build"
+    "build": "yarn workspace warehouse run build && yarn workspace hexo-front-matter run build && yarn workspace hexo run build",
+    "postinstall": "yarn run build"
   },
   "repository": {
     "type": "git",
