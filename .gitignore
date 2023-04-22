@@ -6,5 +6,5 @@ tmp/
 .nyc_output/
 coverage/
 .tmp*
-.vscode
+**/.vscode
 dist/
