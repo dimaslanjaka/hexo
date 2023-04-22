@@ -26,6 +26,6 @@
   "workspaces": [
     "packages/hexo",
     "packages/warehouse",
-    "packages/hexo-post-parser"
+    "packages/hexo-front-matter"
   ]
 }
