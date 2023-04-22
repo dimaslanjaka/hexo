@@ -1,0 +1,8 @@
+[submodule "packages/hexo"]
+	path = packages/hexo
+	url = https://github.com/dimaslanjaka/hexo.git
+	branch = v7-yarn-v3
+[submodule "packages/warehouse"]
+	path = packages/warehouse
+	url = https://github.com/dimaslanjaka/warehouse.git
+	branch = monorepo
