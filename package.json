@@ -1,0 +1,30 @@
+{
+  "name": "hexo-monorepo",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "devDependencies": {
+    "mocha": "^10.2.0"
+  },
+  "scripts": {
+    "test": "mocha",
+    "postinstall": "yarn workspace warehouse run build && yarn workspace hexo run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dimaslanjaka/hexo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dimaslanjaka/hexo/issues"
+  },
+  "homepage": "https://github.com/dimaslanjaka/hexo#readme",
+  "workspaces": [
+    "packages/hexo",
+    "packages/warehouse",
+    "packages/hexo-post-parser"
+  ]
+}
