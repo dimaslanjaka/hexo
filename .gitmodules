@@ -6,3 +6,7 @@
 	path = packages/warehouse
 	url = https://github.com/dimaslanjaka/warehouse.git
 	branch = monorepo
+[submodule "packages/hexo-front-matter"]
+	path = packages/hexo-front-matter
+	url = https://github.com/dimaslanjaka/hexo-front-matter
+	branch = monorepo
