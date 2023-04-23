@@ -9,8 +9,15 @@ hexo.init().then(function () {
 			hexo.post
 				.render("source/_posts/post-asset-link.md")
 				.then(function (rendered) {
-					console.log(rendered);
+					console.log(rendered.content);
 				});
+			hexo.post.render(
+				"source/_posts/post-asset-link.md",
+				{},
+				function (err, rendered) {
+					console.log(rendered.content);
+				}
+			);
 		});
 	});
 });
