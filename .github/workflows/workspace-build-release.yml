@@ -27,7 +27,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install Dependencies
-        run: yarn install
+        run: touch yarn.lock && yarn install
       - name: Build
         run: node -r ts-node/register packer.js
       - name: Set env
