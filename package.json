@@ -5,7 +5,9 @@
   "description": "",
   "main": "packages/hexo/dist/hexo/index.js",
   "devDependencies": {
-    "mocha": "^10.2.0"
+    "depcheck": "^1.4.3",
+    "mocha": "^10.2.0",
+    "npm-check-updates": "^16.10.9"
   },
   "scripts": {
     "test": "mocha",
@@ -28,6 +30,7 @@
     "packages/warehouse",
     "packages/hexo-front-matter",
     "packages/hexo-asset-link",
-    "test/hexo-theme-test"
+    "test/hexo-theme-test",
+    "packages/hexo-theme-landscape"
   ]
 }

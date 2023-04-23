@@ -22,3 +22,6 @@
 	path = test/hexo-theme-test
 	url = https://github.com/dimaslanjaka/hexo-theme-unit-test
 	branch = monorepo
+[submodule "packages/hexo-theme-landscape"]
+	path = packages/hexo-theme-landscape
+	url = https://github.com/hexojs/hexo-theme-landscape
