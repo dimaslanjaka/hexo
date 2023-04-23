@@ -4,7 +4,8 @@ import { Environment } from 'nunjucks';
 import Promise from 'bluebird';
 const rSwigRawFullBlock = /{% *raw *%}/;
 const rCodeTag = /<code[^<>]*>[\s\S]+?<\/code>/g;
-const escapeSwigTag = str => str.replace(/{/g, '&#123;').replace(/}/g, '&#125;');
+const escapeSwigTag = (str: string) =>
+  str.replace(/{/g, '&#123;').replace(/}/g, '&#125;');
 
 interface TagFunction {
   (args: any[], content: string): string;
@@ -37,9 +38,16 @@ class NunjucksTag {
     let argitem = '';
 
     while ((token = parser.nextToken(true))) {
-      if (token.type === lexer.TOKEN_WHITESPACE || token.type === lexer.TOKEN_BLOCK_END) {
+      if (
+        token.type === lexer.TOKEN_WHITESPACE
+        || token.type === lexer.TOKEN_BLOCK_END
+      ) {
         if (argitem !== '') {
-          const argnode = new nodes.Literal(tag.lineno, tag.colno, argitem.trim());
+          const argnode = new nodes.Literal(
+            tag.lineno,
+            tag.colno,
+            argitem.trim()
+          );
           argarray.addChild(argnode);
           argitem = '';
         }
@@ -78,14 +86,14 @@ class NunjucksBlock extends NunjucksTag {
     return new nodes.CallExtension(this, 'run', node, [body]);
   }
 
-  _parseBody(parser, nodes, lexer) {
+  _parseBody(parser, nodes?, lexer?) {
     const body = parser.parseUntilBlocks(`end${this.tags[0]}`);
 
     parser.advanceAfterBlockEnd();
     return body;
   }
 
-  run(context, args, body, callback) {
+  run(context, args, body, callback?) {
     return this._run(context, args, trimBody(body));
   }
 }
@@ -145,18 +153,20 @@ const getContext = (lines, errLine, location, type) => {
 
   message.push(
     // get LINES_OF_CONTEXT lines surrounding `errLine`
-    ...getContextLineNums(1, lines.length, errLine, LINES_OF_CONTEXT)
-      .map(lnNum => {
+    ...getContextLineNums(1, lines.length, errLine, LINES_OF_CONTEXT).map(
+      lnNum => {
         const line = '  ' + lnNum + ' | ' + lines[lnNum - 1];
         if (lnNum === errLine) {
           return cyan(bold(line));
         }
 
         return cyan(line);
-      })
+      }
+    )
   );
-  message.push(cyan(
-    '    =====             Context Dump Ends            ====='));
+  message.push(
+    cyan('    =====             Context Dump Ends            =====')
+  );
 
   return message;
 };
@@ -174,7 +184,10 @@ class NunjucksError extends Error {
  * @return {Error}    New error object with embedded context
  */
 const formatNunjucksError = (err, input, source = '') => {
-  err.message = err.message.replace('(unknown path)', source ? magenta(source) : '');
+  err.message = err.message.replace(
+    '(unknown path)',
+    source ? magenta(source) : ''
+  );
 
   const match = err.message.match(/Line (\d+), Column \d+/);
   if (!match) return err;
@@ -189,14 +202,19 @@ const formatNunjucksError = (err, input, source = '') => {
   e.line = errLine;
   e.location = splited[0];
   e.type = splited[1].trim();
-  e.message = getContext(input.split(/\r?\n/), errLine, e.location, e.type).join('\n');
+  e.message = getContext(
+    input.split(/\r?\n/),
+    errLine,
+    e.location,
+    e.type
+  ).join('\n');
   return e;
 };
 
 type RegisterOptions = {
   async?: boolean;
   ends?: boolean;
-}
+};
 
 class Tag {
   public env: any;
@@ -208,9 +226,9 @@ class Tag {
     });
   }
 
-  register(name: string, fn: TagFunction): void
-  register(name: string, fn: TagFunction, ends: boolean): void
-  register(name: string, fn: TagFunction, options: RegisterOptions): void
+  register(name: string, fn: TagFunction): void;
+  register(name: string, fn: TagFunction, ends: boolean): void;
+  register(name: string, fn: TagFunction, options: RegisterOptions): void;
   register(name: string, fn: TagFunction, options?: RegisterOptions | boolean) {
     if (!name) throw new TypeError('name is required');
     if (typeof fn !== 'function') throw new TypeError('fn must be a function');
@@ -251,7 +269,11 @@ class Tag {
     if (env.hasExtension(name)) env.removeExtension(name);
   }
 
-  render(str, options: { source?: string } = {}, callback) {
+  render(
+    str,
+    options: { source?: string } = {},
+    callback?: (...args: any[]) => any
+  ) {
     if (!callback && typeof options === 'function') {
       callback = options;
       options = {};
@@ -271,9 +293,10 @@ class Tag {
         options,
         cb
       );
-    }).catch(err => {
-      return Promise.reject(formatNunjucksError(err, str, source));
     })
+      .catch(err => {
+        return Promise.reject(formatNunjucksError(err, str, source));
+      })
       .asCallback(callback);
   }
 }

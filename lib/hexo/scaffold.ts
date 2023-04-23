@@ -24,49 +24,59 @@ class Scaffold {
   _listDir() {
     const { scaffoldDir } = this;
 
-    return exists(scaffoldDir).then(exist => {
-      if (!exist) return [];
+    return exists(scaffoldDir)
+      .then(exist => {
+        if (!exist) return [];
 
-      return listDir(scaffoldDir, {
-        ignorePattern: /^_|\/_/
-      });
-    }).map(item => ({
-      name: item.substring(0, item.length - extname(item).length),
-      path: join(scaffoldDir, item)
-    }));
+        return listDir(scaffoldDir, {
+          ignorePattern: /^_|\/_/
+        });
+      })
+      .map(item => ({
+        name: item.substring(0, item.length - extname(item).length),
+        path: join(scaffoldDir, item)
+      }));
   }
 
   _getScaffold(name) {
-    return this._listDir().then(list => list.find(item => item.name === name));
+    return this._listDir().then(list =>
+      list.find(item => item.name === name)
+    );
   }
 
-  get(name, callback) {
-    return this._getScaffold(name).then(item => {
-      if (item) {
-        return readFile(item.path);
-      }
+  get(name, callback?: (...args: any[]) => any) {
+    return this._getScaffold(name)
+      .then(item => {
+        if (item) {
+          return readFile(item.path);
+        }
 
-      return this.defaults[name];
-    }).asCallback(callback);
+        return this.defaults[name];
+      })
+      .asCallback(callback);
   }
 
-  set(name, content, callback) {
+  set(name, content, callback?: (...args: any[]) => any) {
     const { scaffoldDir } = this;
 
-    return this._getScaffold(name).then(item => {
-      let path = item ? item.path : join(scaffoldDir, name);
-      if (!extname(path)) path += '.md';
+    return this._getScaffold(name)
+      .then(item => {
+        let path = item ? item.path : join(scaffoldDir, name);
+        if (!extname(path)) path += '.md';
 
-      return writeFile(path, content);
-    }).asCallback(callback);
+        return writeFile(path, content);
+      })
+      .asCallback(callback);
   }
 
-  remove(name, callback) {
-    return this._getScaffold(name).then(item => {
-      if (!item) return;
+  remove(name, callback?: (...args: any[]) => any) {
+    return this._getScaffold(name)
+      .then(item => {
+        if (!item) return;
 
-      return unlink(item.path);
-    }).asCallback(callback);
+        return unlink(item.path);
+      })
+      .asCallback(callback);
   }
 }
 
