@@ -2,7 +2,7 @@ import { extname } from 'path';
 import Promise from 'bluebird';
 import { readFile, readFileSync } from 'hexo-fs';
 
-const getExtname = str => {
+const getExtname = (str: string) => {
   if (typeof str !== 'string') return '';
 
   const ext = extname(str);
@@ -10,7 +10,12 @@ const getExtname = str => {
 };
 
 const toString = (result, options) => {
-  if (!Object.prototype.hasOwnProperty.call(options, 'toString') || typeof result === 'string') return result;
+  if (
+    !Object.prototype.hasOwnProperty.call(options, 'toString')
+    || typeof result === 'string'
+  ) {
+    return result;
+  }
 
   if (typeof options.toString === 'function') {
     return options.toString(result);
@@ -52,7 +57,11 @@ class Render {
     return this.getRenderer(ext, true);
   }
 
-  render(data, options, callback) {
+  render(
+    data: Record<string, any>,
+    options?,
+    callback?: (...args: any[]) => any
+  ) {
     if (!callback && typeof options === 'function') {
       callback = options;
       options = {};
@@ -61,7 +70,7 @@ class Render {
     const ctx = this.context;
     let ext = '';
 
-    let promise;
+    let promise: Promise<string | Buffer>;
 
     if (!data) return Promise.reject(new TypeError('No input file or string!'));
 
@@ -73,27 +82,31 @@ class Render {
       promise = readFile(data.path);
     }
 
-    return promise.then(text => {
-      data.text = text;
-      ext = data.engine || getExtname(data.path);
-      if (!ext || !this.isRenderable(ext)) return text;
+    return promise
+      .then(text => {
+        data.text = text;
+        ext = data.engine || getExtname(data.path);
+        if (!ext || !this.isRenderable(ext)) return text;
 
-      const renderer = this.getRenderer(ext);
-      return Reflect.apply(renderer, ctx, [data, options]);
-    }).then(result => {
-      result = toString(result, data);
-      if (data.onRenderEnd) {
-        return data.onRenderEnd(result);
-      }
+        const renderer = this.getRenderer(ext);
+        return Reflect.apply(renderer, ctx, [data, options]);
+      })
+      .then(result => {
+        result = toString(result, data);
+        if (data.onRenderEnd) {
+          return data.onRenderEnd(result);
+        }
 
-      return result;
-    }).then(result => {
-      const output = this.getOutput(ext) || ext;
-      return ctx.execFilter(`after_render:${output}`, result, {
-        context: ctx,
-        args: [data]
-      });
-    }).asCallback(callback);
+        return result;
+      })
+      .then(result => {
+        const output = this.getOutput(ext) || ext;
+        return ctx.execFilter(`after_render:${output}`, result, {
+          context: ctx,
+          args: [data]
+        });
+      })
+      .asCallback(callback);
   }
 
   renderSync(data, options = {}) {

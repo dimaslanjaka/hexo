@@ -232,7 +232,7 @@ interface Data {
 }
 
 class Post {
-  public context: any;
+  public context: import('../hexo');
   public config: any;
   public tag: any;
   public separator: any;
