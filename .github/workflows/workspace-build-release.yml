@@ -63,7 +63,7 @@ jobs:
           fi
           echo "architecture=$(getconf LONG_BIT)" >> $GITHUB_ENV
       - name: Push
-        if: matrix.node-version == '18.x' && runner.os == 'Linux' && steps.build.outcome === 'success'
+        if: matrix.node-version == '18.x' && runner.os == 'Linux' && steps.build.outcome == 'success'
         run: |
           git config --global user.name 'dimaslanjaka'
           git config --global user.email 'dimaslanjaka@gmail.com'
