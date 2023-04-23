@@ -14,7 +14,7 @@ jobs:
         node-version: ["14.x", "16.x", "18.x"]
       fail-fast: false
     env:
-      NODE_OPTIONS: '--max_old_space_size=8192' #8192 4096 --expose-gc
+      NODE_OPTIONS: "--max_old_space_size=8192" #8192 4096 --expose-gc
       YARN_ENABLE_IMMUTABLE_INSTALLS: false
       ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -62,8 +62,14 @@ jobs:
             echo "cache-yarn=$(yarn cache dir)" >> $GITHUB_OUTPUT
           fi
           echo "architecture=$(getconf LONG_BIT)" >> $GITHUB_ENV
-      - name: Push
+      - name: Get changed files in the docs folder
+        id: releases-changed
+        uses: tj-actions/changed-files@v35
         if: matrix.node-version == '18.x' && runner.os == 'Linux' && steps.build.outcome == 'success'
+        with:
+          files: releases/*.tgz # Alternatively using: `docs/**` or `docs`
+      - name: Push
+        if: matrix.node-version == '18.x' && runner.os == 'Linux' && steps.build.outcome == 'success' && steps.releases-changed.outputs.any_changed == 'true'
         run: |
           git config --global user.name 'dimaslanjaka'
           git config --global user.email 'dimaslanjaka@gmail.com'
