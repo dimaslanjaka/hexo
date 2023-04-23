@@ -1,6 +1,6 @@
 const croSpawn = require("cross-spawn");
-const { renameSync } = require("fs");
-const { join } = require("path");
+const { renameSync, existsSync, rmSync, mkdirSync } = require("fs");
+const { join, dirname } = require("path");
 
 /**
  * @type {Promise<{location:string,name:string}[]>}
@@ -39,12 +39,18 @@ Promise.all([parseWorkspaces, buildAllPackage, packAllPackage]).then(function (
 	workspaces.forEach((workspace) => {
 		const tarballName = workspace.name + ".tgz";
 		const tarballPath = join(workspace.location, tarballName);
+		if (!existsSync(tarballPath)) {
+			throw new Error("fail packing " + tarballPath + " not found");
+		}
 		croSpawn.sync("yarn", [
 			"workspace",
 			workspace.name,
 			"exec",
 			`"mv package.tgz ${tarballName}"`,
 		]);
-		renameSync(tarballPath, join(__dirname, "releases", tarballName));
+		const dest = join(__dirname, "releases", tarballName);
+		if (!existsSync(dirname(dest))) mkdirSync(dirname(dest));
+		if (existsSync(dest)) rmSync(dest);
+		renameSync(tarballPath, dest);
 	});
 });
