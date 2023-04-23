@@ -54,4 +54,4 @@ function findYarnRootWorkspace(ctx: { base_dir: string }): string | null {
   return null;
 }
 
-module.exports = findYarnRootWorkspace;
+export = findYarnRootWorkspace;
