@@ -14,7 +14,7 @@
   },
   "scripts": {
     "test": "mocha",
-    "build": "yarn workspace warehouse run build && yarn workspace hexo-front-matter run build && yarn workspace hexo run build && yarn workspace hexo-asset-link run build",
+    "build": "yarn workspaces foreach run build",
     "postinstall": "yarn run build",
     "serve": "yarn workspace hexo-site exec \"hexo server\""
   },
@@ -30,9 +30,9 @@
   },
   "homepage": "https://github.com/dimaslanjaka/hexo#readme",
   "workspaces": [
-    "packages/hexo",
     "packages/warehouse",
     "packages/hexo-front-matter",
+    "packages/hexo",
     "packages/hexo-asset-link",
     "test/hexo-theme-test",
     "packages/hexo-theme-landscape"
