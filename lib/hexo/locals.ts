@@ -3,13 +3,15 @@ import { Cache } from 'hexo-util';
 class Locals {
   public cache: any;
   public getters: any;
+  public page: any;
+  public path: string;
 
   constructor() {
     this.cache = new Cache();
     this.getters = {};
   }
 
-  get(name) {
+  get(name: string) {
     if (typeof name !== 'string') throw new TypeError('name must be a string!');
 
     return this.cache.apply(name, () => {
@@ -20,7 +22,7 @@ class Locals {
     });
   }
 
-  set(name, value) {
+  set(name: string, value: any) {
     if (typeof name !== 'string') throw new TypeError('name must be a string!');
     if (value == null) throw new TypeError('value is required!');
 
@@ -32,7 +34,7 @@ class Locals {
     return this;
   }
 
-  remove(name) {
+  remove(name: string) {
     if (typeof name !== 'string') throw new TypeError('name must be a string!');
 
     this.getters[name] = null;
@@ -41,6 +43,10 @@ class Locals {
     return this;
   }
 
+  /**
+   * invalidate cache
+   * @returns
+   */
   invalidate() {
     this.cache.flush();
 
