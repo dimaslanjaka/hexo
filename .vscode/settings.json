@@ -1,0 +1,17 @@
+{
+  "editor.formatOnSave": false,
+  "editor.formatOnPaste": false,
+  "editor.formatOnType": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true,
+    "source.organizeImports": false
+  },
+  "npm.packageManager": "yarn",
+  "eslint.packageManager": "yarn",
+  "code-runner.respectShebang": true,
+  "code-runner.executorMapByGlob": {
+    "*.test.{ts,js}": "npx c8 --reporter=lcovonly mocha --timeout=7000000"
+  },
+  "code-runner.clearPreviousOutput": true,
+  "code-runner.runInTerminal": true
+}
