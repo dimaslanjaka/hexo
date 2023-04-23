@@ -1,6 +1,6 @@
 import * as models from '../models';
 
-export = ctx => {
+const RegisterModel = (ctx: import('../hexo')) => {
   const db = ctx.database;
 
   const keys = Object.keys(models);
@@ -10,3 +10,5 @@ export = ctx => {
     db.model(key, models[key](ctx));
   }
 };
+
+export = RegisterModel;
