@@ -274,9 +274,9 @@ interface Result {
 interface Data {
   [key: string]: any;
   engine?: string;
-  content?: string;
+  content?: string | null;
   disableNunjucks?: boolean;
-  markdown?: object;
+  markdown?: Record<string, any>;
   source?: string;
 }
 
@@ -456,7 +456,38 @@ class Post {
       .asCallback(callback);
   }
 
-  render(source: string, data: Data = {}, callback?: (...args: any[]) => any) {
+  /**
+   * renderer
+   * @param source source path file
+   * @param data
+   * @param callback
+   * @returns
+   * @see {@link https://hexo.io/api/rendering.html}
+   * @example
+   * // promise
+   * hexo.post.render("source/_posts/post-asset-link.md").then(function (rendered) {
+   *    console.log(rendered.content);
+   * });
+   * // callback
+   * hexo.post.render("source/_posts/post-asset-link.md", {}, function (err, rendered) {
+   *    console.log(rendered.content);
+   * });
+   */
+  render(
+    source: string,
+    data: Data = {},
+    callback?: (
+      err: any,
+      rendered: {
+        [key: string]: any;
+        content: string;
+        more: string;
+        permalink: string;
+        excerpt: string;
+      },
+      ...args: any[]
+    ) => any | Promise<any>
+  ) {
     const ctx = this.context;
     const { config } = ctx;
     const { tag } = ctx.extend;
