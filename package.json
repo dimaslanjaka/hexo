@@ -7,8 +7,8 @@
   "scripts": {
     "prepare": "husky install",
     "prepublish ": "npm run clean && npm run build",
-    "build": "tsc -b",
-    "clean": "tsc -b --clean",
+    "build": "tsc --build tsconfig.build.json",
+    "clean": "tsc --build tsconfig.build.json --clean",
     "eslint": "eslint lib test",
     "pretest": "npm run clean && npm run build",
     "test": "mocha --timeout=700000 test/index.js --require ts-node/register",
