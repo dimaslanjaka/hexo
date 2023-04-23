@@ -8,6 +8,14 @@
   "rules": {
     "@typescript-eslint/no-explicit-any": 0,
     "@typescript-eslint/no-var-requires": 0,
-    "node/no-missing-require": 0
+    "node/no-missing-require": 0,
+    "@typescript-eslint/no-this-alias": [
+      // rules for this binding
+      "error",
+      {
+        "allowDestructuring": false, // Disallow `const { props, state } = this`; true by default
+        "allowedNames": ["self", "hexo"] // Allow `const self = this`; `[]` by default
+      }
+    ]
   }
 }
