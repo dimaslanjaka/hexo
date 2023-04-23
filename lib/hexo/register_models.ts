@@ -1,7 +1,7 @@
 import * as models from '../models';
 import type Hexo from './index';
 
-export = (ctx: Hexo): void => {
+const RegisterModel = (ctx: import('../hexo')) => {
   const db = ctx.database;
 
   const keys = Object.keys(models);
@@ -11,3 +11,5 @@ export = (ctx: Hexo): void => {
     db.model(key, models[key](ctx));
   }
 };
+
+export = RegisterModel;
