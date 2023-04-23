@@ -6,6 +6,7 @@ import { exists, readdir } from 'hexo-fs';
 import { magenta } from 'picocolors';
 import { deepMerge } from 'hexo-util';
 import validateConfig from './validate_config';
+import findYarnRootWorkspace from './findYarnRootWorkspace';
 
 export = async ctx => {
   if (!ctx.env.init) return;
@@ -50,14 +51,24 @@ export = async ctx => {
 
   const themeDirFromThemes = join(baseDir, 'themes', theme) + sep; // base_dir/themes/[config.theme]/
   const themeDirFromNodeModules = join(ctx.plugin_dir, 'hexo-theme-' + theme) + sep; // base_dir/node_modules/hexo-theme-[config.theme]/
+  const yarnRootWorkspace = findYarnRootWorkspace(ctx);
+  const themeDirFromYarnNodeModules
+    = yarnRootWorkspace !== null && join(yarnRootWorkspace, 'node_modules/hexo-theme-' + theme);
+
 
   // themeDirFromThemes has higher priority than themeDirFromNodeModules
   let ignored = [];
   if (await exists(themeDirFromThemes)) {
+    // theme applied from theme dir
     ctx.theme_dir = themeDirFromThemes;
     ignored = ['**/themes/*/node_modules/**', '**/themes/*/.git/**'];
   } else if (await exists(themeDirFromNodeModules)) {
+    // theme applied from project dir
     ctx.theme_dir = themeDirFromNodeModules;
+    ignored = ['**/node_modules/hexo-theme-*/node_modules/**', '**/node_modules/hexo-theme-*/.git/**'];
+  } else if (yarnRootWorkspace !== null && await exists(themeDirFromYarnNodeModules)) {
+    // theme applied from yarn workspace root directory
+    ctx.theme_dir = themeDirFromYarnNodeModules;
     ignored = ['**/node_modules/hexo-theme-*/node_modules/**', '**/node_modules/hexo-theme-*/.git/**'];
   }
   ctx.theme_script_dir = join(ctx.theme_dir, 'scripts') + sep;
