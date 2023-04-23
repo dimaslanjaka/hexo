@@ -1,3 +1,4 @@
+import './global.d.ts';
 import Promise from 'bluebird';
 import { sep, join, dirname } from 'path';
 import tildify from 'tildify';
@@ -7,7 +8,7 @@ import { EventEmitter } from 'events';
 import { readFile } from 'hexo-fs';
 import Module from 'module';
 import { runInThisContext } from 'vm';
-const {version} = require('../../package.json');
+const { version } = require('../../package.json');
 import logger from 'hexo-log';
 
 import {
@@ -41,11 +42,15 @@ let resolveSync; // = require('resolve');
 const libDir = dirname(__dirname);
 const dbVersion = 1;
 
-const stopWatcher = box => { if (box.isWatching()) box.unwatch(); };
+const stopWatcher = box => {
+  if (box.isWatching()) box.unwatch();
+};
 
 const routeCache = new WeakMap();
 
-const castArray = obj => { return Array.isArray(obj) ? obj : [obj]; };
+const castArray = obj => {
+  return Array.isArray(obj) ? obj : [obj];
+};
 
 const mergeCtxThemeConfig = ctx => {
   // Merge hexo.config.theme_config into hexo.theme.config before post rendering & generating
@@ -65,7 +70,9 @@ const createLoadThemeRoute = function(generatorResult, locals, ctx) {
   // always use cache in fragment_cache
   locals.cache = true;
   return () => {
-    if (useCache && routeCache.has(generatorResult)) return routeCache.get(generatorResult);
+    if (useCache && routeCache.has(generatorResult)) {
+      return routeCache.get(generatorResult);
+    }
 
     for (let i = 0; i < layoutLength; i++) {
       const name = layout[i];
@@ -73,17 +80,21 @@ const createLoadThemeRoute = function(generatorResult, locals, ctx) {
 
       if (view) {
         log.debug(`Rendering HTML ${name}: ${magenta(path)}`);
-        return view.render(locals)
+        return view
+          .render(locals)
           .then(result => ctx.extend.injector.exec(result, locals))
-          .then(result => ctx.execFilter('_after_html_render', result, {
-            context: ctx,
-            args: [locals]
-          }))
+          .then(result =>
+            ctx.execFilter('_after_html_render', result, {
+              context: ctx,
+              args: [locals]
+            })
+          )
           .tap(result => {
             if (useCache) {
               routeCache.set(generatorResult, result);
             }
-          }).tapCatch(err => {
+          })
+          .tapCatch(err => {
             log.error({ err }, `Render HTML failed: ${magenta(path)}`);
           });
       }
@@ -118,17 +129,17 @@ interface Query {
 }
 
 interface Extend {
-  console: Console,
-  deployer: Deployer,
-  filter: Filter,
-  generator: Generator,
-  helper: Helper,
-  highlight: Highlight,
-  injector: Injector,
-  migrator: Migrator,
-  processor: Processor,
-  renderer: Renderer,
-  tag: Tag
+  console: Console;
+  deployer: Deployer;
+  filter: Filter;
+  generator: Generator;
+  helper: Helper;
+  highlight: Highlight;
+  injector: Injector;
+  migrator: Migrator;
+  processor: Processor;
+  renderer: Renderer;
+  tag: Tag;
 }
 
 type DefaultConfigType = typeof defaultConfig;
@@ -139,9 +150,13 @@ interface Config extends DefaultConfigType {
 // Node.js internal APIs
 declare module 'module' {
   function _nodeModulePaths(path: string): string[];
-  function _resolveFilename(request: string, parent: Module, isMain?: any, options?: any): string;
-  const _extensions: NodeJS.RequireExtensions,
-    _cache: any;
+  function _resolveFilename(
+    request: string,
+    parent: Module,
+    isMain?: any,
+    options?: any
+  ): string;
+  const _extensions: NodeJS.RequireExtensions, _cache: any;
 }
 
 class Hexo extends EventEmitter {
@@ -254,7 +269,8 @@ class Hexo extends EventEmitter {
 
     const mcp = multiConfigPath(this);
 
-    this.config_path = args.config ? mcp(base, args.config, args.output)
+    this.config_path = args.config
+      ? mcp(base, args.config, args.output)
       : join(base, '_config.yml');
 
     registerModels(this);
@@ -324,15 +340,20 @@ class Hexo extends EventEmitter {
     require('../plugins/tag').default(this);
 
     // Load config
-    return Promise.each([
-      'update_package', // Update package.json
-      'load_config', // Load config
-      'load_theme_config', // Load alternate theme config
-      'load_plugins' // Load external plugins & scripts
-    ], name => require(`./${name}`)(this)).then(() => this.execFilter('after_init', null, { context: this })).then(() => {
-      // Ready to go!
-      this.emit('ready');
-    });
+    return Promise.each(
+      [
+        'update_package', // Update package.json
+        'load_config', // Load config
+        'load_theme_config', // Load alternate theme config
+        'load_plugins' // Load external plugins & scripts
+      ],
+      name => require(`./${name}`)(this)
+    )
+      .then(() => this.execFilter('after_init', null, { context: this }))
+      .then(() => {
+        // Ready to go!
+        this.emit('ready');
+      });
   }
 
   call(name, args, callback) {
@@ -345,7 +366,9 @@ class Hexo extends EventEmitter {
 
     // eslint-disable-next-line no-extra-parens
     if (c) return (Reflect.apply(c, this, [args]) as any).asCallback(callback);
-    return Promise.reject(new Error(`Console \`${name}\` has not been registered yet!`));
+    return Promise.reject(
+      new Error(`Console \`${name}\` has not been registered yet!`)
+    );
   }
 
   model(name, schema) {
@@ -371,28 +394,30 @@ class Hexo extends EventEmitter {
   }
 
   loadPlugin(path: string, callback: (...args: any[]) => any) {
-    return readFile(path).then(script => {
-      // Based on: https://github.com/joyent/node/blob/v0.10.33/src/node.js#L516
-      const module = new Module(path);
-      module.filename = path;
-      module.paths = Module._nodeModulePaths(path);
+    return readFile(path)
+      .then(script => {
+        // Based on: https://github.com/joyent/node/blob/v0.10.33/src/node.js#L516
+        const module = new Module(path);
+        module.filename = path;
+        module.paths = Module._nodeModulePaths(path);
 
-      function req(path) {
-        return module.require(path);
-      }
+        function req(path) {
+          return module.require(path);
+        }
 
-      req.resolve = request => Module._resolveFilename(request, module);
+        req.resolve = request => Module._resolveFilename(request, module);
 
-      req.main = require.main;
-      req.extensions = Module._extensions;
-      req.cache = Module._cache;
+        req.main = require.main;
+        req.extensions = Module._extensions;
+        req.cache = Module._cache;
 
-      script = `(function(exports, require, module, __filename, __dirname, hexo){${script}\n});`;
+        script = `(function(exports, require, module, __filename, __dirname, hexo){${script}\n});`;
 
-      const fn = runInThisContext(script, path);
+        const fn = runInThisContext(script, path);
 
-      return fn(module.exports, req, module, path, dirname(path), this);
-    }).asCallback(callback);
+        return fn(module.exports, req, module, path, dirname(path), this);
+      })
+      .asCallback(callback);
   }
 
   _showDrafts() {
@@ -401,24 +426,27 @@ class Hexo extends EventEmitter {
   }
 
   load(callback) {
-    return loadDatabase(this).then(() => {
-      this.log.info('Start processing');
+    return loadDatabase(this)
+      .then(() => {
+        this.log.info('Start processing');
 
-      return Promise.all([
-        this.source.process(),
-        this.theme.process()
-      ]);
-    }).then(() => {
-      mergeCtxThemeConfig(this);
-      return this._generate({ cache: false });
-    }).asCallback(callback);
+        return Promise.all([this.source.process(), this.theme.process()]);
+      })
+      .then(() => {
+        mergeCtxThemeConfig(this);
+        return this._generate({ cache: false });
+      })
+      .asCallback(callback);
   }
 
   watch(callback) {
     let useCache = false;
-    const { cache } = Object.assign({
-      cache: false
-    }, this.config.server);
+    const { cache } = Object.assign(
+      {
+        cache: false
+      },
+      this.config.server
+    );
     const { alias } = this.extend.console;
 
     if (alias[this.env.cmd] === 'server' && cache) {
@@ -427,24 +455,24 @@ class Hexo extends EventEmitter {
     }
     this._watchBox = debounce(() => this._generate({ cache: useCache }), 100);
 
-    return loadDatabase(this).then(() => {
-      this.log.info('Start processing');
+    return loadDatabase(this)
+      .then(() => {
+        this.log.info('Start processing');
 
-      return Promise.all([
-        this.source.watch(),
-        this.theme.watch()
-      ]);
-    }).then(() => {
-      mergeCtxThemeConfig(this);
-
-      this.source.on('processAfter', this._watchBox);
-      this.theme.on('processAfter', () => {
-        this._watchBox();
+        return Promise.all([this.source.watch(), this.theme.watch()]);
+      })
+      .then(() => {
         mergeCtxThemeConfig(this);
-      });
 
-      return this._generate({ cache: useCache });
-    }).asCallback(callback);
+        this.source.on('processAfter', this._watchBox);
+        this.theme.on('processAfter', () => {
+          this._watchBox();
+          mergeCtxThemeConfig(this);
+        });
+
+        return this._generate({ cache: useCache });
+      })
+      .asCallback(callback);
   }
 
   unwatch() {
@@ -478,7 +506,7 @@ class Hexo extends EventEmitter {
       site: object;
       cache?: boolean;
 
-      constructor(path, locals) {
+      constructor(path: string, locals: import('.')['locals']) {
         this.page = { ...locals };
         if (this.page.path == null) this.page.path = path;
         this.path = path;
@@ -512,37 +540,58 @@ class Hexo extends EventEmitter {
     }, []);
   }
 
-  _routerReflesh(runningGenerators, useCache) {
+  _routerReflesh(runningGenerators: Promise<any[]>, useCache: boolean) {
     const { route } = this;
     const routeList = route.list();
     const Locals = this._generateLocals();
     Locals.prototype.cache = useCache;
 
-    return runningGenerators.map(generatorResult => {
-      if (typeof generatorResult !== 'object' || generatorResult.path == null) return undefined;
+    return runningGenerators
+      .map(
+        (generatorResult: {
+          [key: string]: any;
+          path?: any;
+          data?: any;
+          layout?: any;
+        }) => {
+          if (
+            typeof generatorResult !== 'object'
+            || generatorResult.path == null
+          ) {
+            return undefined;
+          }
 
-      // add Route
-      const path = route.format(generatorResult.path);
-      const { data, layout } = generatorResult;
+          // add Route
+          const path = route.format(generatorResult.path);
+          const { data, layout } = generatorResult;
 
-      if (!layout) {
-        route.set(path, data);
-        return path;
-      }
+          if (!layout) {
+            route.set(path, data);
+            return path;
+          }
 
-      return this.execFilter('template_locals', new Locals(path, data), { context: this })
-        .then(locals => { route.set(path, createLoadThemeRoute(generatorResult, locals, this)); })
-        .thenReturn(path);
-    }).then(newRouteList => {
-      // Remove old routes
-      for (let i = 0, len = routeList.length; i < len; i++) {
-        const item = routeList[i];
-
-        if (!newRouteList.includes(item)) {
-          route.remove(item);
+          return this.execFilter('template_locals', new Locals(path, data), {
+            context: this
+          })
+            .then(locals => {
+              route.set(
+                path,
+                createLoadThemeRoute(generatorResult, locals, this)
+              );
+            })
+            .thenReturn(path);
         }
-      }
-    });
+      )
+      .then((newRouteList: string | string[]) => {
+        // Remove old routes
+        for (let i = 0, len = routeList.length; i < len; i++) {
+          const item = routeList[i];
+
+          if (!newRouteList.includes(item)) {
+            route.remove(item);
+          }
+        }
+      });
   }
 
   _generate(options: { cache?: boolean } = {}) {
@@ -555,18 +604,22 @@ class Hexo extends EventEmitter {
     this.emit('generateBefore');
 
     // Run before_generate filters
-    return this.execFilter('before_generate', this.locals.get('data'), { context: this })
-      .then(() => this._routerReflesh(this._runGenerators(), useCache)).then(() => {
+    return this.execFilter('before_generate', this.locals.get('data'), {
+      context: this
+    })
+      .then(() => this._routerReflesh(this._runGenerators(), useCache))
+      .then(() => {
         this.emit('generateAfter');
 
         // Run after_generate filters
         return this.execFilter('after_generate', null, { context: this });
-      }).finally(() => {
+      })
+      .finally(() => {
         this._isGenerating = false;
       });
   }
 
-  exit(err) {
+  exit(err: any) {
     if (err) {
       this.log.fatal(
         { err },
@@ -580,11 +633,11 @@ class Hexo extends EventEmitter {
     });
   }
 
-  execFilter(type, data, options) {
+  execFilter(type: string, data: any, options?: Record<string, any>) {
     return this.extend.filter.exec(type, data, options);
   }
 
-  execFilterSync(type, data, options) {
+  execFilterSync(type: string, data: any, options?: Record<string, any>) {
     return this.extend.filter.execSync(type, data, options);
   }
 }
