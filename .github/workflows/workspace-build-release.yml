@@ -31,13 +31,16 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Enable corepack
+        shell: bash
         run: |
           corepack enable
           yarn set version stable
       - name: Install Dependencies
         run: touch yarn.lock && yarn install
+        shell: bash
       - name: Build
         run: node -r ts-node/register packer.js
+        shell: bash
       - name: Set env
         id: set-env
         shell: bash
