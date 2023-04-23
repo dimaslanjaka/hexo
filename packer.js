@@ -66,5 +66,5 @@ Promise.all([parseWorkspaces, buildAllPackage, packAllPackage]).then(function (
 		}
 	};
 
-	run();
+	_run();
 });
