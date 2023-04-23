@@ -355,6 +355,14 @@ class Hexo extends EventEmitter {
       });
   }
 
+  /**
+   * CLI caller
+   * @see {@link https://hexo.io/api/#Execute-Commands}
+   * @param name
+   * @param args
+   * @param callback
+   * @returns
+   */
   call(
     name: string,
     args: {
