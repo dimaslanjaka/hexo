@@ -2,17 +2,9 @@
   "name": "hexo-monorepo",
   "private": true,
   "version": "1.0.0",
-  "description": "",
+  "description": "Hexo Monorepo",
   "main": "packages/hexo/dist/hexo/index.js",
-  "devDependencies": {
-    "@types/node": "^18.16.0",
-    "depcheck": "^1.4.3",
-    "mocha": "^10.2.0",
-    "npm-check-updates": "^16.10.9",
-    "ts-node": "^10.9.1",
-    "tslib": "^2.5.0",
-    "typescript": "^5.0.4"
-  },
+  "types": "packages/hexo/dist/hexo/index.d.ts",
   "scripts": {
     "test": "mocha",
     "build": "yarn workspaces foreach run build",
@@ -23,13 +15,29 @@
     "type": "git",
     "url": "git+https://github.com/dimaslanjaka/hexo.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "hexo",
+    "monorepo"
+  ],
+  "author": {
+    "email": "dimaslanjaka@gmail.com",
+    "name": "Dimas Lanjaka",
+    "url": "https://www.webmanajemen.com"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/dimaslanjaka/hexo/issues"
   },
   "homepage": "https://github.com/dimaslanjaka/hexo#readme",
+  "devDependencies": {
+    "@types/node": "^18.16.0",
+    "depcheck": "^1.4.3",
+    "mocha": "^10.2.0",
+    "npm-check-updates": "^16.10.9",
+    "ts-node": "^10.9.1",
+    "tslib": "^2.5.0",
+    "typescript": "^5.0.4"
+  },
   "workspaces": [
     "packages/warehouse",
     "packages/hexo-front-matter",
