@@ -4,5 +4,13 @@ const Hexo = require("../packages/hexo/dist/hexo");
 
 const hexo = new Hexo(process.cwd(), { debug: true });
 hexo.init().then(function () {
-	hexo.post.render("source/_posts/post-asset-link.md");
+	hexo.load().then(function () {
+		hexo.call("clean", {}, function () {
+			hexo.post
+				.render("source/_posts/post-asset-link.md")
+				.then(function (rendered) {
+					console.log(rendered);
+				});
+		});
+	});
 });
