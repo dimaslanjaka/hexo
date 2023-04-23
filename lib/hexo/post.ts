@@ -517,6 +517,8 @@ class Post {
     return promise
       .then((content: string) => {
         data.content = content;
+        // add more property for type extend_filter_before_post_render_data
+        // see more lib/plugins/filter/before_post_render/dataType.ts
         data.source = source;
         data.config = ctx.config;
 
