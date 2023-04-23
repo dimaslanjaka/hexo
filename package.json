@@ -5,9 +5,12 @@
   "description": "",
   "main": "packages/hexo/dist/hexo/index.js",
   "devDependencies": {
+    "@types/node": "^18.16.0",
     "depcheck": "^1.4.3",
     "mocha": "^10.2.0",
-    "npm-check-updates": "^16.10.9"
+    "npm-check-updates": "^16.10.9",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
   },
   "scripts": {
     "test": "mocha",

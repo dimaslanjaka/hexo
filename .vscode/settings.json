@@ -13,5 +13,14 @@
     "*.test.{ts,js}": "npx c8 --reporter=lcovonly mocha --timeout=7000000"
   },
   "code-runner.clearPreviousOutput": true,
-  "code-runner.runInTerminal": true
+  "code-runner.runInTerminal": true,
+  "workbench.localHistory.exclude": {
+    "**/dist/**": true
+  },
+  "files.exclude": {
+    "**/node_modules": true
+  },
+  "search.exclude": {
+    "**/dist": true
+  }
 }
