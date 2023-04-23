@@ -272,6 +272,7 @@ interface Result {
 }
 
 interface Data {
+  [key: string]: any;
   engine?: string;
   content?: string;
   disableNunjucks?: boolean;
@@ -455,13 +456,13 @@ class Post {
       .asCallback(callback);
   }
 
-  render(source, data: Data = {}, callback) {
+  render(source: string, data: Data = {}, callback?: (...args: any[]) => any) {
     const ctx = this.context;
     const { config } = ctx;
     const { tag } = ctx.extend;
     const ext = data.engine || (source ? extname(source) : '');
 
-    let promise;
+    let promise: Promise<string | Buffer>;
 
     if (data.content != null) {
       promise = Promise.resolve(data.content);
@@ -482,7 +483,7 @@ class Post {
 
     if (!isPost) {
       return promise
-        .then(content => {
+        .then((content: string) => {
           data.content = content;
           ctx.log.debug('Rendering file: %s', magenta(source));
 
@@ -516,6 +517,9 @@ class Post {
     return promise
       .then((content: string) => {
         data.content = content;
+        data.source = source;
+        data.config = ctx.config;
+
         // Run "before_post_render" filters
         return ctx.execFilter('before_post_render', data, { context: ctx });
       })
@@ -537,7 +541,7 @@ class Post {
             path: source,
             engine: data.engine,
             toString: true,
-            onRenderEnd(content) {
+            onRenderEnd(content: string) {
               // Replace cache data with real contents
               data.content = cacheObj.restoreAllSwigTags(content);
 
