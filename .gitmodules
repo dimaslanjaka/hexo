@@ -8,7 +8,7 @@
 	branch = monorepo
 [submodule "packages/hexo-front-matter"]
 	path = packages/hexo-front-matter
-	url = https://github.com/dimaslanjaka/hexo-front-matter
+	url = https://github.com/dimaslanjaka/hexo-front-matter.git
 	branch = monorepo
 [submodule "bin"]
 	path = bin
@@ -16,12 +16,12 @@
 	branch = master
 [submodule "packages/hexo-asset-link"]
 	path = packages/hexo-asset-link
-	url = https://github.com/dimaslanjaka/hexo-asset-link
+	url = https://github.com/dimaslanjaka/hexo-asset-link.git
 	branch = monorepo
 [submodule "test/hexo-theme-test"]
 	path = test/hexo-theme-test
-	url = https://github.com/dimaslanjaka/hexo-theme-unit-test
+	url = https://github.com/dimaslanjaka/hexo-theme-unit-test.git
 	branch = monorepo
 [submodule "packages/hexo-theme-landscape"]
 	path = packages/hexo-theme-landscape
-	url = https://github.com/hexojs/hexo-theme-landscape
+	url = https://github.com/hexojs/hexo-theme-landscape.git
