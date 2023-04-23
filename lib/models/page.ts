@@ -4,9 +4,9 @@ import Moment from './types/moment';
 import moment from 'moment';
 import { full_url_for } from 'hexo-util';
 
-export = ctx => {
+const ModelPage = (ctx: import('../hexo')) => {
   const Page = new warehouse.Schema({
-    title: {type: String, default: ''},
+    title: { type: String, default: '' },
     date: {
       type: Moment,
       default: moment,
@@ -18,15 +18,15 @@ export = ctx => {
       language: ctx.config.languages,
       timezone: ctx.config.timezone
     },
-    comments: {type: Boolean, default: true},
-    layout: {type: String, default: 'page'},
-    _content: {type: String, default: ''},
-    source: {type: String, required: true},
-    path: {type: String, required: true},
-    raw: {type: String, default: ''},
-    content: {type: String},
-    excerpt: {type: String},
-    more: {type: String}
+    comments: { type: Boolean, default: true },
+    layout: { type: String, default: 'page' },
+    _content: { type: String, default: '' },
+    source: { type: String, required: true },
+    path: { type: String, required: true },
+    raw: { type: String, default: '' },
+    content: { type: String },
+    excerpt: { type: String },
+    more: { type: String }
   });
 
   Page.virtual('permalink').get(function() {
@@ -39,3 +39,5 @@ export = ctx => {
 
   return Page;
 };
+
+export = ModelPage;
