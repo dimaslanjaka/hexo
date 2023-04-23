@@ -5,7 +5,7 @@ import moment from 'moment';
 import { full_url_for } from 'hexo-util';
 import type Hexo from '../hexo';
 
-export = (ctx: Hexo) => {
+const ModelPage = (ctx: import('../hexo')) => {
   const Page = new warehouse.Schema({
     title: { type: String, default: '' },
     date: {
@@ -40,3 +40,5 @@ export = (ctx: Hexo) => {
 
   return Page;
 };
+
+export = ModelPage;
