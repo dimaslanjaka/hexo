@@ -355,7 +355,14 @@ class Hexo extends EventEmitter {
       });
   }
 
-  call(name, args, callback) {
+  call(
+    name: string,
+    args: {
+      [key: string]: any;
+      _?: string[];
+    },
+    callback: any
+  ) {
     if (!callback && typeof args === 'function') {
       callback = args;
       args = {};
