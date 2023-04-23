@@ -10,6 +10,7 @@
     "mocha": "^10.2.0",
     "npm-check-updates": "^16.10.9",
     "ts-node": "^10.9.1",
+    "tslib": "^2.5.0",
     "typescript": "^5.0.4"
   },
   "scripts": {

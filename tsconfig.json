@@ -1,10 +1,10 @@
 {
-	// options for vscode
 	"compilerOptions": {
-    "module": "CommonJS",
-    "target": "ES5",
-		// dump
-		"outDir": "tmp/dist"
+		"module": "CommonJS",
+		"target": "ES5",
+		"outDir": "tmp/dist",
+		"esModuleInterop": true
+		//"lib": ["ES2015", "ES6", "ES5", "ES2022"]
 	},
 	"include": ["packages", "test"],
 	"exclude": ["node_modules", "tmp", "dist"]
