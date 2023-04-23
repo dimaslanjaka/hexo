@@ -6,14 +6,8 @@
     "outDir": "dist",
     "declaration": true,
     "esModuleInterop": true,
-    "types": [
-      "node"
-    ]
+    "types": ["node"]
   },
-  "include": [
-    "lib/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["lib/**/*.ts"],
+  "exclude": ["node_modules", "**/.tmp*", "dist"]
 }
