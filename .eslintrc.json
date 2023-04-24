@@ -13,7 +13,7 @@
       // rules for this binding
       "error",
       {
-        "allowDestructuring": false, // Disallow `const { props, state } = this`; true by default
+        "allowDestructuring": true, // Disallow `const { props, state } = this`; true by default
         "allowedNames": ["self", "hexo"] // Allow `const self = this`; `[]` by default
       }
     ]
