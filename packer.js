@@ -36,33 +36,29 @@ Promise.all([parseWorkspaces, buildAllPackage, packAllPackage]).then(function (
 	arr
 ) {
 	const workspaces = arr[0];
-	let retry = 0;
 	const _run = () => {
 		for (let i = 0; i < workspaces.length; i++) {
 			const workspace = workspaces[i];
 			const tarballName = workspace.name + ".tgz";
 			const tarballPath = join(workspace.location, tarballName);
-			if (!existsSync(tarballPath)) {
-				console.log("fail packing " + tarballPath + " not found");
-				// set retry +1
-				retry += 1;
-				continue;
-			}
+
+			// rename package.tgz to {workspace.name}.tgz
 			croSpawn.sync("yarn", [
 				"workspace",
 				workspace.name,
 				"exec",
 				`"mv package.tgz ${tarballName}"`,
 			]);
+
+			if (!existsSync(tarballPath)) {
+				console.log("fail packing " + tarballPath + " not found");
+				continue;
+			}
+
 			const dest = join(__dirname, "releases", tarballName);
 			if (!existsSync(dirname(dest))) mkdirSync(dirname(dest));
 			if (existsSync(dest)) rmSync(dest);
 			renameSync(tarballPath, dest);
-		}
-
-		if (retry < 4) {
-			// restart
-			_run();
 		}
 	};
 
