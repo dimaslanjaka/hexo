@@ -365,11 +365,13 @@ class Hexo extends EventEmitter {
    */
   call(
     name: string,
-    args: {
-      [key: string]: any;
-      _?: string[];
-    },
-    callback: any
+    args:
+      | {
+          [key: string]: any;
+          _?: string[];
+        }
+      | ((...args: any[]) => any) = {},
+    callback?: (...args: any[]) => any
   ) {
     if (!callback && typeof args === 'function') {
       callback = args;
