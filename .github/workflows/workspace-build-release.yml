@@ -39,7 +39,9 @@ jobs:
         run: touch yarn.lock && yarn install
         shell: bash
       - name: Build
-        run: node -r ts-node/register packer.js
+        run: |
+          yarn build
+          node -r ts-node/register packer.js
         shell: bash
         id: build
       - name: Set env
