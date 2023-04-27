@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+# make cygwin bin as priority
+export PATH="/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH";
+
+(set -o igncr) 2>/dev/null && set -o igncr; # cygwin encoding fix
+
+# absolute path working directory
+basecwd=${PWD}
+# base script directory
+basedir=`dirname "$0"`
+# absolute path script directory
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+case `uname` in
+  *CYGWIN*) basedir=`cygpath -w "$basedir"`;;
+esac
+
+echo "cleaning..."
+yarn workspace warehouse exec "rm -rf dist"
+yarn workspace hexo-front-matter exec "rm -rf dist"
+yarn workspace hexo exec "rm -rf dist"
+yarn workspace hexo-asset-link exec "rm -rf dist"
+
+echo "building..."
+yarn workspace warehouse run build
+yarn workspace hexo-front-matter run build
+yarn workspace hexo run build
+yarn workspace hexo-asset-link run build
+
+yarn workspaces foreach run build
