@@ -7,8 +7,7 @@
   "types": "packages/hexo/dist/hexo/index.d.ts",
   "scripts": {
     "test": "mocha",
-    "build": "yarn workspaces foreach run build",
-    "postinstall": "yarn workspace warehouse run build && yarn workspace hexo-front-matter run build && yarn workspace hexo run build && yarn run build",
+    "build": "yarn workspace warehouse run build && yarn workspace hexo-front-matter run build && yarn workspace hexo run build && yarn workspaces foreach run build",
     "serve": "yarn workspace hexo-site exec \"hexo server\"",
     "bundle": "node packer.js"
   },
