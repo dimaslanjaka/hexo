@@ -10,7 +10,7 @@
     "build": "node packer.js",
     "serve": "yarn workspace hexo-site exec \"hexo server\"",
     "bundle": "node packer.js",
-    "clean": "yarn workspaces foreach run clean"
+    "clean": "node packer.js --clean"
   },
   "repository": {
     "type": "git",
