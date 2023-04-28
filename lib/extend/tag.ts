@@ -38,16 +38,9 @@ class NunjucksTag {
     let argitem = '';
 
     while ((token = parser.nextToken(true))) {
-      if (
-        token.type === lexer.TOKEN_WHITESPACE
-        || token.type === lexer.TOKEN_BLOCK_END
-      ) {
+      if (token.type === lexer.TOKEN_WHITESPACE || token.type === lexer.TOKEN_BLOCK_END) {
         if (argitem !== '') {
-          const argnode = new nodes.Literal(
-            tag.lineno,
-            tag.colno,
-            argitem.trim()
-          );
+          const argnode = new nodes.Literal(tag.lineno, tag.colno, argitem.trim());
           argarray.addChild(argnode);
           argitem = '';
         }
@@ -153,20 +146,16 @@ const getContext = (lines, errLine, location, type) => {
 
   message.push(
     // get LINES_OF_CONTEXT lines surrounding `errLine`
-    ...getContextLineNums(1, lines.length, errLine, LINES_OF_CONTEXT).map(
-      lnNum => {
-        const line = '  ' + lnNum + ' | ' + lines[lnNum - 1];
-        if (lnNum === errLine) {
-          return cyan(bold(line));
-        }
-
-        return cyan(line);
+    ...getContextLineNums(1, lines.length, errLine, LINES_OF_CONTEXT).map(lnNum => {
+      const line = '  ' + lnNum + ' | ' + lines[lnNum - 1];
+      if (lnNum === errLine) {
+        return cyan(bold(line));
       }
-    )
+
+      return cyan(line);
+    })
   );
-  message.push(
-    cyan('    =====             Context Dump Ends            =====')
-  );
+  message.push(cyan('    =====             Context Dump Ends            ====='));
 
   return message;
 };
@@ -179,15 +168,12 @@ class NunjucksError extends Error {
 
 /**
  * Provide context for Nunjucks error
- * @param  {Error}    err Nunjucks error
- * @param  {string}   str string input for Nunjucks
- * @return {Error}    New error object with embedded context
+ * @param err Nunjucks error
+ * @param input string input for Nunjucks
+ * @return  New error object with embedded context
  */
-const formatNunjucksError = (err, input, source = '') => {
-  err.message = err.message.replace(
-    '(unknown path)',
-    source ? magenta(source) : ''
-  );
+const formatNunjucksError = (err: Error, input: string, source = ''): Error => {
+  err.message = err.message.replace('(unknown path)', source ? magenta(source) : '');
 
   const match = err.message.match(/Line (\d+), Column \d+/);
   if (!match) return err;
@@ -202,12 +188,7 @@ const formatNunjucksError = (err, input, source = '') => {
   e.line = errLine;
   e.location = splited[0];
   e.type = splited[1].trim();
-  e.message = getContext(
-    input.split(/\r?\n/),
-    errLine,
-    e.location,
-    e.type
-  ).join('\n');
+  e.message = getContext(input.split(/\r?\n/), errLine, e.location, e.type).join('\n');
   return e;
 };
 
@@ -217,7 +198,7 @@ type RegisterOptions = {
 };
 
 class Tag {
-  public env: any;
+  public env: Environment;
   public source: any;
 
   constructor() {
@@ -269,11 +250,8 @@ class Tag {
     if (env.hasExtension(name)) env.removeExtension(name);
   }
 
-  render(
-    str,
-    options: { source?: string } = {},
-    callback?: (...args: any[]) => any
-  ) {
+  render(str: string, options: { source?: string }): Promise<string>;
+  render(str: string, options: { source?: string } = {}, callback?: (err: any, result: string) => any) {
     if (!callback && typeof options === 'function') {
       callback = options;
       options = {};
