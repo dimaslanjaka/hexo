@@ -23,7 +23,7 @@ const parseWorkspaces = croSpawn
 
 const logfile = (...args) => appendFileSync(join(__dirname, 'build.log'), args.join('\n') + '\n');
 
-logfile('\n', new Date(), '\n');
+logfile('', 'Build ' + new Date(), '');
 
 parseWorkspaces.then((workspaces) => {
   if (workspaces.length === 0) return logfile('workspaces empty');
