@@ -3,6 +3,8 @@ const { renameSync, existsSync, rmSync, mkdirSync } = require('fs');
 const { join, dirname } = require('path');
 const utility = require('sbg-utility');
 
+const argv = process.argv.slice(2);
+
 const parseWorkspaces = croSpawn
   .async('yarn', ['workspaces', 'list', '--no-private', '--json'], {
     cwd: process.cwd()
@@ -29,6 +31,8 @@ logfile('', 'Build ' + new Date(), '');
 parseWorkspaces.then((workspaces) => {
   if (workspaces.length === 0) return logfile('workspaces empty');
   const runBuild = (wname, clean) => {
+    // activate clean when argument -c or --clean exist and clean option is undefined
+    if (typeof clean === 'undefined') clean = argv.includes('-c') || argv.includes('--clean');
     /**
      * @type {ReturnType<typeof croSpawn.async>}
      */
