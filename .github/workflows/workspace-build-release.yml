@@ -11,10 +11,10 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        node-version: ["14.x", "16.x", "18.x"]
+        node-version: ['14.x', '16.x', '18.x']
       fail-fast: false
     env:
-      NODE_OPTIONS: "--max_old_space_size=8192" #8192 4096 --expose-gc
+      NODE_OPTIONS: '--max_old_space_size=8192' #8192 4096 --expose-gc
       YARN_ENABLE_IMMUTABLE_INSTALLS: false
       ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -22,8 +22,8 @@ jobs:
         uses: actions/checkout@v3
         with:
           submodules: recursive
-          token: "${{ secrets.GITHUB_TOKEN }}"
-          ref: "monorepo-v7"
+          token: '${{ secrets.GITHUB_TOKEN }}'
+          ref: 'monorepo-v7'
           persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
           fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
       - name: Use Node.js ${{ matrix.node-version }}
@@ -33,13 +33,7 @@ jobs:
       - name: Enable corepack
         shell: bash
         run: corepack enable
-      - name: Install Dependencies
-        run: touch yarn.lock && yarn install
-        shell: bash
-      - name: Build
-        run: yarn build
-        shell: bash
-        id: build
+
       - name: Set env
         id: set-env
         shell: bash
@@ -60,6 +54,27 @@ jobs:
             echo "cache-yarn=$(yarn cache dir)" >> $GITHUB_OUTPUT
           fi
           echo "architecture=$(getconf LONG_BIT)" >> $GITHUB_ENV
+
+      - name: Install Dependencies
+        run: touch yarn.lock && yarn install
+        shell: bash
+      - name: Build
+        run: yarn build
+        shell: bash
+        id: build
+
+      - uses: actions/cache@v3
+        id: cache
+        with:
+          path: |
+            **/.yarn
+            ./releases
+            ./yarn.lock
+            ./releases/yarn.lock
+          key: ${{ runner.os }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ hashFiles('**/package.json') }}
+            ${{ runner.os }}-
 
       - name: what changes
         id: changes
