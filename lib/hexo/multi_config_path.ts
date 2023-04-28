@@ -42,7 +42,7 @@ export = ctx => function multiConfigPath(base, configPaths, outputDir) {
     }
 
     // files read synchronously to ensure proper overwrite order
-    const file = readFileSync(configPath);
+    const file = readFileSync(configPath).toString();
     const ext = extname(paths[i]).toLowerCase();
 
     if (ext === '.yml') {
