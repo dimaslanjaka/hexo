@@ -12,7 +12,7 @@ interface TagFunction {
   (args: any[], content: string, callback?: NodeJSLikeCallback<any>): string | PromiseLike<string>;
 }
 interface AsyncTagFunction {
-  (args: any[], content: string): Promise<string>;
+  (args: any[], content: string): PromiseLike<string> | Promise<string>;
 }
 
 class NunjucksTag {
