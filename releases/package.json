@@ -19,6 +19,15 @@
     "hexo-asset-link": "file:./hexo-asset-link.tgz",
     "hexo-front-matter": "file:./hexo-front-matter.tgz",
     "hexo-log": "file:./hexo-log.tgz",
+    "warehouse": "file:./warehouse.tgz",
+    "hexo-wrapper": "file:./hexo-wrapper.tgz"
+  },
+  "resolutions": {
+    "hexo-asset-link": "file:./hexo-asset-link.tgz",
+    "hexo-front-matter": "file:./hexo-front-matter.tgz",
+    "hexo-log": "file:./hexo-log.tgz",
+    "hexo-wrapper": "file:./hexo-wrapper.tgz",
+    "hexo": "file:./hexo.tgz",
     "warehouse": "file:./warehouse.tgz"
   }
 }
