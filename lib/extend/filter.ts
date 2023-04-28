@@ -39,6 +39,10 @@ class Filter {
   register(fn: StoreFunction, priority: number): void;
   register(type: string, fn: StoreFunction): void;
   register(
+    type: 'server_middleware',
+    fn: (app: import('connect').Server) => void
+  ): void;
+  register(
     type: 'before_post_render',
     fn: (data: extend_filter_before_post_render_data) => void
   ): void;
