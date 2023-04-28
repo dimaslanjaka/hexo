@@ -16,7 +16,7 @@ const parseWorkspaces = croSpawn
          * @type {{location:string,name:string}}
          */
         const parse = JSON.parse(str.trim());
-        parse.location = join(utility.findYarnRootWorkspace(process.cwd()), parse.location);
+        parse.location = join(utility.findYarnRootWorkspace({ base_dir: process.cwd() }), parse.location);
         return parse;
       })
   );
