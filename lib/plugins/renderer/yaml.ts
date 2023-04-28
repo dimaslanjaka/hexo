@@ -2,7 +2,8 @@ import yaml from 'js-yaml';
 import { escape } from 'hexo-front-matter';
 import logger from 'hexo-log';
 
-let schema = {};
+let schema = {} as yaml.Schema;
+
 // FIXME: workaround for https://github.com/hexojs/hexo/issues/4917
 try {
   schema = yaml.DEFAULT_SCHEMA.extend(require('js-yaml-js-types').all);
@@ -14,7 +15,7 @@ try {
   }
 }
 
-function yamlHelper(data) {
+function yamlHelper(data: { text: string; }) {
   return yaml.load(escape(data.text), { schema });
 }
 
