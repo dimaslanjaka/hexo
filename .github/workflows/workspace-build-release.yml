@@ -32,9 +32,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Enable corepack
         shell: bash
-        run: |
-          corepack enable
-          yarn set version stable
+        run: corepack enable
       - name: Install Dependencies
         run: touch yarn.lock && yarn install
         shell: bash
