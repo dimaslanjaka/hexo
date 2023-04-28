@@ -5,6 +5,8 @@ import type { StoreFunctionData } from '../../extend/renderer';
 
 let schema = {} as yaml.Schema;
 
+let schema = {} as yaml.Schema;
+
 // FIXME: workaround for https://github.com/hexojs/hexo/issues/4917
 try {
   schema = yaml.DEFAULT_SCHEMA.extend(require('js-yaml-js-types').all);
