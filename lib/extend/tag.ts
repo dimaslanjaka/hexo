@@ -17,7 +17,7 @@ interface TagFunction {
  * asynchronous callback - shortcode tag
  */
 interface AsyncTagFunction {
-  (args: any[], content: string): Promise<string>;
+  (args: any[], content: string): PromiseLike<string> | Promise<string>;
 }
 
 class NunjucksTag {
