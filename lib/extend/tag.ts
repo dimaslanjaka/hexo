@@ -4,12 +4,18 @@ import { Environment } from 'nunjucks';
 import Promise from 'bluebird';
 const rSwigRawFullBlock = /{% *raw *%}/;
 const rCodeTag = /<code[^<>]*>[\s\S]+?<\/code>/g;
-const escapeSwigTag = (str: string) =>
-  str.replace(/{/g, '&#123;').replace(/}/g, '&#125;');
+const escapeSwigTag = (str: string) => str.replace(/{/g, '&#123;').replace(/}/g, '&#125;');
 
+/**
+ * synchronous callback - shortcode tag
+ */
 interface TagFunction {
   (args: any[], content: string): string;
 }
+
+/**
+ * asynchronous callback - shortcode tag
+ */
 interface AsyncTagFunction {
   (args: any[], content: string): Promise<string>;
 }
@@ -197,6 +203,10 @@ type RegisterOptions = {
   ends?: boolean;
 };
 
+interface RegisterAsyncOptions extends RegisterOptions {
+  async: boolean;
+}
+
 class Tag {
   public env: Environment;
   public source: any;
@@ -207,10 +217,56 @@ class Tag {
     });
   }
 
+  /**
+   * register shortcode tag
+   * @param name shortcode tag name
+   * @param fn shortcode tag function
+   */
   register(name: string, fn: TagFunction): void;
+
+  /**
+   * register shortcode tag with RegisterOptions.ends boolean directly
+   * @param name shortcode tag name
+   * @param fn callback shortcode tag
+   * @param ends use endblock
+   */
   register(name: string, fn: TagFunction, ends: boolean): void;
+
+  /**
+   * register shortcode tag with synchronous function callback
+   * @param name shortcode tag name
+   * @param fn synchronous function callback
+   * @param options register options
+   */
   register(name: string, fn: TagFunction, options: RegisterOptions): void;
-  register(name: string, fn: TagFunction, options?: RegisterOptions | boolean) {
+
+  /**
+   * register shortcode tag with synchronous function callback
+   * @param name shortcode tag name
+   * @param fn synchronous function callback
+   * @param options register options
+   */
+  register(name: string, fn: TagFunction, options: { async: false }): void;
+
+  /**
+   * register shortcode tag with asynchronous function callback
+   * @param name shortcode tag name
+   * @param fn asynchronous function callback
+   * @param options register options
+   */
+  register(name: string, fn: AsyncTagFunction, options: { async: true }): void;
+
+  /**
+   * register shortcode tag
+   * @param name shortcode tag name
+   * @param fn asynchronous or synchronous function callback
+   * @param options register options
+   */
+  register(
+    name: string,
+    fn: TagFunction | AsyncTagFunction,
+    options?: RegisterOptions | RegisterAsyncOptions | boolean
+  ) {
     if (!name) throw new TypeError('name is required');
     if (typeof fn !== 'function') throw new TypeError('fn must be a function');
 
@@ -246,7 +302,7 @@ class Tag {
    * unregister shortcode tag
    * @param name shortcode tag name
    */
-  unregister(name:string) {
+  unregister(name: string) {
     if (!name) throw new TypeError('name is required');
 
     const { env } = this;
