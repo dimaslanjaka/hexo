@@ -80,7 +80,7 @@ parseWorkspaces.then((workspaces) => {
           logfile(wname, 'is not workspace');
         }
       })
-      .then(() => console.log(wname, 'clean->build->pack successful'));
+      .then(() => console.log(wname, ((clean ? 'clean->' : '') + 'build->pack successful').trim()));
   };
   return runBuild('warehouse')
     .then(() => runBuild('hexo-front-matter'))
