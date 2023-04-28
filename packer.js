@@ -1,10 +1,8 @@
 const croSpawn = require('cross-spawn');
 const { renameSync, existsSync, rmSync, mkdirSync, appendFileSync } = require('fs');
 const { join, dirname } = require('path');
+const utility = require('sbg-utility');
 
-/**
- * @type {Promise<{location:string,name:string}[]>}
- */
 const parseWorkspaces = croSpawn
   .async('yarn', ['workspaces', 'list', '--no-private', '--json'], {
     cwd: __dirname
@@ -14,15 +12,21 @@ const parseWorkspaces = croSpawn
       .split(/\r?\n/gm)
       .filter((str) => str.length > 4)
       .map((str) => {
+        /**
+         * @type {{location:string,name:string}}
+         */
         const parse = JSON.parse(str.trim());
-        parse.location = join(__dirname, parse.location);
+        parse.location = join(utility.findYarnRootWorkspace(__dirname), parse.location);
         return parse;
       })
   );
 
 const logfile = (...args) => appendFileSync(join(__dirname, 'build.log'), args.join('\n') + '\n');
 
+logfile('\n', new Date(), '\n');
+
 parseWorkspaces.then((workspaces) => {
+  if (workspaces.length === 0) return logfile('workspaces empty');
   const clean_build = (wname) =>
     croSpawn
       .async('yarn', ['workspace', wname, 'run', 'clean'], {
