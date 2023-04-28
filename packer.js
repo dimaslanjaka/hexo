@@ -28,16 +28,27 @@ logfile('', 'Build ' + new Date(), '');
 
 parseWorkspaces.then((workspaces) => {
   if (workspaces.length === 0) return logfile('workspaces empty');
-  const clean_build = (wname) =>
-    croSpawn
-      .async('yarn', ['workspace', wname, 'run', 'clean'], {
-        cwd: __dirname
-      })
-      .then(() =>
-        croSpawn.async('yarn', ['workspace', wname, 'run', 'build'], {
+  const runBuild = (wname, clean) => {
+    /**
+     * @type {ReturnType<typeof croSpawn.async>}
+     */
+    let promised;
+    if (clean) {
+      promised = croSpawn
+        .async('yarn', ['workspace', wname, 'run', 'clean'], {
           cwd: __dirname
         })
-      )
+        .then(() =>
+          croSpawn.async('yarn', ['workspace', wname, 'run', 'build'], {
+            cwd: __dirname
+          })
+        );
+    } else {
+      promised = croSpawn.async('yarn', ['workspace', wname, 'run', 'build'], {
+        cwd: __dirname
+      });
+    }
+    return promised
       .then(() =>
         croSpawn.async('yarn', ['workspace', wname, 'pack'], {
           cwd: __dirname
@@ -66,10 +77,11 @@ parseWorkspaces.then((workspaces) => {
         }
       })
       .then(() => console.log(wname, 'clean->build->pack successful'));
-  return clean_build('warehouse')
-    .then(() => clean_build('hexo-front-matter'))
-    .then(() => clean_build('hexo-asset-link'))
-    .then(() => clean_build('hexo-log'))
-    .then(() => clean_build('hexo'))
+  };
+  return runBuild('warehouse')
+    .then(() => runBuild('hexo-front-matter'))
+    .then(() => runBuild('hexo-asset-link'))
+    .then(() => runBuild('hexo-log'))
+    .then(() => runBuild('hexo'))
     .then(() => workspaces);
 });
