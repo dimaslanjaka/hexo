@@ -242,7 +242,11 @@ class Tag {
     this.env.addExtension(name, tag);
   }
 
-  unregister(name) {
+  /**
+   * unregister shortcode tag
+   * @param name shortcode tag name
+   */
+  unregister(name:string) {
     if (!name) throw new TypeError('name is required');
 
     const { env } = this;
