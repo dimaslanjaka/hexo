@@ -15,3 +15,6 @@ coverage/
 ##.vscode
 dist/
 *.log
+releases/yarn.lock
+releases/.yarn
+releases/package-lock.json
