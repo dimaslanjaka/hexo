@@ -50,6 +50,6 @@
   ],
   "packageManager": "yarn@3.5.0",
   "dependencies": {
-    "sbg-utility": "^1.0.9"
+    "sbg-utility": "https://github.com/dimaslanjaka/static-blog-generator/raw/beta/packages/sbg-utility/release/sbg-utility.tgz"
   }
 }
