@@ -62,6 +62,11 @@ jobs:
         run: yarn build
         shell: bash
         id: build
+      - name: create hexo-wrapper
+        run: |
+          yarn build
+          git add .
+        working-directory: releases
 
       - uses: actions/cache@v3
         id: cache
