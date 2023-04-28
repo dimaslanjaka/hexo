@@ -47,5 +47,6 @@
     "test/hexo-theme-test",
     "packages/hexo-theme-landscape",
     "packages/hexo-log"
-  ]
+  ],
+  "packageManager": "yarn@3.5.0"
 }
