@@ -7,7 +7,7 @@
   "types": "packages/hexo/dist/hexo/index.d.ts",
   "scripts": {
     "test": "mocha",
-    "build": "bash ./build",
+    "build": "node packer.js",
     "serve": "yarn workspace hexo-site exec \"hexo server\"",
     "bundle": "node packer.js"
   },

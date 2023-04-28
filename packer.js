@@ -20,47 +20,64 @@ const parseWorkspaces = croSpawn
 			})
 	);
 
-const buildAllPackage = croSpawn.async(
-	"yarn",
-	["workspaces", "foreach", "--no-private", "run", "build"],
-	{ cwd: __dirname }
-);
+parseWorkspaces
+	.then((workspaces) => {
+		const clean_build = (wname) =>
+			croSpawn
+				.async("yarn", ["workspace", wname, "run", "clean"], {
+					cwd: __dirname,
+				})
+				.then(() =>
+					croSpawn.async("yarn", ["workspace", wname, "run", "build"], {
+						cwd: __dirname,
+					})
+				);
+		return clean_build("warehouse")
+			.then(() => clean_build("hexo-front-matter"))
+			.then(() => clean_build("hexo-asset-link"))
+			.then(() => clean_build("hexo-log"))
+			.then(() =>
+				croSpawn.async(
+					"yarn",
+					["workspaces", "foreach", "--no-private", "run", "build"],
+					{ cwd: __dirname }
+				)
+			)
+			.then(() =>
+				croSpawn.async(
+					"yarn",
+					["workspaces", "foreach", "--no-private", "pack"],
+					{ cwd: __dirname }
+				)
+			)
+			.then(() => workspaces);
+	})
+	.then((workspaces) => {
+		const _run = () => {
+			for (let i = 0; i < workspaces.length; i++) {
+				const workspace = workspaces[i];
+				const tarballName = workspace.name + ".tgz";
+				const tarballPath = join(workspace.location, tarballName);
 
-const packAllPackage = croSpawn.async(
-	"yarn",
-	["workspaces", "foreach", "--no-private", "pack"],
-	{ cwd: __dirname }
-);
+				// rename package.tgz to {workspace.name}.tgz
+				croSpawn.sync("yarn", [
+					"workspace",
+					workspace.name,
+					"exec",
+					`"mv package.tgz ${tarballName}"`,
+				]);
 
-Promise.all([parseWorkspaces, buildAllPackage, packAllPackage]).then(function (
-	arr
-) {
-	const workspaces = arr[0];
-	const _run = () => {
-		for (let i = 0; i < workspaces.length; i++) {
-			const workspace = workspaces[i];
-			const tarballName = workspace.name + ".tgz";
-			const tarballPath = join(workspace.location, tarballName);
+				if (!existsSync(tarballPath)) {
+					console.log("fail packing " + tarballPath + " not found");
+					continue;
+				}
 
-			// rename package.tgz to {workspace.name}.tgz
-			croSpawn.sync("yarn", [
-				"workspace",
-				workspace.name,
-				"exec",
-				`"mv package.tgz ${tarballName}"`,
-			]);
-
-			if (!existsSync(tarballPath)) {
-				console.log("fail packing " + tarballPath + " not found");
-				continue;
+				const dest = join(__dirname, "releases", tarballName);
+				if (!existsSync(dirname(dest))) mkdirSync(dirname(dest));
+				if (existsSync(dest)) rmSync(dest);
+				renameSync(tarballPath, dest);
 			}
+		};
 
-			const dest = join(__dirname, "releases", tarballName);
-			if (!existsSync(dirname(dest))) mkdirSync(dirname(dest));
-			if (existsSync(dest)) rmSync(dest);
-			renameSync(tarballPath, dest);
-		}
-	};
-
-	_run();
-});
+		_run();
+	});
