@@ -64,14 +64,17 @@ jobs:
             echo "cache-yarn=$(yarn cache dir)" >> $GITHUB_OUTPUT
           fi
           echo "architecture=$(getconf LONG_BIT)" >> $GITHUB_ENV
-      - name: Get changed files in the docs folder
-        id: releases-changed
-        uses: tj-actions/changed-files@v35
-        if: matrix.node-version == '18.x' && runner.os == 'Linux' && steps.build.outcome == 'success'
-        with:
-          files: releases/*.tgz # Alternatively using: `docs/**` or `docs`
+
+      - name: what changes
+        id: changes
+        run: |
+          git status
+          echo "cached=$(git diff --cached --numstat | wc -l)" >> $GITHUB_OUTPUT
+          echo "commits=$(git diff origin/master..HEAD --numstat | wc -l)" >> $GITHUB_OUTPUT
+          echo "releases=$(git diff --numstat -- releases | wc -l)" >> $GITHUB_OUTPUT
+
       - name: Push
-        if: matrix.node-version == '18.x' && runner.os == 'Linux' && steps.build.outcome == 'success' && steps.releases-changed.outputs.any_changed == 'true'
+        if: matrix.node-version == '18.x' && runner.os == 'Linux' && steps.build.outcome == 'success' && steps.changes.outputs.releases > 0
         run: |
           git config --global user.name 'dimaslanjaka'
           git config --global user.email 'dimaslanjaka@gmail.com'
