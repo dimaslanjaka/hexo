@@ -9,7 +9,7 @@
     "test": "mocha",
     "build": "node packer.js",
     "serve": "yarn workspace hexo-site exec \"hexo server\"",
-    "bundle": "node packer.js",
+    "postinstall": "node packer.js",
     "clean": "node packer.js --clean"
   },
   "repository": {
