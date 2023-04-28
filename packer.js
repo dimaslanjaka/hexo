@@ -21,35 +21,41 @@ const parseWorkspaces = croSpawn
         parse.location = join(utility.findYarnRootWorkspace({ base_dir: process.cwd() }), parse.location);
         return parse;
       })
+      .filter((o) => existsSync(o.location))
   );
 
 const logfile = (...args) =>
   utility.writefile(join(__dirname, 'tmp/build.log'), args.join('\n') + '\n', { append: true });
 
-logfile('', 'Build ' + new Date(), '');
+utility.writefile(join(__dirname, 'tmp/build.log'), 'Build ' + new Date() + '\n\n');
 
 parseWorkspaces.then((workspaces) => {
   if (workspaces.length === 0) return logfile('workspaces empty');
   const runBuild = (wname, clean) => {
     // activate clean when argument -c or --clean exist and clean option is undefined
     if (typeof clean === 'undefined') clean = argv.includes('-c') || argv.includes('--clean');
+
+    // determine current workspace
+    const workspace = workspaces.filter((o) => o.name === wname)[0];
+    if (!workspace) throw new Error('workspace ' + wname + ' not found');
+
     /**
      * @type {ReturnType<typeof croSpawn.async>}
      */
     let promised;
     if (clean) {
       promised = croSpawn
-        .async('yarn', ['workspace', wname, 'run', 'clean'], {
-          cwd: __dirname
+        .async('yarn', ['run', 'clean'], {
+          cwd: workspace.location
         })
         .then(() =>
-          croSpawn.async('yarn', ['workspace', wname, 'run', 'build'], {
-            cwd: __dirname
+          croSpawn.async('yarn', ['run', 'build'], {
+            cwd: workspace.location
           })
         );
     } else {
-      promised = croSpawn.async('yarn', ['workspace', wname, 'run', 'build'], {
-        cwd: __dirname
+      promised = croSpawn.async('yarn', ['run', 'build'], {
+        cwd: workspace.location
       });
     }
     return promised
@@ -59,14 +65,17 @@ parseWorkspaces.then((workspaces) => {
         })
       )
       .then(() => {
-        const workspace = workspaces.filter((o) => o.name === wname)[0];
         if (typeof workspace === 'object') {
           const tarballName = workspace.name + '.tgz';
           const tarballPath = join(workspace.location, tarballName);
           const originalTarballPath = join(workspace.location, 'package.tgz');
 
           // rename package.tgz to {workspace.name}.tgz
-          if (existsSync(originalTarballPath)) renameSync(originalTarballPath, tarballPath);
+          if (existsSync(originalTarballPath)) {
+            renameSync(originalTarballPath, tarballPath);
+          } else {
+            logfile(originalTarballPath + ' not found');
+          }
           // move {workspace.name}.tgz to releases/{workspace.name}.tgz
           if (existsSync(tarballPath)) {
             const dest = join(__dirname, 'releases', tarballName);
