@@ -246,7 +246,7 @@ class Tag {
    * @param fn synchronous function callback
    * @param options register options
    */
-  register(name: string, fn: TagFunction, options: { async: false }): void;
+  register(name: string, fn: TagFunction, options: { async: false; ends?: boolean }): void;
 
   /**
    * register shortcode tag with asynchronous function callback
@@ -254,7 +254,11 @@ class Tag {
    * @param fn asynchronous function callback
    * @param options register options
    */
-  register(name: string, fn: AsyncTagFunction, options: { async: true }): void;
+  register(
+    name: string,
+    fn: AsyncTagFunction,
+    options: { async: true; ends?: boolean } | { async: true; ends: boolean }
+  ): void;
 
   /**
    * register shortcode tag
