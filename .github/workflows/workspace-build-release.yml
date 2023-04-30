@@ -64,6 +64,8 @@ jobs:
         id: build
       - name: create hexo-wrapper
         run: |
+          touch yarn.lock
+          yarn install
           yarn build
           git add .
         working-directory: releases
