@@ -7,13 +7,14 @@
   "types": "packages/hexo/dist/hexo/index.d.ts",
   "scripts": {
     "test": "mocha",
-    "build:util": "yarn workspace hexo-util run build",
+    "build:util": "yarn workspace hexo-util prepare && yarn workspace hexo-util run build",
     "build:log": "yarn workspace hexo-log run build",
     "build:fm": "yarn workspace hexo-front-matter run build",
-    "build": "run-s build:** && node packer.js",
+    "prebuild": "yarn build:util && yarn build:log && yarn build:fm",
+    "build": "node packer.js",
     "serve": "yarn workspace hexo-site exec \"hexo server\"",
-    "postinstall": "run-s build:** && node packer.js",
-    "clean": "run-s build:** && node packer.js --clean"
+    "postinstall": "npm run build",
+    "clean": "node packer.js --clean"
   },
   "repository": {
     "type": "git",
@@ -53,8 +54,7 @@
     "test/hexo-theme-test",
     "packages/hexo-theme-landscape",
     "packages/hexo-log",
-    "packages/hexo-util",
-    "packages/hexo-shortcodes"
+    "packages/hexo-util"
   ],
   "packageManager": "yarn@3.5.0",
   "resolutions": {
