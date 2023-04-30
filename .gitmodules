@@ -37,4 +37,4 @@
 [submodule "packages/hexo-shortcodes"]
 	path = packages/hexo-shortcodes
 	url = https://github.com/dimaslanjaka/hexo-shortcodes.git
-	branch = pre-release
+	branch = monorepo
