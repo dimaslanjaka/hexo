@@ -18,3 +18,4 @@ dist/
 releases/yarn.lock
 releases/.yarn
 releases/package-lock.json
+releases/hexo-shortcodes.tgz

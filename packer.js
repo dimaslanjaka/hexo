@@ -91,11 +91,21 @@ parseWorkspaces.then((workspaces) => {
       })
       .then(() => console.log(wname, ((clean ? 'clean->' : '') + 'build->pack successful').trim()));
   };
-  return runBuild('hexo-log')
-    .then(() => runBuild('hexo-util'))
-    .then(() => runBuild('warehouse'))
-    .then(() => runBuild('hexo-front-matter'))
-    .then(() => runBuild('hexo-asset-link'))
-    .then(() => runBuild('hexo'))
-    .then(() => workspaces);
+  return (
+    // no need any workspaces
+    runBuild('hexo-log')
+      // no need any workspaces
+      .then(() => runBuild('hexo-front-matter'))
+      // no need any workspaces
+      .then(() => runBuild('hexo-util'))
+      // need hexo-log
+      .then(() => runBuild('warehouse'))
+      // need hexo-util
+      .then(() => runBuild('hexo-asset-link'))
+      // need hexo-util, hexo-log, warehouse, hexo-front-matter
+      .then(() => runBuild('hexo'))
+      // need hexo
+      .then(() => runBuild('hexo-shortcodes'))
+      .then(() => workspaces)
+  );
 });

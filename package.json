@@ -36,6 +36,7 @@
     "depcheck": "^1.4.3",
     "mocha": "^10.2.0",
     "npm-check-updates": "^16.10.9",
+    "sbg-utility": "^1.0.9",
     "ts-node": "^10.9.1",
     "tslib": "^2.5.0",
     "typescript": "^5.0.4"
@@ -51,7 +52,7 @@
     "packages/hexo-util"
   ],
   "packageManager": "yarn@3.5.0",
-  "dependencies": {
+  "resolutions": {
     "sbg-utility": "https://github.com/dimaslanjaka/static-blog-generator/raw/beta/packages/sbg-utility/release/sbg-utility.tgz"
   }
 }
