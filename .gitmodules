@@ -30,3 +30,7 @@
 	path = packages/hexo-log
 	url = https://github.com/dimaslanjaka/hexo-log.git
 	branch = monorepo
+[submodule "packages/hexo-util"]
+	path = packages/hexo-util
+	url = https://github.com/dimaslanjaka/hexo-util.git
+	branch = monorepo

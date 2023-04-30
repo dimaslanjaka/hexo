@@ -91,10 +91,11 @@ parseWorkspaces.then((workspaces) => {
       })
       .then(() => console.log(wname, ((clean ? 'clean->' : '') + 'build->pack successful').trim()));
   };
-  return runBuild('warehouse')
+  return runBuild('hexo-log')
+    .then(() => runBuild('hexo-util'))
+    .then(() => runBuild('warehouse'))
     .then(() => runBuild('hexo-front-matter'))
     .then(() => runBuild('hexo-asset-link'))
-    .then(() => runBuild('hexo-log'))
     .then(() => runBuild('hexo'))
     .then(() => workspaces);
 });
