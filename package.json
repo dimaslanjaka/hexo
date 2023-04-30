@@ -53,7 +53,8 @@
     "test/hexo-theme-test",
     "packages/hexo-theme-landscape",
     "packages/hexo-log",
-    "packages/hexo-util"
+    "packages/hexo-util",
+    "packages/hexo-shortcodes"
   ],
   "packageManager": "yarn@3.5.0",
   "resolutions": {
