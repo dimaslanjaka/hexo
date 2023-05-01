@@ -99,8 +99,14 @@ jobs:
       - name: what changes
         id: changes
         run: |
-          git whatchanged -1 --format=oneline | wc -l
           git status
+          echo ""
+          countChanges=$(git whatchanged -1 --format=oneline | wc -l)
+          echo "total changed files is $countChanges"
+          countStaged=$(git diff --cached --numstat | wc -l)
+          echo "total staged files is $countStaged"
+          countCommits=$(git diff origin/master..HEAD --numstat | wc -l)
+          echo "total unpushed commits is $countCommits"
           echo "cached=$(git diff --cached --numstat | wc -l)" >> $GITHUB_OUTPUT
           echo "commits=$(git diff origin/master..HEAD --numstat | wc -l)" >> $GITHUB_OUTPUT
           echo "releases=$(git diff --numstat -- releases | wc -l)" >> $GITHUB_OUTPUT
