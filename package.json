@@ -67,7 +67,7 @@
   "devDependencies": {
     "0x": "^5.1.2",
     "@easyops/git-exec-and-restage": "^1.0.4",
-    "@types/bluebird": "^3.5.37",
+    "@types/bluebird": "^3.5.38",
     "@types/connect": "^3.4.35",
     "@types/micromatch": "^4.0.2",
     "@types/node": "^18.11.8",
