@@ -149,12 +149,7 @@ interface Config extends DefaultConfigType {
 // Node.js internal APIs
 declare module 'module' {
   function _nodeModulePaths(path: string): string[];
-  function _resolveFilename(
-    request: string,
-    parent: Module,
-    isMain?: any,
-    options?: any
-  ): string;
+  function _resolveFilename(request: string, parent: Module, isMain?: any, options?: any): string;
   const _extensions: NodeJS.RequireExtensions, _cache: any;
 }
 
@@ -268,9 +263,7 @@ class Hexo extends EventEmitter {
 
     const mcp = multiConfigPath(this);
 
-    this.config_path = args.config
-      ? mcp(base, args.config, args.output)
-      : join(base, '_config.yml');
+    this.config_path = args.config ? mcp(base, args.config, args.output) : join(base, '_config.yml');
 
     registerModels(this);
 
@@ -382,12 +375,10 @@ class Hexo extends EventEmitter {
 
     // eslint-disable-next-line no-extra-parens
     if (c) return (Reflect.apply(c, this, [args]) as any).asCallback(callback);
-    return Promise.reject(
-      new Error(`Console \`${name}\` has not been registered yet!`)
-    );
+    return Promise.reject(new Error(`Console \`${name}\` has not been registered yet!`));
   }
 
-  model(name, schema) {
+  model(name: string, schema?: any) {
     return this.database.model(name, schema);
   }
 
@@ -563,41 +554,28 @@ class Hexo extends EventEmitter {
     Locals.prototype.cache = useCache;
 
     return runningGenerators
-      .map(
-        (generatorResult: {
-          [key: string]: any;
-          path?: any;
-          data?: any;
-          layout?: any;
-        }) => {
-          if (
-            typeof generatorResult !== 'object'
-            || generatorResult.path == null
-          ) {
-            return undefined;
-          }
-
-          // add Route
-          const path = route.format(generatorResult.path);
-          const { data, layout } = generatorResult;
-
-          if (!layout) {
-            route.set(path, data);
-            return path;
-          }
-
-          return this.execFilter('template_locals', new Locals(path, data), {
-            context: this
-          })
-            .then(locals => {
-              route.set(
-                path,
-                createLoadThemeRoute(generatorResult, locals, this)
-              );
-            })
-            .thenReturn(path);
+      .map((generatorResult: { [key: string]: any; path?: any; data?: any; layout?: any }) => {
+        if (typeof generatorResult !== 'object' || generatorResult.path == null) {
+          return undefined;
         }
-      )
+
+        // add Route
+        const path = route.format(generatorResult.path);
+        const { data, layout } = generatorResult;
+
+        if (!layout) {
+          route.set(path, data);
+          return path;
+        }
+
+        return this.execFilter('template_locals', new Locals(path, data), {
+          context: this
+        })
+          .then(locals => {
+            route.set(path, createLoadThemeRoute(generatorResult, locals, this));
+          })
+          .thenReturn(path);
+      })
       .then((newRouteList: string | string[]) => {
         // Remove old routes
         for (let i = 0, len = routeList.length; i < len; i++) {
