@@ -29,7 +29,7 @@ class Box extends EventEmitter {
   public emit: any;
   public ctx: any;
 
-  constructor(ctx, base, options?: object) {
+  constructor(ctx: import('../hexo'), base: string, options?: object) {
     super();
 
     this.options = Object.assign({
