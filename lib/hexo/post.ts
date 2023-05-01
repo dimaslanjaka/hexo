@@ -486,7 +486,13 @@ class Post {
         excerpt: string;
       },
       ...args: any[]
-    ) => any | Promise<any>
+    ) => any | Promise<{
+      [key: string]: any;
+      content: string;
+      more: string;
+      permalink: string;
+      excerpt: string;
+    }>
   ) {
     const ctx = this.context;
     const { config } = ctx;
