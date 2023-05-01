@@ -88,7 +88,7 @@ class View {
   }
 
   _buildLocals(locals) {
-    // eslint-disable-next-line no-unused-vars
+    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
     const { layout, _content, ...data } = this.data;
     return assignIn({}, locals, data, {
       filename: this.source

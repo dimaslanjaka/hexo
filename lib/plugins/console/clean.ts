@@ -1,7 +1,7 @@
 import Promise from 'bluebird';
 import { exists, unlink, rmdir } from 'hexo-fs';
 
-function cleanConsole(args) {
+function cleanConsole(_args) {
   return Promise.all([
     deleteDatabase(this),
     deletePublicDir(this),

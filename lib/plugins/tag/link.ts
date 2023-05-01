@@ -9,7 +9,7 @@ const rUrl = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:ww
 *   {% link text url [external] [title] %}
 */
 
-function linkTag(args, content) {
+function linkTag(args: any[], _content: any) {
   let url = '';
   const text = [];
   let external = false;
