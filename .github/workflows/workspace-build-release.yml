@@ -91,11 +91,9 @@ jobs:
         run: npm run build
         shell: bash
         id: build
-      - name: create hexo-wrapper
+      - name: add releases
+        shell: bash
         run: |
-          touch yarn.lock
-          yarn install
-          npm run build
           git add .
         working-directory: releases
 
