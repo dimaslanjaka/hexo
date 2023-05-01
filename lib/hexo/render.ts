@@ -26,8 +26,8 @@ const toString = (result, options) => {
 };
 
 class Render {
-  public context: import(".")
-  public renderer: import("../extend/renderer")
+  public context: import('.');
+  public renderer: import('../extend/renderer');
 
   constructor(ctx: import('.')) {
     this.context = ctx;
@@ -76,7 +76,7 @@ class Render {
     }
 
     return promise
-      .then((text) => {
+      .then(text => {
         data.text = text;
         ext = data.engine || getExtname(data.path);
         if (!ext || !this.isRenderable(ext)) return text;
@@ -84,7 +84,7 @@ class Render {
         const renderer = this.getRenderer(ext);
         return Reflect.apply(renderer, ctx, [data, options]);
       })
-      .then((result) => {
+      .then(result => {
         result = toString(result, data);
         if (data.onRenderEnd) {
           return data.onRenderEnd(result);
@@ -92,7 +92,7 @@ class Render {
 
         return result;
       })
-      .then((result) => {
+      .then(result => {
         const output = this.getOutput(ext) || ext;
         return ctx.execFilter(`after_render:${output}`, result, {
           context: ctx,
