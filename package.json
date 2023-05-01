@@ -7,9 +7,9 @@
   "types": "packages/hexo/dist/hexo/index.d.ts",
   "scripts": {
     "test": "mocha",
-    "build:util": "yarn workspace hexo-util prepare && yarn workspace hexo-util run build",
-    "build:log": "yarn workspace hexo-log run build",
-    "build:fm": "yarn workspace hexo-front-matter run build",
+    "build:util": "yarn workspace hexo-util prepare && npm run build --workspace=hexo-util",
+    "build:log": "npm run build --workspace=hexo-log",
+    "build:fm": "npm run build --workspace=hexo-front-matter",
     "prebuild": "yarn build:util && yarn build:log && yarn build:fm",
     "build": "node packer.js",
     "serve": "yarn workspace hexo-site exec \"hexo server\"",
@@ -61,6 +61,7 @@
   "packageManager": "yarn@3.5.0",
   "resolutions": {
     "sbg-utility": "https://github.com/dimaslanjaka/static-blog-generator/raw/beta/packages/sbg-utility/release/sbg-utility.tgz",
-    "node-sass": "https://github.com/sass/node-sass/tarball/master"
+    "node-sass": "https://github.com/sass/node-sass/tarball/master",
+    "cross-spawn": "https://github.com/dimaslanjaka/node-cross-spawn.git#private"
   }
 }
