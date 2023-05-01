@@ -55,6 +55,20 @@ jobs:
           fi
           echo "architecture=$(getconf LONG_BIT)" >> $GITHUB_ENV
 
+      - uses: actions/cache@v3
+        id: cache
+        with:
+          path: |
+            **/.yarn
+            ./releases
+            ./yarn.lock
+            ./releases/yarn.lock
+          key: ${{ runner.os }}-${{ matrix.node-version }}-${{ github.ref_name }}
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.node-version }}-${{ github.ref_name }}
+            ${{ runner.os }}-${{ matrix.node-version }}-
+            ${{ runner.os }}-
+
       - name: Install Dependencies
         run: touch yarn.lock && yarn install
         shell: bash
@@ -69,20 +83,6 @@ jobs:
           yarn build
           git add .
         working-directory: releases
-
-      - uses: actions/cache@v3
-        id: cache
-        with:
-          path: |
-            **/.yarn
-            ./releases
-            ./yarn.lock
-            ./releases/yarn.lock
-          key: ${{ runner.os }}-${{ matrix.node-version }}-${{ github.ref_name }}
-          restore-keys: |
-            ${{ runner.os }}-${{ matrix.node-version }}-${{ github.ref_name }}
-            ${{ runner.os }}-${{ matrix.node-version }}-
-            ${{ runner.os }}-
 
       - name: what changes
         id: changes
