@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        node-version: ['14.x', '16.x', '18.x']
+        node-version: ['14.x', '16.x', '18.x', '19.x', '20.x']
       fail-fast: false
     env:
       NODE_OPTIONS: '--max_old_space_size=8192' #8192 4096 --expose-gc
