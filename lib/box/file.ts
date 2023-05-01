@@ -1,6 +1,4 @@
-import type Promise from 'bluebird';
-import { readFile, readFileSync, stat, statSync, type ReadFileOptions } from 'hexo-fs';
-import type fs from 'fs';
+import { ReadFileOptions, readFile, readFileSync, stat, statSync } from 'hexo-fs';
 
 class File {
   public source: string;
@@ -19,19 +17,19 @@ class File {
     this.type = type;
   }
 
-  read(options?: ReadFileOptions): Promise<string> {
-    return readFile(this.source, options) as Promise<string>;
+  read(options: ReadFileOptions) {
+    return readFile(this.source, options);
   }
 
-  readSync(options?: ReadFileOptions): string {
-    return readFileSync(this.source, options) as string;
+  readSync(options: ReadFileOptions) {
+    return readFileSync(this.source, options);
   }
 
-  stat(): Promise<fs.Stats> {
+  stat(_options: any) {
     return stat(this.source);
   }
 
-  statSync(): fs.Stats {
+  statSync(_options: any) {
     return statSync(this.source);
   }
 }
