@@ -99,6 +99,7 @@ jobs:
       - name: what changes
         id: changes
         run: |
+          git whatchanged -1 --format=oneline | wc -l
           git status
           echo "cached=$(git diff --cached --numstat | wc -l)" >> $GITHUB_OUTPUT
           echo "commits=$(git diff origin/master..HEAD --numstat | wc -l)" >> $GITHUB_OUTPUT
