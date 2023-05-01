@@ -36,7 +36,7 @@
   "homepage": "https://github.com/dimaslanjaka/hexo#readme",
   "devDependencies": {
     "@types/node": "^18.16.0",
-    "binary-collections": "https://github.com/dimaslanjaka/bin",
+    "binary-collections": "https://github.com/dimaslanjaka/bin.git#master",
     "cross-spawn": "https://github.com/dimaslanjaka/node-cross-spawn/raw/private/release/cross-spawn.tgz",
     "depcheck": "^1.4.3",
     "mocha": "^10.2.0",
