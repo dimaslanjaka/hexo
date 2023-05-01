@@ -102,7 +102,7 @@ class Render {
       .asCallback(callback);
   }
 
-  renderSync(data, options = {}) {
+  renderSync(data, options: Record<string, any> = {}) {
     if (!data) throw new TypeError('No input file or string!');
 
     const ctx = this.context;
