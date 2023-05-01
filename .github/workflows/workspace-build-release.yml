@@ -78,9 +78,10 @@ jobs:
             ./releases
             ./yarn.lock
             ./releases/yarn.lock
-          key: ${{ runner.os }}-${{ hashFiles('**/package.json') }}
+          key: ${{ runner.os }}-${{ matrix.node-version }}-${{ hashFiles('**/package.json') }}
           restore-keys: |
-            ${{ runner.os }}-${{ hashFiles('**/package.json') }}
+            ${{ runner.os }}-${{ matrix.node-version }}-${{ hashFiles('**/package.json') }}
+            ${{ runner.os }}-${{ matrix.node-version }}-
             ${{ runner.os }}-
 
       - name: what changes
