@@ -25,7 +25,8 @@ export interface StoreSyncFunction {
     // callback?: NodeJSLikeCallback<string>
   ): any;
   output?: string;
-  compile?: (local: object) => any;
+  compile?: (local: object) => string;
+  disableNunjucks?: boolean;
 }
 export interface StoreFunction {
   (
