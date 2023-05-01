@@ -70,7 +70,7 @@ class Box extends EventEmitter {
         }, options);
       }
 
-      renderSync(options) {
+      renderSync(options: Record<string, any>) {
         return ctx.render.renderSync({
           path: this.source
         }, options);
