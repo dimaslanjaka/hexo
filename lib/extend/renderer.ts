@@ -50,6 +50,7 @@ class Renderer {
    * @param fn renderer function
    */
   register(name: string, output: string, fn: StoreFunction): void;
+
   /**
    * register renderer engine asynchronous
    * @param name input extension name. ex: ejs
@@ -58,6 +59,7 @@ class Renderer {
    * @param sync is synchronous?
    */
   register(name: string, output: string, fn: StoreFunction, sync: false): void;
+
   /**
    * register renderer engine
    * @param name input extension name. ex: ejs
@@ -66,6 +68,7 @@ class Renderer {
    * @param sync is synchronous?
    */
   register(name: string, output: string, fn: StoreSyncFunction, sync: true): void;
+
   /**
    * register renderer engine
    * @param name input extension name. ex: ejs
@@ -74,6 +77,7 @@ class Renderer {
    * @param sync is synchronous?
    */
   register(name: string, output: string, fn: StoreFunction | StoreSyncFunction, sync: boolean): void;
+
   /**
    * register renderer engine
    * @param name input extension name. ex: ejs
