@@ -15,9 +15,9 @@ interface Processor {
 }
 
 class Box extends EventEmitter {
-  public options: any;
-  public context: any;
-  public base: any;
+  public options: Record<string, any>;
+  public context: import('../hexo');
+  public base: string;
   public processors: Processor[];
   public _processingFiles: any;
   public watcher: any;
@@ -64,7 +64,7 @@ class Box extends EventEmitter {
     class _File extends File {
       public box: Box;
 
-      render(options) {
+      render(options: any) {
         return ctx.render.render({
           path: this.source
         }, options);
