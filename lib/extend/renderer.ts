@@ -19,6 +19,7 @@ interface StoreSyncFunction {
   ): any;
   output?: string;
   compile?: (local: object) => string;
+  disableNunjucks?: boolean;
 }
 interface StoreFunction {
   (
