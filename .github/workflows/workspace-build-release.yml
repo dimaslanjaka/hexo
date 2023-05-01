@@ -63,6 +63,8 @@ jobs:
             ./releases
             ./yarn.lock
             ./releases/yarn.lock
+            **/node_modules
+            **/tmp
           key: ${{ runner.os }}-${{ matrix.node-version }}-${{ github.ref_name }}
           restore-keys: |
             ${{ runner.os }}-${{ matrix.node-version }}-${{ github.ref_name }}
