@@ -1,5 +1,6 @@
 import { extname } from 'path';
 import Promise from 'bluebird';
+import { Store, SyncStore, StoreSyncFunction, StoreFunction } from './renderer-d';
 
 const getExtname = (str: string) => {
   if (typeof str !== 'string') return '';
@@ -7,47 +8,6 @@ const getExtname = (str: string) => {
   const ext = extname(str) || str;
   return ext.startsWith('.') ? ext.slice(1) : ext;
 };
-
-interface StoreSyncFunction {
-  (
-    data: {
-      path?: string;
-      text: string;
-    },
-    options: object,
-    // callback: (err: Error, value: string) => any
-  ): any;
-  output?: string;
-  compile?: (local: object) => string;
-  disableNunjucks?: boolean;
-}
-interface StoreFunction {
-  (
-    data: {
-      path?: string;
-      text: string;
-    },
-    options: object,
-  ): Promise<any>;
-  (
-    data: {
-      path?: string;
-      text: string;
-    },
-    options: object,
-    callback: (err: Error, value: string) => any
-  ): void;
-  output?: string;
-  compile?: (local: object) => string;
-  disableNunjucks?: boolean;
-}
-
-interface SyncStore {
-  [key: string]: StoreSyncFunction;
-}
-interface Store {
-  [key: string]: StoreFunction;
-}
 
 class Renderer {
   public store: Store;

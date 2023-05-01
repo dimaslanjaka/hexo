@@ -10,10 +10,7 @@ const getExtname = (str: string) => {
 };
 
 const toString = (result, options) => {
-  if (
-    !Object.prototype.hasOwnProperty.call(options, 'toString')
-    || typeof result === 'string'
-  ) {
+  if (!Object.prototype.hasOwnProperty.call(options, 'toString') || typeof result === 'string') {
     return result;
   }
 
@@ -29,10 +26,10 @@ const toString = (result, options) => {
 };
 
 class Render {
-  public context: any;
-  public renderer: any;
+  public context: import(".")
+  public renderer: import("../extend/renderer")
 
-  constructor(ctx) {
+  constructor(ctx: import('.')) {
     this.context = ctx;
     this.renderer = ctx.extend.renderer;
   }
@@ -49,19 +46,15 @@ class Render {
     return this.renderer.getOutput(path);
   }
 
-  getRenderer(ext, sync?) {
+  getRenderer(ext: string, sync?: boolean) {
     return this.renderer.get(ext, sync);
   }
 
-  getRendererSync(ext) {
+  getRendererSync(ext: string) {
     return this.getRenderer(ext, true);
   }
 
-  render(
-    data: Record<string, any>,
-    options?,
-    callback?: (...args: any[]) => any
-  ) {
+  render(data: Record<string, any>, options?, callback?: (...args: any[]) => any) {
     if (!callback && typeof options === 'function') {
       callback = options;
       options = {};
@@ -83,7 +76,7 @@ class Render {
     }
 
     return promise
-      .then(text => {
+      .then((text) => {
         data.text = text;
         ext = data.engine || getExtname(data.path);
         if (!ext || !this.isRenderable(ext)) return text;
@@ -91,7 +84,7 @@ class Render {
         const renderer = this.getRenderer(ext);
         return Reflect.apply(renderer, ctx, [data, options]);
       })
-      .then(result => {
+      .then((result) => {
         result = toString(result, data);
         if (data.onRenderEnd) {
           return data.onRenderEnd(result);
@@ -99,7 +92,7 @@ class Render {
 
         return result;
       })
-      .then(result => {
+      .then((result) => {
         const output = this.getOutput(ext) || ext;
         return ctx.execFilter(`after_render:${output}`, result, {
           context: ctx,
@@ -122,7 +115,7 @@ class Render {
     if (data.text == null) throw new TypeError('No input file or string!');
 
     const ext = data.engine || getExtname(data.path);
-    let result;
+    let result: string;
 
     if (ext && this.isRenderableSync(ext)) {
       const renderer = this.getRendererSync(ext);
