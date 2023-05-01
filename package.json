@@ -60,6 +60,7 @@
   ],
   "packageManager": "yarn@3.5.0",
   "resolutions": {
-    "sbg-utility": "https://github.com/dimaslanjaka/static-blog-generator/raw/beta/packages/sbg-utility/release/sbg-utility.tgz"
+    "sbg-utility": "https://github.com/dimaslanjaka/static-blog-generator/raw/beta/packages/sbg-utility/release/sbg-utility.tgz",
+    "node-sass": "https://github.com/sass/node-sass/tarball/master"
   }
 }
