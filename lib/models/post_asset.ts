@@ -1,14 +1,13 @@
 import warehouse from 'warehouse';
-import { join, posix } from 'path';
-import type Hexo from '../hexo';
+import { dirname, join } from 'path';
 
-export = (ctx: Hexo) => {
+export = (ctx: import('../hexo')) => {
   const PostAsset = new warehouse.Schema({
-    _id: {type: String, required: true},
-    slug: {type: String, required: true},
-    modified: {type: Boolean, default: true},
-    post: {type: warehouse.Schema.Types.CUID, ref: 'Post'},
-    renderable: {type: Boolean, default: true}
+    _id: { type: String, required: true },
+    slug: { type: String, required: true },
+    modified: { type: Boolean, default: true },
+    post: { type: warehouse.Schema.Types.CUID, ref: 'Post' },
+    renderable: { type: Boolean, default: true }
   });
 
   PostAsset.virtual('path').get(function() {
@@ -18,9 +17,8 @@ export = (ctx: Hexo) => {
 
     // PostAsset.path is file path relative to `public_dir`
     // no need to urlescape, #1562
-    // strip /\.html?$/ extensions on permalink, #2134
-    // Use path.posix.join to avoid path.join introducing unwanted backslashes on Windows.
-    return posix.join(post.path.replace(/\.html?$/, ''), this.slug);
+    // strip extensions better on permalink, #2134
+    return join(dirname(post.path), post.slug, this.slug);
   });
 
   PostAsset.virtual('source').get(function() {
