@@ -6,6 +6,5 @@
 		"esModuleInterop": true
 		//"lib": ["ES2015", "ES6", "ES5", "ES2022"]
 	},
-	"include": ["packages", "test"],
 	"exclude": ["node_modules", "tmp", "dist"]
 }
