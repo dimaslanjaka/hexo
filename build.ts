@@ -111,6 +111,8 @@ parseWorkspaces
         .then(() => runBuild('hexo'))
         // need hexo
         .then(() => runBuild('hexo-shortcodes'))
+        // need hexo
+        .then(() => runBuild('hexo-renderers'))
         .then(res);
     }).then(() => workspaces);
   })
