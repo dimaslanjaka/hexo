@@ -1,5 +1,13 @@
 export interface StoreSyncFunction {
   (
+
+    /**
+     * to cast `data` type look example below
+     * @example
+     * type rendererData = Parameters<Parameters<typeof hexo.extend.renderer.register>[2]>[0];
+     * // or
+     * type rendererData = Parameters<Parameters<import('hexo')['extend']['renderer']['register']>[2]>[0];
+     */
     data: {
       path?: string;
       text: string;
@@ -11,6 +19,7 @@ export interface StoreSyncFunction {
   compile?: (local: Record<string, any>) => string;
   disableNunjucks?: boolean;
 }
+
 export interface StoreFunction {
   (
     data: {
