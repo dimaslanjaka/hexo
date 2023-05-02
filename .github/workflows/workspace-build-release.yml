@@ -13,7 +13,7 @@ jobs:
   packer:
     runs-on: ${{ matrix.os }}
     # set timeout - see https://stackoverflow.com/a/59076067/6404439
-    timeout-minutes: 30
+    timeout-minutes: 120
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
@@ -88,6 +88,7 @@ jobs:
       - name: Install Dependencies
         run: touch yarn.lock && yarn install
         shell: bash
+        timeout-minutes: 30
       - name: Update submodules
         shell: bash
         run: submodule-install
