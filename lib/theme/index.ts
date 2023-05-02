@@ -20,12 +20,7 @@ class Theme extends Box {
 
     this.views = {};
 
-    this.processors = [
-      config,
-      i18n,
-      source,
-      view
-    ];
+    this.processors = [config, i18n, source, view];
 
     let languages: string | string[] = ctx.config.language;
 
@@ -46,7 +41,11 @@ class Theme extends Box {
     _View.prototype._helper = ctx.extend.helper;
   }
 
-  getView(path) {
+  getView(path: string): {
+    [key: string]: any;
+    path: string;
+    renderSync: (...args: any[]) => any;
+  } {
     // Replace backslashes on Windows
     path = path.replace(/\\/g, '/');
 
