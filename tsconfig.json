@@ -3,8 +3,8 @@
 		"module": "CommonJS",
 		"target": "ES5",
 		"outDir": "tmp/dist",
-		"esModuleInterop": true
-		//"lib": ["ES2015", "ES6", "ES5", "ES2022"]
+		"esModuleInterop": true,
+		"lib": ["ES2015", "ES6", "ES5", "ES2022"]
 	},
 	"exclude": ["node_modules", "tmp", "dist"]
 }
