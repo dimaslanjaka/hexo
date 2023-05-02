@@ -1,0 +1,7 @@
+yarn workspace hexo exec "git remote add upstream https://github.com/hexojs/hexo"
+yarn workspace hexo-front-matter exec "git remote add upstream https://github.com/hexojs/hexo-front-matter"
+yarn workspace warehouse exec "git remote add upstream https://github.com/hexojs/warehouse"
+yarn workspace hexo-asset-link exec "git remote add upstream https://github.com/liolok/hexo-asset-link"
+yarn workspace hexo-site exec "git remote add upstream https://github.com/hexojs/hexo-theme-unit-test"
+yarn workspace hexo-util exec "git remote add upstream https://github.com/hexojs/hexo-util"
+yarn workspace hexo-log exec "git remote add upstream https://github.com/hexojs/hexo-log"
