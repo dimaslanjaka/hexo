@@ -11,10 +11,10 @@
     "build:log": "npm run build --workspace=hexo-log",
     "build:fm": "npm run build --workspace=hexo-front-matter",
     "prebuild": "yarn build:util && yarn build:log && yarn build:fm",
-    "build": "node packer.js",
+    "build": "node build.js",
     "serve": "yarn workspace hexo-site exec \"hexo server\"",
     "postinstall": "npm run build",
-    "clean": "node packer.js --clean",
+    "clean": "node build.js --clean",
     "lint": "eslint --fix",
     "prepare": "yarn workspaces foreach run prepare"
   },
