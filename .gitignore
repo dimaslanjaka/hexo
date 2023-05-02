@@ -20,3 +20,4 @@ releases/.yarn
 releases/package-lock.json
 releases/hexo-shortcodes.tgz
 releases/hexo-renderers.tgz
+releases/git-embed.tgz
