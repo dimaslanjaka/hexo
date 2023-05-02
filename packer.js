@@ -2,7 +2,7 @@ const croSpawn = require('cross-spawn');
 const { renameSync, existsSync, rmSync, mkdirSync } = require('fs');
 const { join, dirname } = require('path');
 const utility = require('sbg-utility');
-const pc = require("picocolors")
+const pc = require('picocolors');
 const argv = process.argv.slice(2);
 
 const parseWorkspaces = croSpawn
@@ -23,11 +23,6 @@ const parseWorkspaces = croSpawn
       })
       .filter((o) => existsSync(o.location))
   );
-
-const logfile = (...args) =>
-  utility.writefile(join(__dirname, 'tmp/build.log'), args.join('\n') + '\n', { append: true });
-
-utility.writefile(join(__dirname, 'tmp/build.log'), 'Build ' + new Date() + '\n\n');
 
 parseWorkspaces.then((workspaces) => {
   if (workspaces.length === 0) return logfile('workspaces empty');
@@ -74,7 +69,7 @@ parseWorkspaces.then((workspaces) => {
           if (existsSync(originalTarballPath)) {
             renameSync(originalTarballPath, tarballPath);
           } else {
-            logfile(originalTarballPath + ' not found');
+            console.log(originalTarballPath + ' not found');
           }
           // move {workspace.name}.tgz to releases/{workspace.name}.tgz
           if (existsSync(tarballPath)) {
@@ -83,13 +78,18 @@ parseWorkspaces.then((workspaces) => {
             if (existsSync(dest)) rmSync(dest);
             renameSync(tarballPath, dest);
           } else {
-            logfile(tarballPath + ' not found');
+            console.log(tarballPath + ' not found');
           }
         } else {
-          logfile(wname, 'is not workspace');
+          console.log(wname, 'is not workspace');
         }
       })
-      .then(() => console.log(wname, ((clean ? 'clean->' : '') + 'build->pack successful').trim()));
+      .then(() =>
+        console.log(
+          wname,
+          ((clean ? pc.red('build') + '->' : '') + pc.green('build') + '->' + pc.yellow('pack') + ' successful').trim()
+        )
+      );
   };
   return (
     // no need any workspaces
