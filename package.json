@@ -69,7 +69,7 @@
     "packages/hexo-shortcodes",
     "test/hexo-theme-test"
   ],
-  "packageManager": "yarn@3.5.0",
+  "packageManager": "yarn@3.5.1",
   "resolutions": {
     "sbg-utility": "https://github.com/dimaslanjaka/static-blog-generator/raw/beta/packages/sbg-utility/release/sbg-utility.tgz",
     "node-sass": "https://github.com/sass/node-sass/tarball/master",
