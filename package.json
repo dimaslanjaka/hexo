@@ -15,7 +15,8 @@
     "serve": "yarn workspace hexo-site exec \"hexo server\"",
     "postinstall": "npm run build",
     "clean": "node packer.js --clean",
-    "lint": "eslint --fix"
+    "lint": "eslint --fix",
+    "prepare": "yarn workspaces foreach run prepare"
   },
   "repository": {
     "type": "git",
@@ -66,5 +67,8 @@
     "node-sass": "https://github.com/sass/node-sass/tarball/master",
     "cross-spawn": "https://github.com/dimaslanjaka/node-cross-spawn.git#private",
     "@types/hexo": "file:./packages/hexo"
+  },
+  "dependencies": {
+    "picocolors": "^1.0.0"
   }
 }
