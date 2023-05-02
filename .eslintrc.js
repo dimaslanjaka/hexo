@@ -1,4 +1,4 @@
-const prettier = require('./.prettierrc.json')
+const prettier = require('./.prettierrc.json');
 
 /**
  * @type {import('eslint').ESLint.ConfigData}
@@ -11,7 +11,6 @@ const config = {
     amd: true, // add amd support
     node: true // add node support (module.export,etc)
   },
-
   globals: {
     dataLayer: true,
     hexo: true,
@@ -34,6 +33,7 @@ const config = {
     {
       files: ['*.js'],
       rules: {
+        'no-var-requires': 'warn', // warning unused vars on js files
         '@typescript-eslint/no-var-requires': 'off' // disable require warning on js files
       }
     }
@@ -64,6 +64,6 @@ const config = {
     'arrow-body-style': 'off',
     'prefer-arrow-callback': 'off'
   }
-}
+};
 
-module.exports = config
+module.exports = config;
