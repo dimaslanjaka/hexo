@@ -14,7 +14,8 @@
     "build": "node packer.js",
     "serve": "yarn workspace hexo-site exec \"hexo server\"",
     "postinstall": "npm run build",
-    "clean": "node packer.js --clean"
+    "clean": "node packer.js --clean",
+    "lint": "eslint --fix"
   },
   "repository": {
     "type": "git",
