@@ -48,20 +48,22 @@
     "typescript": "^5.0.4"
   },
   "workspaces": [
+    "packages/hexo-log",
+    "packages/hexo-util",
     "packages/warehouse",
+    "packages/hexo-cli",
     "packages/hexo-front-matter",
     "packages/hexo",
     "packages/hexo-asset-link",
-    "test/hexo-theme-test",
     "packages/hexo-theme-landscape",
-    "packages/hexo-log",
-    "packages/hexo-util",
-    "packages/hexo-shortcodes"
+    "packages/hexo-shortcodes",
+    "test/hexo-theme-test"
   ],
   "packageManager": "yarn@3.5.0",
   "resolutions": {
     "sbg-utility": "https://github.com/dimaslanjaka/static-blog-generator/raw/beta/packages/sbg-utility/release/sbg-utility.tgz",
     "node-sass": "https://github.com/sass/node-sass/tarball/master",
-    "cross-spawn": "https://github.com/dimaslanjaka/node-cross-spawn.git#private"
+    "cross-spawn": "https://github.com/dimaslanjaka/node-cross-spawn.git#private",
+    "@types/hexo": "file:./packages/hexo"
   }
 }

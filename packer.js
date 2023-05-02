@@ -2,7 +2,7 @@ const croSpawn = require('cross-spawn');
 const { renameSync, existsSync, rmSync, mkdirSync } = require('fs');
 const { join, dirname } = require('path');
 const utility = require('sbg-utility');
-
+const pc = require("picocolors")
 const argv = process.argv.slice(2);
 
 const parseWorkspaces = croSpawn
@@ -102,7 +102,9 @@ parseWorkspaces.then((workspaces) => {
       .then(() => runBuild('warehouse'))
       // need hexo-util
       .then(() => runBuild('hexo-asset-link'))
-      // need hexo-util, hexo-log, warehouse, hexo-front-matter
+      // need hexo-util, hexo-log
+      .then(() => runBuild('hexo-cli'))
+      // need hexo-cli, hexo-util, hexo-log, warehouse, hexo-front-matter
       .then(() => runBuild('hexo'))
       // need hexo
       .then(() => runBuild('hexo-shortcodes'))
