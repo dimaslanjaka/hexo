@@ -16,3 +16,4 @@ coverage/
 dist/
 releases/
 packages/
+test/hexo-theme-test
