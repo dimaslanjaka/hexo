@@ -1,4 +1,6 @@
 const prettier = require('./.prettierrc.json');
+// or using prettier config javascript
+// const prettier = require('./.prettierrc');
 
 /**
  * @type {import('eslint').ESLint.ConfigData}
@@ -33,8 +35,16 @@ const config = {
     {
       files: ['*.js'],
       rules: {
-        'no-var-requires': 'warn', // warning unused vars on js files
-        '@typescript-eslint/no-var-requires': 'off' // disable require warning on js files
+        'no-unused-vars': [
+          'warn',
+          {
+            argsIgnorePattern: '^_',
+            varsIgnorePattern: '^_',
+            caughtErrorsIgnorePattern: '^_'
+          }
+        ], // warn unused vars on js files
+        'no-var-requires': 'off', // disable require vars on js files
+        '@typescript-eslint/no-var-requires': 'off' // disable require vars warning on js files
       }
     }
   ],
