@@ -505,12 +505,12 @@ class Hexo extends EventEmitter {
       };
       path: string;
       url: string;
-      config: object;
-      theme: object;
+      config: Record<string, any>;
+      theme: Record<string, any>;
       layout: string;
       env: any;
       view_dir: string;
-      site: object;
+      site: Record<string, any>;
       cache?: boolean;
 
       constructor(path: string, locals: import('.')['locals']) {
