@@ -118,7 +118,7 @@ jobs:
           echo "releases=$(git diff --numstat -- releases | wc -l)" >> $GITHUB_OUTPUT
 
       - name: Push
-        if: matrix.node-version == '18.x' && runner.os == 'Linux' && steps.build.outcome == 'success' && steps.changes.outputs.releases > 0
+        if: matrix.node-version == '18.x' && runner.os == 'Linux' && steps.build.outcome == 'success' && steps.changes.outputs.releases != '0'
         run: |
           git config --global user.name 'dimaslanjaka'
           git config --global user.email 'dimaslanjaka@gmail.com'
