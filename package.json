@@ -66,7 +66,7 @@
     "sbg-utility": "https://github.com/dimaslanjaka/static-blog-generator/raw/beta/packages/sbg-utility/release/sbg-utility.tgz",
     "node-sass": "https://github.com/sass/node-sass/tarball/master",
     "cross-spawn": "https://github.com/dimaslanjaka/node-cross-spawn.git#private",
-    "@types/hexo": "file:./packages/hexo"
+    "@types/hexo": "file:./releases/hexo.tgz"
   },
   "dependencies": {
     "picocolors": "^1.0.0"
