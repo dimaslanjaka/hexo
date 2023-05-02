@@ -89,7 +89,7 @@ jobs:
       - name: Install Dependencies
         run: touch yarn.lock && yarn install
         shell: bash
-        timeout-minutes: 60
+        #timeout-minutes: 60
       - name: Update submodules
         shell: bash
         run: submodule-install
