@@ -38,3 +38,7 @@
 	path = packages/hexo-cli
 	url = https://github.com/dimaslanjaka/hexo-cli.git
 	branch = monorepo
+[submodule "packages/hexo-renderers"]
+	path = packages/hexo-renderers
+	url = https://github.com/dimaslanjaka/hexo-renderers
+	branch = monorepo
