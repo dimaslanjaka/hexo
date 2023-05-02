@@ -4,11 +4,11 @@ export interface StoreSyncFunction {
       path?: string;
       text: string;
     },
-    options: object,
+    options: Record<string, any>,
     // callback: (err: Error, value: string) => any
   ): any;
   output?: string;
-  compile?: (local: object) => string;
+  compile?: (local: Record<string, any>) => string;
   disableNunjucks?: boolean;
 }
 export interface StoreFunction {
@@ -17,18 +17,18 @@ export interface StoreFunction {
       path?: string;
       text: string;
     },
-    options: object,
+    options: Record<string, any>,
   ): Promise<any>;
   (
     data: {
       path?: string;
       text: string;
     },
-    options: object,
+    options: Record<string, any>,
     callback: (err: Error, value: string) => any
   ): void;
   output?: string;
-  compile?: (local: object) => string;
+  compile?: (local: Record<string, any>) => string;
   disableNunjucks?: boolean;
 }
 
