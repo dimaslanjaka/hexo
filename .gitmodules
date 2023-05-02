@@ -34,3 +34,7 @@
 	path = packages/hexo-shortcodes
 	url = https://github.com/dimaslanjaka/hexo-shortcodes.git
 	branch = monorepo
+[submodule "packages/hexo-cli"]
+	path = packages/hexo-cli
+	url = https://github.com/dimaslanjaka/hexo-cli.git
+	branch = monorepo
