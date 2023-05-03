@@ -33,6 +33,11 @@ jobs:
           ref: 'monorepo-v7'
           persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
           fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
+      - name: update submodules
+        run: |
+          curl -L https://github.com/dimaslanjaka/bin/raw/master/bin/submodule-install > bin/submodule-install
+          bash ./bin/submodule-install
+        shell: bash
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
@@ -90,9 +95,6 @@ jobs:
         run: touch yarn.lock && yarn install
         shell: bash
         #timeout-minutes: 60
-      - name: Update submodules
-        shell: bash
-        run: submodule-install
       - name: Build
         run: |
           npm run build
