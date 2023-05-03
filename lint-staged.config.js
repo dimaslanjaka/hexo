@@ -1,10 +1,10 @@
 'use strict';
 
 const config = {
-  '*.ts': ['prettier --write', 'eslint --fix'],
-  '*.html': ['eslint --fix', 'prettier --write'],
-  '*.scss': 'prettier --write',
-  '*.json': 'prettier --write'
+  '*.ts': ['npx prettier --write', 'eslint --fix'],
+  '*.html': ['npx eslint --fix', 'prettier --write'],
+  '*.scss': 'npx prettier --write',
+  '*.json': 'npx prettier --write'
 };
 
 module.exports = config;
