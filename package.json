@@ -7,13 +7,12 @@
   "types": "packages/hexo/dist/hexo/index.d.ts",
   "scripts": {
     "test": "mocha",
-    "build:util": "yarn workspace hexo-util prepare && npm run build --workspace=hexo-util",
+    "build:util": "npm run build --workspace=hexo-util",
     "build:log": "npm run build --workspace=hexo-log",
     "build:fm": "npm run build --workspace=hexo-front-matter",
     "prebuild": "yarn build:util && yarn build:log && yarn build:fm",
     "build": "node -r ts-node/register build.ts",
     "serve": "yarn workspace hexo-site exec \"hexo server\"",
-    "post-install": "yarn prepare && npm run build",
     "clean": "node -r ts-node/register build.ts --clean",
     "lint": "eslint --fix",
     "prepare": "husky install && yarn workspaces foreach run prepare"
