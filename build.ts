@@ -107,6 +107,8 @@ async function buildPack(workspaces: Awaited<typeof parseWorkspaces>) {
       // need hexo-cli, hexo-util, hexo-log, warehouse, hexo-front-matter
       .then(() => runBuild('hexo'))
       // need hexo
+      .then(() => runBuild('git-embed'))
+      // need hexo, git-embed
       .then(() => runBuild('hexo-shortcodes'))
       // need hexo
       .then(() => runBuild('hexo-renderers'))
@@ -128,9 +130,18 @@ async function createReadMe(workspaces: Awaited<typeof parseWorkspaces>) {
     for (let i = 0; i < workspaces.length; i++) {
       const workspace = workspaces[i];
       const tarball = join(__dirname, 'releases', workspace.name + '.tgz');
-      if (!existsSync(tarball)) continue;
+      if (!existsSync(tarball)) {
+        console.log(tarball, pc.red('not found'));
+        continue;
+      }
       const relativeTarball = toUnix(tarball.replace(__dirname, '')).replace(/^\//, '');
-      if ((await croSpawn.async('git', 'status --porcelain --ignored'.split(' '))).output.includes(relativeTarball)) {
+      const checkIgnore = (await croSpawn.async('git', 'status --porcelain --ignored'.split(' '))).output
+        .split(/\r?\n/)
+        .map((str) => str.trim())
+        .filter((str) => str.startsWith('!!'))
+        .join('\n');
+      if (checkIgnore.includes(relativeTarball)) {
+        console.log(relativeTarball, pc.red('excluded by .gitignore'));
         continue;
       }
       const github = new git(workspace.location);
@@ -138,8 +149,7 @@ async function createReadMe(workspaces: Awaited<typeof parseWorkspaces>) {
         (await github.getremote()).fetch.url.replace(/.git$/, '') + '/commit/' + (await github.latestCommit())
       );
 
-      const args = ['diff', '--numstat', '--', relativeTarball, '|', 'wc', '-l'];
-      // console.log('git', ...args);
+      const args = ['status', '--porcelain', '--', relativeTarball, '|', 'wc', '-l'];
       const isChanged =
         parseInt(
           (
@@ -149,10 +159,13 @@ async function createReadMe(workspaces: Awaited<typeof parseWorkspaces>) {
             })
           ).output.trim()
         ) > 0;
-      // console.log(relativeTarball, 'is changed', isChanged);
+      console.log('git', ...args, '->', relativeTarball, 'is changed', isChanged);
       if (isChanged) {
-        await croSpawn.async('git', ['add', relativeTarball]);
-        await croSpawn.async('git', ['commit', '-m', 'chore: update from ' + commitURL.pathname]);
+        await croSpawn.async('git', ['add', relativeTarball], { cwd: __dirname, stdio: 'inherit' });
+        await croSpawn.async('git', ['commit', '-m', 'chore: update from ' + commitURL.pathname], {
+          cwd: __dirname,
+          stdio: 'inherit'
+        });
       }
 
       // create installation
