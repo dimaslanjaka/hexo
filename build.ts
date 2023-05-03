@@ -1,10 +1,11 @@
 import croSpawn from 'cross-spawn';
-import { renameSync, existsSync, rmSync, mkdirSync, writeFileSync } from 'fs';
+import { renameSync, existsSync, rmSync, mkdirSync, writeFileSync, readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import utility from 'sbg-utility';
 import pc from 'picocolors';
 import git from 'git-command-helper';
 import { toUnix } from 'upath';
+import nunjucks from 'nunjucks';
 
 const argv = process.argv.slice(2);
 const gh = new git(__dirname, 'monorepo-v7');
@@ -116,19 +117,13 @@ async function buildPack(workspaces: Awaited<typeof parseWorkspaces>) {
 async function createReadMe(workspaces: Awaited<typeof parseWorkspaces>) {
   if (Array.isArray(workspaces)) {
     const readme = join(__dirname, 'releases/readme.md');
-    const readmebody = [
-      '# HexoJS - Customized',
-      'because of HexoJS doesnt accept my PR, i bundled my improved version of hexo.'
-    ];
+    const source_readme = nunjucks.compile(readFileSync(join(__dirname, 'build-readme.md'), 'utf-8'));
+    const source_vars = {
+      install_prod: '',
+      install_dev: '',
+      resolutions: ''
+    };
 
-    const table = [
-      '',
-      '',
-      '## Installation by CLI',
-      'Installation with command line interface',
-      '| production | development |',
-      '| :--- | :--- |'
-    ];
     const resolutions = {};
     for (let i = 0; i < workspaces.length; i++) {
       const workspace = workspaces[i];
@@ -160,35 +155,24 @@ async function createReadMe(workspaces: Awaited<typeof parseWorkspaces>) {
         await croSpawn.async('git', ['commit', '-m', 'chore: update from ' + commitURL.pathname]);
       }
 
-      // create table installation
+      // create installation
       const tarballRawURL = (await gh.getGithubRepoUrl(relativeTarball)).rawURL;
       const tarballProdURL = tarballRawURL.replace('monorepo-v7', await gh.latestCommit(relativeTarball));
-      table.push(
-        `| <pre>npm i ${workspace.name}@${tarballProdURL}</pre> | <pre>npm i ${workspace.name}@${tarballRawURL}</pre> |`
-      );
+      source_vars.install_prod += `npm i ${workspace.name}@${tarballProdURL}\n`;
+      source_vars.install_dev += `npm i ${workspace.name}@${tarballRawURL}\n`;
 
-      // create json resolution
+      // create resolutions
       resolutions[workspace.name] = tarballProdURL;
     }
 
-    // append table
-    readmebody.push(...table);
+    source_vars.resolutions = JSON.stringify({ name: 'your package name', resolutions }, null, 2);
 
-    // append resolutions
-    readmebody.push(
-      '',
-      '',
-      '## Installation by changing resolutions',
-      'changing module `resolutions` can changed whole source of desired package, _but only work with `yarn`_',
-      'package.json',
-      '```json',
-      JSON.stringify({ name: 'your package name', resolutions }, null, 2),
-      '```'
-    );
+    source_vars.install_prod = source_vars.install_prod.trim();
+    source_vars.install_dev = source_vars.install_dev.trim();
 
-    // readmebody.push('\n' + readFileSync(join(__dirname, 'README.md'), 'utf-8'));
+    const render = source_readme.render(source_vars);
 
-    writeFileSync(readme, readmebody.join('\n'));
+    writeFileSync(readme, render);
     await gh.add('releases/readme.md');
     // await gh.commit('docs: update docs');
   }
