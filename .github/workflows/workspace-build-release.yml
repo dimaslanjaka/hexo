@@ -92,7 +92,10 @@ jobs:
             ${{ runner.os }}-
 
       - name: Install Dependencies
-        run: touch yarn.lock && yarn install
+        run: |
+          touch yarn.lock
+          yarn prepare
+          yarn install
         shell: bash
         #timeout-minutes: 60
       - name: Build
