@@ -12,7 +12,7 @@ npm i hexo-asset-link@https://github.com/dimaslanjaka/hexo/raw/4ce9acab/releases
 npm i hexo-cli@https://github.com/dimaslanjaka/hexo/raw/b2788726/releases/hexo-cli.tgz
 npm i hexo-front-matter@https://github.com/dimaslanjaka/hexo/raw/b2788726/releases/hexo-front-matter.tgz
 npm i hexo-log@https://github.com/dimaslanjaka/hexo/raw/8a00c35d/releases/hexo-log.tgz
-npm i hexo-util@https://github.com/dimaslanjaka/hexo/raw/32eacdbf/releases/hexo-util.tgz
+npm i hexo-util@https://github.com/dimaslanjaka/hexo/raw/9476cf4b/releases/hexo-util.tgz
 npm i warehouse@https://github.com/dimaslanjaka/hexo/raw/806f1798/releases/warehouse.tgz
 ```
 
@@ -33,15 +33,15 @@ changing module `resolutions` can changed whole source of desired package, _but 
 package.json
 ```json
 {
-  &quot;name&quot;: &quot;your package name&quot;,
-  &quot;resolutions&quot;: {
-    &quot;hexo&quot;: &quot;https://github.com/dimaslanjaka/hexo/raw/a7e09431/releases/hexo.tgz&quot;,
-    &quot;hexo-asset-link&quot;: &quot;https://github.com/dimaslanjaka/hexo/raw/4ce9acab/releases/hexo-asset-link.tgz&quot;,
-    &quot;hexo-cli&quot;: &quot;https://github.com/dimaslanjaka/hexo/raw/b2788726/releases/hexo-cli.tgz&quot;,
-    &quot;hexo-front-matter&quot;: &quot;https://github.com/dimaslanjaka/hexo/raw/b2788726/releases/hexo-front-matter.tgz&quot;,
-    &quot;hexo-log&quot;: &quot;https://github.com/dimaslanjaka/hexo/raw/8a00c35d/releases/hexo-log.tgz&quot;,
-    &quot;hexo-util&quot;: &quot;https://github.com/dimaslanjaka/hexo/raw/32eacdbf/releases/hexo-util.tgz&quot;,
-    &quot;warehouse&quot;: &quot;https://github.com/dimaslanjaka/hexo/raw/806f1798/releases/warehouse.tgz&quot;
+  "name": "your package name",
+  "resolutions": {
+    "hexo": "https://github.com/dimaslanjaka/hexo/raw/a7e09431/releases/hexo.tgz",
+    "hexo-asset-link": "https://github.com/dimaslanjaka/hexo/raw/4ce9acab/releases/hexo-asset-link.tgz",
+    "hexo-cli": "https://github.com/dimaslanjaka/hexo/raw/b2788726/releases/hexo-cli.tgz",
+    "hexo-front-matter": "https://github.com/dimaslanjaka/hexo/raw/b2788726/releases/hexo-front-matter.tgz",
+    "hexo-log": "https://github.com/dimaslanjaka/hexo/raw/8a00c35d/releases/hexo-log.tgz",
+    "hexo-util": "https://github.com/dimaslanjaka/hexo/raw/9476cf4b/releases/hexo-util.tgz",
+    "warehouse": "https://github.com/dimaslanjaka/hexo/raw/806f1798/releases/warehouse.tgz"
   }
 }
 ```
