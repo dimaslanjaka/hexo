@@ -107,7 +107,7 @@ async function buildPack(workspaces: Awaited<typeof parseWorkspaces>) {
       // need hexo-cli, hexo-util, hexo-log, warehouse, hexo-front-matter
       .then(() => runBuild('hexo'))
       // need hexo
-      .then(() => runBuild('git-embed'))
+      //.then(() => runBuild('git-embed'))
       // need hexo, git-embed
       //.then(() => runBuild('hexo-shortcodes'))
       // need hexo
