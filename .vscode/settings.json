@@ -31,6 +31,8 @@
   "search.exclude": {
     "**/dist": true
   },
+  "git.enabled": true,
+  "git.detectSubmodules": true,
   "git.ignoreLimitWarning": true,
   "git.ignoredRepositories": ["packages/hexo-cli/assets"]
 }
