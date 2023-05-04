@@ -34,5 +34,5 @@
   "git.enabled": true,
   "git.detectSubmodules": true,
   "git.ignoreLimitWarning": true,
-  "git.ignoredRepositories": ["packages/hexo-cli/assets"]
+  "git.ignoredRepositories": ["packages/hexo-cli/assets", "packages/hexo-theme-landscape"]
 }
