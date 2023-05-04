@@ -1,6 +1,24 @@
 name: Workspace Build Release
 
-on: [push, pull_request, workflow_dispatch]
+on:
+  push:
+    branches: ['monorepo-v7']
+    paths-ignore:
+      - '**/*.tgz'
+      - '**/*.gz'
+      - '**/release*/**'
+      - '**garbage-collector**'
+      - '**codeql**'
+  pull_request:
+    branches: ['monorepo-v7']
+    types:
+      - closed
+    paths-ignore:
+      - '**/release*/**'
+      - '**/*.tgz'
+      - '**/*.gz'
+      - '**/test*/**'
+  workflow_dispatch:
 
 permissions: write-all
 
