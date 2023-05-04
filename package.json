@@ -12,7 +12,8 @@
     "build:fm": "npm run build --workspace=hexo-front-matter",
     "prebuild": "yarn build:util && yarn build:log && yarn build:fm",
     "build": "node -r ts-node/register build.ts",
-    "serve": "yarn workspace hexo-site exec \"hexo server\"",
+    "prestart": "npm run build",
+    "start": "yarn workspace hexo-site exec \"hexo server\"",
     "clean": "node -r ts-node/register build.ts --clean",
     "lint": "eslint --fix",
     "prepare": "husky install && yarn workspaces foreach run prepare"
