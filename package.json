@@ -75,7 +75,6 @@
     "packages/hexo-asset-link",
     "packages/hexo-theme-landscape",
     "packages/hexo-renderers",
-    "packages/hexo-shortcodes",
     "test/hexo-theme-test"
   ],
   "packageManager": "yarn@3.5.1",
