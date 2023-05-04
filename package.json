@@ -6,17 +6,16 @@
   "main": "packages/hexo/dist/hexo/index.js",
   "types": "packages/hexo/dist/hexo/index.d.ts",
   "scripts": {
-    "test": "mocha",
+    "prestart": "npm run build",
+    "start": "yarn workspace hexo-site exec \"hexo server\"",
     "build:util": "npm run build --workspace=hexo-util",
     "build:log": "npm run build --workspace=hexo-log",
     "build:fm": "npm run build --workspace=hexo-front-matter",
-    "prebuild": "yarn build:util && yarn build:log && yarn build:fm",
-    "build": "node -r ts-node/register build.ts",
-    "prestart": "npm run build",
-    "start": "yarn workspace hexo-site exec \"hexo server\"",
+    "build": "yarn build:util && yarn build:log && yarn build:fm && node -r ts-node/register build.ts",
     "clean": "node -r ts-node/register build.ts --clean",
     "lint": "eslint --fix",
-    "prepare": "husky install && yarn workspaces foreach run prepare"
+    "prepare": "husky install && yarn workspaces foreach run prepare",
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
