@@ -7,6 +7,7 @@ import git from 'git-command-helper';
 import { toUnix } from 'upath';
 import nunjucks from 'nunjucks';
 
+console.log(process.env);
 const argv = process.argv.slice(2);
 const gh = new git(__dirname, 'monorepo-v7');
 
