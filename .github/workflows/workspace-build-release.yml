@@ -129,7 +129,7 @@ jobs:
           touch yarn.lock
           yarn install
           npm run prepare
-          yarn workspace foreach run postinstall
+          yarn workspaces foreach run postinstall
         shell: bash
         #timeout-minutes: 60
       - name: Build
