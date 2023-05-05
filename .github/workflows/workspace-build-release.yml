@@ -112,7 +112,7 @@ jobs:
         with:
           path: |
             **/.yarn
-            ./releases
+            ./release*
             ./yarn.lock
             ./releases/yarn.lock
             **/node_modules
