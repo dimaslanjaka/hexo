@@ -22,7 +22,7 @@ on:
 permissions: write-all
 
 jobs:
-  dobuild:
+  builder:
     runs-on: ${{ inputs.os }}
     # set timeout - see https://stackoverflow.com/a/59076067/6404439
     timeout-minutes: 120
