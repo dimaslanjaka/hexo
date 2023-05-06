@@ -145,16 +145,6 @@ jobs:
           yarn workspaces foreach run postinstall
         shell: bash
 
-      - name: Build
-        run: |
-          yarn workspace hexo-util run build
-          yarn workspace hexo-log run build
-          yarn workspace hexo-front-matter run build
-          yarn workspace warehouse run build
-          npm run build
-        shell: bash
-        id: build
-
       - name: modify releases/readme.md
         shell: bash
         run: |
@@ -192,7 +182,7 @@ jobs:
           git status --porcelain
 
       - name: Push
-        if: matrix.node-version == '14.x' && runner.os == 'Linux' && steps.build.outcome == 'success' && steps.changes.outputs.commits > 0
+        if: matrix.node-version == '14.x' && runner.os == 'Linux' && steps.changes.outputs.commits > 0
         run: |
           git config --global user.name 'dimaslanjaka'
           git config --global user.email 'dimaslanjaka@gmail.com'
