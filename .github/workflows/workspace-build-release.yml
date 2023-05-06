@@ -141,7 +141,7 @@ jobs:
         run: yarn install
         shell: bash
 
-      - name: modify releases/readme.md
+      - name: modify releases
         shell: bash
         run: |
           git add releases
