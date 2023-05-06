@@ -43,4 +43,8 @@ jobs:
       YARN_ENABLE_IMMUTABLE_INSTALLS: false
       ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Let's get all the branches
       - run: npm test
