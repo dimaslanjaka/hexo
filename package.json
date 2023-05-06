@@ -38,6 +38,7 @@
   "homepage": "https://github.com/dimaslanjaka/hexo#readme",
   "dependencies": {
     "git-command-helper": "^1.2.0",
+    "minimist": "^1.2.8",
     "nunjucks": "^3.2.4",
     "picocolors": "^1.0.0",
     "sbg-utility": "^1.0.9",
@@ -45,6 +46,7 @@
   },
   "devDependencies": {
     "@types/eslint": "^8",
+    "@types/minimist": "^1",
     "@types/node": "^20.0.0",
     "@types/nunjucks": "^3.2.2",
     "@types/prettier": "^2",
