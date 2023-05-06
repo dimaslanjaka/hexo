@@ -7,7 +7,10 @@ import git from 'git-command-helper';
 import { toUnix } from 'upath';
 import nunjucks from 'nunjucks';
 
-console.log(process.env);
+/**
+ * is current device is Github Actions
+ */
+const _isCI = process.env.GITHUB_ACTION && process.env.GITHUB_ACTIONS;
 const argv = process.argv.slice(2);
 const gh = new git(__dirname, 'monorepo-v7');
 
@@ -162,6 +165,16 @@ async function createReadMe(workspaces: Awaited<typeof parseWorkspaces>) {
         ) > 0;
       console.log('git', ...args, '->', relativeTarball, 'is changed', isChanged);
       if (isChanged) {
+        if (_isCI) {
+          await croSpawn.async('git', ['config', '--global', 'user.name', 'dimaslanjaka'], {
+            cwd: __dirname,
+            stdio: 'inherit'
+          });
+          await croSpawn.async('git', ['config', '--global', 'user.email', 'dimaslanjaka@gmail.com'], {
+            cwd: __dirname,
+            stdio: 'inherit'
+          });
+        }
         await croSpawn.async('git', ['add', relativeTarball], { cwd: __dirname, stdio: 'inherit' });
         await croSpawn.async('git', ['commit', '-m', 'chore: update from ' + commitURL.pathname], {
           cwd: __dirname,
