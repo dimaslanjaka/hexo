@@ -33,7 +33,7 @@ const config = {
   // override rules for js files
   overrides: [
     {
-      files: ['*.js'],
+      files: ['*.js', '**/bin/**'],
       rules: {
         'no-unused-vars': [
           'warn',
