@@ -30,6 +30,9 @@ jobs:
     uses: ./.github/workflows/workspace-builder.yml
     secrets:
       ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+    with:
+      os: ${{ inputs.os || 'ubuntu-latest' }}
+      node-version: ${{ inputs.node-version || '14.x' }}
   tester:
     needs: build
     runs-on: ${{ inputs.os || 'ubuntu-latest' }}
