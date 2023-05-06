@@ -88,16 +88,16 @@ jobs:
           name: build-output
       - run: yarn install
       - name: hexo-util
-        run: 'yarn worskspace hexo-util exec "npm test"'
+        run: 'yarn workspace hexo-util exec "npm test"'
       - name: hexo-log
-        run: 'yarn worskspace hexo-log exec "npm test"'
+        run: 'yarn workspace hexo-log exec "npm test"'
       - name: warehouse
-        run: 'yarn worskspace warehouse exec "npm test"'
+        run: 'yarn workspace warehouse exec "npm test"'
       - name: hexo-cli
-        run: 'yarn worskspace hexo-cli exec "npm test"'
+        run: 'yarn workspace hexo-cli exec "npm test"'
       - name: hexo-asset-link
-        run: 'yarn worskspace hexo-asset-link exec "npm test"'
+        run: 'yarn workspace hexo-asset-link exec "npm test"'
       - name: hexo-front-matter
-        run: 'yarn worskspace hexo-front-matter exec "npm test"'
+        run: 'yarn workspace hexo-front-matter exec "npm test"'
       - name: hexo
-        run: 'yarn worskspace hexo exec "npm test"'
+        run: 'yarn workspace hexo exec "npm test"'
