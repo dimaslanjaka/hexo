@@ -15,7 +15,8 @@
     "clean": "node -r ts-node/register build.ts --clean",
     "lint": "eslint --fix",
     "prepare": "husky install && yarn workspaces foreach run prepare",
-    "test": "mocha"
+    "pretest": "npm run build",
+    "test": "yarn workspce foreach exec \"npm test\""
   },
   "repository": {
     "type": "git",
