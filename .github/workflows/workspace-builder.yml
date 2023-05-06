@@ -143,3 +143,5 @@ jobs:
             **/release*/**
             !**/node_modules/**
             !**/tmp/**
+            **/yarn.lock
+            **/.yarn/cache
