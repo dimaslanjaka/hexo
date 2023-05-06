@@ -150,8 +150,6 @@ jobs:
         id: changes
         shell: bash
         run: |
-          git status
-          echo ""
           countChanges=$(git whatchanged -1 --format=oneline | wc -l)
           echo "total changed files is $countChanges"
           countStaged=$(git diff --cached --numstat | wc -l)
@@ -167,6 +165,7 @@ jobs:
           echo "staged=$countStaged" >> $GITHUB_OUTPUT
           echo "commits=$countCommits" >> $GITHUB_OUTPUT
           echo "releases=$countReleases" >> $GITHUB_OUTPUT
+          git status --porcelain
 
       - name: Push
         if: matrix.node-version == '14.x' && runner.os == 'Linux' && steps.build.outcome == 'success' && (steps.changes.outputs.staged > 0 || steps.changes.outputs.commits > 0)
