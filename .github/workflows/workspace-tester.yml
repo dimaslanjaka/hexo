@@ -9,6 +9,7 @@ on:
       - '**/release*/**'
       - '**garbage-collector**'
       - '**codeql**'
+      - '**/workspace-build-release.yml'
   pull_request:
     branches: ['monorepo-v7']
     types:
