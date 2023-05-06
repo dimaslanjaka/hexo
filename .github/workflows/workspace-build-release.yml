@@ -179,4 +179,7 @@ jobs:
           else
             echo "no changes"
           fi
-          git push
+          countCommits=$(git diff origin/${{ steps.set-env.outputs.GITHUB_BRANCH }}..HEAD --numstat | wc -l)
+          if [ "$countCommits" != "0" ]; then
+            git push
+          fi
