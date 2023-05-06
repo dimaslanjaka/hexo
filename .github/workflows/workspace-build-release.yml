@@ -153,7 +153,8 @@ jobs:
           yarn workspace hexo-log run build
           yarn workspace hexo-front-matter run build
           yarn workspace warehouse run build
-          npm run build
+          nrs 'build:**'
+          node -r ts-node/register build.ts --commit
         shell: bash
         id: build
       - name: add releases
