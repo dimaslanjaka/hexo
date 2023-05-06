@@ -188,7 +188,10 @@ async function createReadMe(workspaces: Awaited<typeof parseWorkspaces>) {
 
       // create installation
       const tarballRawURL = (await gh.getGithubRepoUrl(relativeTarball)).rawURL;
-      const tarballProdURL = tarballRawURL.replace('monorepo-v7', await gh.latestCommit(relativeTarball));
+      const tarballProdURL = tarballRawURL.replace(
+        'monorepo-v7',
+        '<production>' /*await gh.latestCommit(relativeTarball)*/
+      );
       source_vars.install_prod += `npm i ${workspace.name}@${tarballProdURL}\n`;
       source_vars.install_dev += `npm i ${workspace.name}@${tarballRawURL}\n`;
 
