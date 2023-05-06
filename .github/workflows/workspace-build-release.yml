@@ -133,7 +133,12 @@ jobs:
         shell: bash
         #timeout-minutes: 60
       - name: Build
-        run: npm run build
+        run: |
+          yarn workspace hexo-util run build
+          yarn workspace hexo-log run build
+          yarn workspace hexo-front-matter run build
+          yarn workspace warehouse run build
+          npm run build
         shell: bash
         id: build
       - name: add releases
