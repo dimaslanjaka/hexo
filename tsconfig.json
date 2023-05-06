@@ -5,8 +5,7 @@
     "sourceMap": true,
     "outDir": "dist",
     "declaration": true,
-    "esModuleInterop": true,
-    "types": ["node"]
+    "esModuleInterop": true
   },
   "include": ["lib", "test"],
   "exclude": ["node_modules", "**/.tmp*", "dist"]
