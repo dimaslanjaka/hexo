@@ -139,7 +139,8 @@ async function createReadMe(workspaces: Awaited<typeof parseWorkspaces>) {
     const source_vars = {
       install_prod: '',
       install_dev: '',
-      resolutions: ''
+      resolutions: '',
+      commits: {}
     };
 
     const resolutions = {};
@@ -164,6 +165,7 @@ async function createReadMe(workspaces: Awaited<typeof parseWorkspaces>) {
       const commitURL = new URL(
         (await github.getremote()).fetch.url.replace(/.git$/, '') + '/commit/' + (await github.latestCommit())
       );
+      source_vars.commits[workspace.name] = commitURL;
 
       const args = ['status', '--porcelain', '--', relativeTarball, '|', 'wc', '-l'];
       const isChanged =
@@ -175,14 +177,14 @@ async function createReadMe(workspaces: Awaited<typeof parseWorkspaces>) {
             })
           ).output.trim()
         ) > 0;
-      console.log('git', ...args, '->', relativeTarball, 'is changed', isChanged);
-      if (isChanged) {
+      console.log('git', ...args, '->', relativeTarball, 'is changed', isChanged ? pc.green('true') : pc.gray('false'));
+      /*if (isChanged) {
         await croSpawn.async('git', ['add', relativeTarball], { cwd: __dirname, stdio: 'inherit' });
         await croSpawn.async('git', ['commit', '-m', 'chore: update from ' + commitURL.pathname.replace(/^\/+/, '')], {
           cwd: __dirname,
           stdio: 'inherit'
         });
-      }
+      }*/
 
       // create installation
       const tarballRawURL = (await gh.getGithubRepoUrl(relativeTarball)).rawURL;
@@ -203,7 +205,7 @@ async function createReadMe(workspaces: Awaited<typeof parseWorkspaces>) {
 
     writeFileSync(readme, render);
     await gh.add('releases/readme.md');
-    await gh.commit('docs: update docs');
+    //await gh.commit('docs: update docs');
   }
 }
 
