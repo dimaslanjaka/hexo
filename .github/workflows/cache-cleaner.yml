@@ -6,13 +6,12 @@ on:
       - '**/package-lock.json'
       - '**/yarn.lock'
       - '**/package.json'
-      - '**/workspace-build-release.yml'
+      #- '**/workspace-build-release.yml'
   pull_request:
     paths:
       - '**/package-lock.json'
       - '**/yarn.lock'
       - '**/package.json'
-      - '**/workspace-build-release.yml'
   workflow_dispatch:
 
 # run single job
