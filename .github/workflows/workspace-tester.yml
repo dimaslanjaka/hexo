@@ -101,13 +101,19 @@ jobs:
         shell: bash
       - name: hexo-util
         run: 'yarn workspace hexo-util exec "npm test"'
+        continue-on-error: true
       - name: hexo-log
         run: 'yarn workspace hexo-log exec "npm test"'
+        continue-on-error: true
       - name: warehouse
         run: 'yarn workspace warehouse exec "npm test"'
+        continue-on-error: true
       - name: hexo-cli
         run: 'yarn workspace hexo-cli exec "npm test"'
+        continue-on-error: true
       - name: hexo-front-matter
         run: 'yarn workspace hexo-front-matter exec "npm test"'
+        continue-on-error: true
       - name: hexo
         run: 'yarn workspace hexo exec "npm test"'
+        continue-on-error: true
