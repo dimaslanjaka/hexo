@@ -168,16 +168,8 @@ jobs:
           git status --porcelain
 
       - name: Push
-        if: matrix.node-version == '14.x' && runner.os == 'Linux' && steps.build.outcome == 'success' && (steps.changes.outputs.staged > 0 || steps.changes.outputs.commits > 0)
+        if: matrix.node-version == '14.x' && runner.os == 'Linux' && steps.build.outcome == 'success' && steps.changes.outputs.commits > 0
         run: |
           git config --global user.name 'dimaslanjaka'
           git config --global user.email 'dimaslanjaka@gmail.com'
-          if [ -n "$(git status --porcelain)" ]; then
-            git commit -m "Update build from ${{ steps.set-env.outputs.GITHUB_COMMIT_URL }}" -m "commit hash: ${{ steps.set-env.outputs.GITHUB_SHA_SHORT }}" -m "commit url: ${{ steps.set-env.outputs.GITHUB_COMMIT_URL }}" -m "runner: ${{ steps.set-env.outputs.GITHUB_RUNNER_URL }}"
-          else
-            echo "no changes"
-          fi
-          countCommits=$(git diff origin/${{ steps.set-env.outputs.GITHUB_BRANCH }}..HEAD --numstat | wc -l)
-          if [ "$countCommits" != "0" ]; then
-            git push
-          fi
+          git push
