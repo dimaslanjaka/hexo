@@ -3,21 +3,30 @@ name: Workspace Tester
 on:
   workflow_dispatch:
   workflow_call:
+    inputs:
+      os:
+        required: false
+        type: string
+        default: 'ubuntu-latest'
+        description: 'Operation system to be used'
+      node-version:
+        required: false
+        type: string
+        description: 'Node version to be used'
+        default: '14.x'
     secrets:
       ACCESS_TOKEN:
         required: true
 
+# Reference https://docs.github.com/en/actions/security-guides/automatic-token-authentication
 permissions: write-all
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ inputs.os }}
     # set timeout - see https://stackoverflow.com/a/59076067/6404439
     timeout-minutes: 120
     strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        node-version: ['14.x', '16.x', '18.x']
       fail-fast: true
       #max-parallel: 3
     env:
@@ -52,10 +61,10 @@ jobs:
           rm -rf .git/modules
           bash ./bin/submodule-install
         shell: bash
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js ${{ inputs.node-version }}
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: ${{ inputs.node-version }}
       - name: Enable corepack
         shell: bash
         run: corepack enable
@@ -96,10 +105,9 @@ jobs:
             ./release*
             ./yarn.lock
             **/dist
-          key: ${{ runner.os }}-${{ matrix.node-version }}-${{ github.ref_name }}
+          key: ${{ runner.os }}-${{ inputs.node-version }}
           restore-keys: |
-            ${{ runner.os }}-${{ matrix.node-version }}-${{ github.ref_name }}
-            ${{ runner.os }}-${{ matrix.node-version }}-
+            ${{ runner.os }}-${{ inputs.node-version }}
             ${{ runner.os }}-
 
       - name: Install Dependencies
