@@ -12,6 +12,7 @@ on:
       - '**/package-lock.json'
       - '**/yarn.lock'
       - '**/package.json'
+      - '**/packages/**'
   workflow_dispatch:
 
 # run single job
