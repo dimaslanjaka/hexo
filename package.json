@@ -16,7 +16,7 @@
     "lint": "eslint --fix",
     "prepare": "husky install && yarn workspaces foreach run prepare",
     "pretest": "npm run build",
-    "test": "yarn workspce foreach exec \"npm test\""
+    "test": "yarn workspce foreach --no-private exec \"npm run test --if-present\""
   },
   "repository": {
     "type": "git",
