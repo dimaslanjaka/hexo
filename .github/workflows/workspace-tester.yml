@@ -31,14 +31,17 @@ on:
         type: string
         description: 'Node version to be used'
         default: '14.x'
-    secrets: inherit
+    secrets:
+      ACCESS_TOKEN:
+        required: true
 
 permissions: write-all
 
 jobs:
   build:
     uses: ./.github/workflows/workspace-builder.yml
-    secrets: inherit
+    secrets:
+      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
   tester:
     needs: build
     runs-on: ubuntu-latest
