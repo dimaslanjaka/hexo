@@ -113,9 +113,7 @@ jobs:
             **/.yarn
             ./release*
             ./yarn.lock
-            ./releases/yarn.lock
             **/node_modules
-            **/tmp
             **/dist
           key: ${{ runner.os }}-${{ matrix.node-version }}-${{ github.ref_name }}
           restore-keys: |
