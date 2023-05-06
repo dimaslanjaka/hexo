@@ -91,7 +91,7 @@ async function buildPack(workspaces: Awaited<typeof parseWorkspaces>) {
       .then(() =>
         console.log(
           wname.padEnd(19),
-          ((clean ? pc.red('build') + '->' : '') + pc.green('build') + '->' + pc.yellow('pack') + ' successful').trim()
+          ((clean ? pc.red('clean') + '->' : '') + pc.green('build') + '->' + pc.yellow('pack') + ' successful').trim()
         )
       );
   };
