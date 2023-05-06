@@ -33,6 +33,7 @@ jobs:
       NODE_OPTIONS: '--max_old_space_size=8192' #8192 4096 --expose-gc
       YARN_ENABLE_IMMUTABLE_INSTALLS: false
       ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      node_version: ${{ inputs.node-version || '14.x' }}
     steps:
       - run: git config --global core.autocrlf false
       - uses: szenius/set-timezone@v1.2
@@ -63,10 +64,10 @@ jobs:
           echo "disable githooks warning"
           git config advice.ignoredHook false
         shell: bash
-      - name: Use Node.js ${{ inputs.node-version }}
+      - name: Use Node.js ${{ env.node_version }}
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ inputs.node-version }}
+          node-version: ${{ env.node_version }}
       - name: Enable corepack
         shell: bash
         run: corepack enable
@@ -109,9 +110,9 @@ jobs:
             ./packages/**/dist
             ./packages/**/node_modules
             ./node_modules
-          key: ${{ runner.os }}-${{ inputs.node-version }}
+          key: ${{ runner.os }}-${{ env.node_version }}
           restore-keys: |
-            ${{ runner.os }}-${{ inputs.node-version }}
+            ${{ runner.os }}-${{ env.node_version }}
             ${{ runner.os }}-
 
       - name: Install Dependencies
