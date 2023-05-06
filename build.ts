@@ -178,7 +178,7 @@ async function createReadMe(workspaces: Awaited<typeof parseWorkspaces>) {
       console.log('git', ...args, '->', relativeTarball, 'is changed', isChanged);
       if (isChanged) {
         await croSpawn.async('git', ['add', relativeTarball], { cwd: __dirname, stdio: 'inherit' });
-        await croSpawn.async('git', ['commit', '-m', 'chore: update from ' + commitURL.pathname], {
+        await croSpawn.async('git', ['commit', '-m', 'chore: update from ' + commitURL.pathname.replace(/^\/+/, '')], {
           cwd: __dirname,
           stdio: 'inherit'
         });
