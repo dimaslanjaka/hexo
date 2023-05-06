@@ -87,4 +87,17 @@ jobs:
         with:
           name: build-output
       - run: yarn install
-      - run: npm test
+      - name: hexo-util
+        run: 'yarn worskspace hexo-util exec "npm test"'
+      - name: hexo-log
+        run: 'yarn worskspace hexo-log exec "npm test"'
+      - name: warehouse
+        run: 'yarn worskspace warehouse exec "npm test"'
+      - name: hexo-cli
+        run: 'yarn worskspace hexo-cli exec "npm test"'
+      - name: hexo-asset-link
+        run: 'yarn worskspace hexo-asset-link exec "npm test"'
+      - name: hexo-front-matter
+        run: 'yarn worskspace hexo-front-matter exec "npm test"'
+      - name: hexo
+        run: 'yarn worskspace hexo exec "npm test"'
