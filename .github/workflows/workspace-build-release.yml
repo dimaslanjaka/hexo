@@ -134,6 +134,8 @@ jobs:
             ./release*
             ./yarn.lock
             ./packages/**/dist
+            ./packages/**/node_modules
+            ./node_modules
           key: ${{ runner.os }}-${{ matrix.node-version }}
           restore-keys: |
             ${{ runner.os }}-${{ matrix.node-version }}
