@@ -20,6 +20,17 @@ on:
       - '**/test*/**'
   workflow_dispatch:
   workflow_call:
+    inputs:
+      os:
+        required: false
+        type: string
+        default: 'ubuntu-latest'
+        description: 'Operation system to be used'
+      node-version:
+        required: false
+        type: string
+        description: 'Node version to be used'
+        default: '14.x'
 
 permissions: write-all
 
@@ -29,13 +40,10 @@ jobs:
     secrets:
       ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
   tester:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     # set timeout - see https://stackoverflow.com/a/59076067/6404439
     timeout-minutes: 120
     strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        node-version: ['14.x', '16.x', '18.x']
       fail-fast: true
       #max-parallel: 3
     env:
