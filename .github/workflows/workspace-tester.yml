@@ -83,6 +83,18 @@ jobs:
       - name: Enable corepack
         shell: bash
         run: corepack enable
+      - uses: pat-s/always-upload-cache@v3.0.11
+        id: cache
+        with:
+          path: |
+            **/.yarn
+            ./release*
+            ./yarn.lock
+            **/dist
+          key: ${{ runner.os }}-${{ inputs.node-version }}
+          restore-keys: |
+            ${{ runner.os }}-${{ inputs.node-version }}
+            ${{ runner.os }}-
       - name: Download build-output artifact
         uses: actions/download-artifact@master
         with:
