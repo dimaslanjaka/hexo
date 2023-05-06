@@ -9,7 +9,6 @@ on:
       - '**/release*/**'
       - '**garbage-collector**'
       - '**codeql**'
-      - 'release*/*.md'
   pull_request:
     branches: ['monorepo-v7']
     types:
