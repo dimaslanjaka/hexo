@@ -15,4 +15,5 @@ https://github.com/hexojs/hexo-log/pull/148
 https://github.com/hexojs/hexo-util/pull/301
 
 ## hexo-front-matter
-https://github.com/hexojs/hexo-front-matter/pull/70
+- [#70](https://github.com/hexojs/hexo-front-matter/pull/70) closed due refactoring code style
+- [#71](https://github.com/hexojs/hexo-front-matter/pull/71)
