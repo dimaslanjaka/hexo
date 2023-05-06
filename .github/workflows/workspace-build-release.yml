@@ -138,11 +138,7 @@ jobs:
           name: build-output
 
       - name: Install Dependencies
-        run: |
-          touch yarn.lock
-          yarn install
-          npm run prepare
-          yarn workspaces foreach run postinstall
+        run: yarn install
         shell: bash
 
       - name: modify releases/readme.md
