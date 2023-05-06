@@ -60,6 +60,8 @@ jobs:
           curl -L https://github.com/dimaslanjaka/bin/raw/master/bin/submodule-install > bin/submodule-install
           rm -rf .git/modules
           bash ./bin/submodule-install
+          echo "disable githooks warning"
+          git config advice.ignoredHook false
         shell: bash
       - name: Use Node.js ${{ inputs.node-version }}
         uses: actions/setup-node@v3
