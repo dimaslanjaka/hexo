@@ -30,7 +30,23 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  packer:
+  build_ubuntu_14:
+    uses: ./.github/workflows/workspace-builder.yml
+    secrets:
+      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+    with:
+      os: ubuntu-latest
+      node-version: 14.x
+  test_ubuntu_14:
+    needs: build_ubuntu_14
+    uses: ./.github/workflows/workspace-tester.yml
+    secrets:
+      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+    with:
+      os: ubuntu-latest
+      node-version: 14.x
+  pack:
+    needs: test_ubuntu_14
     runs-on: ${{ matrix.os }}
     # set timeout - see https://stackoverflow.com/a/59076067/6404439
     timeout-minutes: 120
@@ -123,6 +139,11 @@ jobs:
             ${{ runner.os }}-${{ matrix.node-version }}
             ${{ runner.os }}-
 
+      - name: Download build-output artifact
+        uses: actions/download-artifact@master
+        with:
+          name: build-output
+
       - name: Install Dependencies
         run: |
           touch yarn.lock
@@ -130,7 +151,7 @@ jobs:
           npm run prepare
           yarn workspaces foreach run postinstall
         shell: bash
-        #timeout-minutes: 60
+
       - name: Build
         run: |
           yarn workspace hexo-util run build
