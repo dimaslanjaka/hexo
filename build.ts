@@ -122,6 +122,18 @@ async function buildPack(workspaces: Awaited<typeof parseWorkspaces>) {
 
 async function createReadMe(workspaces: Awaited<typeof parseWorkspaces>) {
   if (Array.isArray(workspaces)) {
+    // set username and email on CI
+    if (_isCI) {
+      await croSpawn.async('git', ['config', '--global', 'user.name', 'dimaslanjaka'], {
+        cwd: __dirname,
+        stdio: 'inherit'
+      });
+      await croSpawn.async('git', ['config', '--global', 'user.email', 'dimaslanjaka@gmail.com'], {
+        cwd: __dirname,
+        stdio: 'inherit'
+      });
+    }
+
     const readme = join(__dirname, 'releases/readme.md');
     const source_readme = nunjucks.compile(readFileSync(join(__dirname, 'build-readme.md'), 'utf-8'));
     const source_vars = {
@@ -165,16 +177,6 @@ async function createReadMe(workspaces: Awaited<typeof parseWorkspaces>) {
         ) > 0;
       console.log('git', ...args, '->', relativeTarball, 'is changed', isChanged);
       if (isChanged) {
-        if (_isCI) {
-          await croSpawn.async('git', ['config', '--global', 'user.name', 'dimaslanjaka'], {
-            cwd: __dirname,
-            stdio: 'inherit'
-          });
-          await croSpawn.async('git', ['config', '--global', 'user.email', 'dimaslanjaka@gmail.com'], {
-            cwd: __dirname,
-            stdio: 'inherit'
-          });
-        }
         await croSpawn.async('git', ['add', relativeTarball], { cwd: __dirname, stdio: 'inherit' });
         await croSpawn.async('git', ['commit', '-m', 'chore: update from ' + commitURL.pathname], {
           cwd: __dirname,
@@ -201,7 +203,7 @@ async function createReadMe(workspaces: Awaited<typeof parseWorkspaces>) {
 
     writeFileSync(readme, render);
     await gh.add('releases/readme.md');
-    // await gh.commit('docs: update docs');
+    await gh.commit('docs: update docs');
   }
 }
 
