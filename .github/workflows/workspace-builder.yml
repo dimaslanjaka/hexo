@@ -3,6 +3,9 @@ name: Workspace Tester
 on:
   workflow_dispatch:
   workflow_call:
+    secrets:
+      ACCESS_TOKEN:
+        required: true
 
 permissions: write-all
 
