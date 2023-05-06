@@ -13,3 +13,6 @@ https://github.com/hexojs/hexo-log/pull/148
 
 ## hexo-util
 https://github.com/hexojs/hexo-util/pull/301
+
+## hexo-front-matter
+https://github.com/hexojs/hexo-front-matter/pull/70
