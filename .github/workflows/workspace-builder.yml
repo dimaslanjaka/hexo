@@ -14,9 +14,7 @@ on:
         type: string
         description: 'Node version to be used'
         default: '14.x'
-    secrets:
-      ACCESS_TOKEN:
-        required: true
+    secrets: inherit
 
 # Reference https://docs.github.com/en/actions/security-guides/automatic-token-authentication
 permissions: write-all
