@@ -6,12 +6,13 @@ import pc from 'picocolors';
 import git from 'git-command-helper';
 import { toUnix } from 'upath';
 import nunjucks from 'nunjucks';
+import minimist from 'minimist';
 
 /**
  * is current device is Github Actions
  */
 const _isCI = process.env.GITHUB_ACTION && process.env.GITHUB_ACTIONS;
-const argv = process.argv.slice(2);
+const argv = minimist(process.argv.slice(2));
 const gh = new git(__dirname, 'monorepo-v7');
 
 const parseWorkspaces = croSpawn
@@ -34,7 +35,7 @@ async function buildPack(workspaces: Awaited<typeof parseWorkspaces>) {
   if (workspaces.length === 0) return console.log('workspaces empty');
   const runBuild = (wname: string, clean?: boolean) => {
     // activate clean when argument -c or --clean exist and clean option is undefined
-    if (typeof clean === 'undefined') clean = argv.includes('-c') || argv.includes('--clean');
+    if (typeof clean === 'undefined') clean = argv['c'] || argv['clean'];
 
     // determine current workspace
     const workspace = workspaces.filter((o) => o.name === wname)[0];
@@ -204,7 +205,17 @@ async function createReadMe(workspaces: Awaited<typeof parseWorkspaces>) {
     source_vars.install_prod = source_vars.install_prod.trim();
     source_vars.install_dev = source_vars.install_dev.trim();
 
-    const render = source_readme.render(source_vars);
+    let render = source_readme.render(source_vars);
+
+    if (argv['commits'] || argv['commit']) {
+      gh.add('releases');
+      const lc = await gh.latestCommit();
+      const url = new URL('https://github.com/');
+      url.pathname =
+        new URL((await gh.getremote()).push.url.replace(/\.git$/, '')).pathname.replace(/^\//, '') + '/commits/' + lc;
+      await gh.commit(`chore(tarball): build ${url}`);
+      render = render.replace(/<production>/gm, await gh.latestCommit());
+    }
 
     writeFileSync(readme, render);
     //await gh.add('releases/readme.md');
