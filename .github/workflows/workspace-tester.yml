@@ -79,7 +79,7 @@ jobs:
             **/.yarn
             ./release*
             ./yarn.lock
-            **/dist
+            ./packages/**/dist
           key: ${{ runner.os }}-${{ env.node_version }}
           restore-keys: |
             ${{ runner.os }}-${{ env.node_version }}
