@@ -59,6 +59,27 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0 # Let's get all the branches
+      - name: update submodules
+        run: |
+          echo "init submodules"
+          git submodule init
+          git submodule foreach "git submodule init"
+          echo "sync submodules"
+          git submodule sync
+          git submodule foreach "git submodule sync"
+          echo "update submodules"
+          mkdir -p bin >/dev/null 2>&1
+          curl -L https://github.com/dimaslanjaka/bin/raw/master/bin/submodule-install > bin/submodule-install
+          rm -rf .git/modules
+          bash ./bin/submodule-install
+        shell: bash
+      - name: Use Node.js ${{ inputs.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ inputs.node-version }}
+      - name: Enable corepack
+        shell: bash
+        run: corepack enable
       - name: Download build-output artifact
         uses: actions/download-artifact@master
         with:
