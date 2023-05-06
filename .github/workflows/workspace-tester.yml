@@ -26,6 +26,7 @@ permissions: write-all
 
 jobs:
   build:
+    if: ${{ github.event_name == 'push' }}
     uses: ./.github/workflows/workspace-builder.yml
     secrets:
       ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
