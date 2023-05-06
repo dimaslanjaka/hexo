@@ -118,10 +118,9 @@ jobs:
             ./release*
             ./yarn.lock
             **/dist
-          key: ${{ runner.os }}-${{ matrix.node-version }}-${{ github.ref_name }}
+          key: ${{ runner.os }}-${{ matrix.node-version }}
           restore-keys: |
-            ${{ runner.os }}-${{ matrix.node-version }}-${{ github.ref_name }}
-            ${{ runner.os }}-${{ matrix.node-version }}-
+            ${{ runner.os }}-${{ matrix.node-version }}
             ${{ runner.os }}-
 
       - name: Install Dependencies
