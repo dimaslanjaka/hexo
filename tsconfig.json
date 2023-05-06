@@ -5,7 +5,8 @@
     "sourceMap": true,
     "outDir": "dist",
     "declaration": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "lib": ["ES2019"]
   },
   "include": ["lib", "test"],
   "exclude": ["node_modules", "**/.tmp*", "dist"]
