@@ -30,15 +30,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build_ubuntu_14:
-    uses: ./.github/workflows/workspace-builder.yml
-    secrets:
-      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-    with:
-      os: ubuntu-latest
-      node-version: 14.x
   test_ubuntu_14:
-    needs: build_ubuntu_14
     uses: ./.github/workflows/workspace-tester.yml
     secrets:
       ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
