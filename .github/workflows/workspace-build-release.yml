@@ -153,15 +153,24 @@ jobs:
           yarn workspace hexo-log run build
           yarn workspace hexo-front-matter run build
           yarn workspace warehouse run build
-          nrs 'build:**'
-          node -r ts-node/register build.ts --commit
+          npm run build
         shell: bash
         id: build
-      - name: add releases
+
+      - name: modify releases/readme.md
         shell: bash
         run: |
-          git add .
-        working-directory: releases
+          git add releases
+          echo "undo staged releases/readme.md"
+          git restore --staged releases/readme.md
+          hasChanged=$(git diff --cached --numstat | wc -l)
+          if [ $hasChanged -ge 0 ]; then
+            git commit -m "chore(tarball): build ${{ steps.set-env.outcome.GITHUB_COMMIT_URL }}"
+            lastcommit=$(git rev-parse --short HEAD)
+            sed -i "s/<production>/$lastcommit/g" releases/readme.md
+            git add releases
+            git commit -m "docs: update releases docs"
+          fi
 
       - name: what changes
         id: changes
