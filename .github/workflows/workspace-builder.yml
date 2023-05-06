@@ -127,3 +127,13 @@ jobs:
           npm run build
         shell: bash
         id: build
+
+      - name: Create build-output artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: build-output
+          path: |
+            **/dist/**
+            **/release*/**
+            !**/node_modules/**
+            !**/tmp/**
