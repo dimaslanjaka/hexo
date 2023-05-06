@@ -1,4 +1,4 @@
-name: Workspace Tester
+name: Reusable Builder Workflows
 
 on:
   workflow_dispatch:
