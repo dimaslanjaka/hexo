@@ -144,6 +144,8 @@ jobs:
       - name: modify releases
         shell: bash
         run: |
+          git config --global user.name 'dimaslanjaka'
+          git config --global user.email 'dimaslanjaka@gmail.com'
           git add releases
           echo "undo staged releases/readme.md"
           git restore --staged releases/readme.md
