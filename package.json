@@ -12,6 +12,7 @@
     "build:log": "yarn workspace hexo-log run build",
     "build:fm": "yarn workspace hexo-front-matter run build",
     "build": "nrs 'build:**' && node -r ts-node/register build.ts",
+    "build-commit": "nrs 'build:**' && node -r ts-node/register build.ts --commit",
     "clean": "node -r ts-node/register build.ts --clean",
     "lint": "eslint --fix",
     "prepare": "husky install && yarn workspaces foreach run prepare",
