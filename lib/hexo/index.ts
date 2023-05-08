@@ -36,6 +36,7 @@ import defaultConfig from './default_config';
 import loadDatabase from './load_database';
 import multiConfigPath from './multi_config_path';
 import { deepMerge, full_url_for } from 'hexo-util';
+import { Args, Config, Extend, Query } from './index-d';
 let resolveSync; // = require('resolve');
 
 const libDir = dirname(__dirname);
@@ -111,39 +112,6 @@ function debounce(func: () => void, wait: number) {
       func.apply(this);
     }, wait);
   };
-}
-
-interface Args {
-  debug?: any;
-  safe?: any;
-  silent?: any;
-  _?: any[];
-  output?: any;
-  config?: any;
-}
-
-interface Query {
-  date?: any;
-  published?: boolean;
-}
-
-interface Extend {
-  console: Console;
-  deployer: Deployer;
-  filter: Filter;
-  generator: Generator;
-  helper: Helper;
-  highlight: Highlight;
-  injector: Injector;
-  migrator: Migrator;
-  processor: Processor;
-  renderer: Renderer;
-  tag: Tag;
-}
-
-type DefaultConfigType = typeof defaultConfig;
-interface Config extends DefaultConfigType {
-  [key: string]: any;
 }
 
 // Node.js internal APIs
