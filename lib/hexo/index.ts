@@ -36,6 +36,7 @@ import defaultConfig from './default_config';
 import loadDatabase from './load_database';
 import multiConfigPath from './multi_config_path';
 import { deepMerge, full_url_for } from 'hexo-util';
+import { Config } from './config-d';
 let resolveSync; // = require('resolve');
 
 const libDir = dirname(__dirname);
@@ -139,11 +140,6 @@ interface Extend {
   processor: Processor;
   renderer: Renderer;
   tag: Tag;
-}
-
-type DefaultConfigType = typeof defaultConfig;
-interface Config extends DefaultConfigType {
-  [key: string]: any;
 }
 
 // Node.js internal APIs
