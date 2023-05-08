@@ -218,7 +218,7 @@ async function createReadMe(workspaces: Awaited<typeof parseWorkspaces>) {
       const lc = await gh.latestCommit();
       const url = new URL('https://github.com/');
       url.pathname =
-        new URL((await gh.getremote()).push.url.replace(/\.git$/, '')).pathname.replace(/^\//, '') + '/commits/' + lc;
+        new URL((await gh.getremote()).push.url.replace(/\.git$/, '')).pathname.replace(/^\//, '') + '/commit/' + lc;
       await gh.commit(`chore(tarball): build ${url}`);
       render = render.replace(/<production>/gm, await gh.latestCommit());
     }
