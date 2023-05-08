@@ -76,7 +76,7 @@
     "packages/hexo-cli",
     "packages/hexo-front-matter",
     "packages/hexo",
-    "packages/hexo/test/yarn-workspace",
+    "packages/hexo/test/fixtures/yarn-workspace",
     "packages/hexo-asset-link",
     "packages/hexo-theme-landscape",
     "packages/hexo-renderers",
