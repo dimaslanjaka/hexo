@@ -4,6 +4,7 @@ const chai = require('chai');
 global.should = chai.should();
 
 describe('Hexo', () => {
+  require('./event-emitter');
   require('./scripts/box');
   require('./scripts/console');
   require('./scripts/extend');
