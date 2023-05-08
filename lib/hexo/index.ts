@@ -432,7 +432,13 @@ class Hexo extends EventEmitter {
     return args.draft || args.drafts || this.config.render_drafts;
   }
 
-  load(callback) {
+  /**
+   * load all files
+   * @see {@link https://hexo.io/api/#Load-Files}
+   * @param callback
+   * @returns
+   */
+  load(callback?: (...args: any[]) => any) {
     return loadDatabase(this)
       .then(() => {
         this.log.info('Start processing');
