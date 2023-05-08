@@ -35,3 +35,14 @@ package.json
 ```json
 {{ resolutions | safe }}
 ```
+
+## Installation by changing overrides
+
+Since NPM 8.3 the equivalent to yarn resolutions is called overrides.
+
+Documentation: https://docs.npmjs.com/cli/v9/configuring-npm/package-json#overrides
+
+package.json
+```json
+{{ overrides | safe }}
+```

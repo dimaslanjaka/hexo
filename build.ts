@@ -141,6 +141,7 @@ async function createReadMe(workspaces: Awaited<typeof parseWorkspaces>) {
       npm_prod: '',
       npm_dev: '',
       resolutions: '',
+      overrides: '',
       yarn_prod: '',
       yarn_dev: '',
       commits: {}
@@ -205,6 +206,7 @@ async function createReadMe(workspaces: Awaited<typeof parseWorkspaces>) {
     }
 
     source_vars.resolutions = JSON.stringify({ name: 'your package name', resolutions }, null, 2);
+    source_vars.overrides = JSON.stringify({ name: 'your package name', overrides: resolutions }, null, 2);
 
     source_vars.npm_prod = source_vars.npm_prod.trim();
     source_vars.npm_dev = source_vars.npm_dev.trim();
