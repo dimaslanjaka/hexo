@@ -125,10 +125,10 @@ declare module 'module' {
 }
 
 declare interface Hexo {
-  on(event: 'generateBefore', listener: (...args: any[]) => any): any;
-  on(event: 'generateAfter', listener: (...args: any[]) => any): any;
-  on(event: 'exit', listener: (...args: any[]) => any): any;
-  on(event: 'ready', listener: (...args: any[]) => any): any;
+  on(event: 'generateBefore', listener: (...args: any[]) => any): this;
+  on(event: 'generateAfter', listener: (...args: any[]) => any): this;
+  on(event: 'exit', listener: (...args: any[]) => any): this;
+  on(event: 'ready', listener: (...args: any[]) => any): this;
   on(event: string, listener: (...args: any[]) => any): any;
   emit(event: string, ...args: any[]): any;
 }
