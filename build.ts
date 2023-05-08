@@ -165,9 +165,11 @@ async function createReadMe(workspaces: Awaited<typeof parseWorkspaces>) {
         console.log(relativeTarball, pc.red('excluded by .gitignore'));
         continue;
       }
-      const github = new git(workspace.location);
+      const workspaceGit = new git(workspace.location);
       const commitURL = new URL(
-        (await github.getremote()).fetch.url.replace(/.git$/, '') + '/commit/' + (await github.latestCommit())
+        (await workspaceGit.getremote()).fetch.url.replace(/.git$/, '') +
+          '/commit/' +
+          (await workspaceGit.latestCommit())
       );
       source_vars.commits[workspace.name] = commitURL;
 
