@@ -408,11 +408,11 @@ class Hexo extends EventEmitter {
         module.filename = path;
         module.paths = Module._nodeModulePaths(path);
 
-        function req(path) {
+        function req(path: string) {
           return module.require(path);
         }
 
-        req.resolve = request => Module._resolveFilename(request, module);
+        req.resolve = (request: string) => Module._resolveFilename(request, module);
 
         req.main = require.main;
         req.extensions = Module._extensions;
