@@ -9,13 +9,11 @@ const chai = require('chai');
 const path = require('path');
 
 describe('Hexo EventEmitter', () => {
-
   it('should instance of Event Emitter', () => {
     chai.expect(new Hexo() instanceof EventEmitter).to.be.true;
   });
 
   describe('#emit()', () => {
-
     it('should same interface', () => {
       const siteDir = path.join(__dirname, 'fixtures/yarn-workspace/site');
       const hexo = new Hexo(siteDir);
@@ -24,7 +22,6 @@ describe('Hexo EventEmitter', () => {
 
     it('should invoke the callback', async () => {
       const spy = sinon.spy();
-
       const siteDir = path.join(__dirname, 'fixtures/yarn-workspace/site');
       const hexo = new Hexo(siteDir);
 
@@ -33,16 +30,15 @@ describe('Hexo EventEmitter', () => {
       chai.expect(spy.called).to.be.true;
     });
 
-    /*
-
-    it('should pass arguments to the callbacks', () => {
+    it('should pass arguments to the callback', () => {
       const spy = sinon.spy();
-      const emitter = new Hexo();
+      const siteDir = path.join(__dirname, 'fixtures/yarn-workspace/site');
+      const hexo = new Hexo(siteDir);
 
-      emitter.on('foo', spy);
-      emitter.emit('foo', 'bar', 'baz');
+      hexo.on('ready', spy);
+      hexo.emit('ready', 'bar', 'baz');
       sinon.assert.calledOnce(spy);
       sinon.assert.calledWith(spy, 'bar', 'baz');
-    });*/
+    });
   });
 });
