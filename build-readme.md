@@ -1,6 +1,10 @@
 # HexoJS - Customized
 because of HexoJS doesnt accept my PR, i bundled my improved version of hexo.
 
+| package name | commit |
+| :--- | :--- | {% for name, item in commits %}
+| {{ name }} | {{ item }} | {% endfor %}
+
 ## Installation by CLI
 Installation with command line interface
 
