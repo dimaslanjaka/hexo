@@ -20,6 +20,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "hexo": "^7"
+    "hexo": "*"
   }
 }
