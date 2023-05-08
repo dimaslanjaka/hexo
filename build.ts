@@ -167,7 +167,7 @@ async function createReadMe(workspaces: Awaited<typeof parseWorkspaces>) {
       }
       const workspaceGit = new git(workspace.location);
       const commitURL = new URL(
-        (await workspaceGit.getremote()).fetch.url.replace(/.git$/, '') +
+        (await workspaceGit.getremote()).push.url.replace(/.git$/, '') +
           '/commit/' +
           (await workspaceGit.latestCommit())
       );
