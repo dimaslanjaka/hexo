@@ -138,9 +138,11 @@ async function createReadMe(workspaces: Awaited<typeof parseWorkspaces>) {
     const readme = join(__dirname, 'releases/readme.md');
     const source_readme = nunjucks.compile(readFileSync(join(__dirname, 'build-readme.md'), 'utf-8'));
     const source_vars = {
-      install_prod: '',
-      install_dev: '',
+      npm_prod: '',
+      npm_dev: '',
       resolutions: '',
+      yarn_prod: '',
+      yarn_dev: '',
       commits: {}
     };
 
@@ -193,8 +195,10 @@ async function createReadMe(workspaces: Awaited<typeof parseWorkspaces>) {
         'monorepo-v7',
         '<production>' /*await gh.latestCommit(relativeTarball)*/
       );
-      source_vars.install_prod += `npm i ${workspace.name}@${tarballProdURL}\n`;
-      source_vars.install_dev += `npm i ${workspace.name}@${tarballRawURL}\n`;
+      source_vars.npm_prod += `npm i ${workspace.name}@${tarballProdURL}\n`;
+      source_vars.npm_dev += `npm i ${workspace.name}@${tarballRawURL}\n`;
+      source_vars.yarn_dev += `yarn add ${workspace.name}@${tarballRawURL}\n`;
+      source_vars.yarn_prod += `yarn add ${workspace.name}@${tarballProdURL}\n`;
 
       // create resolutions
       resolutions[workspace.name] = tarballProdURL;
@@ -202,8 +206,8 @@ async function createReadMe(workspaces: Awaited<typeof parseWorkspaces>) {
 
     source_vars.resolutions = JSON.stringify({ name: 'your package name', resolutions }, null, 2);
 
-    source_vars.install_prod = source_vars.install_prod.trim();
-    source_vars.install_dev = source_vars.install_dev.trim();
+    source_vars.npm_prod = source_vars.npm_prod.trim();
+    source_vars.npm_dev = source_vars.npm_dev.trim();
 
     let render = source_readme.render(source_vars);
 

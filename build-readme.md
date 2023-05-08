@@ -6,14 +6,26 @@ Installation with command line interface
 
 ### Production
 
+using `npm`
 ```bash
-{{ install_prod | safe }}
+{{ npm_prod | safe }}
+```
+
+using `yarn`
+```bash
+{{ yarn_prod | safe }}
 ```
 
 ### Development
 
+using `npm`
 ```bash
-{{ install_dev | safe }}
+{{ npm_dev | safe }}
+```
+
+using `yarn`
+```bash
+{{ yarn_dev | safe }}
 ```
 
 ## Installation by changing resolutions
