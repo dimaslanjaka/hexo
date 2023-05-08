@@ -59,7 +59,11 @@ const mergeCtxThemeConfig = (ctx: import('.')) => {
   }
 };
 
-const createLoadThemeRoute = function(generatorResult: Record<string, any>, locals: import('./locals'), ctx: import('.')) {
+const createLoadThemeRoute = function(
+  generatorResult: Record<string, any>,
+  locals: import('./locals'),
+  ctx: import('.')
+) {
   const { log, theme } = ctx;
   const { path, cache: useCache } = locals;
 
@@ -118,6 +122,15 @@ declare module 'module' {
   function _nodeModulePaths(path: string): string[];
   function _resolveFilename(request: string, parent: Module, isMain?: any, options?: any): string;
   const _extensions: NodeJS.RequireExtensions, _cache: any;
+}
+
+declare interface Hexo {
+  on(event: 'generateBefore', listener: (...args: any[]) => any): any;
+  on(event: 'generateAfter', listener: (...args: any[]) => any): any;
+  on(event: 'exit', listener: (...args: any[]) => any): any;
+  on(event: 'ready', listener: (...args: any[]) => any): any;
+  on(event: string, listener: (...args: any[]) => any): any;
+  emit(event: string, ...args: any[]): any;
 }
 
 class Hexo extends EventEmitter {
