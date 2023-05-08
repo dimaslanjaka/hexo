@@ -619,6 +619,14 @@ class Hexo extends EventEmitter {
       });
   }
 
+  /**
+   * exit hexo
+   *
+   * > You should call the exit method upon successful or unsuccessful completion of a console command. This allows Hexo to exit gracefully and finish up important things such as saving the database
+   * @see {@link https://hexo.io/api/#Exit}
+   * @param err
+   * @returns
+   */
   exit(err?: any) {
     if (err) {
       this.log.fatal(
