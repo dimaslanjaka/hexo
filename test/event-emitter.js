@@ -22,14 +22,18 @@ describe('Hexo EventEmitter', () => {
       chai.expect(hexo.on('ready', sinon.spy) instanceof Hexo).to.be.true;
     });
 
-    /* it('should invoke the callback', () => {
+    it('should invoke the callback', async () => {
       const spy = sinon.spy();
-      const emitter = new Hexo();
 
-      emitter.on('ready', spy);
-      emitter.emit('ready');
-      spy.called.should.equal.true;
+      const siteDir = path.join(__dirname, 'fixtures/yarn-workspace/site');
+      const hexo = new Hexo(siteDir);
+
+      hexo.on('ready', spy);
+      await hexo.init();
+      chai.expect(spy.called).to.be.true;
     });
+
+    /*
 
     it('should pass arguments to the callbacks', () => {
       const spy = sinon.spy();
