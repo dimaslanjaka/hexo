@@ -619,7 +619,7 @@ class Hexo extends EventEmitter {
       });
   }
 
-  exit(err: any) {
+  exit(err?: any) {
     if (err) {
       this.log.fatal(
         { err },
