@@ -72,10 +72,10 @@ jobs:
           echo "disable githooks warning"
           git config advice.ignoredHook false
         shell: bash
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js ${{ env.node_version }}
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: ${{ env.node_version }}
       - name: Enable corepack
         shell: bash
         run: corepack enable
