@@ -9,7 +9,6 @@ import Module from 'module';
 import { runInThisContext } from 'vm';
 const { version } = require('../../package.json');
 import logger from 'hexo-log';
-
 import {
   Console,
   Deployer,
@@ -42,17 +41,17 @@ let resolveSync; // = require('resolve');
 const libDir = dirname(__dirname);
 const dbVersion = 1;
 
-const stopWatcher = box => {
+const stopWatcher = (box: Theme | Source) => {
   if (box.isWatching()) box.unwatch();
 };
 
 const routeCache = new WeakMap();
 
-const castArray = obj => {
+const castArray = (obj: any) => {
   return Array.isArray(obj) ? obj : [obj];
 };
 
-const mergeCtxThemeConfig = ctx => {
+const mergeCtxThemeConfig = (ctx: import('.')) => {
   // Merge hexo.config.theme_config into hexo.theme.config before post rendering & generating
   // config.theme_config has "_config.[theme].yml" merged in load_theme_config.js
   if (ctx.config.theme_config) {
@@ -60,7 +59,7 @@ const mergeCtxThemeConfig = ctx => {
   }
 };
 
-const createLoadThemeRoute = function(generatorResult, locals, ctx) {
+const createLoadThemeRoute = function(generatorResult: Record<string, any>, locals: import('./locals'), ctx: import('.')) {
   const { log, theme } = ctx;
   const { path, cache: useCache } = locals;
 
@@ -130,7 +129,7 @@ class Hexo extends EventEmitter {
   public scaffold_dir: string;
   public theme_dir: string;
   public theme_script_dir: string;
-  public env: any;
+  public env: Record<string, any>;
   public extend: Extend;
   public config: Config;
   public log: ReturnType<typeof logger>;
