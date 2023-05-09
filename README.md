@@ -18,7 +18,11 @@ yarn workspace hexo-log exec "git remote add upstream https://github.com/hexojs/
 ## Pull request document
 
 ## hexo-cli
-https://github.com/hexojs/hexo-cli/pull/479
+[#479](https://github.com/hexojs/hexo-cli/pull/479)
+
+### prepare
+previous errors
+https://github.com/dimaslanjaka/static-blog-generator/actions/runs/4928832185/jobs/8807692807
 
 ## hexo-log
 https://github.com/hexojs/hexo-log/pull/148
