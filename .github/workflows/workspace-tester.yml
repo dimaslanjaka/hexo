@@ -82,8 +82,6 @@ jobs:
             ./release*
             ./yarn.lock
             ./packages/**/dist
-            ./packages/**/node_modules
-            ./node_modules
           key: ${{ runner.os }}-${{ env.node_version }}
           restore-keys: |
             ${{ runner.os }}-${{ env.node_version }}
