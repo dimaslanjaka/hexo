@@ -38,7 +38,7 @@
   },
   "homepage": "https://github.com/dimaslanjaka/hexo#readme",
   "dependencies": {
-    "git-command-helper": "^1.2.0",
+    "git-command-helper": "^1.2.2",
     "minimist": "^1.2.8",
     "nunjucks": "^3.2.4",
     "picocolors": "^1.0.0",
