@@ -115,7 +115,7 @@ jobs:
       - name: hexo
         run: 'yarn workspace hexo exec "npm test"'
         continue-on-error: true
-      - name: test clean
+      - name: test site clean
         run: 'yarn run site:clean'
-      - name: test generate
+      - name: test site generate
         run: 'yarn run site:build'
