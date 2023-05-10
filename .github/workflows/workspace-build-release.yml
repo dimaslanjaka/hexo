@@ -71,6 +71,9 @@ jobs:
           bash ./bin/submodule-install
           echo "disable githooks warning"
           git config advice.ignoredHook false
+          git config core.eol lf
+          git config core.autocrlf input
+          git checkout-index --force --all
         shell: bash
       - name: Use Node.js ${{ env.node_version }}
         uses: actions/setup-node@v3
