@@ -7,7 +7,7 @@
   "types": "packages/hexo/dist/hexo/index.d.ts",
   "scripts": {
     "prestart": "npm run build",
-    "start": "yarn workspace hexo-site exec \"hexo server\"",
+    "start": "yarn workspace hexo-site run start",
     "build:util": "yarn workspace hexo-util run postinstall && yarn workspace hexo-util run build",
     "build:log": "yarn workspace hexo-log run build",
     "build:fm": "yarn workspace hexo-front-matter run build",
@@ -17,7 +17,9 @@
     "lint": "eslint --fix",
     "prepare": "husky install && yarn workspaces foreach run prepare",
     "pretest": "npm run build",
-    "test": "yarn workspce foreach --no-private exec \"npm run test --if-present\""
+    "test": "yarn workspce foreach --no-private exec \"npm run test --if-present\"",
+    "test:clean": "yarn workspace hexo-site run clean",
+    "test:site": "yarn workspace hexo-site run build"
   },
   "repository": {
     "type": "git",
