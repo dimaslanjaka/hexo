@@ -7169,7 +7169,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hexo-cli@^4.3.0, hexo-cli@workspace:packages/hexo-cli":
+"hexo-cli@^4.3.0, hexo-cli@workspace:^, hexo-cli@workspace:packages/hexo-cli":
   version: 0.0.0-use.local
   resolution: "hexo-cli@workspace:packages/hexo-cli"
   dependencies:
@@ -7311,7 +7311,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hexo-log@^4.0.1, hexo-log@workspace:packages/hexo-log":
+"hexo-log@^4.0.1, hexo-log@workspace:^, hexo-log@workspace:packages/hexo-log":
   version: 0.0.0-use.local
   resolution: "hexo-log@workspace:packages/hexo-log"
   dependencies:
@@ -7529,15 +7529,19 @@ __metadata:
   dependencies:
     hexo: "workspace:^"
     hexo-asset-link: "workspace:^"
+    hexo-cli: "workspace:^"
     hexo-front-matter: "workspace:^"
     hexo-generator-archive: ^2.0.0
     hexo-generator-category: ^2.0.0
     hexo-generator-index: ^3.0.0
     hexo-generator-tag: ^2.0.0
+    hexo-log: "workspace:^"
     hexo-renderers: ^1.0.9
     hexo-server: ^3.0.0
     hexo-shortcodes: ^1.0.6
     hexo-theme-landscape: "workspace:^"
+    hexo-util: "workspace:^"
+    warehouse: "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -7553,7 +7557,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"hexo-util@^3.0.1, hexo-util@workspace:packages/hexo-util":
+"hexo-util@^3.0.1, hexo-util@workspace:^, hexo-util@workspace:packages/hexo-util":
   version: 0.0.0-use.local
   resolution: "hexo-util@workspace:packages/hexo-util"
   dependencies:
@@ -15756,7 +15760,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"warehouse@^5.0.0, warehouse@workspace:packages/warehouse":
+"warehouse@^5.0.0, warehouse@workspace:^, warehouse@workspace:packages/warehouse":
   version: 0.0.0-use.local
   resolution: "warehouse@workspace:packages/warehouse"
   dependencies:
