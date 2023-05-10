@@ -84,9 +84,7 @@
   ],
   "packageManager": "yarn@3.5.1",
   "resolutions": {
-    "@types/node": "^14",
     "sbg-utility": "https://github.com/dimaslanjaka/static-blog-generator/raw/beta/packages/sbg-utility/release/sbg-utility.tgz",
-    "node-sass": "https://github.com/sass/node-sass/tarball/master",
     "cross-spawn": "https://github.com/dimaslanjaka/node-cross-spawn.git#private",
     "git-command-helper": "https://github.com/dimaslanjaka/git-command-helper/raw/2bc2009/release/git-command-helper.tgz"
   }

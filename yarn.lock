@@ -1262,10 +1262,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^14":
-  version: 14.18.43
-  resolution: "@types/node@npm:14.18.43"
-  checksum: 3ef43eda265c346597bc5c8329605255550f7a92300a76e9e3c48e07fd685b4a48d47465997bf6f1a68b235c7339e6e583d73515769efcad70e4f8f4c7f47fd4
+"@types/node@npm:*, @types/node@npm:>=10.0.0, @types/node@npm:^20.0.0":
+  version: 20.1.1
+  resolution: "@types/node@npm:20.1.1"
+  checksum: 47961ee23f873c14c3f6045422ff3059f3bfb10231ef3080a7a72d7215cc8c2623fa8cedb7b246305962fa9c1e0c9e381e04b12eb3e9ec5d076025c6231ac8da
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^18.11.7, @types/node@npm:^18.11.8, @types/node@npm:^18.14.6, @types/node@npm:^18.15.11, @types/node@npm:^18.16.0, @types/node@npm:^18.16.3, @types/node@npm:^18.7.18":
+  version: 18.16.6
+  resolution: "@types/node@npm:18.16.6"
+  checksum: 99417418952c0b1a6ff5dd40ccf01c2cd18db6a1c54bfaaff29c700c877e2e541aa31ea33090592f3817adb2b8c0946b86c7fb57049131e7c08252d70075f09b
   languageName: node
   linkType: hard
 
@@ -7480,7 +7487,7 @@ __metadata:
     prettier: ^2.8.7
     pug: ^3.0.2
     sass: ^1.61.0
-    sbg-utility: ^1.0.8
+    sbg-utility: ^1.0.9
     stylus: ^0.59.0
     ts-node: ^10.9.1
     typescript: ^5.0.4
@@ -11014,9 +11021,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-sass@https://github.com/sass/node-sass/tarball/master":
+"node-sass@npm:^8.0.0":
   version: 8.0.0
-  resolution: "node-sass@https://github.com/sass/node-sass.git#commit=06ae4c70f792287c28bb765811014c7c56012d72"
+  resolution: "node-sass@npm:8.0.0"
   dependencies:
     async-foreach: ^0.1.3
     chalk: ^4.1.2
@@ -11034,7 +11041,7 @@ __metadata:
     true-case-path: ^2.2.1
   bin:
     node-sass: bin/node-sass
-  checksum: 6fe20ef24b755e4cc65c3dba185b350bd1917914d98beaa481b2952cbc3cc189445d153df27cd7053f02f7fa2a5c406abd3b73d6c3c41c20061adee2ff5e9add
+  checksum: 92c1c78600a89b9cc03ce1fe1212e107163973dbdd2c548751cd3187c56713c944952a477aedcb8f2c332fba6e098fd992e25ee62552c1ba80f75e252f6ef3c3
   languageName: node
   linkType: hard
 
