@@ -223,7 +223,7 @@ async function createReadMe(workspaces: Awaited<typeof parseWorkspaces>) {
         new URL((await gh.getremote()).push.url.replace(/\.git$/, '')).pathname.replace(/^\//, '') + '/commit/' + lc;
 
       await croSpawn.async('git', ['commit', '-m', `chore(tarball): build ${String(url)}`], { cwd: gh.cwd });
-      render = render.replace(/<production>/gm, await gh.latestCommit('releases'));
+      render = render.replace(/<production>/gm, await gh.latestCommit());
     }
 
     writeFileSync(readme, render);
