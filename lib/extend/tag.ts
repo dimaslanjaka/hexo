@@ -8,6 +8,11 @@ const escapeSwigTag = (str: string) => str.replace(/{/g, '&#123;').replace(/}/g,
 
 /**
  * synchronous callback - shortcode tag
+ * @example
+ * // to get args type
+ * type args = Parameters<Parameters<typeof hexo.extend.tag.register>[1]>[0];
+ * // to get content type
+ * type content = Parameters<Parameters<typeof hexo.extend.tag.register>[1]>[1];
  */
 interface TagFunction {
   (args: any[], content: string): string;
@@ -15,6 +20,11 @@ interface TagFunction {
 
 /**
  * asynchronous callback - shortcode tag
+ * @example
+ * // to get args type
+ * type args = Parameters<Parameters<typeof hexo.extend.tag.register>[1]>[0];
+ * // to get content type
+ * type content = Parameters<Parameters<typeof hexo.extend.tag.register>[1]>[1];
  */
 interface AsyncTagFunction {
   (args: any[], content: string): PromiseLike<string> | Promise<string>;
