@@ -222,7 +222,9 @@ async function createReadMe(workspaces: Awaited<typeof parseWorkspaces>) {
       url.pathname =
         new URL((await gh.getremote()).push.url.replace(/\.git$/, '')).pathname.replace(/^\//, '') + '/commit/' + lc;
 
-      await croSpawn.async('git', ['commit', '-m', `chore(tarball): build ${String(url)}`], { cwd: gh.cwd }).catch(()=>console.log('cannot commit'));
+      await croSpawn
+        .async('git', ['commit', '-m', `chore(tarball): build ${String(url)}`], { cwd: gh.cwd })
+        .catch(() => console.log('cannot commit'));
       render = render.replace(/<production>/gm, await gh.latestCommit());
     }
 

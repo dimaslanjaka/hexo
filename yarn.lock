@@ -6613,14 +6613,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"git-embed@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "git-embed@npm:0.1.0"
+"git-embed@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "git-embed@npm:0.1.2"
   dependencies:
     axios: ^1.4.0
     highlight.js: ^11.8.0
     sbg-utility: ^1.0.9
-  checksum: 2dfc2d861d1501291a75216270ce0ffc36df6d27128e34d6d48d55f60916ad766bd9d371c78694c8ce5abd2cc3dcda4fe64849c409d57abfaef69e1d69ddf470
+  checksum: f503194afd5a7e74b5ab4561d21ad21fdc399020117bd6d3aca0150ee9c32e3cf250d86ebf308925445f270b991483e19f6af802aab181b912b93541169fdfc1
   languageName: node
   linkType: hard
 
@@ -7214,6 +7214,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "hexo-front-matter@workspace:packages/hexo-front-matter"
   dependencies:
+    "@types/chai": ^4.3.5
     "@types/js-yaml": ^4.0.5
     "@types/node": ^18.16.3
     "@typescript-eslint/eslint-plugin": ^5.41.0
@@ -7365,7 +7366,7 @@ __metadata:
     eslint: ^8.39.0
     eslint-config-prettier: ^8.8.0
     eslint-plugin-prettier: ^4.2.1
-    git-command-helper: ^1.2.2
+    git-command-helper: ^1.2.3
     husky: ^8.0.3
     lint-staged: ^13.2.2
     minimist: ^1.2.8
@@ -7437,7 +7438,7 @@ __metadata:
     eslint-plugin-prettier: ^4.2.1
     execa: ^7.0.0
     fs-extra: ^11.1.0
-    git-command-helper: ^1.2.2
+    git-command-helper: ^1.2.3
     gulp: ^4.0.2
     minimist: ^1.2.8
     npm-check-updates: ^16.7.10
@@ -7511,22 +7512,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hexo-shortcodes@npm:^1.0.6":
-  version: 1.0.6
-  resolution: "hexo-shortcodes@npm:1.0.6"
+"hexo-shortcodes@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "hexo-shortcodes@npm:1.1.1"
   dependencies:
     ansi-colors: ^4.1.3
     axios: ^1.4.0
     bluebird: ^3.7.2
     fs-extra: ^11.1.1
-    git-embed: ^0.1.0
-    hexo-util: ^3.0.1
+    git-embed: ^0.1.2
+    hexo-util: "https://github.com/dimaslanjaka/hexo/raw/2f222d3/releases/hexo-util.tgz"
     nunjucks: ^3.2.4
     rss-parser: ^3.13.0
-    sbg-utility: ^1.0.9
+    sbg-utility: ^1.1.0
   peerDependencies:
     hexo: ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0
-  checksum: 5c85c7b2c420e4dd63ac8647f6db9b60fc8a5f3d71557b50369b9fbd6d856dcd74b034b70e44bb0307d8b778aa8981928aba6030bc641f87e67957ff0216193f
+  checksum: 9bbb0d57f3e36d2b7899dccd3128302e0457aa29711ae3bbee75732839ea9ca38179f69c533e8d2b6cebb0e34f96da60b486bd5de13d23fa4fdc27a1235720f9
   languageName: node
   linkType: hard
 
@@ -7545,7 +7546,7 @@ __metadata:
     hexo-log: "workspace:^"
     hexo-renderers: ^1.0.9
     hexo-server: ^3.0.0
-    hexo-shortcodes: ^1.0.6
+    hexo-shortcodes: ^1.1.1
     hexo-theme-landscape: "workspace:^"
     hexo-util: "workspace:^"
     warehouse: "workspace:^"
@@ -7593,6 +7594,21 @@ __metadata:
     typescript: ^5.0.3
   languageName: unknown
   linkType: soft
+
+"hexo-util@https://github.com/dimaslanjaka/hexo/raw/2f222d3/releases/hexo-util.tgz":
+  version: 3.0.1
+  resolution: "hexo-util@https://github.com/dimaslanjaka/hexo/raw/2f222d3/releases/hexo-util.tgz"
+  dependencies:
+    camel-case: ^4.1.2
+    cross-spawn: ^7.0.3
+    deepmerge: ^4.2.2
+    highlight.js: ^11.6.0
+    htmlparser2: ^8.0.1
+    prismjs: ^1.29.0
+    strip-indent: ^3.0.0
+  checksum: faa57a860d3dfa7c705848fdca8c46d713db337454681d9beae585fad75546a28a7a54b539cb9743ffd418454f70babd9634caf5938a14a8e2d69adbdec82a64
+  languageName: node
+  linkType: hard
 
 "hexo-util@https://github.com/dimaslanjaka/hexo/raw/cdff687/releases/hexo-util.tgz":
   version: 3.0.1
