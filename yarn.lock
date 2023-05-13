@@ -7512,9 +7512,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hexo-shortcodes@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "hexo-shortcodes@npm:1.1.1"
+"hexo-shortcodes@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "hexo-shortcodes@npm:1.1.2"
   dependencies:
     ansi-colors: ^4.1.3
     axios: ^1.4.0
@@ -7527,7 +7527,7 @@ __metadata:
     sbg-utility: ^1.1.0
   peerDependencies:
     hexo: ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0
-  checksum: 9bbb0d57f3e36d2b7899dccd3128302e0457aa29711ae3bbee75732839ea9ca38179f69c533e8d2b6cebb0e34f96da60b486bd5de13d23fa4fdc27a1235720f9
+  checksum: 57d3e9fb94e05a79dd290ca471274eec22dda5ea7cbba5986c47e539c3930f38161c551af168385db8d01564aa056946bb8e2b85c66b8c1c1e47064c646bebe1
   languageName: node
   linkType: hard
 
@@ -7546,7 +7546,7 @@ __metadata:
     hexo-log: "workspace:^"
     hexo-renderers: ^1.0.9
     hexo-server: ^3.0.0
-    hexo-shortcodes: ^1.1.1
+    hexo-shortcodes: ^1.1.2
     hexo-theme-landscape: "workspace:^"
     hexo-util: "workspace:^"
     warehouse: "workspace:^"
