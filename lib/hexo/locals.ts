@@ -2,7 +2,7 @@ import { Cache } from 'hexo-util';
 
 class Locals {
   public cache: any;
-  public getters: any;
+  public getters: Record<string, any>;
   public page: any;
   public path: string;
 
