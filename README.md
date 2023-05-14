@@ -30,3 +30,20 @@ https://github.com/hexojs/hexo-util/pull/301
 ## hexo-front-matter
 - [#70](https://github.com/hexojs/hexo-front-matter/pull/70) closed due refactoring code style
 - [#71](https://github.com/hexojs/hexo-front-matter/pull/71)
+
+## hexo
+## What does it do?
+### feat(lint): add rule unused vars
+affects: `.eslintrc`
+-  turn error all unused vars, except start with `underscore` (`_`)
+
+### chore(deps-dev): update types, fix missing types
+affects: `package.json`
+- add `@types/mocha`, `@types/chai`
+- add `@types/sinon`. `@types/micromatch`
+- update `@types/bluebird`
+
+## Pull request tasks
+
+- [ ] Add test cases for the changes.
+- [ ] Passed the CI test.
