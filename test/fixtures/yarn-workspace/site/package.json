@@ -21,6 +21,7 @@
   "license": "MIT",
   "dependencies": {
     "hexo": "*",
-    "hexo-renderers": "*"
+    "hexo-renderers": "*",
+    "hexo-theme-workspace-test": "*"
   }
 }
