@@ -40,8 +40,8 @@ affects: `.eslintrc`
 ### chore(deps-dev): update types, fix missing types
 affects: `package.json`
 - add `@types/mocha`, `@types/chai`
-- add `@types/sinon`. `@types/micromatch`
-- update `@types/bluebird`
+- add `@types/sinon`, `@types/micromatch`
+- update `@types/bluebird`, `mocha`, `chai`
 
 ## Pull request tasks
 
