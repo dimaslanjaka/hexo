@@ -37,11 +37,22 @@ https://github.com/hexojs/hexo-util/pull/301
 affects: `.eslintrc`
 -  turn error all unused vars, except start with `underscore` (`_`)
 
+because there are so many variables that are not used, we need add prefix `_` to them.
+
 ### chore(deps-dev): update types, fix missing types
 affects: `package.json`
 - add `@types/mocha`, `@types/chai`
 - add `@types/sinon`, `@types/micromatch`
 - update `@types/bluebird`, `mocha`, `chai`
+
+fixed missing type for 'module' when testing standalone/single test
+
+### refactor: only running on 'hexojs/hexo'
+affects: `.github/workflows/benchmark.yml`
+- upload flamegraph when running on 'hexojs/hexo'
+- comment PR when running on 'hexojs/hexo'
+
+fixed CI for someone not having SURGE.sh token.
 
 ## Pull request tasks
 
