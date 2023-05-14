@@ -28,8 +28,16 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build_test_win_node14:
-    name: build and test
+  build_win_node14:
+    uses: ./.github/workflows/workspace-builder.yml
+    secrets:
+      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+    with:
+      os: windows-latest
+      node-version: 14.x
+  test_win_node14:
+    needs: build_win_node14
+    name: test
     uses: ./.github/workflows/workspace-tester.yml
     secrets:
       ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
@@ -37,7 +45,7 @@ jobs:
       os: windows-latest
       node-version: 14.x
   pack:
-    needs: build_test_win_node14
+    needs: build_win_node14
     runs-on: windows-latest
     # set timeout - see https://stackoverflow.com/a/59076067/6404439
     timeout-minutes: 120
