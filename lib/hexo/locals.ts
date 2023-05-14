@@ -1,5 +1,5 @@
 import { Cache } from 'hexo-util';
-import { HexoLocalsData, HexoLocalsFunc } from './locals-d';
+import { HexoLocalsData } from './locals-d';
 
 class Locals {
   public cache: {
@@ -15,7 +15,7 @@ class Locals {
       [k: string]: HexoLocalsData;
     };
   };
-  public getters: Record<string, HexoLocalsFunc>;
+  public getters: Record<string, HexoLocalsData>;
 
   constructor() {
     this.cache = new Cache<HexoLocalsData>();
@@ -26,10 +26,13 @@ class Locals {
     if (typeof name !== 'string') throw new TypeError('name must be a string!');
 
     return this.cache.apply(name, () => {
-      const getter = this.getters[name];
+      // This expression is not callable.
+      // Type 'HexoLocalsData' has no call signatures
+      // solution cast to `any`
+      const getter = this.getters[name] as any;
       if (!getter) return;
 
-      return getter();
+      return getter() as HexoLocalsData;
     });
   }
 
