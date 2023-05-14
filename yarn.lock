@@ -7568,12 +7568,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"hexo-theme-workspace-test@workspace:packages/hexo/test/fixtures/yarn-workspace/packages/theme":
-  version: 0.0.0-use.local
-  resolution: "hexo-theme-workspace-test@workspace:packages/hexo/test/fixtures/yarn-workspace/packages/theme"
-  languageName: unknown
-  linkType: soft
-
 "hexo-util@^3.0.1, hexo-util@workspace:^, hexo-util@workspace:packages/hexo-util":
   version: 0.0.0-use.local
   resolution: "hexo-util@workspace:packages/hexo-util"
@@ -7652,14 +7646,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hexo-yarn-workspace-site@workspace:packages/hexo/test/fixtures/yarn-workspace/site":
-  version: 0.0.0-use.local
-  resolution: "hexo-yarn-workspace-site@workspace:packages/hexo/test/fixtures/yarn-workspace/site"
-  dependencies:
-    hexo: "*"
-  languageName: unknown
-  linkType: soft
-
 "hexo@github:hexojs/hexo":
   version: 6.3.0
   resolution: "hexo@https://github.com/hexojs/hexo.git#commit=8b95bbc722e5c77a7e8125441ed64d2ea3524ac0"
@@ -7694,7 +7680,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hexo@npm:*, hexo@npm:^6.3.0":
+"hexo@npm:^6.3.0":
   version: 6.3.0
   resolution: "hexo@npm:6.3.0"
   dependencies:
@@ -16369,12 +16355,6 @@ __metadata:
   checksum: 0c330ce1338cd9f293157bf8955af6833ae59032ab1bc936510ce7a216de9bb65b05b39a82ff0e7359bfb643342cc05de5049ce50ee9404b0818f65911fb59a5
   languageName: node
   linkType: hard
-
-"yarn-workspace@workspace:packages/hexo/test/fixtures/yarn-workspace":
-  version: 0.0.0-use.local
-  resolution: "yarn-workspace@workspace:packages/hexo/test/fixtures/yarn-workspace"
-  languageName: unknown
-  linkType: soft
 
 "yn@npm:3.1.1":
   version: 3.1.1
