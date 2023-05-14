@@ -1,5 +1,5 @@
 import { Cache } from 'hexo-util';
-import { HexoLocalsData } from './locals-d';
+import { HexoLocalsData, HexoLocalsFunc } from './locals-d';
 
 class Locals {
   public cache: {
@@ -15,7 +15,7 @@ class Locals {
       [k: string]: HexoLocalsData;
     };
   };
-  public getters: Record<string, HexoLocalsData>;
+  public getters: Record<string, HexoLocalsFunc>;
 
   constructor() {
     this.cache = new Cache<HexoLocalsData>();

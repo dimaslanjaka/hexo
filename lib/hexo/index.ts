@@ -36,6 +36,7 @@ import loadDatabase from './load_database';
 import multiConfigPath from './multi_config_path';
 import { deepMerge, full_url_for } from 'hexo-util';
 import { Args, Config, Extend, Query } from './index-d';
+import { HexoLocalsData } from './locals-d';
 let resolveSync; // = require('resolve');
 
 const libDir = dirname(__dirname);
@@ -59,11 +60,7 @@ const mergeCtxThemeConfig = (ctx: import('.')) => {
   }
 };
 
-const createLoadThemeRoute = function(
-  generatorResult: Record<string, any>,
-  locals: import('./locals'),
-  ctx: import('.')
-) {
+const createLoadThemeRoute = function(generatorResult: Record<string, any>, locals: HexoLocalsData, ctx: import('.')) {
   const { log, theme } = ctx;
   const { path, cache: useCache } = locals;
 
@@ -485,7 +482,7 @@ class Hexo extends EventEmitter {
     const ctx = { config: { url: this.config.url } };
     const localsObj = this.locals.toObject();
 
-    class Locals {
+    class Locals implements HexoLocalsData {
       page: {
         path: string;
       };
@@ -499,7 +496,7 @@ class Hexo extends EventEmitter {
       site: Record<string, any>;
       cache?: boolean;
 
-      constructor(path: string, locals: import('.')['locals']) {
+      constructor(path: string, locals: { path: string }) {
         this.page = { ...locals };
         if (this.page.path == null) this.page.path = path;
         this.path = path;
