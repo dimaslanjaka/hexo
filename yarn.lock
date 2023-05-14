@@ -1082,9 +1082,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/hexo@https://github.com/dimaslanjaka/hexo/raw/monorepo-v7/releases/hexo.tgz":
+"@types/hexo@https://github.com/dimaslanjaka/hexo/raw/b5606f1/releases/hexo.tgz":
   version: 7.0.0-rc1
-  resolution: "@types/hexo@https://github.com/dimaslanjaka/hexo/raw/monorepo-v7/releases/hexo.tgz"
+  resolution: "@types/hexo@https://github.com/dimaslanjaka/hexo/raw/b5606f1/releases/hexo.tgz"
   dependencies:
     abbrev: ^2.0.0
     archy: ^1.0.0
@@ -1112,7 +1112,7 @@ __metadata:
     warehouse: ^5.0.0
   bin:
     hexo: ./bin/hexo
-  checksum: e00d4c7433c3dae70016994e6baeffd5fa9c4f5292501d456a46ed640041de6bf98f8614298d0691144255350acc0592568177fa56d989973ca12628ef4b3241
+  checksum: d3bbf50cba23f2c263eba8ec3447247efcdcfdacea0d3d2d124238c89924d283aed0181f44ba175c9d31c4b34c08c6c7cee524c53cbff24756aa498d3dab4b34
   languageName: node
   linkType: hard
 
@@ -7462,7 +7462,7 @@ __metadata:
     "@types/ejs": ^3.1.2
     "@types/fs-extra": ^11.0.1
     "@types/gulp": ^4.0.10
-    "@types/hexo": "https://github.com/dimaslanjaka/hexo/raw/monorepo-v7/releases/hexo.tgz"
+    "@types/hexo": "https://github.com/dimaslanjaka/hexo/raw/b5606f1/releases/hexo.tgz"
     "@types/lodash.toarray": ^4.4.7
     "@types/markdown-it": ^12.2.3
     "@types/node": ^18.15.11
