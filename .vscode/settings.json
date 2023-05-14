@@ -17,7 +17,7 @@
   "eslint.packageManager": "yarn",
   "code-runner.respectShebang": true,
   "code-runner.executorMapByGlob": {
-    "*.test.{ts,js}": "npx c8 --reporter=lcovonly mocha --timeout=7000000",
+    "*.{test,spec}.{ts,js}": "npx c8 --reporter=lcovonly mocha --timeout=7000000",
     "*.build.js": "yarn build && node -r ts-node/register"
   },
   "code-runner.clearPreviousOutput": true,
