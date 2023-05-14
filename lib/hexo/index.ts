@@ -488,7 +488,7 @@ class Hexo extends EventEmitter {
       };
       path: string;
       url: string;
-      config: Record<string, any>;
+      config: Config;
       theme: Record<string, any>;
       layout: string;
       env: any;
