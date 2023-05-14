@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "local": "yarn add hexo@file:../../../../",
-    "git": "yarn add hexo@https://github.com/dimaslanjaka/hexo/tarball/private"
+    "build": "hexo g",
+    "clean": "hexo clean"
   },
   "keywords": [
     "hexo",
