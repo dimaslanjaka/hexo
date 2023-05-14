@@ -1,10 +1,6 @@
 name: Workspace Tester
 
 on:
-  push:
-    branches: ['monorepo-v7']
-    paths:
-      - '**/workspace-tester.yml'
   workflow_dispatch:
   workflow_call:
     inputs:
@@ -25,15 +21,7 @@ on:
 permissions: write-all
 
 jobs:
-  builder:
-    uses: ./.github/workflows/workspace-builder.yml
-    secrets:
-      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-    with:
-      os: ${{ inputs.os || 'ubuntu-latest' }}
-      node-version: ${{ inputs.node-version || '14.x' }}
   tester:
-    needs: builder
     runs-on: ${{ inputs.os || 'ubuntu-latest' }}
     # set timeout - see https://stackoverflow.com/a/59076067/6404439
     timeout-minutes: 120
