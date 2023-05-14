@@ -1082,6 +1082,30 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/hexo-log@https://github.com/dimaslanjaka/hexo/raw/b5606f1/releases/hexo-log.tgz":
+  version: 4.0.1
+  resolution: "@types/hexo-log@https://github.com/dimaslanjaka/hexo/raw/b5606f1/releases/hexo-log.tgz"
+  dependencies:
+    picocolors: ^1.0.0
+  checksum: 86fea0f6c47dceb3ff8e2f3ff76c038c85a4e75a0ff5df4dff32599b2ff4ae15c06dd0adacfa14a54c5e47d7bffb89bb499a8a2f584c2d7c34570a79de8c766f
+  languageName: node
+  linkType: hard
+
+"@types/hexo-util@https://github.com/dimaslanjaka/hexo/raw/b5606f1/releases/hexo-util.tgz":
+  version: 3.0.1
+  resolution: "@types/hexo-util@https://github.com/dimaslanjaka/hexo/raw/b5606f1/releases/hexo-util.tgz"
+  dependencies:
+    camel-case: ^4.1.2
+    cross-spawn: ^7.0.3
+    deepmerge: ^4.2.2
+    highlight.js: ^11.6.0
+    htmlparser2: ^8.0.1
+    prismjs: ^1.29.0
+    strip-indent: ^3.0.0
+  checksum: 6d437eddcd0553fc433f4a858149d075d760ec29a992b9077ddec21bb41bb6ddb0df87c68f43362db70d57783136e96b634ae0d368e00608de1608f5c1d74b34
+  languageName: node
+  linkType: hard
+
 "@types/hexo@https://github.com/dimaslanjaka/hexo/raw/b5606f1/releases/hexo.tgz":
   version: 7.0.0-rc1
   resolution: "@types/hexo@https://github.com/dimaslanjaka/hexo/raw/b5606f1/releases/hexo.tgz"
@@ -1269,10 +1293,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^18.11.7, @types/node@npm:^18.11.8, @types/node@npm:^18.14.6, @types/node@npm:^18.15.11, @types/node@npm:^18.16.0, @types/node@npm:^18.16.3, @types/node@npm:^18.7.18":
+"@types/node@npm:^18.11.7, @types/node@npm:^18.11.8, @types/node@npm:^18.14.6, @types/node@npm:^18.16.0, @types/node@npm:^18.16.3, @types/node@npm:^18.7.18":
   version: 18.16.6
   resolution: "@types/node@npm:18.16.6"
   checksum: 99417418952c0b1a6ff5dd40ccf01c2cd18db6a1c54bfaaff29c700c877e2e541aa31ea33090592f3817adb2b8c0946b86c7fb57049131e7c08252d70075f09b
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^20.1.4":
+  version: 20.1.4
+  resolution: "@types/node@npm:20.1.4"
+  checksum: bffa6a6e92831cc805b13658c55be8e04abe3202d5e57ddd7fee4cfbe269656a1f475909a9f9514e1aff50310d0d90c516ac2c649cb6f1c77d4b1079c2fd1e88
   languageName: node
   linkType: hard
 
@@ -5550,7 +5581,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^8.2.0, eslint@npm:^8.23.0, eslint@npm:^8.23.1, eslint@npm:^8.26.0, eslint@npm:^8.35.0, eslint@npm:^8.38.0, eslint@npm:^8.39.0":
+"eslint@npm:^8.2.0, eslint@npm:^8.23.0, eslint@npm:^8.23.1, eslint@npm:^8.26.0, eslint@npm:^8.35.0, eslint@npm:^8.39.0":
   version: 8.39.0
   resolution: "eslint@npm:8.39.0"
   dependencies:
@@ -5600,7 +5631,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^8.8.0":
+"eslint@npm:^8.40.0, eslint@npm:^8.8.0":
   version: 8.40.0
   resolution: "eslint@npm:8.40.0"
   dependencies:
@@ -7385,7 +7416,7 @@ __metadata:
     nunjucks: ^3.2.4
     picocolors: ^1.0.0
     prettier: ^2.8.8
-    sbg-utility: ^1.0.9
+    sbg-utility: ^1.1.0
     ts-node: ^10.9.1
     tslib: ^2.5.0
     typescript: ^5.0.4
@@ -7463,41 +7494,42 @@ __metadata:
     "@types/fs-extra": ^11.0.1
     "@types/gulp": ^4.0.10
     "@types/hexo": "https://github.com/dimaslanjaka/hexo/raw/b5606f1/releases/hexo.tgz"
+    "@types/hexo-log": "https://github.com/dimaslanjaka/hexo/raw/b5606f1/releases/hexo-log.tgz"
+    "@types/hexo-util": "https://github.com/dimaslanjaka/hexo/raw/b5606f1/releases/hexo-util.tgz"
     "@types/lodash.toarray": ^4.4.7
     "@types/markdown-it": ^12.2.3
-    "@types/node": ^18.15.11
+    "@types/node": ^20.1.4
     "@types/node-sass": ^4.11.3
     "@types/nunjucks": ^3.2.2
     "@types/pug": ^2.0.6
     ansi-colors: ^4.1.3
     ejs: ^3.1.9
-    eslint: ^8.38.0
+    eslint: ^8.40.0
     fs-extra: ^11.1.1
     gulp: ^4.0.2
-    hexo: ^6.3.0
     hexo-util: ^3.0.1
     lodash.toarray: ^4.4.0
     markdown-it: ^13.0.1
     markdown-it-abbr: ^1.0.4
-    markdown-it-attrs: ^4.1.3
-    markdown-it-cjk-breaks: ^1.1.2
+    markdown-it-attrs: ^4.1.6
+    markdown-it-cjk-breaks: ^1.1.3
     markdown-it-container: ^3.0.0
-    markdown-it-deflist: ^2.0.3
-    markdown-it-emoji: ^2.0.0
-    markdown-it-footnote: ^3.0.1
-    markdown-it-ins: ^3.0.0
-    markdown-it-mark: ^3.0.0
+    markdown-it-deflist: ^2.1.0
+    markdown-it-emoji: ^2.0.2
+    markdown-it-footnote: ^3.0.3
+    markdown-it-ins: ^3.0.1
+    markdown-it-mark: ^3.0.1
     markdown-it-sub: ^1.0.0
     markdown-it-sup: ^1.0.0
     moment: ^2.29.4
     moment-timezone: ^0.5.43
     nib: ^1.2.0
     node-sass: ^8.0.0
-    nunjucks: ^3.2.3
-    prettier: ^2.8.7
+    nunjucks: ^3.2.4
+    prettier: ^2.8.8
     pug: ^3.0.2
-    sass: ^1.61.0
-    sbg-utility: ^1.0.9
+    sass: ^1.62.1
+    sbg-utility: ^1.1.0
     stylus: ^0.59.0
     ts-node: ^10.9.1
     typescript: ^5.0.4
@@ -10034,7 +10066,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-it-attrs@npm:^4.1.3":
+"markdown-it-attrs@npm:^4.1.6":
   version: 4.1.6
   resolution: "markdown-it-attrs@npm:4.1.6"
   peerDependencies:
@@ -10043,7 +10075,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-it-cjk-breaks@npm:^1.1.2":
+"markdown-it-cjk-breaks@npm:^1.1.3":
   version: 1.1.3
   resolution: "markdown-it-cjk-breaks@npm:1.1.3"
   dependencies:
@@ -10059,35 +10091,35 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-it-deflist@npm:^2.0.3":
+"markdown-it-deflist@npm:^2.1.0":
   version: 2.1.0
   resolution: "markdown-it-deflist@npm:2.1.0"
   checksum: 6d5b0cc8c0e729cb8d0add4cbfa98cc39bf3cbc8aa33a8bd7dab50da10273aac834b5fc85a36985235ff945048a246ec3688ecaf5469e64668e94b4449f79531
   languageName: node
   linkType: hard
 
-"markdown-it-emoji@npm:^2.0.0":
+"markdown-it-emoji@npm:^2.0.2":
   version: 2.0.2
   resolution: "markdown-it-emoji@npm:2.0.2"
   checksum: e93ca19591b8dd543029e1997763e094a0861185f71403ffa522f09860da0a6457b3a2bd50e6e59cf1551b28ff464a2c2f596045a577323bd1d546cd1f0cc377
   languageName: node
   linkType: hard
 
-"markdown-it-footnote@npm:^3.0.1":
+"markdown-it-footnote@npm:^3.0.3":
   version: 3.0.3
   resolution: "markdown-it-footnote@npm:3.0.3"
   checksum: 3657f943f938603ec74e86a41883bfac5564eec7733b8d74e00894cb2b2b73f823c072bccd8aa07c418ae1e017a4f5d22c6309627dfc2800100fcb2c6c71e24b
   languageName: node
   linkType: hard
 
-"markdown-it-ins@npm:^3.0.0":
+"markdown-it-ins@npm:^3.0.1":
   version: 3.0.1
   resolution: "markdown-it-ins@npm:3.0.1"
   checksum: f4ddc456bf67eeae872bd77146723cd6c6a035b2dfa4c8a6f282c1fc6eb35b503836ac567aee4d6550bbd5e67a014003f52bad4c28661387662e215c3c1ab2ae
   languageName: node
   linkType: hard
 
-"markdown-it-mark@npm:^3.0.0":
+"markdown-it-mark@npm:^3.0.1":
   version: 3.0.1
   resolution: "markdown-it-mark@npm:3.0.1"
   checksum: cb9d8bee158440938e615d9f2866b6ee3b98666aba7d4c1a78d9df2e0c121a23f2c9172d1f92680883eae9229794a5e6e7e15e76bfd151fadf8be2299330905f
@@ -12284,7 +12316,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^2.8.4, prettier@npm:^2.8.7, prettier@npm:^2.8.8":
+"prettier@npm:^2.8.4, prettier@npm:^2.8.8":
   version: 2.8.8
   resolution: "prettier@npm:2.8.8"
   bin:
@@ -13456,7 +13488,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:^1.29.0, sass@npm:^1.61.0":
+"sass@npm:^1.29.0, sass@npm:^1.62.1":
   version: 1.62.1
   resolution: "sass@npm:1.62.1"
   dependencies:
