@@ -1,26 +1,24 @@
 import { Cache } from 'hexo-util';
-// import Cache from './cache';
-
-type CacheType = import('../hexo')['_generateLocals'];
+import { HexoLocalsData } from './locals-d';
 
 class Locals {
   public cache: {
-    cache: Map<string, CacheType>;
-    set(id: string, value: CacheType): void;
+    cache: Map<string, HexoLocalsData>;
+    set(id: string, value: HexoLocalsData): void;
     has(id: string): boolean;
-    get(id: string): CacheType;
+    get(id: string): HexoLocalsData;
     del(id: string): void;
     apply<T>(id: string, value: T): T;
     flush(): void;
     size(): number;
     dump(): {
-      [k: string]: CacheType;
+      [k: string]: HexoLocalsData;
     };
   };
-  public getters: Record<string, CacheType>;
+  public getters: Record<string, HexoLocalsData>;
 
   constructor() {
-    this.cache = new Cache<CacheType>();
+    this.cache = new Cache<HexoLocalsData>();
     this.getters = {};
   }
 
