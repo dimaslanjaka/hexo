@@ -81,13 +81,12 @@
     "packages/hexo",
     "packages/hexo-asset-link",
     "packages/hexo-theme-landscape",
-    "packages/hexo-renderers",
     "test/hexo-theme-test"
   ],
   "packageManager": "yarn@3.5.1",
   "resolutions": {
     "sbg-utility": "https://github.com/dimaslanjaka/static-blog-generator/raw/beta/packages/sbg-utility/release/sbg-utility.tgz",
-    "cross-spawn": "https://github.com/dimaslanjaka/node-cross-spawn.git#private",
+    "cross-spawn": "https://github.com/dimaslanjaka/node-cross-spawn/raw/5560156/release/cross-spawn.tgz",
     "git-command-helper": "https://github.com/dimaslanjaka/git-command-helper/raw/2bc2009/release/git-command-helper.tgz"
   }
 }
