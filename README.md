@@ -22,14 +22,18 @@ yarn workspace hexo-log exec "git remote add upstream https://github.com/hexojs/
 - [#483](https://github.com/hexojs/hexo-cli/pull/483)
 
 ## hexo-log
-https://github.com/hexojs/hexo-log/pull/148
+- https://github.com/hexojs/hexo-log/pull/148
 
 ## hexo-util
-https://github.com/hexojs/hexo-util/pull/301
+- https://github.com/hexojs/hexo-util/pull/301
+- https://github.com/hexojs/hexo-util/pull/307
+- https://github.com/hexojs/hexo-util/pull/308
 
 ## hexo-front-matter
-- [#70](https://github.com/hexojs/hexo-front-matter/pull/70) closed due refactoring code style
+- ~~[#70](https://github.com/hexojs/hexo-front-matter/pull/70)~~ closed due refactoring code style
 - [#71](https://github.com/hexojs/hexo-front-matter/pull/71)
+  - https://github.com/hexojs/hexo-front-matter/pull/77
+  - https://github.com/hexojs/hexo-front-matter/pull/76
 
 ## hexo
 ## What does it do?
