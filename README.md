@@ -18,22 +18,23 @@ yarn workspace hexo-log exec "git remote add upstream https://github.com/hexojs/
 ## Pull request document
 
 ## hexo-cli
-- [#479](https://github.com/hexojs/hexo-cli/pull/479)
-- [#483](https://github.com/hexojs/hexo-cli/pull/483)
+1. [#479](https://github.com/hexojs/hexo-cli/pull/479)
+2. [#483](https://github.com/hexojs/hexo-cli/pull/483)
 
 ## hexo-log
-- https://github.com/hexojs/hexo-log/pull/148
+1. https://github.com/hexojs/hexo-log/pull/148
 
 ## hexo-util
-- https://github.com/hexojs/hexo-util/pull/301
-- https://github.com/hexojs/hexo-util/pull/307
-- https://github.com/hexojs/hexo-util/pull/308
+1.  https://github.com/hexojs/hexo-util/pull/311
+    - https://github.com/hexojs/hexo-util/pull/301
+    - https://github.com/hexojs/hexo-util/pull/307
+    - https://github.com/hexojs/hexo-util/pull/308
 
 ## hexo-front-matter
-- ~~[#70](https://github.com/hexojs/hexo-front-matter/pull/70)~~ closed due refactoring code style
-- [#71](https://github.com/hexojs/hexo-front-matter/pull/71)
-  - https://github.com/hexojs/hexo-front-matter/pull/77
-  - https://github.com/hexojs/hexo-front-matter/pull/76
+1.  ~~[#70](https://github.com/hexojs/hexo-front-matter/pull/70)~~ closed due refactoring code style
+2.  [#71](https://github.com/hexojs/hexo-front-matter/pull/71)
+    - https://github.com/hexojs/hexo-front-matter/pull/77
+    - https://github.com/hexojs/hexo-front-matter/pull/76
 
 ## hexo
 ## What does it do?
