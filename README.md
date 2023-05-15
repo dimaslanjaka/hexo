@@ -54,6 +54,10 @@ affects: `.github/workflows/benchmark.yml`
 
 fixed CI for someone not having SURGE.sh token.
 
+## chore: update locals data
+affects: `lib/hexo/locals.ts`
+require https://github.com/hexojs/hexo-util/pull/308
+
 ## Pull request tasks
 
 - [ ] Add test cases for the changes.
