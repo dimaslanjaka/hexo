@@ -116,7 +116,7 @@ async function buildPack(workspaces: Awaited<typeof parseWorkspaces>) {
       // need hexo, git-embed
       //.then(() => runBuild('hexo-shortcodes'))
       // need hexo
-      .then(() => runBuild('hexo-renderers'))
+      // .then(() => runBuild('hexo-renderers'))
       .then(res);
   }).then(() => workspaces);
 }
