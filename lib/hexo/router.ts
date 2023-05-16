@@ -28,7 +28,7 @@ class RouteStream extends Readable {
   }
 
   // Assume we only accept Buffer, plain object, or string
-  _toBuffer(data: Buffer | object | string): Buffer | null {
+  _toBuffer(data: WithImplicitCoercion<string | Uint8Array | readonly number[]>) {
     if (data instanceof Buffer) {
       return data;
     }
