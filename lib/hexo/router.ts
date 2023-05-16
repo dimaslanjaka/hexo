@@ -8,11 +8,12 @@ interface Data {
   modified: boolean;
 }
 
+/*
 declare module 'stream' {
   export default class _Stream extends Stream {
     readable: boolean;
   }
-}
+}*/
 
 class RouteStream extends Readable {
   public _data: any;
@@ -60,7 +61,8 @@ class RouteStream extends Readable {
     this._ended = true;
 
     data().then(data => {
-      if (data instanceof Stream && data.readable) {
+      // eslint-disable-next-line dot-notation
+      if (data instanceof Stream && data['readable']) {
         data.on('data', d => {
           this.push(d);
         });
@@ -79,7 +81,7 @@ class RouteStream extends Readable {
         }
         this.push(null);
       }
-    }).catch(err => {
+    }).catch((err: any) => {
       this.emit('error', err);
       this.push(null);
     });
