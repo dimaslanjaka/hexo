@@ -1,4 +1,4 @@
-import { Cache } from 'hexo-util';
+import { Cache } from 'hexo-util/dist/CacheMapper';
 import { HexoLocalsData } from './locals-d';
 
 
