@@ -6712,7 +6712,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hexo-renderers@npm:^1.0.9":
+"hexo-renderers@npm:^1.0.11":
   version: 1.0.11
   resolution: "hexo-renderers@npm:1.0.11"
   dependencies:
@@ -6799,7 +6799,7 @@ __metadata:
     hexo-generator-index: ^3.0.0
     hexo-generator-tag: ^2.0.0
     hexo-log: "workspace:^"
-    hexo-renderers: ^1.0.9
+    hexo-renderers: ^1.0.11
     hexo-server: ^3.0.0
     hexo-shortcodes: ^1.1.2
     hexo-theme-landscape: "workspace:^"
