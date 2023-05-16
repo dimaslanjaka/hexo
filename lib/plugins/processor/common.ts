@@ -1,4 +1,3 @@
-import { Pattern } from 'hexo-util';
 import moment from 'moment-timezone';
 import micromatch from 'micromatch';
 import { Config } from '../../hexo/index-d';
