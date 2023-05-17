@@ -1,4 +1,3 @@
-
 import nunjucks from 'nunjucks';
 import { readFileSync } from 'hexo-fs';
 import { dirname } from 'path';
@@ -42,7 +41,7 @@ const nunjucksAddFilter = (env: nunjucks.Environment) => {
   env.addFilter('safedump', safeJsonStringify);
 };
 
-function njkCompile(data: { path?: any; text?: any; }) {
+function njkCompile(data: { path?: any; text?: any }) {
   let env: nunjucks.Environment;
   if (typeof data.path === 'string') {
     env = nunjucks.configure(dirname(data.path), nunjucksCfg);
@@ -56,13 +55,17 @@ function njkCompile(data: { path?: any; text?: any; }) {
   return nunjucks.compile(text, env, data.path);
 }
 
-function njkRenderer(data: { path?: any; text?: any; }, locals: Record<string, any>) {
+interface njkRenderer extends Function {
+  compile: (data: { path?: any; text?: any }) => (locals: Record<string, any>) => string;
+}
+
+function njkRenderer(data: { path?: any; text?: any }, locals: Record<string, any>) {
   return njkCompile(data).render(locals);
 }
 
-njkRenderer.compile = data => {
+njkRenderer.compile = (data: { path?: any; text?: any }) => {
   // Need a closure to keep the compiled template.
-  return locals => njkCompile(data).render(locals);
+  return (locals: Record<string, any>) => njkCompile(data).render(locals);
 };
 
 export = njkRenderer;
