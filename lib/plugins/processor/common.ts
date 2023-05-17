@@ -1,6 +1,7 @@
 import moment from 'moment-timezone';
 import micromatch from 'micromatch';
 import { Config } from '../../hexo/index-d';
+import { Pattern } from 'hexo-util';
 
 const DURATION_MINUTE = 1000 * 60;
 
@@ -25,12 +26,10 @@ function isExcludedFile(path: string, config: Config) {
   return false;
 }
 
-/*
 export const ignoreTmpAndHiddenFile = new Pattern(path => {
   if (isTmpFile(path) || isHiddenFile(path)) return false;
   return true;
 });
-*/
 
 export { isTmpFile };
 export { isHiddenFile };
