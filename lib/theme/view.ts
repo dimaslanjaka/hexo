@@ -32,7 +32,7 @@ class View {
   public layout: any;
   public _content: any;
 
-  constructor(path, data) {
+  constructor(path: string, data) {
     this.path = path;
     this.source = join(this._theme.base, 'layout', path);
     this.data = typeof data === 'string' ? yfm(data, {}) : data;
@@ -51,20 +51,22 @@ class View {
     const { layout = (options as Options).layout } = data;
     const locals = this._buildLocals(options);
 
-    return this._compiled(this._bindHelpers(locals)).then(result => {
-      if (result == null || !layout) return result;
+    return this._compiled(this._bindHelpers(locals))
+      .then(result => {
+        if (result == null || !layout) return result;
 
-      const layoutView = this._resolveLayout(layout);
-      if (!layoutView) return result;
+        const layoutView = this._resolveLayout(layout);
+        if (!layoutView) return result;
 
-      const layoutLocals = {
-        ...locals,
-        body: result,
-        layout: false
-      };
+        const layoutLocals = {
+          ...locals,
+          body: result,
+          layout: false
+        };
 
-      return layoutView.render(layoutLocals, callback);
-    }).asCallback(callback);
+        return layoutView.render(layoutLocals, callback);
+      })
+      .asCallback(callback);
   }
 
   renderSync(options: Options = {}) {
@@ -148,8 +150,8 @@ class View {
         return ctx.execFilterSync(...buildFilterArguments(result));
       };
 
-      this._compiled = locals => Promise.resolve(compiled(locals))
-        .then(result => ctx.execFilter(...buildFilterArguments(result)));
+      this._compiled = locals =>
+        Promise.resolve(compiled(locals)).then(result => ctx.execFilter(...buildFilterArguments(result)));
     } else {
       this._compiledSync = locals => render.renderSync(data, locals);
 
