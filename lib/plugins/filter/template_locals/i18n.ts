@@ -13,7 +13,7 @@ function i18nLocalsFilter(locals) {
     const pattern = new Pattern(`${i18nDir}/*path`);
     const data = pattern.match(locals.path);
 
-    if (data && data.lang && i18nLanguages.includes(data.lang)) {
+    if (!Array.isArray(data) && typeof data !== 'boolean' && data.lang && i18nLanguages.includes(data.lang)) {
       lang = data.lang;
       page.canonical_path = data.path;
     } else {
