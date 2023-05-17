@@ -14,7 +14,7 @@ function i18nLocalsFilter(this: import('../../../hexo'), locals: HexoLocalsData)
     const pattern = new Pattern(`${i18nDir}/*path`);
     const data = pattern.match(locals.path);
 
-    if (!Array.isArray(data) && data.lang && i18nLanguages.includes(data.lang as string)) {
+    if (!Array.isArray(data) && typeof data !== 'boolean' && data.lang && i18nLanguages.includes(data.lang as string)) {
       lang = data.lang;
       page.canonical_path = data.path;
     } else {
