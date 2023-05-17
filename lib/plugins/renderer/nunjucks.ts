@@ -42,9 +42,9 @@ const nunjucksAddFilter = env => {
   env.addFilter('safedump', safeJsonStringify);
 };
 
-function njkCompile(data) {
-  let env;
-  if (data.path) {
+function njkCompile(data: { path?: any; text?: any; }) {
+  let env: nunjucks.Environment;
+  if (typeof data.path === 'string') {
     env = nunjucks.configure(dirname(data.path), nunjucksCfg);
   } else {
     env = nunjucks.configure(nunjucksCfg);
