@@ -146,11 +146,11 @@ class View {
 
       this._compiledSync = (locals: Record<string, any>) => {
         const result = compiled(locals);
-        return ctx.execFilterSync(...buildFilterArguments(result));
+        return ctx.execFilterSync.apply(null, buildFilterArguments(result));
       };
 
       this._compiled = (locals: Record<string, any>) =>
-        Promise.resolve(compiled(locals)).then(result => ctx.execFilter(...buildFilterArguments(result)));
+        Promise.resolve(compiled(locals)).then(result => ctx.execFilter.apply(buildFilterArguments(result)));
     } else {
       this._compiledSync = (locals: Record<string, any>) => render.renderSync(data, locals);
 
