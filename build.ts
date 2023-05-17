@@ -172,6 +172,15 @@ async function createReadMe(workspaces: Awaited<typeof parseWorkspaces>) {
           (await workspaceGit.latestCommit())
       );
       source_vars.commits[workspace.name] = commitURL;
+      switch (workspace.name) {
+        case 'hexo':
+          source_vars.commits[workspace.name] +=
+            '\t[![Coverage Status](https://coveralls.io/repos/github/dimaslanjaka/hexo/badge.svg)](https://coveralls.io/github/dimaslanjaka/hexo)';
+          break;
+
+        default:
+          break;
+      }
 
       const args = ['status', '--porcelain', '--', relativeTarball, '|', 'wc', '-l'];
       const isChanged =
