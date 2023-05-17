@@ -44,9 +44,7 @@ class View {
     this._precompile();
   }
 
-  render(callback: NodeJSLikeCallback<any>): Promise<any>;
-  render(options: Options, callback?: NodeJSLikeCallback<any>): Promise<any>;
-  render(options: Options | NodeJSLikeCallback<any> = {}, callback?: NodeJSLikeCallback<any>): Promise<any> {
+  render(options: Options | ((...args: any[]) => any) = {}, callback: (...args: any[]) => any) {
     if (!callback && typeof options === 'function') {
       callback = options;
       options = {};
