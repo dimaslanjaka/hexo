@@ -101,7 +101,7 @@ jobs:
           fi
           echo "architecture=$(getconf LONG_BIT)" >> $GITHUB_ENV
 
-      - uses: pat-s/always-upload-cache@v3.0.11
+      - uses: actions/cache/save@v3
         id: cache
         with:
           path: |
@@ -110,9 +110,6 @@ jobs:
             ./yarn.lock
             ./packages/**/dist
           key: ${{ runner.os }}-${{ env.node_version }}
-          restore-keys: |
-            ${{ runner.os }}-${{ env.node_version }}
-            ${{ runner.os }}-
 
       - name: Install Dependencies
         run: |
