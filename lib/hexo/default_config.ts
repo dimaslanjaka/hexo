@@ -4,7 +4,7 @@ export = {
   subtitle: '',
   description: '',
   author: 'John Doe',
-  language: 'en',
+  language: 'en' as string | string[],
   timezone: '',
   // URL
   url: 'http://example.com',
