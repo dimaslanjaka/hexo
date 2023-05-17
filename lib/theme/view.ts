@@ -129,7 +129,7 @@ class View {
       text: this.data._content
     };
 
-    function buildFilterArguments(result) {
+    function buildFilterArguments(result: string) {
       const output = render.getOutput(ext) || ext;
       return [
         `after_render:${output}`,
@@ -142,14 +142,14 @@ class View {
     }
 
     if (renderer && typeof renderer.compile === 'function') {
-      const compiled = renderer.compile(data);
+      const compiled = renderer.compile(data) as ((locals: Record<string, any>) => string);
 
-      this._compiledSync = locals => {
+      this._compiledSync = (locals: Record<string, any>) => {
         const result = compiled(locals);
         return ctx.execFilterSync(...buildFilterArguments(result));
       };
 
-      this._compiled = locals =>
+      this._compiled = (locals: Record<string, any>) =>
         Promise.resolve(compiled(locals)).then(result => ctx.execFilter(...buildFilterArguments(result)));
     } else {
       this._compiledSync = locals => render.renderSync(data, locals);
