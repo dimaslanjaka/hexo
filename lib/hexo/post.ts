@@ -569,7 +569,7 @@ class Post {
           data.content = cacheObj.escapeAllSwigTags(data.content);
         }
 
-        const options: { highlight?: boolean } = data.markdown || {};
+        const options = data.markdown || {};
         if (!config.syntax_highlighter) options.highlight = null;
 
         ctx.log.debug('Rendering post: %s', magenta(source));
