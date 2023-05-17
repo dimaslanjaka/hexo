@@ -13,7 +13,7 @@ class Theme extends Box {
   public i18n: any;
   public View: any;
 
-  constructor(ctx, options?) {
+  constructor(ctx: import('../hexo'), options?: Record<string, any>) {
     super(ctx, ctx.theme_dir, options);
 
     this.config = {};
