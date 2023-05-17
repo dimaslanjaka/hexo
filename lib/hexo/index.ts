@@ -618,10 +618,12 @@ class Hexo extends EventEmitter {
     });
   }
 
+  execFilter(...args: any[]): any;
   execFilter(type: string, data: any, options?: Record<string, any>) {
     return this.extend.filter.exec(type, data, options);
   }
 
+  execFilterSync(...args: any[]): any;
   execFilterSync(type: string, data: any, options?: Record<string, any>) {
     return this.extend.filter.execSync(type, data, options);
   }
