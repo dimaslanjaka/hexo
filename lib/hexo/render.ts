@@ -34,15 +34,15 @@ class Render {
     this.renderer = ctx.extend.renderer;
   }
 
-  isRenderable(path) {
+  isRenderable(path: string) {
     return this.renderer.isRenderable(path);
   }
 
-  isRenderableSync(path) {
+  isRenderableSync(path: string) {
     return this.renderer.isRenderableSync(path);
   }
 
-  getOutput(path) {
+  getOutput(path: string) {
     return this.renderer.getOutput(path);
   }
 
@@ -54,10 +54,14 @@ class Render {
     return this.getRenderer(ext, true);
   }
 
-  render(data: Record<string, any>, options?, callback?: (...args: any[]) => any) {
+  render(
+    data: Record<string, any>,
+    options?: { [key: string]: any; (...args: any[]): any; highlight?: boolean },
+    callback?: (...args: any[]) => any
+  ) {
     if (!callback && typeof options === 'function') {
       callback = options;
-      options = {};
+      options = {} as typeof options;
     }
 
     const ctx = this.context;
@@ -102,7 +106,7 @@ class Render {
       .asCallback(callback);
   }
 
-  renderSync(data, options: Record<string, any> = {}) {
+  renderSync(data: { path: any; text?: any; engine?: any; onRenderEnd?: any }, options: Record<string, any> = {}) {
     if (!data) throw new TypeError('No input file or string!');
 
     const ctx = this.context;
