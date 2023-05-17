@@ -37,7 +37,7 @@ const nunjucksCfg = {
   lstripBlocks: false
 };
 
-const nunjucksAddFilter = env => {
+const nunjucksAddFilter = (env: nunjucks.Environment) => {
   env.addFilter('toarray', toArray);
   env.addFilter('safedump', safeJsonStringify);
 };
