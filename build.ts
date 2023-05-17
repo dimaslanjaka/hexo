@@ -171,11 +171,12 @@ async function createReadMe(workspaces: Awaited<typeof parseWorkspaces>) {
           '/commit/' +
           (await workspaceGit.latestCommit())
       );
-      source_vars.commits[workspace.name] = commitURL;
+      const cspl = commitURL.toString().split('/');
+      source_vars.commits[workspace.name] = `[${cspl[cspl.length - 1]}](${commitURL})`;
       switch (workspace.name) {
         case 'hexo':
           source_vars.commits[workspace.name] +=
-            '\t[![Coverage Status](https://coveralls.io/repos/github/dimaslanjaka/hexo/badge.svg)](https://coveralls.io/github/dimaslanjaka/hexo)';
+            '  [![Coverage Status](https://coveralls.io/repos/github/dimaslanjaka/hexo/badge.svg)](https://coveralls.io/github/dimaslanjaka/hexo)';
           break;
 
         default:
