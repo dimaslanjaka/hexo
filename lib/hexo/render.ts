@@ -56,11 +56,11 @@ class Render {
 
   render(
     data: Record<string, any>,
-    options?: { [key: string]: any; (...args: any[]): any; highlight?: boolean },
+    options?: Record<string, any> | ((...args: any[]) => any),
     callback?: (...args: any[]) => any
   ) {
     if (!callback && typeof options === 'function') {
-      callback = options;
+      callback = options as (...args: any[]) => any;
       options = {} as typeof options;
     }
 
