@@ -11,13 +11,9 @@ import type { Pattern } from 'hexo-util';
 
 class Theme extends Box {
   public config: any;
-  public views: Record<string, Record<string, View>>;
+  public views: any;
   public i18n: I18n;
-  public View: typeof View;
-  public processors: {
-    pattern: Pattern;
-    process: (...args: any[]) => any;
-  }[];
+  public View: any;
 
   constructor(ctx: import('../hexo'), options?: Record<string, any>) {
     super(ctx, ctx.theme_dir, options);
