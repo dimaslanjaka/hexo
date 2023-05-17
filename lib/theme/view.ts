@@ -142,7 +142,7 @@ class View {
     }
 
     if (renderer && typeof renderer.compile === 'function') {
-      const compiled = renderer.compile(data) as ((locals: Record<string, any>) => string);
+      const compiled = renderer.compile(data) as (locals: Record<string, any>) => string;
 
       this._compiledSync = (locals: Record<string, any>) => {
         const result = compiled(locals);
@@ -152,9 +152,10 @@ class View {
       this._compiled = (locals: Record<string, any>) =>
         Promise.resolve(compiled(locals)).then(result => ctx.execFilter(...buildFilterArguments(result)));
     } else {
-      this._compiledSync = locals => render.renderSync(data, locals);
+      this._compiledSync = (locals: Record<string, any>) => render.renderSync(data, locals);
 
-      this._compiled = locals => render.render(data, locals);
+      this._compiled = (locals: { (...args: any[]): any; [key: string]: any; highlight?: boolean }) =>
+        render.render(data, locals);
     }
   }
 }
