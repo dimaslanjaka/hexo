@@ -119,18 +119,11 @@ jobs:
           fi
           echo "architecture=$(getconf LONG_BIT)" >> $GITHUB_ENV
 
-      - uses: pat-s/always-upload-cache@v3.0.11
+      - uses: actions/cache/restore@v3
         id: cache
         with:
-          path: |
-            **/.yarn
-            ./release*
-            ./yarn.lock
-            **/dist/**
+          path: '**/*'
           key: ${{ runner.os }}-${{ env.node_version }}
-          restore-keys: |
-            ${{ runner.os }}-${{ env.node_version }}
-            ${{ runner.os }}-
 
       - name: Download build-output artifact
         uses: actions/download-artifact@master
