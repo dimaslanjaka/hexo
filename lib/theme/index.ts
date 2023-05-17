@@ -19,7 +19,7 @@ class Theme extends Box {
     process: (...args: any[]) => any;
   }[];
 
-  constructor(ctx: Hexo, options?: any) {
+  constructor(ctx: import('../hexo'), options?: Record<string, any>) {
     super(ctx, ctx.theme_dir, options);
 
     this.config = {};
