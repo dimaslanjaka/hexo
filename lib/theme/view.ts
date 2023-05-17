@@ -24,15 +24,15 @@ class View {
   public path: any;
   public source: any;
   public _theme: any;
-  public data: ReturnType<typeof yfm>;
+  public data: any;
   public _compiled: any;
   public _compiledSync: any;
   public _helper: any;
-  public _render: import('../hexo')['render'];
+  public _render: any;
   public layout: any;
   public _content: any;
 
-  constructor(path: string, data: string | ReturnType<typeof yfm>) {
+  constructor(path, data) {
     this.path = path;
     this.source = join(this._theme.base, 'layout', path);
     this.data = typeof data === 'string' ? yfm(data, {}) : data;
@@ -40,7 +40,8 @@ class View {
     this._precompile();
   }
 
-  render(options: Options | ((...args: any[]) => any) = {}, callback: (...args: any[]) => any) {
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  render(options: Options | Function = {}, callback) {
     if (!callback && typeof options === 'function') {
       callback = options;
       options = {};
@@ -50,22 +51,20 @@ class View {
     const { layout = (options as Options).layout } = data;
     const locals = this._buildLocals(options);
 
-    return this._compiled(this._bindHelpers(locals))
-      .then(result => {
-        if (result == null || !layout) return result;
+    return this._compiled(this._bindHelpers(locals)).then(result => {
+      if (result == null || !layout) return result;
 
-        const layoutView = this._resolveLayout(layout);
-        if (!layoutView) return result;
+      const layoutView = this._resolveLayout(layout);
+      if (!layoutView) return result;
 
-        const layoutLocals = {
-          ...locals,
-          body: result,
-          layout: false
-        };
+      const layoutLocals = {
+        ...locals,
+        body: result,
+        layout: false
+      };
 
-        return layoutView.render(layoutLocals, callback);
-      })
-      .asCallback(callback);
+      return layoutView.render(layoutLocals, callback);
+    }).asCallback(callback);
   }
 
   renderSync(options: Options = {}) {
@@ -88,7 +87,7 @@ class View {
     return layoutView.renderSync(layoutLocals);
   }
 
-  _buildLocals(locals: Options | ((...args: any[]) => any)) {
+  _buildLocals(locals) {
     // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
     const { layout, _content, ...data } = this.data;
     return assignIn({}, locals, data, {
@@ -96,7 +95,7 @@ class View {
     });
   }
 
-  _bindHelpers(locals: Record<string, any>) {
+  _bindHelpers(locals) {
     const helpers = this._helper.list();
     const keys = Object.keys(helpers);
 
@@ -107,7 +106,7 @@ class View {
     return locals;
   }
 
-  _resolveLayout(name: string) {
+  _resolveLayout(name) {
     // Relative path
     const layoutPath = join(dirname(this.path), name);
     let layoutView = this._theme.getView(layoutPath);
@@ -129,7 +128,7 @@ class View {
       text: this.data._content
     };
 
-    function buildFilterArguments(result: string) {
+    function buildFilterArguments(result) {
       const output = render.getOutput(ext) || ext;
       return [
         `after_render:${output}`,
@@ -142,20 +141,19 @@ class View {
     }
 
     if (renderer && typeof renderer.compile === 'function') {
-      const compiled = renderer.compile(data) as (locals: Record<string, any>) => string;
+      const compiled = renderer.compile(data);
 
-      this._compiledSync = (locals: Record<string, any>) => {
+      this._compiledSync = locals => {
         const result = compiled(locals);
-        return ctx.execFilterSync.apply(null, buildFilterArguments(result));
+        return ctx.execFilterSync(...buildFilterArguments(result));
       };
 
-      this._compiled = (locals: Record<string, any>) =>
-        Promise.resolve(compiled(locals)).then(result => ctx.execFilter.apply(buildFilterArguments(result)));
+      this._compiled = locals => Promise.resolve(compiled(locals))
+        .then(result => ctx.execFilter(...buildFilterArguments(result)));
     } else {
-      this._compiledSync = (locals: Record<string, any>) => render.renderSync(data, locals);
+      this._compiledSync = locals => render.renderSync(data, locals);
 
-      this._compiled = (locals: { (...args: any[]): any; [key: string]: any; highlight?: boolean }) =>
-        render.render(data, locals);
+      this._compiled = locals => render.render(data, locals);
     }
   }
 }

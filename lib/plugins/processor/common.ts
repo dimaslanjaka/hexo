@@ -1,25 +1,24 @@
+import { Pattern } from 'hexo-util';
 import moment from 'moment-timezone';
 import micromatch from 'micromatch';
-import { Config } from '../../hexo/index-d';
-import { Pattern } from 'hexo-util';
 
 const DURATION_MINUTE = 1000 * 60;
 
-function isMatch(path: string, patterns: string | readonly string[]) {
+function isMatch(path, patterns) {
   if (!patterns) return false;
 
   return micromatch.isMatch(path, patterns);
 }
 
-function isTmpFile(path: string) {
+function isTmpFile(path) {
   return path.endsWith('%') || path.endsWith('~');
 }
 
-function isHiddenFile(path: string) {
+function isHiddenFile(path) {
   return /(^|\/)[_.]/.test(path);
 }
 
-function isExcludedFile(path: string, config: Config) {
+function isExcludedFile(path, config) {
   if (isTmpFile(path)) return true;
   if (isMatch(path, config.exclude)) return true;
   if (isHiddenFile(path) && !isMatch(path, config.include)) return true;
@@ -31,11 +30,11 @@ export const ignoreTmpAndHiddenFile = new Pattern(path => {
   return true;
 });
 
-export { isTmpFile };
-export { isHiddenFile };
-export { isExcludedFile };
+export {isTmpFile};
+export {isHiddenFile};
+export {isExcludedFile};
 
-export function toDate(date: string | number | Date) {
+export function toDate(date) {
   if (!date || moment.isMoment(date)) return date;
 
   if (!(date instanceof Date)) {
@@ -58,4 +57,4 @@ export function timezone(date, timezone) {
   return new Date(ms - diff);
 }
 
-export { isMatch };
+export {isMatch};

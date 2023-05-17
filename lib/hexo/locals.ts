@@ -1,5 +1,6 @@
-import { Cache } from 'hexo-util/dist/CacheMapper';
+import { Cache } from 'hexo-util';
 import { HexoLocalsData } from './locals-d';
+
 
 class Locals {
   public cache: Cache<HexoLocalsData>;
@@ -10,13 +11,6 @@ class Locals {
     this.getters = {};
   }
 
-  // 'posts' | 'pages' | 'categories' | 'data' | 'tags'
-  get(name: 'posts'): HexoLocalsData;
-  get(name: 'pages'): HexoLocalsData;
-  get(name: 'categories'): HexoLocalsData;
-  get(name: 'data'): HexoLocalsData;
-  get(name: 'tags'): HexoLocalsData;
-  get(name: string): HexoLocalsData;
   get(name: string) {
     if (typeof name !== 'string') throw new TypeError('name must be a string!');
 

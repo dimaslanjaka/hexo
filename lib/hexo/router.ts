@@ -8,12 +8,11 @@ interface Data {
   modified: boolean;
 }
 
-/*
 declare module 'stream' {
   export default class _Stream extends Stream {
     readable: boolean;
   }
-}*/
+}
 
 class RouteStream extends Readable {
   public _data: any;
@@ -31,7 +30,7 @@ class RouteStream extends Readable {
   }
 
   // Assume we only accept Buffer, plain object, or string
-  _toBuffer(data: WithImplicitCoercion<string | Uint8Array | readonly number[]>) {
+  _toBuffer(data) {
     if (data instanceof Buffer) {
       return data;
     }
@@ -61,8 +60,7 @@ class RouteStream extends Readable {
     this._ended = true;
 
     data().then(data => {
-      // eslint-disable-next-line dot-notation
-      if (data instanceof Stream && data['readable']) {
+      if (data instanceof Stream && data.readable) {
         data.on('data', d => {
           this.push(d);
         });
@@ -81,7 +79,7 @@ class RouteStream extends Readable {
         }
         this.push(null);
       }
-    }).catch((err: any) => {
+    }).catch(err => {
       this.emit('error', err);
       this.push(null);
     });

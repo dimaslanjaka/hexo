@@ -1,5 +1,3 @@
-import njkRenderer from '../plugins/renderer/nunjucks';
-
 /**
  * to cast `data` type look example below
  * @example
@@ -22,7 +20,7 @@ export interface StoreSyncFunction {
     // callback: (err: Error, value: string) => any
   ): any;
   output?: string;
-  compile?: ((local: Record<string, any>) => string) | (typeof njkRenderer)['compile'];
+  compile?: (local: Record<string, any>) => string;
   disableNunjucks?: boolean;
 }
 
@@ -30,7 +28,7 @@ export interface StoreFunction {
   (data: StoreFunctionData, options: Record<string, any>): Promise<any>;
   (data: StoreFunctionData, options: Record<string, any>, callback: (err: Error, value: string) => any): void;
   output?: string;
-  compile?: ((local: Record<string, any>) => string) | (typeof njkRenderer)['compile'];
+  compile?: (local: Record<string, any>) => string;
   disableNunjucks?: boolean;
 }
 

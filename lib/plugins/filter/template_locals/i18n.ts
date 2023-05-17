@@ -1,7 +1,6 @@
 import { Pattern } from 'hexo-util';
-import { HexoLocalsData } from '../../../hexo/locals-d';
 
-function i18nLocalsFilter(this: import('../../../hexo'), locals: HexoLocalsData) {
+function i18nLocalsFilter(locals) {
   const { i18n } = this.theme;
   const { config } = this;
   const i18nDir = config.i18n_dir;
@@ -14,7 +13,7 @@ function i18nLocalsFilter(this: import('../../../hexo'), locals: HexoLocalsData)
     const pattern = new Pattern(`${i18nDir}/*path`);
     const data = pattern.match(locals.path);
 
-    if (!Array.isArray(data) && typeof data !== 'boolean' && data.lang && i18nLanguages.includes(data.lang as string)) {
+    if (data && data.lang && i18nLanguages.includes(data.lang)) {
       lang = data.lang;
       page.canonical_path = data.path;
     } else {

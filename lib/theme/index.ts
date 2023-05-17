@@ -10,10 +10,10 @@ import { view } from './processors/view';
 class Theme extends Box {
   public config: any;
   public views: any;
-  public i18n: I18n;
-  public View: typeof View;
+  public i18n: any;
+  public View: any;
 
-  constructor(ctx: import('../hexo'), options?: Record<string, any>) {
+  constructor(ctx, options?) {
     super(ctx, ctx.theme_dir, options);
 
     this.config = {};
@@ -62,7 +62,7 @@ class Theme extends Box {
     return views[Object.keys(views)[0]];
   }
 
-  setView(path: string, data) {
+  setView(path, data) {
     const ext = extname(path);
     const name = path.substring(0, path.length - ext.length);
     this.views[name] = this.views[name] || {};

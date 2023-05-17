@@ -1,3 +1,4 @@
+
 import nunjucks from 'nunjucks';
 import { readFileSync } from 'hexo-fs';
 import { dirname } from 'path';
@@ -36,14 +37,14 @@ const nunjucksCfg = {
   lstripBlocks: false
 };
 
-const nunjucksAddFilter = (env: nunjucks.Environment) => {
+const nunjucksAddFilter = env => {
   env.addFilter('toarray', toArray);
   env.addFilter('safedump', safeJsonStringify);
 };
 
-function njkCompile(data: { path?: any; text?: any }) {
-  let env: nunjucks.Environment;
-  if (typeof data.path === 'string') {
+function njkCompile(data) {
+  let env;
+  if (data.path) {
     env = nunjucks.configure(dirname(data.path), nunjucksCfg);
   } else {
     env = nunjucks.configure(nunjucksCfg);
@@ -55,17 +56,13 @@ function njkCompile(data: { path?: any; text?: any }) {
   return nunjucks.compile(text, env, data.path);
 }
 
-interface njkRenderer extends Function {
-  compile: (data: { path?: any; text?: any }) => (locals: Record<string, any>) => string;
-}
-
-function njkRenderer(data: { path?: any; text?: any }, locals: Record<string, any>) {
+function njkRenderer(data, locals) {
   return njkCompile(data).render(locals);
 }
 
-njkRenderer.compile = (data: { path?: any; text?: any }) => {
+njkRenderer.compile = data => {
   // Need a closure to keep the compiled template.
-  return (locals: Record<string, any>) => njkCompile(data).render(locals);
+  return locals => njkCompile(data).render(locals);
 };
 
 export = njkRenderer;
