@@ -56,7 +56,7 @@ function njkCompile(data: { path?: any; text?: any; }) {
   return nunjucks.compile(text, env, data.path);
 }
 
-function njkRenderer(data, locals) {
+function njkRenderer(data: { path?: any; text?: any; }, locals: Record<string, any>) {
   return njkCompile(data).render(locals);
 }
 
