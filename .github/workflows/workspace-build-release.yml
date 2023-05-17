@@ -145,12 +145,14 @@ jobs:
           echo "undo staged releases/readme.md"
           git restore --staged releases/readme.md
           hasChanged=$(git diff --cached --numstat -- releases | wc -l)
+          echo "changes $hasChanged"
           if [ $hasChanged -ge 0 ]; then
             git commit -m "chore(tarball): build ${{ steps.set-env.outcome.GITHUB_COMMIT_URL }}"
             lastcommit=$(git rev-parse --short HEAD)
             sed -i "s/<production>/$lastcommit/g" releases/readme.md
             git add releases
             hasChanged=$(git diff --cached --numstat -- releases | wc -l)
+            echo "changes $hasChanged"
             if [ $hasChanged -ge 0 ]; then
               git commit -m "docs: update releases docs"
             fi
