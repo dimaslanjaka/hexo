@@ -40,8 +40,7 @@ class View {
     this._precompile();
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  render(options: Options | Function = {}, callback) {
+  render(options: Options | ((...args: any[]) => any) = {}, callback: (...args: any[]) => any) {
     if (!callback && typeof options === 'function') {
       callback = options;
       options = {};
