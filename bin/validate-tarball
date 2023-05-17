@@ -1,0 +1,26 @@
+#!/bin/bash
+
+error=0
+check_size() {
+  filename=$1
+  minsize=$2||10000; # min kb
+  filesize=$(stat -c%s "$filename")
+  echo "Size of $filename = $filesize bytes."
+
+  if (( filesize > minsize )); then
+      echo "$filesize valid tarball, minimum $minsize"
+  else
+      echo "$filesize no more than 10kb"
+      error=1
+  fi
+}
+
+check_size "releases/hexo.tgz" 10000
+check_size "releases/hexo-cli.tgz" 10000
+check_size "releases/hexo-log.tgz" 3000
+check_size "releases/hexo-util.tgz" 10000
+check_size "releases/hexo-front-matter.tgz" 3000
+check_size "releases/warehouse.tgz" 10000
+check_size "releases/hexo-asset-link.tgz" 4000
+
+exit $error
