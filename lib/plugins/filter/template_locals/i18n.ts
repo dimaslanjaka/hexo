@@ -1,8 +1,7 @@
 import { Pattern } from 'hexo-util';
-import type Hexo from '../../../hexo';
-import type { LocalsType } from '../../../types';
+import { HexoLocalsData } from '../../../hexo/locals-d';
 
-function i18nLocalsFilter(this: Hexo, locals: LocalsType): void {
+function i18nLocalsFilter(locals: HexoLocalsData) {
   const { i18n } = this.theme;
   const { config } = this;
   const i18nDir = config.i18n_dir;
