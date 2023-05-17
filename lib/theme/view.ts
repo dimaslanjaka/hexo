@@ -24,7 +24,7 @@ class View {
   public path: any;
   public source: any;
   public _theme: any;
-  public data: any;
+  public data: ReturnType<typeof yfm>;
   public _compiled: any;
   public _compiledSync: any;
   public _helper: any;
@@ -32,7 +32,7 @@ class View {
   public layout: any;
   public _content: any;
 
-  constructor(path: string, data) {
+  constructor(path: string, data: string | ReturnType<typeof yfm>) {
     this.path = path;
     this.source = join(this._theme.base, 'layout', path);
     this.data = typeof data === 'string' ? yfm(data, {}) : data;
