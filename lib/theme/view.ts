@@ -28,7 +28,7 @@ class View {
   public _compiled: any;
   public _compiledSync: any;
   public _helper: any;
-  public _render: any;
+  public _render: import('../hexo')['render'];
   public layout: any;
   public _content: any;
 
@@ -88,7 +88,7 @@ class View {
     return layoutView.renderSync(layoutLocals);
   }
 
-  _buildLocals(locals) {
+  _buildLocals(locals: Options | ((...args: any[]) => any)) {
     // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
     const { layout, _content, ...data } = this.data;
     return assignIn({}, locals, data, {
@@ -96,7 +96,7 @@ class View {
     });
   }
 
-  _bindHelpers(locals) {
+  _bindHelpers(locals: Record<string, any>) {
     const helpers = this._helper.list();
     const keys = Object.keys(helpers);
 
@@ -107,7 +107,7 @@ class View {
     return locals;
   }
 
-  _resolveLayout(name) {
+  _resolveLayout(name: string) {
     // Relative path
     const layoutPath = join(dirname(this.path), name);
     let layoutView = this._theme.getView(layoutPath);
