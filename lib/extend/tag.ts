@@ -14,9 +14,10 @@ const escapeSwigTag = (str: string) => str.replace(/{/g, '&#123;').replace(/}/g,
  * // to get content type
  * type content = Parameters<Parameters<typeof hexo.extend.tag.register>[1]>[1];
  */
-interface TagFunction {
-  (args: any[], content: string): string;
-}
+type TagFunction =
+  | ((arg: string) => string)
+  | ((...args: any[]) => string)
+  | ((args: any[], content: string) => string);
 
 /**
  * asynchronous callback - shortcode tag
@@ -26,9 +27,10 @@ interface TagFunction {
  * // to get content type
  * type content = Parameters<Parameters<typeof hexo.extend.tag.register>[1]>[1];
  */
-interface AsyncTagFunction {
-  (args: any[], content: string): PromiseLike<string> | Promise<string>;
-}
+type AsyncTagFunction =
+  | ((arg: string) => PromiseLike<string> | Promise<string>)
+  | ((...args: any[]) => PromiseLike<string> | Promise<string>)
+  | ((args: any[], content: string) => PromiseLike<string> | Promise<string>);
 
 class NunjucksTag {
   public tags: string[];
