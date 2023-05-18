@@ -371,15 +371,14 @@ class Post {
         const item = list.find(item => regex.test(item));
         if (!item) throw new Error(`Draft "${slug}" does not exist.`);
 
-        // Read the content
-        src = join(draftDir, item);
-        return readFile(src);
-      })
-      .then(content => {
-        // Create post
-        Object.assign(data, yfmParse(String(content), {}));
-        data.content = data._content;
-        data._content = undefined;
+      // Read the content
+      src = join(draftDir, item);
+      return readFile(src);
+    }).then(content => {
+      // Create post
+      Object.assign(data, yfmParse(String(content)));
+      data.content = data._content;
+      data._content = undefined;
 
         return this.create(data, replace);
       })
