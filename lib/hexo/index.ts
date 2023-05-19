@@ -377,30 +377,29 @@ class Hexo extends EventEmitter {
     }
   }
 
-  loadPlugin(path: string, callback: (...args: any[]) => any) {
-    return readFile(path)
-      .then(script => {
-        // Based on: https://github.com/joyent/node/blob/v0.10.33/src/node.js#L516
-        const module = new Module(path);
-        module.filename = path;
-        module.paths = Module._nodeModulePaths(path);
+  loadPlugin(path: string, callback?: (...args: any[]) => any) {
+    return readFile(path).then(script => {
+      // Based on: https://github.com/joyent/node/blob/v0.10.33/src/node.js#L516
+      const module = new Module(path);
+      module.filename = path;
+      module.paths = Module._nodeModulePaths(path);
 
-        function req(path: string) {
-          return module.require(path);
-        }
+      function req(path: string) {
+        return module.require(path);
+      }
 
-        req.resolve = (request: string) => Module._resolveFilename(request, module);
+      req.resolve = (request: string) => Module._resolveFilename(request, module);
 
-        req.main = require.main;
-        req.extensions = Module._extensions;
-        req.cache = Module._cache;
+      req.main = require.main;
+      req.extensions = Module._extensions;
+      req.cache = Module._cache;
 
-        script = `(function(exports, require, module, __filename, __dirname, hexo){${script}\n});`;
+      script = `(function(exports, require, module, __filename, __dirname, hexo){${script}\n});`;
 
-        const fn = runInThisContext(script, path);
+      const fn = runInThisContext(script, path);
 
-        return fn(module.exports, req, module, path, dirname(path), this);
-      })
+      return fn(module.exports, req, module, path, dirname(path), this);
+    })
       .asCallback(callback);
   }
 
