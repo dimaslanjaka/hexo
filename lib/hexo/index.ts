@@ -1,14 +1,13 @@
 import Promise from 'bluebird';
-import { sep, join, dirname } from 'path';
-import tildify from 'tildify';
-import Database from 'warehouse';
-import { magenta, underline } from 'picocolors';
 import { EventEmitter } from 'events';
 import { readFile } from 'hexo-fs';
-import Module from 'module';
-import { runInThisContext } from 'vm';
-const { version } = require('../../package.json');
 import logger from 'hexo-log';
+import Module from 'module';
+import { dirname, join, sep } from 'path';
+import { magenta, underline } from 'picocolors';
+import tildify from 'tildify';
+import { runInThisContext } from 'vm';
+import Database from 'warehouse';
 import {
   Console,
   Deployer,
@@ -22,21 +21,22 @@ import {
   Renderer,
   Tag
 } from '../extend';
+const { version } = require('../../package.json');
 
-import Render from './render';
-import registerModels from './register_models';
+import { deepMerge, full_url_for } from 'hexo-util';
+import Theme from '../theme';
+import defaultConfig from './default_config';
+import { Args, Config, Extend, Query } from './index-d';
+import loadDatabase from './load_database';
+import Locals from './locals';
+import { HexoLocalsData } from './locals-d';
+import multiConfigPath from './multi_config_path';
 import Post from './post';
+import registerModels from './register_models';
+import Render from './render';
+import Router from './router';
 import Scaffold from './scaffold';
 import Source from './source';
-import Router from './router';
-import Theme from '../theme';
-import Locals from './locals';
-import defaultConfig from './default_config';
-import loadDatabase from './load_database';
-import multiConfigPath from './multi_config_path';
-import { deepMerge, full_url_for } from 'hexo-util';
-import { Args, Config, Extend, Query } from './index-d';
-import { HexoLocalsData } from './locals-d';
 let resolveSync; // = require('resolve');
 
 const libDir = dirname(__dirname);
@@ -359,7 +359,7 @@ class Hexo extends EventEmitter {
     return this.database.model(name, schema);
   }
 
-  resolvePlugin(name, basedir) {
+  resolvePlugin(name: string, basedir: string) {
     try {
       // Try to resolve the plugin with the Node.js's built-in require.resolve.
       return require.resolve(name, { paths: [basedir] });
