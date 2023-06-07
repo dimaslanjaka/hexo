@@ -15,4 +15,7 @@ export type HexoLocalsData = {
   view_dir: string;
   site: Record<string, any>;
   cache?: boolean;
+
+  /** absolute path source post markdown */
+  full_source?: string;
 };
