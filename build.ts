@@ -239,6 +239,8 @@ async function createReadMe(workspaces: Awaited<typeof parseWorkspaces>) {
 
     render = render.replace(/<production>/gm, await gh.latestCommit());
 
+    // await croSpawn.async('git', ['rev-list', '--parents', '-n', '1', await gh.latestCommit()], { cwd: __dirname }).stdout.trim().split(/\s/);
+
     writeFileSync(readme, render);
     //await gh.add('releases/readme.md');
     //await gh.commit('docs: update docs');
