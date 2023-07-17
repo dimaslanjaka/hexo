@@ -126,7 +126,7 @@ function parseArgs(args): Options {
   };
 }
 
-export = ctx => function codeTag(args, content) {
+export = (ctx: import('../../hexo')) => function codeTag(args, content) {
 
   // If neither highlight.js nor prism.js is enabled, return escaped code directly
   if (!ctx.extend.highlight.query(ctx.config.syntax_highlighter)) {
@@ -148,7 +148,7 @@ export = ctx => function codeTag(args, content) {
     return `<pre><code>${escapeHTML(content)}</code></pre>`;
   }
 
-  const options = parseArgs(args);
+  const options = parseArgs(args) as Required<Options>;
   options.lines_length = content.split('\n').length;
   content = ctx.extend.highlight.exec(ctx.config.syntax_highlighter, {
     context: ctx,

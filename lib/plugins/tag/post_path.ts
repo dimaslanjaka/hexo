@@ -7,7 +7,7 @@ import { postFindOneFactory } from './';
  * Syntax:
  *   {% post_path slug | title %}
  */
-export = ctx => {
+export = (ctx: import('../../hexo')) => {
   return function postPathTag(args) {
     const slug = args.shift();
     if (!slug) return;

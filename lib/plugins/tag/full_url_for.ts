@@ -6,7 +6,7 @@ import { full_url_for, htmlTag } from 'hexo-util';
  * Syntax:
  *   {% full_url_for text path %}
  */
-export = ctx => {
+export = (ctx: import('../../hexo')) => {
   return function fullUrlForTag([text, path]) {
     const url = full_url_for.call(ctx, path);
     const attrs = {

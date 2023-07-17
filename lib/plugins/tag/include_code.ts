@@ -12,8 +12,7 @@ const rTo = /\s*to:(\d+)/i;
 * Syntax:
 *   {% include_code [title] [lang:language] path/to/file %}
 */
-
-export = ctx => function includeCodeTag(args) {
+export = (ctx: import('../../hexo')) => function includeCodeTag(args) {
   let codeDir = ctx.config.code_dir;
   let arg = args.join(' ');
 

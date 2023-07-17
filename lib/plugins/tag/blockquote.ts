@@ -7,10 +7,10 @@ const rFullCite = /(\S.*)\s+(https?:\/\/\S+)/i;
 const rAuthorTitle = /([^,]+),\s*([^,]+)/;
 
 /**
- * @param {string[]} args
- * @param {Hexo} ctx
+ * @param args
+ * @param ctx
  */
-const parseFooter = (args, ctx) => {
+const parseFooter = (args:string[], ctx: import('../../hexo')) => {
   const str = args.join(' ');
   if (!str) return '';
 
