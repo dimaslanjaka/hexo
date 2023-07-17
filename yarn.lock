@@ -786,12 +786,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sinonjs/fake-timers@npm:^10.2.0":
-  version: 10.2.0
-  resolution: "@sinonjs/fake-timers@npm:10.2.0"
+"@sinonjs/fake-timers@npm:^10.3.0":
+  version: 10.3.0
+  resolution: "@sinonjs/fake-timers@npm:10.3.0"
   dependencies:
     "@sinonjs/commons": ^3.0.0
-  checksum: 586c76e1dd90d03b0c4e754f2011325b38ac6055878c81c52434c900f36d9d245438c96ef69e08e28d9fbecf2335fb347b67850962d8b6e539dd7359d8c62802
+  checksum: 614d30cb4d5201550c940945d44c9e0b6d64a888ff2cd5b357f95ad6721070d6b8839cd10e15b76bf5e14af0bcc1d8f9ec00d49a46318f1f669a4bec1d7f3148
   languageName: node
   linkType: hard
 
@@ -881,7 +881,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/bluebird@npm:^3.5.37":
+"@types/bluebird@npm:^3.5.37, @types/bluebird@npm:^3.5.38":
   version: 3.5.38
   resolution: "@types/bluebird@npm:3.5.38"
   checksum: 8d1b04261e8e58816ec84ffa616c9e641c9416d0ab10c915ddb9cd8a0e7070af16df4f2eec243a3809cbed8ecee2fb3f45600ae43b3ab0ceea563aa18ceb6ab1
@@ -898,6 +898,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/braces@npm:*":
+  version: 3.0.2
+  resolution: "@types/braces@npm:3.0.2"
+  checksum: 0b1bee5e8332fabf57397de8dec1a24c3bf53efc3284d15d64d7dd67c0ba9853e0191e5220464ff171a4963c1db2b0cfd3926e2b363a95909ff723a4426a1964
+  languageName: node
+  linkType: hard
+
 "@types/chai@npm:^4.3.3, @types/chai@npm:^4.3.5":
   version: 4.3.5
   resolution: "@types/chai@npm:4.3.5"
@@ -905,7 +912,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/connect@npm:*":
+"@types/connect@npm:*, @types/connect@npm:^3.4.35":
   version: 3.4.35
   resolution: "@types/connect@npm:3.4.35"
   dependencies:
@@ -1007,6 +1014,15 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: dd45823bbc0ff0df3667f28a260a49cc5ee9910da6d1be06ddf31c7012b979d80dd56e6c80c58a73241742639dbc7fc560c44fab1597a628d151b4055c76f5ca
+  languageName: node
+  linkType: hard
+
+"@types/micromatch@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "@types/micromatch@npm:4.0.2"
+  dependencies:
+    "@types/braces": "*"
+  checksum: 6c678e9c625d5b422c6d2c1001da1c502ecc4457248343bbd324b79fd798a6563e336a4d79630d80e8202312013dd7cf8b4440afa644d04477abd26fde6fba24
   languageName: node
   linkType: hard
 
@@ -1142,7 +1158,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/sinon@npm:^10.0.13":
+"@types/sinon@npm:^10.0.13, @types/sinon@npm:^10.0.14":
   version: 10.0.15
   resolution: "@types/sinon@npm:10.0.15"
   dependencies:
@@ -2826,7 +2842,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chai@npm:^4.1.2, chai@npm:^4.3.4, chai@npm:^4.3.6":
+"chai@npm:^4.1.2, chai@npm:^4.3.4, chai@npm:^4.3.6, chai@npm:^4.3.7":
   version: 4.3.7
   resolution: "chai@npm:4.3.7"
   dependencies:
@@ -6512,7 +6528,25 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"hexo-front-matter@^4.0.0, hexo-front-matter@workspace:^, hexo-front-matter@workspace:packages/hexo-front-matter":
+"hexo-front-matter@npm:4.0.0":
+  version: 4.0.0
+  resolution: "hexo-front-matter@npm:4.0.0"
+  dependencies:
+    js-yaml: ^4.1.0
+  checksum: 4460e631fd45e09b07e36930c124252e96b2e049cbdaef81b470aef14560099289aa2d5a21afbf9a93dfc790b770076897352b2abd2a8d4238f3e8524244c205
+  languageName: node
+  linkType: hard
+
+"hexo-front-matter@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "hexo-front-matter@npm:3.0.0"
+  dependencies:
+    js-yaml: ^4.1.0
+  checksum: 517e5caed96542b0ca7be8822cdc6d49abd1d6925a417eaee66d4ef976d32d105720a8bd0db73118c1d8a95f762fbf4f65206b3ccbfaae46228902edd1ab156a
+  languageName: node
+  linkType: hard
+
+"hexo-front-matter@workspace:^, hexo-front-matter@workspace:packages/hexo-front-matter":
   version: 0.0.0-use.local
   resolution: "hexo-front-matter@workspace:packages/hexo-front-matter"
   dependencies:
@@ -6533,15 +6567,6 @@ __metadata:
     typescript: ^4.8.4
   languageName: unknown
   linkType: soft
-
-"hexo-front-matter@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "hexo-front-matter@npm:3.0.0"
-  dependencies:
-    js-yaml: ^4.1.0
-  checksum: 517e5caed96542b0ca7be8822cdc6d49abd1d6925a417eaee66d4ef976d32d105720a8bd0db73118c1d8a95f762fbf4f65206b3ccbfaae46228902edd1ab156a
-  languageName: node
-  linkType: hard
 
 "hexo-fs@npm:^3.1.0":
   version: 3.1.0
@@ -6940,22 +6965,27 @@ __metadata:
   dependencies:
     0x: ^5.1.2
     "@easyops/git-exec-and-restage": ^1.0.4
-    "@types/bluebird": ^3.5.37
+    "@types/bluebird": ^3.5.38
+    "@types/chai": ^4.3.5
+    "@types/connect": ^3.4.35
+    "@types/micromatch": ^4.0.2
+    "@types/mocha": ^10.0.1
     "@types/node": ^18.11.8
     "@types/nunjucks": ^3.2.2
+    "@types/sinon": ^10.0.14
     "@typescript-eslint/eslint-plugin": ^5.41.0
     "@typescript-eslint/parser": ^5.41.0
     abbrev: ^2.0.0
     archy: ^1.0.0
     bluebird: ^3.7.2
     c8: ^7.12.0
-    chai: ^4.3.6
+    chai: ^4.3.7
     cheerio: 0.22.0
     decache: ^4.6.1
     eslint: ^8.8.0
     eslint-config-hexo: ^5.0.0
     hexo-cli: ^4.3.0
-    hexo-front-matter: ^4.0.0
+    hexo-front-matter: 4.0.0
     hexo-fs: ^4.1.1
     hexo-i18n: ^2.0.0
     hexo-log: ^4.0.1
@@ -6967,14 +6997,14 @@ __metadata:
     lint-staged: ^13.0.3
     micromatch: ^4.0.4
     mocha: ^10.0.0
-    moize: ^6.1.0
+    moize: ^6.1.6
     moment: ^2.29.1
     moment-timezone: ^0.5.34
     nunjucks: ^3.2.3
     picocolors: ^1.0.0
     pretty-hrtime: ^1.0.3
     resolve: ^1.22.0
-    sinon: ^15.0.0
+    sinon: ^15.0.4
     strip-ansi: ^6.0.0
     text-table: ^0.2.0
     tildify: ^2.0.0
@@ -12760,20 +12790,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sinon@npm:^15.0.0":
-  version: 15.1.0
-  resolution: "sinon@npm:15.1.0"
-  dependencies:
-    "@sinonjs/commons": ^3.0.0
-    "@sinonjs/fake-timers": ^10.2.0
-    "@sinonjs/samsam": ^8.0.0
-    diff: ^5.1.0
-    nise: ^5.1.4
-    supports-color: ^7.2.0
-  checksum: 3f0eab3e293c6206cca4a31f3c2836be86889f16bf6f54e2429550c1d07d0e7e9327cdbe6b7b69662c152a63e9f2661334c266932ba8f3206190009d58cb4f06
-  languageName: node
-  linkType: hard
-
 "sinon@npm:^15.0.1, sinon@npm:^15.0.2":
   version: 15.0.4
   resolution: "sinon@npm:15.0.4"
@@ -12785,6 +12801,20 @@ __metadata:
     nise: ^5.1.4
     supports-color: ^7.2.0
   checksum: a5e262c59a891daea405e4c432c5d703f888a7f738c42cb353c08867c920da85c528742025dd3b5cf17897101c7d7f77c287dcc1590103c351be98704e8a51eb
+  languageName: node
+  linkType: hard
+
+"sinon@npm:^15.0.4":
+  version: 15.2.0
+  resolution: "sinon@npm:15.2.0"
+  dependencies:
+    "@sinonjs/commons": ^3.0.0
+    "@sinonjs/fake-timers": ^10.3.0
+    "@sinonjs/samsam": ^8.0.0
+    diff: ^5.1.0
+    nise: ^5.1.4
+    supports-color: ^7.2.0
+  checksum: 1641b9af8a73ba57c73c9b6fd955a2d062a5d78cce719887869eca45faf33b0fd20cabfeffdfd856bb35bfbd3d49debb2d954ff6ae5e9825a3da5ff4f604ab6c
   languageName: node
   linkType: hard
 
