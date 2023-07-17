@@ -3,12 +3,12 @@ because of HexoJS doesnt accept my PR, i bundled my improved version of hexo.
 
 | package name | commit |
 | :--- | :--- | 
-| hexo | [0c434be6](https://github.com/dimaslanjaka/hexo/commit/0c434be6)  [![Coverage Status](https://coveralls.io/repos/github/dimaslanjaka/hexo/badge.svg)](https://coveralls.io/github/dimaslanjaka/hexo) | 
+| hexo | [488d3573](https://github.com/dimaslanjaka/hexo/commit/488d3573)  [![Coverage Status](https://coveralls.io/repos/github/dimaslanjaka/hexo/badge.svg)](https://coveralls.io/github/dimaslanjaka/hexo) | 
 | hexo-asset-link | [4fad836](https://github.com/dimaslanjaka/hexo-asset-link/commit/4fad836) | 
-| hexo-cli | [bd319fd](https://github.com/dimaslanjaka/hexo-cli/commit/bd319fd) | 
-| hexo-front-matter | [4a7681e](https://github.com/dimaslanjaka/hexo-front-matter/commit/4a7681e) | 
+| hexo-cli | [b499cf7](https://github.com/dimaslanjaka/hexo-cli/commit/b499cf7) | 
+| hexo-front-matter | [80d2576](https://github.com/dimaslanjaka/hexo-front-matter/commit/80d2576) | 
 | hexo-log | [6494294](https://github.com/dimaslanjaka/hexo-log/commit/6494294) | 
-| hexo-util | [e0719fb](https://github.com/dimaslanjaka/hexo-util/commit/e0719fb) | 
+| hexo-util | [59adb00](https://github.com/dimaslanjaka/hexo-util/commit/59adb00) | 
 | warehouse | [187c5d3](https://github.com/dimaslanjaka/warehouse/commit/187c5d3) | 
 
 ## Installation by CLI
@@ -18,24 +18,24 @@ Installation with command line interface
 
 using `npm`
 ```bash
-npm i hexo@https://github.com/dimaslanjaka/hexo/raw/7c3a93f/releases/hexo.tgz
-npm i hexo-asset-link@https://github.com/dimaslanjaka/hexo/raw/7c3a93f/releases/hexo-asset-link.tgz
-npm i hexo-cli@https://github.com/dimaslanjaka/hexo/raw/7c3a93f/releases/hexo-cli.tgz
-npm i hexo-front-matter@https://github.com/dimaslanjaka/hexo/raw/7c3a93f/releases/hexo-front-matter.tgz
-npm i hexo-log@https://github.com/dimaslanjaka/hexo/raw/7c3a93f/releases/hexo-log.tgz
-npm i hexo-util@https://github.com/dimaslanjaka/hexo/raw/7c3a93f/releases/hexo-util.tgz
-npm i warehouse@https://github.com/dimaslanjaka/hexo/raw/7c3a93f/releases/warehouse.tgz
+npm i hexo@https://github.com/dimaslanjaka/hexo/raw/71c10678/releases/hexo.tgz
+npm i hexo-asset-link@https://github.com/dimaslanjaka/hexo/raw/71c10678/releases/hexo-asset-link.tgz
+npm i hexo-cli@https://github.com/dimaslanjaka/hexo/raw/71c10678/releases/hexo-cli.tgz
+npm i hexo-front-matter@https://github.com/dimaslanjaka/hexo/raw/71c10678/releases/hexo-front-matter.tgz
+npm i hexo-log@https://github.com/dimaslanjaka/hexo/raw/71c10678/releases/hexo-log.tgz
+npm i hexo-util@https://github.com/dimaslanjaka/hexo/raw/71c10678/releases/hexo-util.tgz
+npm i warehouse@https://github.com/dimaslanjaka/hexo/raw/71c10678/releases/warehouse.tgz
 ```
 
 using `yarn`
 ```bash
-yarn add hexo@https://github.com/dimaslanjaka/hexo/raw/7c3a93f/releases/hexo.tgz
-yarn add hexo-asset-link@https://github.com/dimaslanjaka/hexo/raw/7c3a93f/releases/hexo-asset-link.tgz
-yarn add hexo-cli@https://github.com/dimaslanjaka/hexo/raw/7c3a93f/releases/hexo-cli.tgz
-yarn add hexo-front-matter@https://github.com/dimaslanjaka/hexo/raw/7c3a93f/releases/hexo-front-matter.tgz
-yarn add hexo-log@https://github.com/dimaslanjaka/hexo/raw/7c3a93f/releases/hexo-log.tgz
-yarn add hexo-util@https://github.com/dimaslanjaka/hexo/raw/7c3a93f/releases/hexo-util.tgz
-yarn add warehouse@https://github.com/dimaslanjaka/hexo/raw/7c3a93f/releases/warehouse.tgz
+yarn add hexo@https://github.com/dimaslanjaka/hexo/raw/71c10678/releases/hexo.tgz
+yarn add hexo-asset-link@https://github.com/dimaslanjaka/hexo/raw/71c10678/releases/hexo-asset-link.tgz
+yarn add hexo-cli@https://github.com/dimaslanjaka/hexo/raw/71c10678/releases/hexo-cli.tgz
+yarn add hexo-front-matter@https://github.com/dimaslanjaka/hexo/raw/71c10678/releases/hexo-front-matter.tgz
+yarn add hexo-log@https://github.com/dimaslanjaka/hexo/raw/71c10678/releases/hexo-log.tgz
+yarn add hexo-util@https://github.com/dimaslanjaka/hexo/raw/71c10678/releases/hexo-util.tgz
+yarn add warehouse@https://github.com/dimaslanjaka/hexo/raw/71c10678/releases/warehouse.tgz
 
 ```
 
@@ -72,13 +72,13 @@ package.json
 {
   "name": "your package name",
   "resolutions": {
-    "hexo": "https://github.com/dimaslanjaka/hexo/raw/7c3a93f/releases/hexo.tgz",
-    "hexo-asset-link": "https://github.com/dimaslanjaka/hexo/raw/7c3a93f/releases/hexo-asset-link.tgz",
-    "hexo-cli": "https://github.com/dimaslanjaka/hexo/raw/7c3a93f/releases/hexo-cli.tgz",
-    "hexo-front-matter": "https://github.com/dimaslanjaka/hexo/raw/7c3a93f/releases/hexo-front-matter.tgz",
-    "hexo-log": "https://github.com/dimaslanjaka/hexo/raw/7c3a93f/releases/hexo-log.tgz",
-    "hexo-util": "https://github.com/dimaslanjaka/hexo/raw/7c3a93f/releases/hexo-util.tgz",
-    "warehouse": "https://github.com/dimaslanjaka/hexo/raw/7c3a93f/releases/warehouse.tgz"
+    "hexo": "https://github.com/dimaslanjaka/hexo/raw/71c10678/releases/hexo.tgz",
+    "hexo-asset-link": "https://github.com/dimaslanjaka/hexo/raw/71c10678/releases/hexo-asset-link.tgz",
+    "hexo-cli": "https://github.com/dimaslanjaka/hexo/raw/71c10678/releases/hexo-cli.tgz",
+    "hexo-front-matter": "https://github.com/dimaslanjaka/hexo/raw/71c10678/releases/hexo-front-matter.tgz",
+    "hexo-log": "https://github.com/dimaslanjaka/hexo/raw/71c10678/releases/hexo-log.tgz",
+    "hexo-util": "https://github.com/dimaslanjaka/hexo/raw/71c10678/releases/hexo-util.tgz",
+    "warehouse": "https://github.com/dimaslanjaka/hexo/raw/71c10678/releases/warehouse.tgz"
   }
 }
 ```
@@ -94,13 +94,13 @@ package.json
 {
   "name": "your package name",
   "overrides": {
-    "hexo": "https://github.com/dimaslanjaka/hexo/raw/7c3a93f/releases/hexo.tgz",
-    "hexo-asset-link": "https://github.com/dimaslanjaka/hexo/raw/7c3a93f/releases/hexo-asset-link.tgz",
-    "hexo-cli": "https://github.com/dimaslanjaka/hexo/raw/7c3a93f/releases/hexo-cli.tgz",
-    "hexo-front-matter": "https://github.com/dimaslanjaka/hexo/raw/7c3a93f/releases/hexo-front-matter.tgz",
-    "hexo-log": "https://github.com/dimaslanjaka/hexo/raw/7c3a93f/releases/hexo-log.tgz",
-    "hexo-util": "https://github.com/dimaslanjaka/hexo/raw/7c3a93f/releases/hexo-util.tgz",
-    "warehouse": "https://github.com/dimaslanjaka/hexo/raw/7c3a93f/releases/warehouse.tgz"
+    "hexo": "https://github.com/dimaslanjaka/hexo/raw/71c10678/releases/hexo.tgz",
+    "hexo-asset-link": "https://github.com/dimaslanjaka/hexo/raw/71c10678/releases/hexo-asset-link.tgz",
+    "hexo-cli": "https://github.com/dimaslanjaka/hexo/raw/71c10678/releases/hexo-cli.tgz",
+    "hexo-front-matter": "https://github.com/dimaslanjaka/hexo/raw/71c10678/releases/hexo-front-matter.tgz",
+    "hexo-log": "https://github.com/dimaslanjaka/hexo/raw/71c10678/releases/hexo-log.tgz",
+    "hexo-util": "https://github.com/dimaslanjaka/hexo/raw/71c10678/releases/hexo-util.tgz",
+    "warehouse": "https://github.com/dimaslanjaka/hexo/raw/71c10678/releases/warehouse.tgz"
   }
 }
 ```
