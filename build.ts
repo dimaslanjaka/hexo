@@ -237,7 +237,7 @@ async function createReadMe(workspaces: Awaited<typeof parseWorkspaces>) {
         .catch(() => console.log('cannot commit'));
     }
 
-    render = render.replace(/<production>/gm, await gh.latestCommit());
+    render = render.replace(/<production>/gm, await gh.latestCommit('releases'));
 
     // await croSpawn.async('git', ['rev-list', '--parents', '-n', '1', await gh.latestCommit()], { cwd: __dirname }).stdout.trim().split(/\s/);
 
