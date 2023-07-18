@@ -33,7 +33,7 @@ using `yarn`
 ```
 
 ## Installation by changing resolutions
-changing module `resolutions` can changed whole source of desired package, _but only work with `yarn`_. **and do not using development mode in resolutions, because the integrity will never updated**
+changing module `resolutions` can changed whole source of desired package, _but only work with `yarn`_. **and do not using development mode (branch name) in resolutions, because the integrity will never updated**
 
 package.json
 ```json
