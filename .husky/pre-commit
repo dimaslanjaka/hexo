@@ -14,6 +14,10 @@ case `uname` in
     basedir=`cygpath -w "$basedir"`
     # make cygwin bin as priority
     export PATH="/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH"
+    # add ../node_modules/.bin to PATH enviroment
+    if [ -d "${basedir}/../node_modules/.bin" ]; then
+      export PATH="$PATH:${basedir}/../node_modules/.bin"
+    fi
     ;;
 esac
 
