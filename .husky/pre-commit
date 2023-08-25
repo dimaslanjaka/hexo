@@ -1,4 +1,28 @@
 #!/bin/sh
+
+(set -o igncr) 2>/dev/null && set -o igncr; # cygwin encoding fix
+
+# absolute path working directory
+basecwd=${PWD}
+# base script directory
+basedir=`dirname "$0"`
+# absolute path script directory
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+case `uname` in
+  *CYGWIN*)
+    basedir=`cygpath -w "$basedir"`
+    # make cygwin bin as priority
+    export PATH="/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH"
+    ;;
+esac
+
 . "$(dirname "$0")/_/husky.sh"
 
-npx lint-staged
+npx="npx"
+
+if [ -f "/media/dimaslanjaka/DATA/bin/node/linux/bin/npx" ]; then
+  npx="/media/dimaslanjaka/DATA/bin/node/linux/bin/npx"
+fi
+
+"$npx" lint-staged
