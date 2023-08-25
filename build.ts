@@ -206,7 +206,7 @@ async function createReadMe(workspaces: Awaited<typeof parseWorkspaces>) {
       const tarballRawURL = (await gh.getGithubRepoUrl(relativeTarball)).rawURL;
       const tarballProdURL = tarballRawURL.replace(
         'monorepo-v7',
-        '<production>' /*await gh.latestCommit(relativeTarball)*/
+        /*<production>*/ await gh.latestCommit(relativeTarball)
       );
       source_vars.npm_prod += `npm i ${workspace.name}@${tarballProdURL}\n`;
       source_vars.npm_dev += `npm i ${workspace.name}@${tarballRawURL}\n`;
@@ -227,7 +227,7 @@ async function createReadMe(workspaces: Awaited<typeof parseWorkspaces>) {
 
     if (argv['commits'] || argv['commit']) {
       gh.add('releases');
-      const lc = await gh.latestCommit();
+      const lc = 'latestCommit'; //await gh.latestCommit();
       const url = new URL('https://github.com/');
       url.pathname =
         new URL((await gh.getremote()).push.url.replace(/\.git$/, '')).pathname.replace(/^\//, '') + '/commit/' + lc;
@@ -237,6 +237,7 @@ async function createReadMe(workspaces: Awaited<typeof parseWorkspaces>) {
         .catch(() => console.log('cannot commit'));
     }
 
+    // replace <production>
     render = render.replace(/<production>/gm, await gh.latestCommit('releases'));
 
     // await croSpawn.async('git', ['rev-list', '--parents', '-n', '1', await gh.latestCommit()], { cwd: __dirname }).stdout.trim().split(/\s/);
