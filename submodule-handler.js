@@ -21,7 +21,8 @@ const config = {
   'submodule "packages/hexo-asset-link"': {
     path: 'packages/hexo-asset-link',
     origin: 'https://github.com/dimaslanjaka/hexo-asset-link.git',
-    branch: 'monorepo'
+    branch: 'monorepo',
+    upstream: 'https://github.com/liolok/hexo-asset-link'
   },
   'submodule "test/hexo-theme-test"': {
     path: 'test/hexo-theme-test',
