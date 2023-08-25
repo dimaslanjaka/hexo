@@ -41,7 +41,8 @@ const config = {
   'submodule "packages/hexo-util"': {
     path: 'packages/hexo-util',
     origin: 'https://github.com/dimaslanjaka/hexo-util.git',
-    branch: 'monorepo'
+    branch: 'monorepo',
+    upstream: 'https://github.com/hexojs/hexo-util'
   },
   'submodule "packages/hexo-cli"': {
     path: 'packages/hexo-cli',
