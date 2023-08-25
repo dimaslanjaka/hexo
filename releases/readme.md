@@ -85,7 +85,7 @@ package.json
 
 ## Installation by changing overrides
 
-Since NPM 8.3 the equivalent to yarn resolutions is called overrides.
+Since NPM 8.3 the equivalent to **yarn resolutions** is called overrides.
 
 Documentation: https://docs.npmjs.com/cli/v9/configuring-npm/package-json#overrides
 
