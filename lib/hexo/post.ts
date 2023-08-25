@@ -350,48 +350,44 @@ class Post {
 
   _renderScaffold(data) {
     const { tag } = this.context.extend;
-    let splited;
+    let splitted;
 
-    return this._getScaffold(data.layout)
-      .then(scaffold => {
-        splited = yfmSplit(scaffold);
-        const jsonMode = splited.separator.startsWith(';');
-        const frontMatter = prepareFrontMatter({ ...data }, jsonMode);
+    return this._getScaffold(data.layout).then(scaffold => {
+      splitted = yfmSplit(scaffold);
+      const jsonMode = splitted.separator.startsWith(';');
+      const frontMatter = prepareFrontMatter({ ...data }, jsonMode);
 
-        return tag.render(splited.data, frontMatter);
-      })
-      .then(frontMatter => {
-        const { separator } = splited;
-        const jsonMode = separator.startsWith(';');
+      return tag.render(splitted.data, frontMatter);
+    }).then(frontMatter => {
+      const { separator } = splitted;
+      const jsonMode = separator.startsWith(';');
 
-        // Parse front-matter
-        const obj = jsonMode
-          ? JSON.parse(`{${frontMatter}}`)
-          : load(frontMatter);
+      // Parse front-matter
+      const obj = jsonMode ? JSON.parse(`{${frontMatter}}`) : load(frontMatter);
 
-        Object.keys(data)
-          .filter(key => !preservedKeys.includes(key) && obj[key] == null)
-          .forEach(key => {
-            obj[key] = data[key];
-          });
-
-        let content = '';
-        // Prepend the separator
-        if (splited.prefixSeparator) content += `${separator}\n`;
-
-        content += yfmStringify(obj, {
-          mode: jsonMode ? 'json' : ''
+      Object.keys(data)
+        .filter(key => !preservedKeys.includes(key) && obj[key] == null)
+        .forEach(key => {
+          obj[key] = data[key];
         });
 
-        // Concat content
-        content += splited.content;
+      let content = '';
+      // Prepend the separator
+      if (splitted.prefixSeparator) content += `${separator}\n`;
 
-        if (data.content) {
-          content += `\n${data.content}`;
-        }
-
-        return content;
+      content += yfmStringify(obj, {
+        mode: jsonMode ? 'json' : ''
       });
+
+      // Concat content
+      content += splitted.content;
+
+      if (data.content) {
+        content += `\n${data.content}`;
+      }
+
+      return content;
+    });
   }
 
   publish(data, replace, callback) {
