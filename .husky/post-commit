@@ -98,4 +98,4 @@ if [ -f "$NPM_PREFIX_NPX_CLI_JS" ] || [ -f "$NPX_WSL_PATH" ]; then
 fi
 
 # re-run build.ts
-"$NODE_EXE" -r ts-node/register build.ts
+"$NODE_EXE" -r ts-node/register build-readme.ts
