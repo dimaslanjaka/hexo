@@ -41,6 +41,7 @@
   },
   "homepage": "https://github.com/dimaslanjaka/hexo#readme",
   "dependencies": {
+    "dotenv": "^16.3.1",
     "git-command-helper": "^1.2.3",
     "minimist": "^1.2.8",
     "nunjucks": "^3.2.4",
