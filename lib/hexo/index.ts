@@ -537,7 +537,7 @@ class Hexo extends EventEmitter {
     }, []);
   }
 
-  _routerRefresh(runningGenerators, useCache) {
+  _routerRefresh(runningGenerators: Promise<{[ key: string]: any; }[]>, useCache: boolean) {
     const { route } = this;
     const routeList = route.list();
     const Locals = this._generateLocals();
