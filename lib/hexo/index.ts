@@ -114,7 +114,7 @@ function debounce(func: () => void, wait: number) {
   };
 }
 
-// Node.js internal APIs
+// Node.js internal APIs used in Hexo.loadPlugin
 declare module 'module' {
   function _nodeModulePaths(path: string): string[];
   function _resolveFilename(request: string, parent: Module, isMain?: any, options?: any): string;
@@ -122,9 +122,76 @@ declare module 'module' {
 }
 
 declare interface Hexo {
-  on(event: 'generateBefore', listener: (...args: any[]) => any): this;
-  on(event: 'generateAfter', listener: (...args: any[]) => any): this;
+
+  /**
+   * Emitted before deployment begins.
+   * @param event
+   * @param listener
+   * @link https://hexo.io/api/events.html#deployBefore
+   */
+  on(event: 'deployBefore', listener: (...args: any[]) => any): this;
+
+  /**
+   * Emitted after deployment begins.
+   * @param event
+   * @param listener
+   * @link https://hexo.io/api/events.html#deployAfter
+   */
+  on(event: 'deployAfter', listener: (...args: any[]) => any): this;
+
+  /**
+   * Emitted before Hexo exits.
+   * @param event
+   * @param listener
+   * @link https://hexo.io/api/events.html#exit
+   */
   on(event: 'exit', listener: (...args: any[]) => any): this;
+
+  /**
+   * Emitted before generation begins.
+   * @param event
+   * @param listener
+   * @link https://hexo.io/api/events.html#generateBefore
+   */
+  on(event: 'generateBefore', listener: (...args: any[]) => any): this;
+
+  /**
+   * Emitted after generation finishes.
+   * @param event
+   * @param listener
+   * @link https://hexo.io/api/events.html#generateAfter
+   */
+  on(event: 'generateAfter', listener: (...args: any[]) => any): this;
+
+  /**
+   * Emitted after a new post has been created. This event returns the post data:
+   * @param event
+   * @param listener
+   * @link https://hexo.io/api/events.html#new
+   */
+  on(event: 'new', listener: (post: { path: string; content: string; }) => any): this;
+
+  /**
+   * Emitted before processing begins. This event returns a path representing the root directory of the box.
+   * @param event
+   * @param listener
+   * @link https://hexo.io/api/events.html#processBefore
+   */
+  on(event: 'processBefore', listener: (...args: any[]) => any): this;
+
+  /**
+   * Emitted after processing finishes. This event returns a path representing the root directory of the box.
+   * @param event
+   * @param listener
+   * @link https://hexo.io/api/events.html#processAfter
+   */
+  on(event: 'processAfter', listener: (...args: any[]) => any): this;
+
+  /**
+   * Emitted after initialization finishes.
+   * @param event
+   * @param listener
+   */
   on(event: 'ready', listener: (...args: any[]) => any): this;
   on(event: string, listener: (...args: any[]) => any): any;
   emit(event: string, ...args: any[]): any;
@@ -337,9 +404,9 @@ class Hexo extends EventEmitter {
     name: string,
     args:
       | {
-          [key: string]: any;
-          _?: string[];
-        }
+        [key: string]: any;
+        _?: string[];
+      }
       | ((...args: any[]) => any) = {},
     callback?: (...args: any[]) => any
   ) {
@@ -537,7 +604,7 @@ class Hexo extends EventEmitter {
     }, []);
   }
 
-  _routerRefresh(runningGenerators: Promise<{[ key: string]: any; }[]>, useCache: boolean) {
+  _routerRefresh(runningGenerators: Promise<{ [key: string]: any; }[]>, useCache: boolean) {
     const { route } = this;
     const routeList = route.list();
     const Locals = this._generateLocals();
