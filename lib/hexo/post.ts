@@ -1,13 +1,15 @@
 import assert from 'assert';
-import Promise from 'bluebird';
-import { parse as yfmParse, split as yfmSplit, stringify as yfmStringify } from 'hexo-front-matter';
-import { copyDir, exists, listDir, mkdirs, readFile, rmdir, unlink, writeFile } from 'hexo-fs';
-import { escapeRegExp, slugize } from 'hexo-util';
-import { load } from 'js-yaml';
 import moment from 'moment';
-import { basename, extname, join } from 'path';
+import Promise from 'bluebird';
+import { join, extname, basename } from 'path';
 import { magenta } from 'picocolors';
-import type { NodeJSLikeCallback, PostSchema, RenderData } from '../types';
+import { load } from 'js-yaml';
+import { slugize, escapeRegExp, deepMerge } from 'hexo-util';
+import { copyDir, exists, listDir, mkdirs, readFile, rmdir, unlink, writeFile } from 'hexo-fs';
+import { parse as yfmParse, split as yfmSplit, stringify as yfmStringify } from 'hexo-front-matter';
+import type Hexo from './index';
+import type { NodeJSLikeCallback, RenderData } from '../types';
+
 const preservedKeys = ['title', 'slug', 'path', 'layout', 'date', 'content'];
 
 const rHexoPostRenderEscape = /<hexoPostRenderCodeBlock>([\s\S]+?)<\/hexoPostRenderCodeBlock>/g;
@@ -65,6 +67,9 @@ class PostRenderEscape {
    * @returns string
    */
   escapeAllSwigTags(str: string) {
+    if (!/(\{\{.+?\}\})|(\{#.+?#\})|(\{%.+?%\})/s.test(str)) {
+      return str;
+    }
     let state = STATE_PLAINTEXT;
     let buffer = '';
     let output = '';
@@ -240,19 +245,24 @@ interface Result {
   content?: string;
 }
 
-class Post {
-  public context: import('../hexo');
-  public config: any;
-  public tag: any;
-  public separator: any;
+interface PostData {
+  title?: string | number;
+  layout?: string;
+  slug?: string | number;
+  path?: string;
+  [prop: string]: any;
+}
 
-  constructor(context: import('.')) {
+class Post {
+  public context: Hexo;
+
+  constructor(context: Hexo) {
     this.context = context;
   }
 
-  create(data: PostSchema, callback?: NodeJSLikeCallback<any>);
-  create(data: PostSchema, replace: boolean, callback?: NodeJSLikeCallback<any>);
-  create(data: PostSchema, replace: boolean | NodeJSLikeCallback<any>, callback?: NodeJSLikeCallback<any>) {
+  create(data: PostData, callback?: NodeJSLikeCallback<any>);
+  create(data: PostData, replace: boolean, callback?: NodeJSLikeCallback<any>);
+  create(data: PostData, replace: boolean | NodeJSLikeCallback<any>, callback?: NodeJSLikeCallback<any>) {
     if (!callback && typeof replace === 'function') {
       callback = replace;
       replace = false;
@@ -261,9 +271,7 @@ class Post {
     const ctx = this.context;
     const { config } = ctx;
 
-    data.slug = slugize((data.slug || data.title).toString(), {
-      transform: config.filename_case
-    });
+    data.slug = slugize((data.slug || data.title).toString(), { transform: config.filename_case });
     data.layout = (data.layout || config.default_layout).toLowerCase();
     data.date = data.date ? moment(data.date) : moment();
 
@@ -275,14 +283,14 @@ class Post {
       }),
       this._renderScaffold(data)
     ])
-      .then(results => {
-        const result = { path: results[0], content: results[1] };
+      .spread((path, content) => {
+        const result = { path, content };
 
         return Promise.all<void, void | string>([
           // Write content to file
-          writeFile(result.path, result.content),
+          writeFile(path, content),
           // Create asset folder
-          createAssetFolder(result.path, config.post_asset_folder)
+          createAssetFolder(path, config.post_asset_folder)
         ]).then(() => {
           ctx.emit('new', result);
           return result;
@@ -300,41 +308,42 @@ class Post {
     });
   }
 
-  _renderScaffold(data: PostSchema) {
+  _renderScaffold(data: PostData) {
     const { tag } = this.context.extend;
-    let splited;
+    let splitted;
 
     return this._getScaffold(data.layout)
       .then(scaffold => {
-        splited = yfmSplit(scaffold);
-        const jsonMode = splited.separator.startsWith(';');
+        splitted = yfmSplit(scaffold);
+        const jsonMode = splitted.separator.startsWith(';');
         const frontMatter = prepareFrontMatter({ ...data }, jsonMode);
 
-        return tag.render(splited.data, frontMatter);
+        return tag.render(splitted.data, frontMatter);
       })
       .then(frontMatter => {
-        const { separator } = splited;
+        const { separator } = splitted;
         const jsonMode = separator.startsWith(';');
 
         // Parse front-matter
-        const obj = jsonMode ? JSON.parse(`{${frontMatter}}`) : load(frontMatter);
+        let obj = jsonMode ? JSON.parse(`{${frontMatter}}`) : load(frontMatter);
 
-        Object.keys(data)
-          .filter(key => !preservedKeys.includes(key) && obj[key] == null)
-          .forEach(key => {
-            obj[key] = data[key];
-          });
+        obj = deepMerge(
+          obj,
+          Object.fromEntries(
+            Object.entries(data).filter(([key, value]) => !preservedKeys.includes(key) && value != null)
+          )
+        );
 
         let content = '';
         // Prepend the separator
-        if (splited.prefixSeparator) content += `${separator}\n`;
+        if (splitted.prefixSeparator) content += `${separator}\n`;
 
         content += yfmStringify(obj, {
           mode: jsonMode ? 'json' : ''
         });
 
         // Concat content
-        content += splited.content;
+        content += splitted.content;
 
         if (data.content) {
           content += `\n${data.content}`;
@@ -344,7 +353,10 @@ class Post {
       });
   }
 
-  publish(data: PostSchema, replace: boolean, callback?: NodeJSLikeCallback<Result>) {
+  publish(data: PostData, replace?: boolean);
+  publish(data: PostData, callback?: NodeJSLikeCallback<Result>);
+  publish(data: PostData, replace: boolean, callback?: NodeJSLikeCallback<Result>);
+  publish(data: PostData, replace?: boolean | NodeJSLikeCallback<Result>, callback?: NodeJSLikeCallback<Result>) {
     if (!callback && typeof replace === 'function') {
       callback = replace;
       replace = false;
@@ -355,9 +367,7 @@ class Post {
     const ctx = this.context;
     const { config } = ctx;
     const draftDir = join(ctx.source_dir, '_drafts');
-    const slug = slugize(data.slug.toString(), {
-      transform: config.filename_case
-    });
+    const slug = slugize(data.slug.toString(), { transform: config.filename_case });
     data.slug = slug;
     const regex = new RegExp(`^${escapeRegExp(slug)}(?:[^\\/\\\\]+)`);
     let src = '';
@@ -371,16 +381,17 @@ class Post {
         const item = list.find(item => regex.test(item));
         if (!item) throw new Error(`Draft "${slug}" does not exist.`);
 
-      // Read the content
-      src = join(draftDir, item);
-      return readFile(src);
-    }).then(content => {
-      // Create post
-      Object.assign(data, yfmParse(String(content)));
-      data.content = data._content;
-      data._content = undefined;
+        // Read the content
+        src = join(draftDir, item);
+        return readFile(src);
+      })
+      .then(content => {
+        // Create post
+        Object.assign(data, yfmParse(content));
+        data.content = data._content;
+        data._content = undefined;
 
-        return this.create(data, replace);
+        return this.create(data, replace as boolean);
       })
       .then(post => {
         result.path = post.path;
@@ -422,36 +433,13 @@ class Post {
    *    console.log(rendered.content);
    * });
    */
-  render(
-    source: string | null | undefined,
-    data: RenderData,
-    callback?: (
-      err: any,
-      rendered: {
-        [key: string]: any;
-        content: string;
-        more: string;
-        permalink: string;
-        excerpt: string;
-      },
-      ...args: any[]
-    ) =>
-      | any
-      | Promise<{
-          [key: string]: any;
-          content: string;
-          more: string;
-          permalink: string;
-          excerpt: string;
-        }>
-  ): any;
   render(source: string, data: RenderData = {}, callback?: NodeJSLikeCallback<never>) {
     const ctx = this.context;
     const { config } = ctx;
     const { tag } = ctx.extend;
     const ext = data.engine || (source ? extname(source) : '');
 
-    let promise: Promise<string | Buffer>;
+    let promise: Promise<string>;
 
     if (data.content != null) {
       promise = Promise.resolve(data.content);
@@ -468,7 +456,7 @@ class Post {
 
     if (!isPost) {
       return promise
-        .then((content: string) => {
+        .then(content => {
           data.content = content;
           ctx.log.debug('Rendering file: %s', magenta(source));
 
@@ -479,7 +467,7 @@ class Post {
             toString: true
           });
         })
-        .then((content: string) => {
+        .then(content => {
           data.content = content;
           return data;
         })
@@ -490,20 +478,17 @@ class Post {
     let disableNunjucks = ext && ctx.render.renderer.get(ext) && !!ctx.render.renderer.get(ext).disableNunjucks;
 
     // front-matter overrides renderer's option
-    if (typeof data.disableNunjucks === 'boolean') {
-      disableNunjucks = data.disableNunjucks;
-    }
+    if (typeof data.disableNunjucks === 'boolean') disableNunjucks = data.disableNunjucks;
 
     const cacheObj = new PostRenderEscape();
 
     return promise
-      .then((content: string) => {
+      .then(content => {
         data.content = content;
         // add more property for type extend_filter_before_post_render_data
         // see more lib/plugins/filter/before_post_render/dataType.ts
         data.source = source;
         data.config = ctx.config;
-
         // Run "before_post_render" filters
         return ctx.execFilter('before_post_render', data, { context: ctx });
       })
@@ -539,7 +524,7 @@ class Post {
           options
         );
       })
-      .then((content: any) => {
+      .then(content => {
         data.content = cacheObj.restoreCodeBlocks(content);
 
         // Run "after_post_render" filters

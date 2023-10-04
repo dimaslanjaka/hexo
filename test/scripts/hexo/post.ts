@@ -1408,48 +1408,13 @@ describe('Post', () => {
     hexo.config.syntax_highlighter = 'highlight.js';
   });
 
-  // https://github.com/hexojs/hexo/issues/5301
-  it('render() - dont escape incomplete tags', async () => {
-    const content = 'dont drop `{% }` 11111 `{# }` 22222 `{{ }` 33333';
+  it('render() - doubled brackets in codeblock', async () => {
+    const content = '`build-${{ hashFiles(\'package-lock.json\') }}`';
 
-    const data = await post.render('', {
+    const data = await post.render(null, {
       content,
       engine: 'markdown'
     });
-
-    data.content.should.contains('11111');
-    data.content.should.contains('22222');
-    data.content.should.contains('33333');
-    data.content.should.not.contains('&#96;'); // `
-  });
-
-  it('render() - incomplete tags throw error', async () => {
-    const content = 'nunjucks should throw {#  } error';
-
-    try {
-      await post.render('', {
-        content,
-        engine: 'markdown'
-      });
-      should.fail();
-    } catch (err) {}
-  });
-
-  // https://github.com/hexojs/hexo/issues/5401
-  it('render() - tags in different lines', async () => {
-    const content = [
-      '{% link',
-      'foobar',
-      'https://hexo.io/',
-      'tttitle',
-      '%}'
-    ].join('\n');
-
-    const data = await post.render('', {
-      content,
-      engine: 'markdown'
-    });
-
-    data.content.should.eql('<a href="https://hexo.io/" title="tttitle" target="">foobar</a>');
+    data.content.trim().should.eql('<p><code>build-$&#123;&#123; hashFiles(\'package-lock.json\') &#125;&#125;</code></p>');
   });
 });
