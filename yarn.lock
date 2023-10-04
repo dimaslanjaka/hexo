@@ -6719,7 +6719,7 @@ __metadata:
     ansi-colors: ^4.1.3
     hexo: "workspace:^"
     hexo-front-matter: "workspace:^"
-    hexo-util: ^3.0.1
+    hexo-util: "workspace:^"
     moment-timezone: ^0.5.43
     true-case-path: ^2.2.1
     ts-node: ^10.9.1
@@ -6730,7 +6730,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"hexo-cli@^4.3.0, hexo-cli@workspace:^, hexo-cli@workspace:packages/hexo-cli":
+"hexo-cli@workspace:^, hexo-cli@workspace:packages/hexo-cli":
   version: 0.0.0-use.local
   resolution: "hexo-cli@workspace:packages/hexo-cli"
   dependencies:
@@ -6745,9 +6745,9 @@ __metadata:
     eslint: ^8.2.0
     eslint-config-hexo: ^5.0.0
     hexo-fs: ^4.1.1
-    hexo-log: ^4.0.1
+    hexo-log: "workspace:^"
     hexo-renderer-marked: ^6.0.0
-    hexo-util: ^2.5.0
+    hexo-util: "workspace:^"
     minimist: ^1.2.5
     mocha: ^10.0.0
     nyc: ^15.1.0
@@ -7092,7 +7092,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hexo-util@npm:^2.5.0, hexo-util@npm:^2.7.0":
+"hexo-util@npm:^2.7.0":
   version: 2.7.0
   resolution: "hexo-util@npm:2.7.0"
   dependencies:
@@ -7128,13 +7128,13 @@ __metadata:
     decache: ^4.6.1
     eslint: ^8.48.0
     eslint-config-hexo: ^5.0.0
-    hexo-cli: ^4.3.0
+    hexo-cli: "workspace:^"
     hexo-front-matter: 4.0.0
     hexo-fs: ^4.1.1
     hexo-i18n: ^2.0.0
-    hexo-log: ^4.0.1
+    hexo-log: "workspace:^"
     hexo-renderer-marked: ^6.0.0
-    hexo-util: ^3.0.1
+    hexo-util: "workspace:^"
     husky: ^8.0.1
     js-yaml: ^4.1.0
     js-yaml-js-types: ^1.0.0
@@ -7155,7 +7155,7 @@ __metadata:
     titlecase: ^1.1.3
     ts-node: ^10.9.1
     typescript: ^5.2.2
-    warehouse: ^5.0.0
+    warehouse: "workspace:^"
   bin:
     hexo: ./bin/hexo
   languageName: unknown
@@ -10490,7 +10490,7 @@ __metadata:
     through2: ^4.0.2
     true-case-path: ^2.2.1
     upath: ^2.0.1
-  checksum: 8de7e70a165ef214131acae763b874d2c4a50774732e6ee03f7c38cbf82a2435ef58f4bedc3069a779dc8fb5f1d873090a114060edfe3494749fd1095fcb0768
+  checksum: 058f616c07f320a7dfa0bf36367901a7a8cfca332c802ea486712bb309f1c84cc073c29a00f1372c76b3633533f21ce5665e36ae8e1c98073319359f0bbb1d84
   languageName: node
   linkType: hard
 
@@ -12827,7 +12827,7 @@ __metadata:
     tslib: ^2.5.2
     upath: ^2.0.1
     yaml: ^2.3.1
-  checksum: 87bdc8ac0347be976ed87152a3f2b53668b71bf7734f579d1a47cb33ed9c7b555e700b56effb05c098d05c2df5ac6767ce361dd43b2c7696ef0954b692c806a3
+  checksum: d56981fe799eaa0ad69bdd2bc97b5e9ffaaf0689fd4b0576131d5e824d7e4715ba34d1c0a39878e2cd9ae20e52f7167d72decbc3a226136e40edd437d3134874
   languageName: node
   linkType: hard
 
@@ -14941,7 +14941,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"warehouse@^5.0.0, warehouse@workspace:^, warehouse@workspace:packages/warehouse":
+"warehouse@workspace:^, warehouse@workspace:packages/warehouse":
   version: 0.0.0-use.local
   resolution: "warehouse@workspace:packages/warehouse"
   dependencies:
@@ -14963,7 +14963,7 @@ __metadata:
     eslint: ^8.26.0
     eslint-config-hexo: ^5.0.0
     graceful-fs: ^4.2.10
-    hexo-log: ^4.0.1
+    hexo-log: "workspace:^"
     is-plain-object: ^5.0.0
     jsonparse: ^1.3.1
     lodash: ^4.17.21
