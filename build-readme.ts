@@ -142,7 +142,7 @@ export async function createReadMe() {
 
     if (argv['commits'] || argv['commit']) {
       gh.add('releases');
-      const lc = 'latestCommit'; //await gh.latestCommit();
+      const lc = await gh.latestCommit('releases');
       const url = new URL('https://github.com/');
       url.pathname =
         new URL((await gh.getremote()).push.url.replace(/\.git$/, '')).pathname.replace(/^\//, '') + '/commit/' + lc;
