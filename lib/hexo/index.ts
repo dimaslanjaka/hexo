@@ -193,6 +193,11 @@ declare interface Hexo {
    * @param listener
    */
   on(event: 'ready', listener: (...args: any[]) => any): this;
+  /**
+   * undescripted on emit
+   * @param event
+   * @param listener
+   */
   on(event: string, listener: (...args: any[]) => any): any;
   emit(event: string, ...args: any[]): any;
 }
