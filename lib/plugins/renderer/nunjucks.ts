@@ -12,7 +12,7 @@ interface CompiledTemplate {
   template: nunjucks.Template;
 }
 
-function toArray(value) {
+function toArray(value: any) {
   if (Array.isArray(value)) {
     // Return if given value is an Array
     return value;
