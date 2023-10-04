@@ -1369,4 +1369,14 @@ describe('Post', () => {
 
     hexo.config.syntax_highlighter = 'highlight.js';
   });
+
+  it('render() - doubled brackets in codeblock', async () => {
+    const content = '`build-${{ hashFiles(\'package-lock.json\') }}`';
+
+    const data = await post.render(null, {
+      content,
+      engine: 'markdown'
+    });
+    data.content.trim().should.eql('<p><code>build-$&#123;&#123; hashFiles(\'package-lock.json\') &#125;&#125;</code></p>');
+  });
 });
