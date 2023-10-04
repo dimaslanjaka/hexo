@@ -3,7 +3,7 @@ because of HexoJS doesnt accept my PR, i bundled my improved version of hexo.
 
 | package name | commit |
 | :--- | :--- | 
-| hexo | [3d29aa7b](https://github.com/dimaslanjaka/hexo/commit/3d29aa7b)  [![Coverage Status](https://coveralls.io/repos/github/dimaslanjaka/hexo/badge.svg)](https://coveralls.io/github/dimaslanjaka/hexo) | 
+| hexo | [3c7b3a6b](https://github.com/dimaslanjaka/hexo/commit/3c7b3a6b)  [![Coverage Status](https://coveralls.io/repos/github/dimaslanjaka/hexo/badge.svg)](https://coveralls.io/github/dimaslanjaka/hexo) | 
 | hexo-asset-link | [c7b30eb](https://github.com/dimaslanjaka/hexo-asset-link/commit/c7b30eb) | 
 | hexo-cli | [0e23306](https://github.com/dimaslanjaka/hexo-cli/commit/0e23306) | 
 | hexo-front-matter | [fec8829](https://github.com/dimaslanjaka/hexo-front-matter/commit/fec8829) | 
