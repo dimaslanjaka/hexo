@@ -421,7 +421,7 @@ class Post {
         src = join(draftDir, item);
         return readFile(src);
       }).then(content => {
-      // Create post
+        // Create post
         Object.assign(data, yfmParse(String(content)));
         data.content = data._content;
         data._content = undefined;
@@ -469,7 +469,7 @@ class Post {
    * });
    */
   render(
-    source: string,
+    source: string | null | undefined,
     data: Data = {},
     callback?: (
       err: any,
