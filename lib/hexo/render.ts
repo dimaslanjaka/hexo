@@ -1,6 +1,7 @@
 import { extname } from 'path';
 import Promise from 'bluebird';
 import { readFile, readFileSync } from 'hexo-fs';
+import { HexoRenderOptions } from './render-d';
 
 const getExtname = (str: string) => {
   if (typeof str !== 'string') return '';
@@ -54,7 +55,7 @@ class Render {
     return this.getRenderer(ext, true);
   }
 
-  render(data: Record<string, any>, options?, callback?: (...args: any[]) => any) {
+  render(data: Record<string, any>, options?: HexoRenderOptions, callback?: (...args: any[]) => any) {
     if (!callback && typeof options === 'function') {
       callback = options;
       options = {};
