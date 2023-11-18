@@ -1,6 +1,7 @@
 import yaml from 'js-yaml';
 import { escape } from 'hexo-front-matter';
 import logger from 'hexo-log';
+import type { StoreFunctionData } from '../../extend/renderer';
 
 let schema = {} as yaml.Schema;
 
@@ -15,7 +16,7 @@ try {
   }
 }
 
-function yamlHelper(data: { text: string; }) {
+function yamlHelper(data: StoreFunctionData) {
   return yaml.load(escape(data.text), { schema });
 }
 

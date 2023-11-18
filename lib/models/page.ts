@@ -3,8 +3,9 @@ import { join } from 'path';
 import Moment from './types/moment';
 import moment from 'moment';
 import { full_url_for } from 'hexo-util';
+import type Hexo from '../hexo';
 
-const ModelPage = (ctx: import('../hexo')) => {
+export = (ctx: Hexo) => {
   const Page = new warehouse.Schema({
     title: { type: String, default: '' },
     date: {
@@ -39,5 +40,3 @@ const ModelPage = (ctx: import('../hexo')) => {
 
   return Page;
 };
-
-export = ModelPage;

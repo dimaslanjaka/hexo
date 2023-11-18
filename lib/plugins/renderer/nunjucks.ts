@@ -1,6 +1,7 @@
-import nunjucks from 'nunjucks';
+import nunjucks, { Environment } from 'nunjucks';
 import { readFileSync } from 'hexo-fs';
 import { dirname } from 'path';
+import type { StoreFunctionData } from '../../extend/renderer';
 
 function toArray(value: any) {
   if (Array.isArray(value)) {
@@ -36,14 +37,14 @@ const nunjucksCfg = {
   lstripBlocks: false
 };
 
-const nunjucksAddFilter = (env: nunjucks.Environment) => {
+const nunjucksAddFilter = (env: Environment) => {
   env.addFilter('toarray', toArray);
   env.addFilter('safedump', safeJsonStringify);
 };
 
-function njkCompile(data: { path?: any; text?: any }) {
-  let env: nunjucks.Environment;
-  if (typeof data.path === 'string') {
+function njkCompile(data: StoreFunctionData) {
+  let env: Environment;
+  if (data.path) {
     env = nunjucks.configure(dirname(data.path), nunjucksCfg);
   } else {
     env = nunjucks.configure(nunjucksCfg);
@@ -52,18 +53,19 @@ function njkCompile(data: { path?: any; text?: any }) {
 
   const text = 'text' in data ? data.text : readFileSync(data.path);
 
-  return nunjucks.compile(text, env, data.path);
+  return nunjucks.compile(text as string, env, data.path);
 }
 
+// function with internal exported function needs interface to detect from IDE
 interface njkRenderer extends Function {
   compile: (data: { path?: any; text?: any }) => (locals: Record<string, any>) => string;
 }
 
-function njkRenderer(data: { path?: any; text?: any }, locals: Record<string, any>) {
+function njkRenderer(data: StoreFunctionData, locals: object) {
   return njkCompile(data).render(locals);
 }
 
-njkRenderer.compile = (data: { path?: any; text?: any }) => {
+njkRenderer.compile = (data: StoreFunctionData) => {
   // Need a closure to keep the compiled template.
   return (locals: Record<string, any>) => njkCompile(data).render(locals);
 };

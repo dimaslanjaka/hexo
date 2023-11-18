@@ -5,21 +5,9 @@ import { join, extname, basename } from 'path';
 import { magenta } from 'picocolors';
 import { load } from 'js-yaml';
 import { slugize, escapeRegExp } from 'hexo-util';
-import {
-  copyDir,
-  exists,
-  listDir,
-  mkdirs,
-  readFile,
-  rmdir,
-  unlink,
-  writeFile
-} from 'hexo-fs';
-import {
-  parse as yfmParse,
-  split as yfmSplit,
-  stringify as yfmStringify
-} from 'hexo-front-matter';
+import { copyDir, exists, listDir, mkdirs, readFile, rmdir, unlink, writeFile } from 'hexo-fs';
+import { parse as yfmParse, split as yfmSplit, stringify as yfmStringify } from 'hexo-front-matter';
+import type Hexo from './index';
 const preservedKeys = ['title', 'slug', 'path', 'layout', 'date', 'content'];
 
 const rHexoPostRenderEscape
@@ -34,8 +22,7 @@ const STATE_SWIG_COMMENT = Symbol('swig_comment');
 const STATE_SWIG_TAG = Symbol('swig_tag');
 const STATE_SWIG_FULL_TAG = Symbol('swig_full_tag');
 
-const isNonWhiteSpaceChar = (char: string) =>
-  char !== '\r'
+const isNonWhiteSpaceChar = (char: string) => char !== '\r'
   && char !== '\n'
   && char !== '\t'
   && char !== '\f'
@@ -43,8 +30,8 @@ const isNonWhiteSpaceChar = (char: string) =>
   && char !== ' ';
 
 class PostRenderEscape {
-  public stored: any;
-  public length: any;
+  public stored: any[];
+  public length: number;
 
   constructor() {
     this.stored = [];
@@ -54,7 +41,7 @@ class PostRenderEscape {
     return `<!--${flag}\uFFFC${cache.push(str) - 1}-->`;
   }
 
-  static restoreContent(cache) {
+  static restoreContent(cache: any[]) {
     return (_, index) => {
       assert(cache[index]);
       const value = cache[index];
@@ -64,24 +51,16 @@ class PostRenderEscape {
   }
 
   restoreAllSwigTags(str: string) {
-    const restored = str.replace(
-      rSwigPlaceHolder,
-      PostRenderEscape.restoreContent(this.stored)
-    );
+    const restored = str.replace(rSwigPlaceHolder, PostRenderEscape.restoreContent(this.stored));
     return restored;
   }
 
   restoreCodeBlocks(str: string) {
-    return str.replace(
-      rCodeBlockPlaceHolder,
-      PostRenderEscape.restoreContent(this.stored)
-    );
+    return str.replace(rCodeBlockPlaceHolder, PostRenderEscape.restoreContent(this.stored));
   }
 
   escapeCodeBlocks(str: string) {
-    return str.replace(rHexoPostRenderEscape, (_, content) =>
-      PostRenderEscape.escapeContent(this.stored, 'code', content)
-    );
+    return str.replace(rHexoPostRenderEscape, (_, content) => PostRenderEscape.escapeContent(this.stored, 'code', content));
   }
 
   /**
@@ -223,7 +202,7 @@ class PostRenderEscape {
   }
 }
 
-const prepareFrontMatter = (data, jsonMode) => {
+const prepareFrontMatter = (data: any, jsonMode: boolean) => {
   for (const [key, item] of Object.entries(data)) {
     if (moment.isMoment(item)) {
       data[key] = item.utc().format('YYYY-MM-DD HH:mm:ss');
@@ -280,27 +259,24 @@ interface Data {
   source?: string;
 }
 
-class Post {
-  public context: import('../hexo');
-  public config: any;
-  public tag: any;
-  public separator: any;
+interface PostData {
+  title?: string;
+  layout?: string;
+  slug?: string;
+  path?: string;
+  [prop: string]: any;
+}
 
-  constructor(context: import('.')) {
+class Post {
+  public context: Hexo;
+
+  constructor(context: Hexo) {
     this.context = context;
   }
 
-  create(
-    data: {
-      [key: string]: any;
-      slug?: string;
-      title?: string;
-      layout?: string;
-      date?: any;
-    },
-    replace: boolean,
-    callback?: (...args: any[]) => any
-  ) {
+  create(data: PostData, callback?: NodeJSLikeCallback<any>);
+  create(data: PostData, replace: boolean, callback?: NodeJSLikeCallback<any>);
+  create(data: PostData, replace: boolean | (NodeJSLikeCallback<any>), callback?: NodeJSLikeCallback<any>) {
     if (!callback && typeof replace === 'function') {
       callback = replace;
       replace = false;
@@ -339,7 +315,7 @@ class Post {
       .asCallback(callback);
   }
 
-  _getScaffold(layout) {
+  _getScaffold(layout: string) {
     const ctx = this.context;
 
     return ctx.scaffold.get(layout).then(result => {
@@ -348,7 +324,7 @@ class Post {
     });
   }
 
-  _renderScaffold(data) {
+  _renderScaffold(data: PostData) {
     const { tag } = this.context.extend;
     let splitted;
 
@@ -390,7 +366,7 @@ class Post {
     });
   }
 
-  publish(data, replace, callback) {
+  publish(data: PostData, replace: boolean, callback?: NodeJSLikeCallback<Result>) {
     if (!callback && typeof replace === 'function') {
       callback = replace;
       replace = false;
@@ -420,9 +396,9 @@ class Post {
         // Read the content
         src = join(draftDir, item);
         return readFile(src);
-      }).then(content => {
-        // Create post
-        Object.assign(data, yfmParse(String(content)));
+      }).then((content: string) => {
+      // Create post
+        Object.assign(data, yfmParse(content));
         data.content = data._content;
         data._content = undefined;
 
@@ -470,7 +446,7 @@ class Post {
    */
   render(
     source: string | null | undefined,
-    data: Data = {},
+    data: Data,
     callback?: (
       err: any,
       rendered: {
@@ -488,7 +464,8 @@ class Post {
       permalink: string;
       excerpt: string;
     }>
-  ) {
+  ): any
+  render(source: string, data: Data = {}, callback?: NodeJSLikeCallback<never>) {
     const ctx = this.context;
     const { config } = ctx;
     const { tag } = ctx.extend;

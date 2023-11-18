@@ -93,7 +93,7 @@ class NunjucksTag {
   }
 }
 
-const trimBody = body => {
+const trimBody = (body: () => any) => {
   return stripIndent(body()).replace(/^\n?|\n?$/g, '');
 };
 
@@ -153,7 +153,7 @@ class NunjucksAsyncBlock extends NunjucksBlock {
   }
 }
 
-const getContextLineNums = (min, max, center, amplitude) => {
+const getContextLineNums = (min: number, max: number, center: number, amplitude: number) => {
   const result = [];
   let lbound = Math.max(min, center - amplitude);
   const hbound = Math.min(max, center + amplitude);
@@ -163,7 +163,7 @@ const getContextLineNums = (min, max, center, amplitude) => {
 
 const LINES_OF_CONTEXT = 5;
 
-const getContext = (lines, errLine, location, type) => {
+const getContext = (lines: string[], errLine: number, location: string, type: string) => {
   const message = [
     location + ' ' + red(type),
     cyan('    =====               Context Dump               ====='),
@@ -229,7 +229,7 @@ interface RegisterAsyncOptions extends RegisterOptions {
 
 class Tag {
   public env: Environment;
-  public source: any;
+  public source: string;
 
   constructor() {
     this.env = new Environment(null, {
@@ -326,7 +326,7 @@ class Tag {
    * unregister shortcode tag
    * @param name shortcode tag name
    */
-  unregister(name: string) {
+  unregister(name: string): void {
     if (!name) throw new TypeError('name is required');
 
     const { env } = this;
@@ -335,7 +335,8 @@ class Tag {
   }
 
   render(str: string, options: { source?: string }): Promise<string>;
-  render(str: string, options: { source?: string } = {}, callback?: (err: any, result: string) => any) {
+  render(str: string, options: { source?: string }, callback?: (err: any, result: string) => any): Promise<any>
+  render(str: string, options: { source?: string } = {}, callback?: NodeJSLikeCallback<any>): Promise<any> {
     if (!callback && typeof options === 'function') {
       callback = options;
       options = {};

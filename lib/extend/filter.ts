@@ -78,7 +78,7 @@ class Filter {
     store.sort((a, b) => a.priority - b.priority);
   }
 
-  unregister(type: string, fn: StoreFunction) {
+  unregister(type: string, fn: StoreFunction): void {
     if (!type) throw new TypeError('type is required');
     if (typeof fn !== 'function') throw new TypeError('fn must be a function');
 
@@ -92,7 +92,7 @@ class Filter {
     if (index !== -1) list.splice(index, 1);
   }
 
-  exec(type: string, data: any[], options: FilterOptions = {}) {
+  exec(type: string, data: any[], options: FilterOptions = {}): Promise<any> {
     const filters = this.list(type);
     if (filters.length === 0) return Promise.resolve(data);
 

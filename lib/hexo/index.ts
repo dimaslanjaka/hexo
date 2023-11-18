@@ -23,34 +23,31 @@ import {
 } from '../extend';
 const { version } = require('../../package.json');
 
-import { deepMerge, full_url_for } from 'hexo-util';
-import Theme from '../theme';
 import defaultConfig from './default_config';
 import { Args, Config, Extend, Query } from './index-d';
-import loadDatabase from './load_database';
-import Locals from './locals';
 import { HexoLocalsData } from './locals-d';
-import multiConfigPath from './multi_config_path';
 import Post from './post';
 import registerModels from './register_models';
 import Render from './render';
-import Router from './router';
 import Scaffold from './scaffold';
 import Source from './source';
+import Router from './router';
+import Theme from '../theme';
+import Locals from './locals';
+import loadDatabase from './load_database';
+import multiConfigPath from './multi_config_path';
+import { deepMerge, full_url_for } from 'hexo-util';
+import type Box from '../box';
 let resolveSync; // = require('resolve');
 
 const libDir = dirname(__dirname);
 const dbVersion = 1;
 
-const stopWatcher = (box: Theme | Source) => {
-  if (box.isWatching()) box.unwatch();
-};
+const stopWatcher = (box: Box) => { if (box.isWatching()) box.unwatch(); };
 
 const routeCache = new WeakMap();
 
-const castArray = (obj: any) => {
-  return Array.isArray(obj) ? obj : [obj];
-};
+const castArray = (obj: any) => { return Array.isArray(obj) ? obj : [obj]; };
 
 const mergeCtxThemeConfig = (ctx: import('.')) => {
   // Merge hexo.config.theme_config into hexo.theme.config before post rendering & generating
@@ -413,9 +410,10 @@ class Hexo extends EventEmitter {
         [key: string]: any;
         _?: string[];
       }
-      | ((...args: any[]) => any) = {},
+      | ((...args: any[]) => any),
     callback?: (...args: any[]) => any
-  ) {
+  ): any
+  call(name: string, args: any, callback?: NodeJSLikeCallback<any>) {
     if (!callback && typeof args === 'function') {
       callback = args;
       args = {};
@@ -458,7 +456,8 @@ class Hexo extends EventEmitter {
    * @example
    * hexo.loadPlugin(require.resolve('hexo-renderer-marked'));
    */
-  loadPlugin(path: string, callback?: (...args: any[]) => any) {
+  loadPlugin(path: string, callback?: (...args: any[]) => any): any;
+  loadPlugin(path: string, callback?: NodeJSLikeCallback<any>) {
     return readFile(path).then(script => {
       // Based on: https://github.com/joyent/node/blob/v0.10.33/src/node.js#L516
       const module = new Module(path);
@@ -495,13 +494,13 @@ class Hexo extends EventEmitter {
    * @param callback
    * @returns
    */
-  load(callback?: (...args: any[]) => any) {
-    return loadDatabase(this)
-      .then(() => {
-        this.log.info('Start processing');
+  load(callback?: (...args: any[]) => any): any;
+  load(callback?: NodeJSLikeCallback<any>) {
+    return loadDatabase(this).then(() => {
+      this.log.info('Start processing');
 
-        return Promise.all([this.source.process(), this.theme.process()]);
-      })
+      return Promise.all([this.source.process(), this.theme.process()]);
+    })
       .then(() => {
         mergeCtxThemeConfig(this);
         return this._generate({ cache: false });
@@ -509,7 +508,7 @@ class Hexo extends EventEmitter {
       .asCallback(callback);
   }
 
-  watch(callback) {
+  watch(callback?: NodeJSLikeCallback<any>) {
     let useCache = false;
     const { cache } = Object.assign(
       {
@@ -610,7 +609,7 @@ class Hexo extends EventEmitter {
     }, []);
   }
 
-  _routerRefresh(runningGenerators: Promise<{ [key: string]: any; }[]>, useCache: boolean) {
+  _routerRefresh(runningGenerators: Promise<any[]>, useCache: boolean) {
     const { route } = this;
     const routeList = route.list();
     const Locals = this._generateLocals();
@@ -661,7 +660,7 @@ class Hexo extends EventEmitter {
     this.emit('generateBefore');
 
     // Run before_generate filters
-    return this.execFilter('before_generate', this.locals.get('data'), { context: this })
+    return this.execFilter('before_generate', null, { context: this })
       .then(() => this._routerRefresh(this._runGenerators(), useCache)).then(() => {
         this.emit('generateAfter');
 

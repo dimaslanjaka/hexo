@@ -1,7 +1,9 @@
 import warehouse from 'warehouse';
 import Promise from 'bluebird';
+import type Hexo from '../hexo';
 
-export = (_ctx: import('../hexo')) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export = (ctx: Hexo) => {
   const Cache = new warehouse.Schema({
     _id: {type: String, required: true},
     hash: {type: String, default: ''},

@@ -1,6 +1,9 @@
 import { extname } from 'path';
 import Promise from 'bluebird';
 import { readFile, readFileSync } from 'hexo-fs';
+import type Hexo from './index';
+import type { Renderer } from '../extend';
+import type { StoreFunctionData } from '../extend/renderer';
 import { HexoRenderOptions } from './render-d';
 
 const getExtname = (str: string) => {
@@ -27,23 +30,23 @@ const toString = (result, options) => {
 };
 
 class Render {
-  public context: import('.');
-  public renderer: import('../extend/renderer');
+  public context: Hexo;
+  public renderer: Renderer;
 
-  constructor(ctx: import('.')) {
+  constructor(ctx: Hexo) {
     this.context = ctx;
     this.renderer = ctx.extend.renderer;
   }
 
-  isRenderable(path) {
+  isRenderable(path: string) {
     return this.renderer.isRenderable(path);
   }
 
-  isRenderableSync(path) {
+  isRenderableSync(path: string) {
     return this.renderer.isRenderableSync(path);
   }
 
-  getOutput(path) {
+  getOutput(path: string) {
     return this.renderer.getOutput(path);
   }
 
@@ -55,7 +58,8 @@ class Render {
     return this.getRenderer(ext, true);
   }
 
-  render(data: Record<string, any>, options?: HexoRenderOptions, callback?: (...args: any[]) => any) {
+  render(data: Record<string, any>, options?: HexoRenderOptions, callback?: (...args: any[]) => any): any
+  render(data: StoreFunctionData, options?: { highlight?: boolean; }, callback?: undefined) {
     if (!callback && typeof options === 'function') {
       callback = options;
       options = {};
@@ -78,7 +82,12 @@ class Render {
 
     return promise
       .then(text => {
-        data.text = text;
+        // TODO: need to create PR
+        if (Buffer.isBuffer(text)) {
+          data.text = text.toString();
+        } else {
+          data.text = text;
+        }
         ext = data.engine || getExtname(data.path);
         if (!ext || !this.isRenderable(ext)) return text;
 
@@ -103,14 +112,14 @@ class Render {
       .asCallback(callback);
   }
 
-  renderSync(data, options: Record<string, any> = {}) {
+  renderSync(data: StoreFunctionData, options: Record<string, any> = {}) {
     if (!data) throw new TypeError('No input file or string!');
 
     const ctx = this.context;
 
     if (data.text == null) {
       if (!data.path) throw new TypeError('No input file or string!');
-      data.text = readFileSync(data.path);
+      data.text = readFileSync(data.path) as string;
     }
 
     if (data.text == null) throw new TypeError('No input file or string!');

@@ -19,7 +19,7 @@ class Processor {
     this.store = [];
   }
 
-  list() {
+  list(): Store {
     return this.store;
   }
 

@@ -1,6 +1,5 @@
 import { extname } from 'path';
 import Promise from 'bluebird';
-import { Store, SyncStore, StoreSyncFunction, StoreFunction } from './renderer-d';
 
 const getExtname = (str: string) => {
   if (typeof str !== 'string') return '';
@@ -8,6 +7,55 @@ const getExtname = (str: string) => {
   const ext = extname(str) || str;
   return ext.startsWith('.') ? ext.slice(1) : ext;
 };
+
+/**
+ * to cast `data` type look example below
+ * @example
+ * type rendererData = Parameters<Parameters<typeof hexo.extend.renderer.register>[2]>[0];
+ * // or
+ * type rendererData = Parameters<Parameters<import('hexo')['extend']['renderer']['register']>[2]>[0];
+ * // or
+ * type rendererData = import('hexo/extend/renderer-d.ts').StoreFunctionData;
+ */
+export interface StoreFunctionData {
+  path?: any;
+  text?: string;
+  engine?: string;
+  toString?: any;
+  onRenderEnd?: any;
+}
+
+export interface StoreSyncFunction {
+  [x: string]: any;
+  (
+    data: StoreFunctionData,
+    options: object,
+    // callback: NodeJSLikeCallback<string>
+  ): any;
+  output?: string;
+  compile?: (local: object) => any;
+}
+export interface StoreFunction {
+  (
+    data: StoreFunctionData,
+    options: object,
+  ): Promise<any>;
+  (
+    data: StoreFunctionData,
+    options: object,
+    callback: NodeJSLikeCallback<string>
+  ): void;
+  output?: string;
+  compile?: (local: object) => any;
+  disableNunjucks?: boolean;
+}
+
+interface SyncStore {
+  [key: string]: StoreSyncFunction;
+}
+interface Store {
+  [key: string]: StoreFunction;
+}
 
 class Renderer {
   public store: Store;
@@ -18,25 +66,25 @@ class Renderer {
     this.storeSync = {};
   }
 
-  list(sync: boolean) {
+  list(sync: boolean): Store | SyncStore {
     return sync ? this.storeSync : this.store;
   }
 
-  get(name: string, sync?: boolean) {
+  get(name: string, sync?: boolean): StoreSyncFunction | StoreFunction {
     const store = this[sync ? 'storeSync' : 'store'];
 
     return store[getExtname(name)] || store[name];
   }
 
-  isRenderable(path: string) {
+  isRenderable(path: string): boolean {
     return Boolean(this.get(path));
   }
 
-  isRenderableSync(path: string) {
+  isRenderableSync(path: string): boolean {
     return Boolean(this.get(path, true));
   }
 
-  getOutput(path: string) {
+  getOutput(path: string): string {
     const renderer = this.get(path);
     return renderer ? renderer.output : '';
   }
@@ -110,4 +158,4 @@ class Renderer {
   }
 }
 
-export = Renderer;
+export default Renderer;

@@ -6,8 +6,9 @@ import { exists, readdir } from 'hexo-fs';
 import { magenta } from 'picocolors';
 import { deepMerge } from 'hexo-util';
 import validateConfig from './validate_config';
+import type Hexo from './index';
 
-export = async (ctx: import('.')) => {
+export = async (ctx: Hexo) => {
   if (!ctx.env.init) return;
 
   const baseDir = ctx.base_dir;
@@ -73,7 +74,7 @@ export = async (ctx: import('.')) => {
   ctx.theme = new Theme(ctx, { ignored });
 };
 
-async function findConfigPath(path) {
+async function findConfigPath(path: string) {
   const { dir, name } = parse(path);
 
   const files = await readdir(dir);

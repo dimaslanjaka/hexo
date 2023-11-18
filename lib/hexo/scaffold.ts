@@ -1,12 +1,12 @@
 import { extname, join } from 'path';
 import { exists, listDir, readFile, unlink, writeFile } from 'hexo-fs';
-
+import type Hexo from './index';
 class Scaffold {
-  public context: any;
-  public scaffoldDir: any;
+  public context: Hexo;
+  public scaffoldDir: string;
   public defaults: any;
 
-  constructor(context) {
+  constructor(context: Hexo) {
     this.context = context;
     this.scaffoldDir = context.scaffold_dir;
     this.defaults = {
@@ -38,25 +38,22 @@ class Scaffold {
       }));
   }
 
-  _getScaffold(name) {
-    return this._listDir().then(list =>
-      list.find(item => item.name === name)
-    );
+  _getScaffold(name: string) {
+    return this._listDir().then(list => list.find(item => item.name === name));
   }
 
-  get(name, callback?: (...args: any[]) => any) {
-    return this._getScaffold(name)
-      .then(item => {
-        if (item) {
-          return readFile(item.path);
-        }
+  get(name: string, callback?: NodeJSLikeCallback<any>) {
+    return this._getScaffold(name).then(item => {
+      if (item) {
+        return readFile(item.path);
+      }
 
-        return this.defaults[name];
-      })
+      return this.defaults[name];
+    })
       .asCallback(callback);
   }
 
-  set(name, content, callback?: (...args: any[]) => any) {
+  set(name: string, content: any, callback: NodeJSLikeCallback<void>) {
     const { scaffoldDir } = this;
 
     return this._getScaffold(name)
@@ -69,13 +66,12 @@ class Scaffold {
       .asCallback(callback);
   }
 
-  remove(name, callback?: (...args: any[]) => any) {
-    return this._getScaffold(name)
-      .then(item => {
-        if (!item) return;
+  remove(name: string, callback: NodeJSLikeCallback<void>) {
+    return this._getScaffold(name).then(item => {
+      if (!item) return;
 
-        return unlink(item.path);
-      })
+      return unlink(item.path);
+    })
       .asCallback(callback);
   }
 }
