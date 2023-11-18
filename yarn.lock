@@ -1088,7 +1088,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^18.11.7, @types/node@npm:^18.11.8, @types/node@npm:^18.16.0, @types/node@npm:^18.16.3, @types/node@npm:^18.7.18":
+"@types/node@npm:^18.11.7, @types/node@npm:^18.11.8, @types/node@npm:^18.16.0, @types/node@npm:^18.7.18":
   version: 18.16.9
   resolution: "@types/node@npm:18.16.9"
   checksum: 7fe0ef372ba8b157bd646efe29b0ece92ccb9f455171a7ceb4c92d6b490789ff0f14411b1dc6ad203351a0efa2b435072dfab5566fb6eaaaa5cd549e1fb22afa
@@ -1187,19 +1187,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/sinon@npm:^10.0.14":
-  version: 10.0.16
-  resolution: "@types/sinon@npm:10.0.16"
-  dependencies:
-    "@types/sinonjs__fake-timers": "*"
-  checksum: 1216aac584500d6bf845ca76f57e82f8459cf9de4ed80a55e50aa4438360fc418789a42181e211c5d279e97f86a3a994e3c81e43971d540737caca0193242bbf
-  languageName: node
-  linkType: hard
-
 "@types/sinonjs__fake-timers@npm:*":
   version: 8.1.2
   resolution: "@types/sinonjs__fake-timers@npm:8.1.2"
   checksum: bbc73a5ab6c0ec974929392f3d6e1e8db4ebad97ec506d785301e1c3d8a4f98a35b1aa95b97035daef02886fd8efd7788a2fa3ced2ec7105988bfd8dce61eedd
+  languageName: node
+  linkType: hard
+
+"@types/text-table@npm:^0.2.4":
+  version: 0.2.5
+  resolution: "@types/text-table@npm:0.2.5"
+  checksum: 4e96313dc25983868d84b75921c6159de569509921234c2c3bc8e2aac7963323f326b07d485d2c38342d5c1e7d2a0a39c2f3996b5f00f57af4b554b5d710f59d
   languageName: node
   linkType: hard
 
@@ -1212,7 +1210,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/eslint-plugin@npm:^5.37.0, @typescript-eslint/eslint-plugin@npm:^5.41.0, @typescript-eslint/eslint-plugin@npm:^5.59.2, @typescript-eslint/eslint-plugin@npm:^5.7.0":
+"@typescript-eslint/eslint-plugin@npm:^5.59.2, @typescript-eslint/eslint-plugin@npm:^5.7.0":
   version: 5.59.5
   resolution: "@typescript-eslint/eslint-plugin@npm:5.59.5"
   dependencies:
@@ -1236,7 +1234,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/parser@npm:^5.37.0, @typescript-eslint/parser@npm:^5.41.0, @typescript-eslint/parser@npm:^5.59.2, @typescript-eslint/parser@npm:^5.7.0":
+"@typescript-eslint/parser@npm:^5.59.2, @typescript-eslint/parser@npm:^5.7.0":
   version: 5.59.5
   resolution: "@typescript-eslint/parser@npm:5.59.5"
   dependencies:
@@ -2608,28 +2606,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"c8@npm:^7.12.0":
-  version: 7.13.0
-  resolution: "c8@npm:7.13.0"
-  dependencies:
-    "@bcoe/v8-coverage": ^0.2.3
-    "@istanbuljs/schema": ^0.1.3
-    find-up: ^5.0.0
-    foreground-child: ^2.0.0
-    istanbul-lib-coverage: ^3.2.0
-    istanbul-lib-report: ^3.0.0
-    istanbul-reports: ^3.1.4
-    rimraf: ^3.0.2
-    test-exclude: ^6.0.0
-    v8-to-istanbul: ^9.0.0
-    yargs: ^16.2.0
-    yargs-parser: ^20.2.9
-  bin:
-    c8: bin/c8.js
-  checksum: 491abf4cf3097cdcfd24dbac49162f1383861c22c77fdd9280bcd38240e1e07d2c6a59da5d4df59a61a8204e2fc297d31fd526e495faf8d2f20dcc12a37b144c
-  languageName: node
-  linkType: hard
-
 "c8@npm:^8.0.0":
   version: 8.0.0
   resolution: "c8@npm:8.0.0"
@@ -2887,6 +2863,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"camelcase@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "camelcase@npm:8.0.0"
+  checksum: 6da7abe997af29e80052f17aa21628c7cce14af364cef9f07a2a44d59614dd6f361d405f121938e673424d673697a8c53ad17be8c4b03b0a727307c4db8b5b5e
+  languageName: node
+  linkType: hard
+
 "caniuse-lite@npm:^1.0.30001449":
   version: 1.0.30001487
   resolution: "caniuse-lite@npm:1.0.30001487"
@@ -2924,21 +2907,6 @@ __metadata:
     pathval: ^1.1.1
     type-detect: ^4.0.5
   checksum: 0bba7d267848015246a66995f044ce3f0ebc35e530da3cbdf171db744e14cbe301ab913a8d07caf7952b430257ccbb1a4a983c570a7c5748dc537897e5131f7c
-  languageName: node
-  linkType: hard
-
-"chai@npm:^4.3.7":
-  version: 4.3.8
-  resolution: "chai@npm:4.3.8"
-  dependencies:
-    assertion-error: ^1.1.0
-    check-error: ^1.0.2
-    deep-eql: ^4.1.2
-    get-func-name: ^2.0.0
-    loupe: ^2.3.1
-    pathval: ^1.1.1
-    type-detect: ^4.0.5
-  checksum: 29e0984ed13308319cadc35437c8ef0a3e271544d226c991bf7e3b6d771bf89707321669e11d05e362bc0ad0bd26585079b989d1032f3c106e3bb95d7f079cce
   languageName: node
   linkType: hard
 
@@ -6736,8 +6704,6 @@ __metadata:
   dependencies:
     "@types/bluebird": ^3.5.37
     "@types/node": ^18.11.8
-    "@typescript-eslint/eslint-plugin": ^5.59.2
-    "@typescript-eslint/parser": ^5.59.2
     abbrev: ^2.0.0
     bluebird: ^3.7.2
     chai: ^4.3.4
@@ -6764,24 +6730,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"hexo-front-matter@npm:4.0.0":
-  version: 4.0.0
-  resolution: "hexo-front-matter@npm:4.0.0"
-  dependencies:
-    js-yaml: ^4.1.0
-  checksum: 4460e631fd45e09b07e36930c124252e96b2e049cbdaef81b470aef14560099289aa2d5a21afbf9a93dfc790b770076897352b2abd2a8d4238f3e8524244c205
-  languageName: node
-  linkType: hard
-
-"hexo-front-matter@workspace:^, hexo-front-matter@workspace:packages/hexo-front-matter":
+"hexo-front-matter@^4.2.1, hexo-front-matter@workspace:^, hexo-front-matter@workspace:packages/hexo-front-matter":
   version: 0.0.0-use.local
   resolution: "hexo-front-matter@workspace:packages/hexo-front-matter"
   dependencies:
     "@types/chai": ^4.3.5
     "@types/js-yaml": ^4.0.5
-    "@types/node": ^18.16.3
-    "@typescript-eslint/eslint-plugin": ^5.41.0
-    "@typescript-eslint/parser": ^5.41.0
+    "@types/node": ^18.11.7
     c8: ^8.0.0
     chai: ^4.3.6
     eslint: ^8.23.1
@@ -6858,8 +6813,6 @@ __metadata:
   dependencies:
     "@types/node": ^18.7.18
     "@types/rewire": ^2.5.28
-    "@typescript-eslint/eslint-plugin": ^5.37.0
-    "@typescript-eslint/parser": ^5.37.0
     chai: ^4.1.2
     eslint: ^8.23.1
     eslint-config-hexo: ^5.0.0
@@ -7039,8 +6992,7 @@ __metadata:
     "@types/mocha": ^10.0.1
     "@types/node": ^18.11.8
     "@types/prismjs": ^1.26.0
-    "@typescript-eslint/eslint-plugin": ^5.41.0
-    "@typescript-eslint/parser": ^5.41.0
+    c8: ^8.0.1
     camel-case: ^4.1.2
     chai: ^4.3.6
     chai-as-promised: ^7.1.1
@@ -7053,7 +7005,6 @@ __metadata:
     html-tag-validator: ^1.6.0
     htmlparser2: ^9.0.0
     mocha: ^10.0.0
-    nyc: ^15.1.0
     prismjs: ^1.29.0
     rewire: ^6.0.0
     strip-indent: ^3.0.0
@@ -7116,20 +7067,18 @@ __metadata:
     "@types/bluebird": ^3.5.37
     "@types/node": ^18.11.8
     "@types/nunjucks": ^3.2.2
-    "@types/sinon": ^10.0.14
-    "@typescript-eslint/eslint-plugin": ^5.41.0
-    "@typescript-eslint/parser": ^5.41.0
+    "@types/text-table": ^0.2.4
     abbrev: ^2.0.0
     archy: ^1.0.0
     bluebird: ^3.7.2
-    c8: ^7.12.0
-    chai: ^4.3.7
+    c8: ^8.0.0
+    chai: ^4.3.6
     cheerio: 0.22.0
     decache: ^4.6.1
     eslint: ^8.48.0
     eslint-config-hexo: ^5.0.0
     hexo-cli: "workspace:^"
-    hexo-front-matter: 4.0.0
+    hexo-front-matter: ^4.2.1
     hexo-fs: ^4.1.1
     hexo-i18n: ^2.0.0
     hexo-log: "workspace:^"
@@ -9803,7 +9752,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^9.0.1":
+"minimatch@npm:^9.0.1, minimatch@npm:^9.0.3":
   version: 9.0.3
   resolution: "minimatch@npm:9.0.3"
   dependencies:
@@ -14368,32 +14317,34 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typedoc-plugin-rename-defaults@npm:^0.6.4":
-  version: 0.6.5
-  resolution: "typedoc-plugin-rename-defaults@npm:0.6.5"
+"typedoc-plugin-rename-defaults@npm:^0.7.0":
+  version: 0.7.0
+  resolution: "typedoc-plugin-rename-defaults@npm:0.7.0"
+  dependencies:
+    camelcase: ^8.0.0
   peerDependencies:
-    typedoc: 0.22.x || 0.23.x || 0.24.x
-  checksum: b5bd3b9030b007175ac5c00e166a813c711ab041c543a6d68bde17c725ba4ff9ca8ea2a29a13728b01d3369203087e44e8cd0eec0f2da9524e1dfe6bc8da1050
+    typedoc: 0.22.x || 0.23.x || 0.24.x || 0.25.x
+  checksum: d5e3e0cdaeb0a0f1f23cd7855def550e1624d5a526801c4ea0cb0eee37d6d6d07f44eb9b4101351beaf019720524a7387c0b374d4e7f8ba43c8f2966647715e0
   languageName: node
   linkType: hard
 
-"typedoc@npm:^0.24.4":
-  version: 0.24.7
-  resolution: "typedoc@npm:0.24.7"
+"typedoc@npm:^0.25.0":
+  version: 0.25.3
+  resolution: "typedoc@npm:0.25.3"
   dependencies:
     lunr: ^2.3.9
     marked: ^4.3.0
-    minimatch: ^9.0.0
+    minimatch: ^9.0.3
     shiki: ^0.14.1
   peerDependencies:
-    typescript: 4.6.x || 4.7.x || 4.8.x || 4.9.x || 5.0.x
+    typescript: 4.6.x || 4.7.x || 4.8.x || 4.9.x || 5.0.x || 5.1.x || 5.2.x
   bin:
     typedoc: bin/typedoc
-  checksum: 9ae433566cb02b96deb9eb2a9f5b23d1b199f5aeb61ca8c7e2653ff5d339fbfb4d526e024febab4f3278332978814aaa0885f1d5925ba21a441d93a611510ac3
+  checksum: 060a8f798b32a0e70aa3b16e04d95b56fcfabf54f75fdff74fd9ddeed8860db3ba030d153f8b535b409a9d8825856252bc59f401619e5e3e2f71d3b9e0de606a
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.2.2":
+"typescript@npm:^5.0.3, typescript@npm:^5.2.2":
   version: 5.2.2
   resolution: "typescript@npm:5.2.2"
   bin:
@@ -14403,7 +14354,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^5.2.2#~builtin<compat/typescript>":
+"typescript@patch:typescript@^5.0.3#~builtin<compat/typescript>, typescript@patch:typescript@^5.2.2#~builtin<compat/typescript>":
   version: 5.2.2
   resolution: "typescript@patch:typescript@npm%3A5.2.2#~builtin<compat/typescript>::version=5.2.2&hash=f3b441"
   bin:
@@ -14953,8 +14904,6 @@ __metadata:
     "@types/node": ^18.11.7
     "@types/sinon": ^10.0.13
     "@types/through2": ^2.0.36
-    "@typescript-eslint/eslint-plugin": ^5.41.0
-    "@typescript-eslint/parser": ^5.41.0
     bluebird: ^3.7.2
     c8: ^8.0.1
     chai: ^4.3.6
@@ -14972,9 +14921,9 @@ __metadata:
     sinon: ^15.0.2
     through2: ^4.0.2
     ts-node: ^10.9.1
-    typedoc: ^0.24.4
-    typedoc-plugin-rename-defaults: ^0.6.4
-    typescript: ^5.2.2
+    typedoc: ^0.25.0
+    typedoc-plugin-rename-defaults: ^0.7.0
+    typescript: ^5.0.3
   languageName: unknown
   linkType: soft
 
