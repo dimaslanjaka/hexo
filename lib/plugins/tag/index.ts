@@ -1,4 +1,5 @@
 import moize from 'moize';
+import Hexo from '../../hexo';
 
 export default (ctx: import('../../hexo')) => {
   const { tag } = ctx.extend;
