@@ -9,12 +9,11 @@
   "editor.formatOnPaste": false,
   "editor.formatOnType": false,
   "editor.codeActionsOnSave": {
-    "source.fixAll": true,
-    "source.organizeImports": false
+    "source.fixAll": "explicit",
+    "source.organizeImports": "never"
   },
   "eslint.lintTask.enable": true,
   "npm.packageManager": "yarn",
-  "eslint.packageManager": "yarn",
   "code-runner.respectShebang": true,
   "code-runner.executorMapByGlob": {
     "*.{test,spec}.{ts,js}": "npx c8 --reporter=lcovonly mocha --timeout=7000000",
