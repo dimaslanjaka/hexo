@@ -6631,7 +6631,7 @@ __metadata:
     chai: ^4.3.6
     eslint: ^8.23.1
     eslint-config-hexo: ^5.0.0
-    husky: 8
+    husky: ^9.0.11
     js-yaml: ^4.1.0
     lint-staged: ^15.2.2
     mocha: ^10.0.0
@@ -6946,7 +6946,7 @@ __metadata:
     hexo-log: "workspace:^"
     hexo-renderer-marked: ^6.0.0
     hexo-util: "workspace:^"
-    husky: 8
+    husky: ^8.0.1
     js-yaml: ^4.1.0
     js-yaml-js-types: ^1.0.0
     lint-staged: ^15.2.0
@@ -7230,12 +7230,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"husky@npm:8":
+"husky@npm:8, husky@npm:^8.0.1":
   version: 8.0.3
   resolution: "husky@npm:8.0.3"
   bin:
     husky: lib/bin.js
   checksum: 837bc7e4413e58c1f2946d38fb050f5d7324c6f16b0fd66411ffce5703b294bd21429e8ba58711cd331951ee86ed529c5be4f76805959ff668a337dbfa82a1b0
+  languageName: node
+  linkType: hard
+
+"husky@npm:^9.0.11":
+  version: 9.0.11
+  resolution: "husky@npm:9.0.11"
+  bin:
+    husky: bin.mjs
+  checksum: 1aebc3334dc7ac6288ff5e1fb72cfb447cfa474e72cf7ba692e8c5698c573ab725c28c6a5088c9f8e6aca5f47d40fa7261beffbc07a4d307ca21656dc4571f07
   languageName: node
   linkType: hard
 
@@ -13458,11 +13467,11 @@ __metadata:
 
 "typescript@patch:typescript@^5.0.3#~builtin<compat/typescript>, typescript@patch:typescript@^5.2.2#~builtin<compat/typescript>, typescript@patch:typescript@^5.3.2#~builtin<compat/typescript>, typescript@patch:typescript@^5.3.3#~builtin<compat/typescript>":
   version: 5.3.3
-  resolution: "typescript@patch:typescript@npm%3A5.3.3#~builtin<compat/typescript>::version=5.3.3&hash=29ae49"
+  resolution: "typescript@patch:typescript@npm%3A5.3.3#~builtin<compat/typescript>::version=5.3.3&hash=e012d7"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: f61375590b3162599f0f0d5b8737877ac0a7bc52761dbb585d67e7b8753a3a4c42d9a554c4cc929f591ffcf3a2b0602f65ae3ce74714fd5652623a816862b610
+  checksum: 4e604a9e107ce0c23b16a2f8d79d0531d4d8fe9ebbb7a8c395c66998c39892f0e0a071ef0b0d4e66420a8ec2b8d6cfd9cdb29ba24f25b37cba072e9282376df9
   languageName: node
   linkType: hard
 
