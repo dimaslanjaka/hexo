@@ -24,7 +24,9 @@ function listArchivesHelper(this: LocalsType, options: Options = {}) {
   const { config } = this;
   const archiveDir = config.archive_dir;
   const { timezone } = config;
-  const lang = toMomentLocale(this.page.lang || this.page.language || config.language);
+  let defaultLang = Array.isArray(config.language) ? config.language[0] || 'en' : 'en';
+  if (defaultLang.length === 0) defaultLang = 'en';
+  const lang = toMomentLocale(this.page.lang || this.page.language || defaultLang);
   let { format } = options;
   const type = options.type || 'monthly';
   const { style = 'list', transform, separator = ', ' } = options;
