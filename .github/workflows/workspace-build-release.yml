@@ -29,6 +29,7 @@ concurrency:
 
 jobs:
   build_win_node14:
+    name: Build Windows Node 14.x
     uses: ./.github/workflows/workspace-builder.yml
     secrets:
       ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
@@ -37,7 +38,7 @@ jobs:
       node-version: 14.x
   test_win_node14:
     needs: build_win_node14
-    name: test
+    name: Test Windows Node 14.x
     uses: ./.github/workflows/workspace-tester.yml
     secrets:
       ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
