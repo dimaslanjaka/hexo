@@ -3,20 +3,19 @@ import Promise from 'bluebird';
 import { readFile, readFileSync } from 'hexo-fs';
 import type Hexo from './index';
 import type { Renderer } from '../extend';
-import type { StoreFunctionData } from '../extend/renderer';
 import { HexoRenderOptions } from './render-d';
+import type { StoreFunction, StoreFunctionData, StoreSyncFunction } from '../extend/renderer';
+import { NodeJSLikeCallback } from '../types';
 
-const getExtname = (str: string) => {
+const getExtname = (str: string): string => {
   if (typeof str !== 'string') return '';
 
   const ext = extname(str);
   return ext.startsWith('.') ? ext.slice(1) : ext;
 };
 
-const toString = (result, options) => {
-  if (!Object.prototype.hasOwnProperty.call(options, 'toString') || typeof result === 'string') {
-    return result;
-  }
+const toString = (result: any, options: StoreFunctionData) => {
+  if (!Object.prototype.hasOwnProperty.call(options, 'toString') || typeof result === 'string') return result;
 
   if (typeof options.toString === 'function') {
     return options.toString(result);
@@ -38,28 +37,29 @@ class Render {
     this.renderer = ctx.extend.renderer;
   }
 
-  isRenderable(path: string) {
+  isRenderable(path: string): boolean {
     return this.renderer.isRenderable(path);
   }
 
-  isRenderableSync(path: string) {
+  isRenderableSync(path: string): boolean {
     return this.renderer.isRenderableSync(path);
   }
 
-  getOutput(path: string) {
+  getOutput(path: string): string {
     return this.renderer.getOutput(path);
   }
 
-  getRenderer(ext: string, sync?: boolean) {
+  getRenderer(ext: string, sync?: boolean): StoreSyncFunction | StoreFunction {
     return this.renderer.get(ext, sync);
   }
 
-  getRendererSync(ext: string) {
+  getRendererSync(ext: string): StoreSyncFunction | StoreFunction {
     return this.getRenderer(ext, true);
   }
 
   render(data: Record<string, any>, options?: HexoRenderOptions, callback?: (...args: any[]) => any): any
-  render(data: StoreFunctionData, options?: { highlight?: boolean; }, callback?: undefined) {
+  // render(data: StoreFunctionData, options?: { highlight?: boolean; }, callback?: undefined) {
+  render(data: StoreFunctionData, options?: { highlight?: boolean; }, callback?: NodeJSLikeCallback<any>): Promise<any> {
     if (!callback && typeof options === 'function') {
       callback = options;
       options = {};
@@ -77,7 +77,7 @@ class Render {
     } else if (!data.path) {
       return Promise.reject(new TypeError('No input file or string!'));
     } else {
-      promise = readFile(data.path);
+      promise = readFile(data.path) as Promise<string>;
     }
 
     return promise

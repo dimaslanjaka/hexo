@@ -16,7 +16,7 @@ try {
   }
 }
 
-function yamlHelper(data: StoreFunctionData) {
+function yamlHelper(data: StoreFunctionData): any {
   return yaml.load(escape(data.text), { schema });
 }
 

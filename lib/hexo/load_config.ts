@@ -8,7 +8,7 @@ import { deepMerge } from 'hexo-util';
 import validateConfig from './validate_config';
 import type Hexo from './index';
 
-export = async (ctx: Hexo) => {
+export = async (ctx: Hexo): Promise<void> => {
   if (!ctx.env.init) return;
 
   const baseDir = ctx.base_dir;
@@ -56,7 +56,7 @@ export = async (ctx: Hexo) => {
     = join(ctx.plugin_dir, 'hexo-theme-' + theme) + sep; // base_dir/node_modules/hexo-theme-[config.theme]/
 
   // themeDirFromThemes has higher priority than themeDirFromNodeModules
-  let ignored = [];
+  let ignored: string[] = [];
   if (await exists(themeDirFromThemes)) {
     // theme applied from theme dir
     ctx.theme_dir = themeDirFromThemes;
@@ -74,7 +74,7 @@ export = async (ctx: Hexo) => {
   ctx.theme = new Theme(ctx, { ignored });
 };
 
-async function findConfigPath(path: string) {
+async function findConfigPath(path: string): Promise<string> {
   const { dir, name } = parse(path);
 
   const files = await readdir(dir);

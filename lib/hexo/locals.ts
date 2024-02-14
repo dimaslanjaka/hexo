@@ -2,7 +2,7 @@ import { Cache } from 'hexo-util';
 import { HexoLocalsData } from './locals-d';
 
 class Locals {
-  public cache: Cache<HexoLocalsData>;
+  public cache: InstanceType<typeof Cache<HexoLocalsData>>;
   public getters: Record<string, HexoLocalsData>;
 
   constructor() {
@@ -30,7 +30,7 @@ class Locals {
     });
   }
 
-  set(name: string, value: any) {
+  set(name: string, value: any): this {
     if (typeof name !== 'string') throw new TypeError('name must be a string!');
     if (value == null) throw new TypeError('value is required!');
 
@@ -42,7 +42,7 @@ class Locals {
     return this;
   }
 
-  remove(name: string) {
+  remove(name: string): this {
     if (typeof name !== 'string') throw new TypeError('name must be a string!');
 
     this.getters[name] = null;
@@ -55,7 +55,7 @@ class Locals {
    * invalidate cache
    * @returns
    */
-  invalidate() {
+  invalidate(): this {
     this.cache.flush();
 
     return this;

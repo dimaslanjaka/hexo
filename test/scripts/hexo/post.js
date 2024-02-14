@@ -12,7 +12,7 @@ const escapeSwigTag = str => str.replace(/{/g, '&#123;').replace(/}/g, '&#125;')
 describe('Post', () => {
   const Hexo = require('../../../dist/hexo');
   const hexo = new Hexo(join(__dirname, 'post_test'));
-  require('../../../lib/plugins/highlight/')(hexo);
+  require('../../../dist/plugins/highlight/')(hexo);
   const { post } = hexo;
   const now = Date.now();
   let clock;
@@ -1370,13 +1370,48 @@ describe('Post', () => {
     hexo.config.syntax_highlighter = 'highlight.js';
   });
 
-  it('render() - doubled brackets in codeblock', async () => {
-    const content = '`build-${{ hashFiles(\'package-lock.json\') }}`';
+  // https://github.com/hexojs/hexo/issues/5301
+  it('render() - dont escape uncomplete tags', async () => {
+    const content = 'dont drop `{% }` 11111 `{# }` 22222 `{{ }` 33333';
 
     const data = await post.render(null, {
       content,
       engine: 'markdown'
     });
-    data.content.trim().should.eql('<p><code>build-$&#123;&#123; hashFiles(\'package-lock.json\') &#125;&#125;</code></p>');
+
+    data.content.should.contains('11111');
+    data.content.should.contains('22222');
+    data.content.should.contains('33333');
+    data.content.should.not.contains('&#96;'); // `
+  });
+
+  it('render() - uncomplete tags throw error', async () => {
+    const content = 'nunjucks should thorw {#  } error';
+
+    try {
+      await post.render(null, {
+        content,
+        engine: 'markdown'
+      });
+      should.fail();
+    } catch (err) {}
+  });
+
+  // https://github.com/hexojs/hexo/issues/5401
+  it('render() - tags in different lines', async () => {
+    const content = [
+      '{% link',
+      'foobar',
+      'https://hexo.io/',
+      'tttitle',
+      '%}'
+    ].join('\n');
+
+    const data = await post.render(null, {
+      content,
+      engine: 'markdown'
+    });
+
+    data.content.should.eql('<a href="https://hexo.io/" title="tttitle" target="">foobar</a>');
   });
 });

@@ -4,7 +4,7 @@ import yml from 'js-yaml';
 import { deepMerge } from 'hexo-util';
 import type Hexo from './index';
 
-export = (ctx: Hexo) => function multiConfigPath(base: string, configPaths: string, outputDir: string) {
+export = (ctx: Hexo) => function multiConfigPath(base: string, configPaths: string, outputDir: string): string {
   const { log } = ctx;
   const defaultPath = join(base, '_config.yml');
 
@@ -43,7 +43,8 @@ export = (ctx: Hexo) => function multiConfigPath(base: string, configPaths: stri
     }
 
     // files read synchronously to ensure proper overwrite order
-    const file = readFileSync(configPath).toString();
+    let file = readFileSync(configPath);
+    if (Buffer.isBuffer(file)) file = file.toString();
     const ext = extname(paths[i]).toLowerCase();
 
     if (ext === '.yml') {

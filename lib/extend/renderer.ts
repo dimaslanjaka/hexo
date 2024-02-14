@@ -1,5 +1,6 @@
 import { extname } from 'path';
 import Promise from 'bluebird';
+import type { NodeJSLikeCallback } from '../types';
 
 const getExtname = (str: string) => {
   if (typeof str !== 'string') return '';
@@ -22,7 +23,7 @@ export interface StoreFunctionData {
   text?: string;
   engine?: string;
   toString?: any;
-  onRenderEnd?: any;
+  onRenderEnd?: (...args: any[]) => any;
 }
 
 export interface StoreSyncFunction {
@@ -30,7 +31,7 @@ export interface StoreSyncFunction {
   (
     data: StoreFunctionData,
     options: object,
-    // callback: NodeJSLikeCallback<string>
+    // callback?: NodeJSLikeCallback<string>
   ): any;
   output?: string;
   compile?: (local: object) => any;
@@ -39,6 +40,7 @@ export interface StoreFunction {
   (
     data: StoreFunctionData,
     options: object,
+    callback?: NodeJSLikeCallback<any>
   ): Promise<any>;
   (
     data: StoreFunctionData,
@@ -66,7 +68,7 @@ class Renderer {
     this.storeSync = {};
   }
 
-  list(sync: boolean): Store | SyncStore {
+  list(sync = false): Store | SyncStore {
     return sync ? this.storeSync : this.store;
   }
 
@@ -146,7 +148,6 @@ class Renderer {
       this.storeSync[name].output = output;
 
       this.store[name] = Promise.method(fn);
-      // eslint-disable-next-line no-extra-parens
       this.store[name].disableNunjucks = (fn as StoreFunction).disableNunjucks;
     } else {
       if (fn.length > 2) fn = Promise.promisify(fn);

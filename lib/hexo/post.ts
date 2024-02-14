@@ -8,6 +8,8 @@ import { slugize, escapeRegExp } from 'hexo-util';
 import { copyDir, exists, listDir, mkdirs, readFile, rmdir, unlink, writeFile } from 'hexo-fs';
 import { parse as yfmParse, split as yfmSplit, stringify as yfmStringify } from 'hexo-front-matter';
 import type Hexo from './index';
+import type { NodeJSLikeCallback, PostSchema, RenderData } from '../types';
+
 const preservedKeys = ['title', 'slug', 'path', 'layout', 'date', 'content'];
 
 const rHexoPostRenderEscape
@@ -68,6 +70,9 @@ class PostRenderEscape {
    * @returns string
    */
   escapeAllSwigTags(str: string) {
+    if (!/(\{\{.+?\}\})|(\{#.+?#\})|(\{%.+?%\})/s.test(str)) {
+      return str;
+    }
     let state = STATE_PLAINTEXT;
     let buffer = '';
     let output = '';
@@ -86,6 +91,7 @@ class PostRenderEscape {
       if (state === STATE_PLAINTEXT) {
         // From plain text to swig
         if (char === '{') {
+          // check if it is a complete tag {{ }}
           if (next_char === '{') {
             state = STATE_SWIG_VAR;
             idx++;
@@ -250,22 +256,6 @@ interface Result {
   content?: string;
 }
 
-interface Data {
-  [key: string]: any;
-  engine?: string;
-  content?: string | null;
-  disableNunjucks?: boolean;
-  markdown?: Record<string, any>;
-  source?: string;
-}
-
-interface PostData {
-  title?: string;
-  layout?: string;
-  slug?: string;
-  path?: string;
-  [prop: string]: any;
-}
 
 class Post {
   public context: Hexo;
@@ -274,9 +264,9 @@ class Post {
     this.context = context;
   }
 
-  create(data: PostData, callback?: NodeJSLikeCallback<any>);
-  create(data: PostData, replace: boolean, callback?: NodeJSLikeCallback<any>);
-  create(data: PostData, replace: boolean | (NodeJSLikeCallback<any>), callback?: NodeJSLikeCallback<any>) {
+  create(data: PostSchema, callback?: NodeJSLikeCallback<any>);
+  create(data: PostSchema, replace: boolean, callback?: NodeJSLikeCallback<any>);
+  create(data: PostSchema, replace: boolean | (NodeJSLikeCallback<any>), callback?: NodeJSLikeCallback<any>) {
     if (!callback && typeof replace === 'function') {
       callback = replace;
       replace = false;
@@ -324,7 +314,7 @@ class Post {
     });
   }
 
-  _renderScaffold(data: PostData) {
+  _renderScaffold(data: PostSchema) {
     const { tag } = this.context.extend;
     let splitted;
 
@@ -366,7 +356,7 @@ class Post {
     });
   }
 
-  publish(data: PostData, replace: boolean, callback?: NodeJSLikeCallback<Result>) {
+  publish(data: PostSchema, replace: boolean, callback?: NodeJSLikeCallback<Result>) {
     if (!callback && typeof replace === 'function') {
       callback = replace;
       replace = false;
@@ -446,7 +436,7 @@ class Post {
    */
   render(
     source: string | null | undefined,
-    data: Data,
+    data: RenderData,
     callback?: (
       err: any,
       rendered: {
@@ -465,7 +455,7 @@ class Post {
       excerpt: string;
     }>
   ): any
-  render(source: string, data: Data = {}, callback?: NodeJSLikeCallback<never>) {
+  render(source: string, data: RenderData = {}, callback?: NodeJSLikeCallback<never>) {
     const ctx = this.context;
     const { config } = ctx;
     const { tag } = ctx.extend;

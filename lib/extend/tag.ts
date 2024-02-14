@@ -2,6 +2,8 @@ import { stripIndent } from 'hexo-util';
 import { cyan, magenta, red, bold } from 'picocolors';
 import { Environment } from 'nunjucks';
 import Promise from 'bluebird';
+import type { NodeJSLikeCallback } from '../types';
+
 const rSwigRawFullBlock = /{% *raw *%}/;
 const rCodeTag = /<code[^<>]*>[\s\S]+?<\/code>/g;
 const escapeSwigTag = (str: string) => str.replace(/{/g, '&#123;').replace(/}/g, '&#125;');
@@ -25,7 +27,8 @@ interface ExtendedTagProperty {
 type TagFunction =
   | ((this: ExtendedTagProperty, arg: string) => string)
   | ((this: ExtendedTagProperty, ...args: any[]) => string)
-  | ((this: ExtendedTagProperty, args: any[], content: string) => string);
+  | ((this: ExtendedTagProperty, args: any[], content: string) => string)
+  | ((args: any[], content: string, callback?: NodeJSLikeCallback<any>)=> string | PromiseLike<string>);
 
 /**
  * asynchronous callback - shortcode tag
@@ -36,7 +39,7 @@ type TagFunction =
  * type content = Parameters<Parameters<typeof hexo.extend.tag.register>[1]>[1];
  */
 type AsyncTagFunction =
-  | ((this: ExtendedTagProperty, arg: string) => PromiseLike<string> | Promise<string>)
+  | ((this: ExtendedTagProperty, content: string) => PromiseLike<string> | Promise<string>)
   | ((this: ExtendedTagProperty, ...args: any[]) => PromiseLike<string> | Promise<string>)
   | ((this: ExtendedTagProperty, args: any[], content: string) => PromiseLike<string> | Promise<string>);
 
@@ -336,14 +339,17 @@ class Tag {
 
   render(str: string, options: { source?: string }): Promise<string>;
   render(str: string, options: { source?: string }, callback?: (err: any, result: string) => any): Promise<any>
-  render(str: string, options: { source?: string } = {}, callback?: NodeJSLikeCallback<any>): Promise<any> {
+  render(str: string): Promise<any>;
+  render(str: string, callback: NodeJSLikeCallback<any>): Promise<any>;
+  render(str: string, options: { source?: string, [key: string]: any }, callback?: NodeJSLikeCallback<any>): Promise<any>;
+  render(str: string, options: { source?: string, [key: string]: any } | NodeJSLikeCallback<any> = {}, callback?: NodeJSLikeCallback<any>): Promise<any> {
     if (!callback && typeof options === 'function') {
       callback = options;
       options = {};
     }
 
     // Get path of post from source
-    const { source = '' } = options;
+    const { source = '' } = options as { source?: string };
 
     return Promise.fromCallback(cb => {
       this.env.renderString(

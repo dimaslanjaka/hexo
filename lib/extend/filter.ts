@@ -12,6 +12,7 @@ interface FilterOptions {
   args?: any[];
 }
 
+
 interface StoreFunction {
   (data?: any, ...args: any[]): any;
   priority?: number;
@@ -92,7 +93,7 @@ class Filter {
     if (index !== -1) list.splice(index, 1);
   }
 
-  exec(type: string, data: any[], options: FilterOptions = {}): Promise<any> {
+  exec(type: string, data: any, options: FilterOptions = {}): Promise<any> {
     const filters = this.list(type);
     if (filters.length === 0) return Promise.resolve(data);
 
@@ -109,7 +110,7 @@ class Filter {
     ).then(() => args[0]);
   }
 
-  execSync(type: string, data: any[], options: FilterOptions = {}) {
+  execSync(type: string, data: any, options: FilterOptions = {}) {
     const filters = this.list(type);
     const filtersLen = filters.length;
     if (filtersLen === 0) return data;
