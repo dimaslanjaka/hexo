@@ -9,15 +9,6 @@ const getExtname = (str: string) => {
   return ext.startsWith('.') ? ext.slice(1) : ext;
 };
 
-/**
- * to cast `data` type look example below
- * @example
- * type rendererData = Parameters<Parameters<typeof hexo.extend.renderer.register>[2]>[0];
- * // or
- * type rendererData = Parameters<Parameters<import('hexo')['extend']['renderer']['register']>[2]>[0];
- * // or
- * type rendererData = import('hexo/extend/renderer-d.ts').StoreFunctionData;
- */
 export interface StoreFunctionData {
   path?: any;
   text?: string;

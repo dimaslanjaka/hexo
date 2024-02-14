@@ -25,8 +25,8 @@ class Processor {
 
   register(fn: StoreFunction): void;
   register(pattern: patternType, fn: StoreFunction): void;
-  register(pattern: patternType | StoreFunction, fn?: StoreFunction) {
-    if (typeof fn !== 'function') {
+  register(pattern: patternType | StoreFunction, fn?: StoreFunction): void {
+    if (!fn) {
       if (typeof pattern === 'function') {
         fn = pattern as StoreFunction;
         pattern = /(.*)/;

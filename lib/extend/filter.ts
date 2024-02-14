@@ -36,8 +36,6 @@ class Filter {
     return this.store[type] || [];
   }
 
-  register(fn: StoreFunction): void;
-  register(fn: StoreFunction, priority: number): void;
   register(type: string, fn: StoreFunction): void;
   register(
     type: 'server_middleware',
@@ -52,11 +50,11 @@ class Filter {
     fn: (data: extend_filter_before_post_render_data) => Promise<void>
   ): void;
   register(type: string, fn: StoreFunction, priority: number): void;
-  register(
-    type: string | StoreFunction,
-    fn?: StoreFunction | number,
-    priority?: number
-  ) {
+  register(fn: StoreFunction): void
+  register(fn: StoreFunction, priority: number): void
+  register(type: string, fn: StoreFunction): void
+  register(type: string, fn: StoreFunction, priority: number): void
+  register(type: string | StoreFunction, fn?: StoreFunction | number, priority?: number): void {
     if (!priority) {
       if (typeof type === 'function') {
         priority = fn as number;
