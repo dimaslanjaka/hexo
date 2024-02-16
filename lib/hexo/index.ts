@@ -796,7 +796,7 @@ class Hexo extends EventEmitter {
    * @param err
    * @returns
    */
-  exit(err: Error): Promise<void> {
+  exit(err?: Error): Promise<void> {
     if (err) {
       this.log.fatal(
         { err },
