@@ -1,6 +1,6 @@
 import type Hexo from '../../../hexo';
 
-function saveDatabaseFilter(this: Hexo): Promise<void> {
+function saveDatabaseFilter(this: Hexo): Promise<void> | undefined {
   if (!this.env.init || !this._dbLoaded) return;
 
   return this.database.save().then(() => {
