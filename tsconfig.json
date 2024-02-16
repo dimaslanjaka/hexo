@@ -6,8 +6,14 @@
     "outDir": "dist",
     "declaration": true,
     "esModuleInterop": true,
-    "lib": ["ES2019"]
+    "types": [
+      "node"
+    ]
   },
-  "include": ["lib", "test"],
-  "exclude": ["node_modules", "**/.tmp*", "dist"]
+  "include": [
+    "lib/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
