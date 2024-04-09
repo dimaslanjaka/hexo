@@ -119,7 +119,7 @@ describe('Box', () => {
     const box = newBox('test');
     const name = 'a.txt';
     const path = join(box.base, name);
-    const cacheId = 'test/' + name;
+    const cacheId = join('test/', name);
 
     const processor = spy();
     box.addProcessor(processor);
@@ -143,7 +143,7 @@ describe('Box', () => {
     const box = newBox('test');
     const name = 'a.txt';
     const path = join(box.base, name);
-    const cacheId = 'test/' + name;
+    const cacheId = join('test/', name);
 
     const processor = spy();
     box.addProcessor(processor);
@@ -166,7 +166,7 @@ describe('Box', () => {
     const box = newBox('test');
     const name = 'a.txt';
     const path = join(box.base, name);
-    const cacheId = 'test/' + name;
+    const cacheId = join('test/', name);
 
     const processor = spy();
     box.addProcessor(processor);
@@ -189,7 +189,7 @@ describe('Box', () => {
     const box = newBox('test');
     const name = 'a.txt';
     const path = join(box.base, name);
-    const cacheId = 'test/' + name;
+    const cacheId = join('test/', name);
 
     const processor = spy();
     box.addProcessor(processor);
@@ -210,7 +210,8 @@ describe('Box', () => {
 
   it('process() - delete', async () => {
     const box = newBox('test');
-    const cacheId = 'test/a.txt';
+    // join will replace backslashes on Windows
+    const cacheId = join('test/', 'a.txt');
 
     const processor = spy();
     box.addProcessor(processor);
