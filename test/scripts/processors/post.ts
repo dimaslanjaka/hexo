@@ -117,7 +117,7 @@ describe('post', () => {
     });
 
     await process(file);
-    const id = join('source/', file.path);
+    const id = 'source/' + file.path;
     should.not.exist(PostAsset.findById(id));
   });
 
@@ -140,7 +140,7 @@ describe('post', () => {
     const postId = doc._id;
     await process(file);
 
-    const id = join('source/', file.path);
+    const id = 'source/' + file.path;
     const asset = PostAsset.findById(id);
 
     asset._id.should.eql(id);
@@ -164,7 +164,7 @@ describe('post', () => {
       renderable: false
     });
 
-    const id = join('source/', file.path);
+    const id = 'source/' + file.path;
 
     const post = await Post.insert({
       source: '_posts/foo.html',
@@ -199,7 +199,7 @@ describe('post', () => {
       renderable: false
     });
 
-    const id = join('source/', file.path);
+    const id = 'source/' + file.path;
 
     const post = await Post.insert({
       source: '_posts/foo.html',
@@ -234,7 +234,7 @@ describe('post', () => {
       renderable: false
     });
 
-    const id = join('source/', file.path);
+    const id = 'source/' + file.path;
 
     const post = await Post.insert({
       source: '_posts/foo.html',
@@ -264,7 +264,7 @@ describe('post', () => {
       renderable: false
     });
 
-    const id = join('source/', file.path);
+    const id = 'source/' + file.path;
 
     const post = await Post.insert({
       source: '_posts/foo.html',
@@ -289,7 +289,7 @@ describe('post', () => {
       renderable: false
     });
 
-    const id = join('source/', file.path);
+    const id = 'source/' + file.path;
 
     await writeFile(file.source, 'test');
     await process(file);
@@ -308,7 +308,7 @@ describe('post', () => {
       renderable: false
     });
 
-    const id = join('source/', file.path);
+    const id = 'source/' + file.path;
 
     await BluebirdPromise.all([
       writeFile(file.source, 'test'),
@@ -1060,7 +1060,7 @@ describe('post', () => {
       '_fizz.jpg',
       '_buzz.jpg'
     ].map(filename => {
-      const id = join('source/_posts/foo/', filename);
+      const id = `source/_posts/foo/${filename}`;
       const path = join(hexo.base_dir, id);
       const contents = filename.replace(/\.\w+$/, '');
       return {
@@ -1116,8 +1116,7 @@ describe('post', () => {
       renderable: true
     });
 
-    // join will replace backslashes on Windows
-    const assetId = join('source/_posts/foo/', 'bar.jpg');
+    const assetId = 'source/_posts/foo/bar.jpg';
     const assetPath = join(hexo.base_dir, assetId);
 
     await BluebirdPromise.all([
@@ -1217,8 +1216,7 @@ describe('post', () => {
       renderable: true
     });
 
-    // join will replace backslashes on Windows
-    const assetId = join('source/_posts/foo/', 'bar.jpg');
+    const assetId = 'source/_posts/foo/bar.jpg';
     const assetPath = join(hexo.base_dir, assetId);
 
     await BluebirdPromise.all([
@@ -1256,8 +1254,7 @@ describe('post', () => {
       renderable: true
     });
 
-    // join will replace backslashes on Windows
-    const assetId = join('source/_posts/foo/', 'bar.jpg');
+    const assetId = 'source/_posts/foo/bar.jpg';
     const assetPath = join(hexo.base_dir, assetId);
 
     await BluebirdPromise.all([
@@ -1434,7 +1431,7 @@ describe('post', () => {
       writeFile(assetFile.source, 'test')
     ]);
     await process(file);
-    const id = join('source/', assetFile.path);
+    const id = 'source/' + assetFile.path;
     const post = Post.findOne({ source: file.path });
     PostAsset.findById(id).renderable.should.be.true;
 
@@ -1470,7 +1467,7 @@ describe('post', () => {
       writeFile(assetFile.source, 'test')
     ]);
     await process(file);
-    const id = join('source/', assetFile.path);
+    const id = 'source/' + assetFile.path;
     const post = Post.findOne({ source: file.path });
     PostAsset.findById(id).renderable.should.be.false;
 
