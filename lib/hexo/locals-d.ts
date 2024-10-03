@@ -1,4 +1,4 @@
-import { Config } from './index-d';
+import type { Config } from './index-d';
 export type HexoLocalsFunc = import('../hexo')['_generateLocals'];
 export type HexoLocalsData = {
   [key: string]: any;
