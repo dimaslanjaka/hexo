@@ -63,7 +63,7 @@ interface njkRenderer extends FunctionConstructor {
   compile: (data: { path?: any; text?: any }) => (locals: Record<string, any>) => string;
 }
 
-function njkRenderer(data: StoreFunctionData, locals: object): string {
+function njkRenderer(data: StoreFunctionData, locals: Record<string, any>): string {
   return njkCompile(data).render(locals);
 }
 

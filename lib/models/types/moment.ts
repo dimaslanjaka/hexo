@@ -16,7 +16,7 @@ class SchemaTypeMoment extends warehouse.SchemaType<moment.Moment> {
     super(name, options);
   }
 
-  cast(value, data) {
+  cast(value?, data?) {
     value = super.cast(value, data);
     if (value == null) return value;
 
@@ -29,7 +29,7 @@ class SchemaTypeMoment extends warehouse.SchemaType<moment.Moment> {
     return value;
   }
 
-  validate(value, data) {
+  validate(value, data?) {
     value = super.validate(value, data);
     if (value == null) return value;
 
@@ -46,7 +46,7 @@ class SchemaTypeMoment extends warehouse.SchemaType<moment.Moment> {
     return value ? value.valueOf() === query.valueOf() : false;
   }
 
-  compare(a, b) {
+  compare(a?, b?) {
     if (a) {
       if (b) return a - b;
       return 1;
@@ -56,7 +56,7 @@ class SchemaTypeMoment extends warehouse.SchemaType<moment.Moment> {
     return 0;
   }
 
-  parse(value) {
+  parse(value?) {
     if (value) return toMoment(value);
   }
 
