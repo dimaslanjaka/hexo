@@ -1,7 +1,7 @@
-import nunjucks, { Environment } from 'nunjucks';
 import { readFileSync } from 'hexo-fs';
+import nunjucks, { Environment } from 'nunjucks';
 import { dirname } from 'path';
-import type { StoreFunctionData } from '../../extend/renderer';
+import type { StoreFunctionData } from '../../extend/renderer-d';
 
 function toArray(value: any) {
   if (Array.isArray(value)) {
@@ -37,23 +37,25 @@ const nunjucksCfg = {
   lstripBlocks: false
 };
 
-const nunjucksAddFilter = (env: nunjucks.Environment) => {
+const nunjucksAddFilter = (env: Environment): void => {
   env.addFilter('toarray', toArray);
   env.addFilter('safedump', safeJsonStringify);
 };
 
-function njkCompile(data: { path?: any; text?: any; }) {
-  let env: nunjucks.Environment;
-  if (typeof data.path === 'string') {
+function njkCompile(data: StoreFunctionData): nunjucks.Template {
+  let env: Environment;
+  if (data.path) {
     env = nunjucks.configure(dirname(data.path), nunjucksCfg);
   } else {
     env = nunjucks.configure(nunjucksCfg);
   }
   nunjucksAddFilter(env);
 
-  const text = 'text' in data ? data.text : readFileSync(data.path);
+  const text = 'text' in data ? data.text : readFileSync(data.path).toString();
 
-  return nunjucks.compile(text, env, data.path);
+  // return nunjucks.compile(text, env, data.path);
+  if (data.path) console.log('njkCompile', data.path);
+  return nunjucks.compile(text, env);
 }
 
 // function with internal exported function needs interface to detect from IDE
@@ -63,13 +65,13 @@ interface njkRenderer extends FunctionConstructor {
   compile: (data: { path?: any; text?: any }) => (locals: Record<string, any>) => string;
 }
 
-function njkRenderer(data: StoreFunctionData, locals: Record<string, any>): string {
+function njkRenderer(data: StoreFunctionData, locals?: any): string {
   return njkCompile(data).render(locals);
 }
 
-njkRenderer.compile = (data: StoreFunctionData): (locals: any) => string => {
+njkRenderer.compile = (data: StoreFunctionData): ((locals: any) => string) => {
   // Need a closure to keep the compiled template.
-  return (locals: Record<string, any>) => njkCompile(data).render(locals);
+  return locals => njkCompile(data).render(locals);
 };
 
 export = njkRenderer;
