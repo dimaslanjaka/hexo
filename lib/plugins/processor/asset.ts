@@ -3,10 +3,9 @@ import { parse as yfm } from 'hexo-front-matter';
 import { Pattern } from 'hexo-util';
 import { extname, relative } from 'path';
 import { magenta } from 'picocolors';
-import { isExcludedFile, isMatch, timezone, toDate } from './common';
 import type { _File } from '../../box';
 import type Hexo from '../../hexo';
-import type { Stats } from 'fs';
+import { isExcludedFile, isMatch, timezone, toDate } from './common';
 
 export = (ctx: Hexo) => {
   return {
@@ -51,8 +50,10 @@ function processPage(ctx: Hexo, file: _File) {
   return Promise.all([
     file.stat(),
     file.read()
-  ]).spread((stats: Stats, content: string) => {
-    const data = yfm(content);
+  ]).then(results => {
+    const stats = results[0];
+    const content = results[1];
+    const data = yfm(content, {});
     const output = ctx.render.getOutput(path);
 
     data.source = path;

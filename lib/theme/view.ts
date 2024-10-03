@@ -2,9 +2,9 @@ import Promise from 'bluebird';
 import { parse as yfm } from 'hexo-front-matter';
 import { dirname, extname, join } from 'path';
 import type Theme from '.';
+import type { Helper } from '../extend';
 import type Render from '../hexo/render';
 import type { NodeJSLikeCallback } from '../types';
-import type { Helper } from '../extend';
 
 const assignIn = (target: any, ...sources: any[]) => {
   const length = sources.length;
