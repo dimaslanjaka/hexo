@@ -78,7 +78,7 @@ class Render {
     } else if (!data.path) {
       return Promise.reject(new TypeError('No input file or string!'));
     } else {
-      promise = readFile(data.path) as Promise<string>;
+      promise = readFile(data.path);
     }
 
     return promise
@@ -120,7 +120,7 @@ class Render {
 
     if (data.text == null) {
       if (!data.path) throw new TypeError('No input file or string!');
-      data.text = readFileSync(data.path) as string;
+      data.text = readFileSync(data.path);
     }
 
     if (data.text == null) throw new TypeError('No input file or string!');

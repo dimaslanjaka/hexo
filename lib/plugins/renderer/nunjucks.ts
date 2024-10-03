@@ -53,7 +53,7 @@ function njkCompile(data: StoreFunctionData): nunjucks.Template {
 
   const text = 'text' in data ? data.text : readFileSync(data.path);
 
-  return nunjucks.compile(text as string, env, data.path);
+  return nunjucks.compile(text, env, data.path);
 }
 
 // function with internal exported function needs interface to detect from IDE
