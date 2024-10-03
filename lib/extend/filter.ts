@@ -12,7 +12,6 @@ interface FilterOptions {
   args?: any[];
 }
 
-
 interface StoreFunction {
   (data?: any, ...args: any[]): any;
   priority?: number;
@@ -37,23 +36,14 @@ class Filter {
   }
 
   register(type: string, fn: StoreFunction): void;
-  register(
-    type: 'server_middleware',
-    fn: (app: import('connect').Server) => void
-  ): void;
-  register(
-    type: 'before_post_render',
-    fn: (data: extend_filter_before_post_render_data) => void
-  ): void;
-  register(
-    type: 'before_post_render',
-    fn: (data: extend_filter_before_post_render_data) => Promise<void>
-  ): void;
+  register(type: 'server_middleware', fn: (app: import('connect').Server) => void): void;
+  register(type: 'before_post_render', fn: (data: extend_filter_before_post_render_data) => void): void;
+  register(type: 'before_post_render', fn: (data: extend_filter_before_post_render_data) => Promise<void>): void;
   register(type: string, fn: StoreFunction, priority: number): void;
-  register(fn: StoreFunction): void
-  register(fn: StoreFunction, priority: number): void
-  register(type: string, fn: StoreFunction): void
-  register(type: string, fn: StoreFunction, priority: number): void
+  register(fn: StoreFunction): void;
+  register(fn: StoreFunction, priority: number): void;
+  register(type: string, fn: StoreFunction): void;
+  register(type: string, fn: StoreFunction, priority: number): void;
   register(type: string | StoreFunction, fn?: StoreFunction | number, priority?: number): void {
     if (!priority) {
       if (typeof type === 'function') {
