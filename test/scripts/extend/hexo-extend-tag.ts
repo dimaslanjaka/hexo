@@ -9,7 +9,8 @@ import { htmlTag } from 'hexo-util';
  * Syntax:
  *   {% vimeo video_id %}
  */
-export function vimeoTag(id: string) {
+export function vimeoTag(args: any[]) {
+  const id = args[0];
   const src = 'https://player.vimeo.com/video/' + id;
 
   const iframeTag = htmlTag(
