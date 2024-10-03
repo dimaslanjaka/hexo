@@ -56,7 +56,7 @@ let resolveSync; // = require('resolve');
 const libDir = dirname(__dirname);
 const dbVersion = 1;
 
-const stopWatcher = (box: Box) => {
+const stopWatcher = (box: Box | Theme | Source) => {
   if (box.isWatching()) box.unwatch();
 };
 
@@ -66,8 +66,7 @@ const castArray = (obj: any) => {
   return Array.isArray(obj) ? obj : [obj];
 };
 
-// eslint-disable-next-line no-use-before-define
-const mergeCtxThemeConfig = (ctx: Hexo) => {
+const mergeCtxThemeConfig = (ctx: import('.')) => {
   // Merge hexo.config.theme_config into hexo.theme.config before post rendering & generating
   // config.theme_config has "_config.[theme].yml" merged in load_theme_config.js
   if (ctx.config.theme_config) {
