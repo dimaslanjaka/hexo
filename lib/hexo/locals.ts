@@ -1,9 +1,9 @@
 import { Cache } from 'hexo-util';
-import { HexoLocalsData } from './locals-d';
+import { HexoLocalsData, HexoLocalsFunc } from './locals-d';
 
 class Locals {
   public cache: InstanceType<typeof Cache<HexoLocalsData>>;
-  public getters: Record<string, HexoLocalsData>;
+  public getters: Record<string, HexoLocalsData | HexoLocalsFunc>;
   public page: any;
   public path: string;
 

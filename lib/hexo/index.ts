@@ -39,6 +39,7 @@ import type {
   SiteLocals
 } from '../types';
 import defaultConfig from './default_config';
+import { Args, Config, Env, Extend, Query } from './index-d';
 import loadDatabase from './load_database';
 import Locals from './locals';
 import { HexoLocalsData } from './locals-d';
@@ -49,7 +50,6 @@ import Render from './render';
 import Router from './router';
 import Scaffold from './scaffold';
 import Source from './source';
-import { Args, Config, Env, Extend, Query } from './index-d';
 
 let resolveSync; // = require('resolve');
 
