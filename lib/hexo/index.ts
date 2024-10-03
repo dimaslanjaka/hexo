@@ -49,6 +49,7 @@ import Render from './render';
 import Router from './router';
 import Scaffold from './scaffold';
 import Source from './source';
+import { Args, Config, Env, Extend, Query } from './index-d';
 
 let resolveSync; // = require('resolve');
 
@@ -129,54 +130,6 @@ function debounce(func: () => void, wait: number): () => void {
       func.apply(this);
     }, wait);
   };
-}
-
-// Node.js internal APIs used in Hexo.loadPlugin
-interface Args {
-  debug?: boolean;
-  safe?: boolean;
-  silent?: boolean;
-  draft?: boolean;
-  drafts?: boolean;
-  _?: string[];
-  output?: string;
-  config?: string;
-  [key: string]: any;
-}
-
-interface Query {
-  date?: any;
-  published?: boolean;
-}
-
-interface Extend {
-  console: Console;
-  deployer: Deployer;
-  filter: Filter;
-  generator: Generator;
-  helper: Helper;
-  highlight: Highlight;
-  injector: Injector;
-  migrator: Migrator;
-  processor: Processor;
-  renderer: Renderer;
-  tag: Tag;
-}
-
-interface Env {
-  args: Args;
-  debug: boolean;
-  safe: boolean;
-  silent: boolean;
-  env: string;
-  version: string;
-  cmd: string;
-  init: boolean;
-}
-
-type DefaultConfigType = typeof defaultConfig;
-interface Config extends DefaultConfigType {
-  [key: string]: any;
 }
 
 // Node.js internal APIs
