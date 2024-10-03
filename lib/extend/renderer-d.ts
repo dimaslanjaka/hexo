@@ -4,6 +4,9 @@ export interface StoreFunctionData {
   engine?: string;
   onRenderEnd?: (content: string) => string | Promise<string>;
 }
+export type RenderCompile = (
+  local: Record<string, any>
+) => string | ((local: Record<string, any>) => (...args: any[]) => string);
 export interface StoreSyncFunction {
   (
     data: StoreFunctionData,
@@ -11,14 +14,14 @@ export interface StoreSyncFunction {
     // callback: (err: Error, value: string) => any
   ): any;
   output?: string;
-  compile?: (local: Record<string, any>) => string;
+  compile?: RenderCompile;
   disableNunjucks?: boolean;
 }
 export interface StoreFunction {
   (data: StoreFunctionData, options: object): Promise<any>;
   (data: StoreFunctionData, options: object, callback: (err: Error, value: string) => any): void;
   output?: string;
-  compile?: (local: Record<string, any>) => string;
+  compile?: RenderCompile;
   disableNunjucks?: boolean;
 }
 
