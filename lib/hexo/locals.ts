@@ -4,6 +4,8 @@ import { HexoLocalsData } from './locals-d';
 class Locals {
   public cache: InstanceType<typeof Cache<HexoLocalsData>>;
   public getters: Record<string, HexoLocalsData>;
+  public page: any;
+  public path: string;
 
   constructor() {
     this.cache = new Cache<HexoLocalsData>();
@@ -30,7 +32,7 @@ class Locals {
     });
   }
 
-  set(name: string, value: any): this {
+  set(name: string, value: any) {
     if (typeof name !== 'string') throw new TypeError('name must be a string!');
     if (value == null) throw new TypeError('value is required!');
 
@@ -42,7 +44,7 @@ class Locals {
     return this;
   }
 
-  remove(name: string): this {
+  remove(name: string) {
     if (typeof name !== 'string') throw new TypeError('name must be a string!');
 
     this.getters[name] = null;
