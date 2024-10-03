@@ -1,10 +1,8 @@
 import Promise from 'bluebird';
 import { parse as yfm } from 'hexo-front-matter';
 import { dirname, extname, join } from 'path';
-import type Theme from '.';
 import type { Helper } from '../extend';
 import type Render from '../hexo/render';
-import type { NodeJSLikeCallback } from '../types';
 import { HexoRenderOptions } from '../hexo/render-d';
 
 const assignIn = (target: any, ...sources: any[]) => {
@@ -27,16 +25,16 @@ class Options {
 }
 
 class View {
-  public path: string;
-  public source: string;
-  public _theme: Theme;
-  public data: any;
+  public path: any;
+  public source: any;
+  public _theme: any;
+  public data: ReturnType<typeof yfm>;
   public _compiled: any;
   public _compiledSync: any;
   public _helper: Helper;
   public _render: Render;
 
-  constructor(path: string, data: any) {
+  constructor(path: string, data: string | ReturnType<typeof yfm>) {
     this.path = path;
     this.source = join(this._theme.base, 'layout', path);
     this.data = typeof data === 'string' ? yfm(data, {}) : data;
@@ -99,7 +97,7 @@ class View {
     });
   }
 
-  _bindHelpers(locals: { [x: string]: any; }) {
+  _bindHelpers(locals: { [x: string]: any }) {
     const helpers = this._helper.list();
     const keys = Object.keys(helpers);
 
