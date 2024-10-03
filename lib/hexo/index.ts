@@ -1,13 +1,14 @@
 import Promise from 'bluebird';
 import { EventEmitter } from 'events';
 import { readFile } from 'hexo-fs';
-import Module from 'module';
-import { runInThisContext } from 'vm';
 import logger from 'hexo-log';
+import Module from 'module';
 import { dirname, join, sep } from 'path';
 import { magenta, underline } from 'picocolors';
 import tildify from 'tildify';
+import { runInThisContext } from 'vm';
 import Database from 'warehouse';
+import { version } from '../../package.json';
 import {
   Console,
   Deployer,
@@ -21,36 +22,48 @@ import {
   Renderer,
   Tag
 } from '../extend';
-const { version } = require('../../package.json');
 
+import { deepMerge, full_url_for } from 'hexo-util';
+import type Schema from 'warehouse/dist/schema';
+import type { AddSchemaTypeOptions } from 'warehouse/dist/types';
+import type Box from '../box';
+import Theme from '../theme';
+import type {
+  AssetGenerator,
+  LocalsType,
+  NodeJSLikeCallback,
+  NormalPageGenerator,
+  NormalPostGenerator,
+  PageGenerator,
+  PostGenerator,
+  SiteLocals
+} from '../types';
 import defaultConfig from './default_config';
+import loadDatabase from './load_database';
+import Locals from './locals';
 import { HexoLocalsData } from './locals-d';
+import multiConfigPath from './multi_config_path';
 import Post from './post';
 import registerModels from './register_models';
 import Render from './render';
+import Router from './router';
 import Scaffold from './scaffold';
 import Source from './source';
-import Router from './router';
-import Theme from '../theme';
-import Locals from './locals';
-import loadDatabase from './load_database';
-import multiConfigPath from './multi_config_path';
-import { deepMerge, full_url_for } from 'hexo-util';
-import type Box from '../box';
-import type { AssetGenerator, LocalsType, NodeJSLikeCallback, NormalPageGenerator, NormalPostGenerator, PageGenerator, PostGenerator, SiteLocals } from '../types';
-import type { AddSchemaTypeOptions } from 'warehouse/dist/types';
-import type Schema from 'warehouse/dist/schema';
 
 let resolveSync; // = require('resolve');
 
 const libDir = dirname(__dirname);
 const dbVersion = 1;
 
-const stopWatcher = (box: Box) => { if (box.isWatching()) box.unwatch(); };
+const stopWatcher = (box: Box) => {
+  if (box.isWatching()) box.unwatch();
+};
 
 const routeCache = new WeakMap();
 
-const castArray = (obj: any) => { return Array.isArray(obj) ? obj : [obj]; };
+const castArray = (obj: any) => {
+  return Array.isArray(obj) ? obj : [obj];
+};
 
 // eslint-disable-next-line no-use-before-define
 const mergeCtxThemeConfig = (ctx: Hexo) => {
@@ -61,8 +74,12 @@ const mergeCtxThemeConfig = (ctx: Hexo) => {
   }
 };
 
-// eslint-disable-next-line no-use-before-define
-const createLoadThemeRoute = function(generatorResult: NormalPageGenerator | NormalPostGenerator|HexoLocalsData, locals: LocalsType, ctx: Hexo) {
+const createLoadThemeRoute = function(
+  generatorResult: NormalPageGenerator | NormalPostGenerator,
+  locals: LocalsType,
+  // eslint-disable-next-line no-use-before-define
+  ctx: Hexo
+) {
   const { log, theme } = ctx;
   const { path, cache: useCache } = locals;
 
@@ -72,9 +89,7 @@ const createLoadThemeRoute = function(generatorResult: NormalPageGenerator | Nor
   // always use cache in fragment_cache
   locals.cache = true;
   return () => {
-    if (useCache && routeCache.has(generatorResult)) {
-      return routeCache.get(generatorResult);
-    }
+    if (useCache && routeCache.has(generatorResult)) return routeCache.get(generatorResult);
 
     for (let i = 0; i < layoutLength; i++) {
       const name = layout[i];
@@ -135,17 +150,17 @@ interface Query {
 }
 
 interface Extend {
-  console: Console,
-  deployer: Deployer,
-  filter: Filter,
-  generator: Generator,
-  helper: Helper,
-  highlight: Highlight,
-  injector: Injector,
-  migrator: Migrator,
-  processor: Processor,
-  renderer: Renderer,
-  tag: Tag
+  console: Console;
+  deployer: Deployer;
+  filter: Filter;
+  generator: Generator;
+  helper: Helper;
+  highlight: Highlight;
+  injector: Injector;
+  migrator: Migrator;
+  processor: Processor;
+  renderer: Renderer;
+  tag: Tag;
 }
 
 interface Env {
@@ -169,88 +184,6 @@ declare module 'module' {
   function _nodeModulePaths(path: string): string[];
   function _resolveFilename(request: string, parent: Module, isMain?: any, options?: any): string;
   const _extensions: NodeJS.RequireExtensions, _cache: any;
-}
-
-declare interface Hexo {
-
-  /**
-   * Emitted before deployment begins.
-   * @param event
-   * @param listener
-   * @link https://hexo.io/api/events.html#deployBefore
-   */
-  on(event: 'deployBefore', listener: (...args: any[]) => any): this;
-
-  /**
-   * Emitted after deployment begins.
-   * @param event
-   * @param listener
-   * @link https://hexo.io/api/events.html#deployAfter
-   */
-  on(event: 'deployAfter', listener: (...args: any[]) => any): this;
-
-  /**
-   * Emitted before Hexo exits.
-   * @param event
-   * @param listener
-   * @link https://hexo.io/api/events.html#exit
-   */
-  on(event: 'exit', listener: (...args: any[]) => any): this;
-
-  /**
-   * Emitted before generation begins.
-   * @param event
-   * @param listener
-   * @link https://hexo.io/api/events.html#generateBefore
-   */
-  on(event: 'generateBefore', listener: (...args: any[]) => any): this;
-
-  /**
-   * Emitted after generation finishes.
-   * @param event
-   * @param listener
-   * @link https://hexo.io/api/events.html#generateAfter
-   */
-  on(event: 'generateAfter', listener: (...args: any[]) => any): this;
-
-  /**
-   * Emitted after a new post has been created. This event returns the post data:
-   * @param event
-   * @param listener
-   * @link https://hexo.io/api/events.html#new
-   */
-  on(event: 'new', listener: (post: { path: string; content: string; }) => any): this;
-
-  /**
-   * Emitted before processing begins. This event returns a path representing the root directory of the box.
-   * @param event
-   * @param listener
-   * @link https://hexo.io/api/events.html#processBefore
-   */
-  on(event: 'processBefore', listener: (...args: any[]) => any): this;
-
-  /**
-   * Emitted after processing finishes. This event returns a path representing the root directory of the box.
-   * @param event
-   * @param listener
-   * @link https://hexo.io/api/events.html#processAfter
-   */
-  on(event: 'processAfter', listener: (...args: any[]) => any): this;
-
-  /**
-   * Emitted after initialization finishes.
-   * @param event
-   * @param listener
-   */
-  on(event: 'ready', listener: (...args: any[]) => any): this;
-
-  /**
-   * undescripted on emit
-   * @param event
-   * @param listener
-   */
-  on(event: string, listener: (...args: any[]) => any): any;
-  emit(event: string, ...args: any[]): any;
 }
 
 interface Hexo {
@@ -301,7 +234,7 @@ interface Hexo {
    * @param listener
    * @link https://hexo.io/api/events.html#new
    */
-  on(event: 'new', listener: (post: { path: string; content: string; }) => any): this;
+  on(event: 'new', listener: (post: { path: string; content: string }) => any): this;
 
   /**
    * Emitted before processing begins. This event returns a path representing the root directory of the box.
@@ -538,12 +471,12 @@ class Hexo extends EventEmitter {
     name: string,
     args:
       | {
-        [key: string]: any;
-        _?: string[];
-      }
+          [key: string]: any;
+          _?: string[];
+        }
       | ((...args: any[]) => any),
     callback?: (...args: any[]) => any
-  ): any
+  ): any;
   call(name: string, callback?: NodeJSLikeCallback<any>): Promise<any>;
   call(name: string, args: object, callback?: NodeJSLikeCallback<any>): Promise<any>;
   call(name: string, args?: object | NodeJSLikeCallback<any>, callback?: NodeJSLikeCallback<any>): Promise<any> {
@@ -589,28 +522,29 @@ class Hexo extends EventEmitter {
    * hexo.loadPlugin(require.resolve('hexo-renderer-marked'));
    */
   loadPlugin(path: string, callback?: NodeJSLikeCallback<any>): Promise<any> {
-    return readFile(path).then(script => {
-      // Based on: https://github.com/nodejs/node-v0.x-archive/blob/v0.10.33/src/node.js#L516
-      const module = new Module(path);
-      module.filename = path;
-      module.paths = Module._nodeModulePaths(path);
+    return readFile(path)
+      .then(script => {
+        // Based on: https://github.com/nodejs/node-v0.x-archive/blob/v0.10.33/src/node.js#L516
+        const module = new Module(path);
+        module.filename = path;
+        module.paths = Module._nodeModulePaths(path);
 
-      function req(path: string) {
-        return module.require(path);
-      }
+        function req(path: string) {
+          return module.require(path);
+        }
 
-      req.resolve = (request: string) => Module._resolveFilename(request, module);
+        req.resolve = (request: string) => Module._resolveFilename(request, module);
 
-      req.main = require.main;
-      req.extensions = Module._extensions;
-      req.cache = Module._cache;
+        req.main = require.main;
+        req.extensions = Module._extensions;
+        req.cache = Module._cache;
 
-      script = `(async function(exports, require, module, __filename, __dirname, hexo){${script}\n});`;
+        script = `(async function(exports, require, module, __filename, __dirname, hexo){${script}\n});`;
 
-      const fn = runInThisContext(script, path);
+        const fn = runInThisContext(script, path);
 
-      return fn(module.exports, req, module, path, dirname(path), this);
-    })
+        return fn(module.exports, req, module, path, dirname(path), this);
+      })
       .asCallback(callback);
   }
 
@@ -626,11 +560,12 @@ class Hexo extends EventEmitter {
    * @returns
    */
   load(callback?: NodeJSLikeCallback<any>): Promise<any> {
-    return loadDatabase(this).then(() => {
-      this.log.info('Start processing');
+    return loadDatabase(this)
+      .then(() => {
+        this.log.info('Start processing');
 
-      return Promise.all([this.source.process(), this.theme.process()]);
-    })
+        return Promise.all([this.source.process(), this.theme.process()]);
+      })
       .then(() => {
         mergeCtxThemeConfig(this);
         return this._generate({ cache: false });
@@ -737,39 +672,53 @@ class Hexo extends EventEmitter {
     }, []);
   }
 
-  _routerRefresh(runningGenerators: Promise<(AssetGenerator | PostGenerator | PageGenerator)[]>, useCache: boolean): Promise<void> {
+  _routerRefresh(
+    runningGenerators: Promise<(AssetGenerator | PostGenerator | PageGenerator)[]>,
+    useCache: boolean
+  ): Promise<void> {
     const { route } = this;
     const routeList = route.list();
     const Locals = this._generateLocals();
     Locals.prototype.cache = useCache;
 
-    return runningGenerators.map((generatorResult: AssetGenerator | PostGenerator | PageGenerator) => {
-      if (typeof generatorResult !== 'object' || generatorResult.path == null) return undefined;
+    return runningGenerators
+      .map((generatorResult: AssetGenerator | PostGenerator | PageGenerator) => {
+        if (typeof generatorResult !== 'object' || generatorResult.path == null) return undefined;
 
-      // add Route
-      const path = route.format(generatorResult.path);
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const { data, layout } = generatorResult;
+        // add Route
+        const path = route.format(generatorResult.path);
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        const { data, layout } = generatorResult;
 
-      if (!layout) {
-        route.set(path, data);
-        return path;
-      }
-
-      return this.execFilter('template_locals', new Locals(path, data as unknown as NormalPageGenerator | NormalPostGenerator), { context: this })
-        .then((locals: LocalsType) => { route.set(path, createLoadThemeRoute(generatorResult as NormalPageGenerator | NormalPostGenerator, locals, this)); })
-        .thenReturn(path);
-    }).then(newRouteList => {
-      // Remove old routes
-      for (let i = 0, len = routeList.length; i < len; i++) {
-        const item = routeList[i];
-
-        if (!newRouteList.includes(item)) {
-          route.remove(item);
+        if (!layout) {
+          route.set(path, data);
+          return path;
         }
-      }
-    });
+
+        return this.execFilter(
+          'template_locals',
+          new Locals(path, data as unknown as NormalPageGenerator | NormalPostGenerator),
+          { context: this }
+        )
+          .then((locals: LocalsType) => {
+            route.set(
+              path,
+              createLoadThemeRoute(generatorResult as NormalPageGenerator | NormalPostGenerator, locals, this)
+            );
+          })
+          .thenReturn(path);
+      })
+      .then(newRouteList => {
+        // Remove old routes
+        for (let i = 0, len = routeList.length; i < len; i++) {
+          const item = routeList[i];
+
+          if (!newRouteList.includes(item)) {
+            route.remove(item);
+          }
+        }
+      });
   }
 
   _generate(options: { cache?: boolean } = {}): Promise<any> {
@@ -783,7 +732,8 @@ class Hexo extends EventEmitter {
 
     // Run before_generate filters
     return this.execFilter('before_generate', null, { context: this })
-      .then(() => this._routerRefresh(this._runGenerators(), useCache)).then(() => {
+      .then(() => this._routerRefresh(this._runGenerators(), useCache))
+      .then(() => {
         this.emit('generateAfter');
 
         // Run after_generate filters
@@ -802,7 +752,7 @@ class Hexo extends EventEmitter {
    * @param err
    * @returns
    */
-  exit(err?: Error): Promise<void> {
+  exit(err?: any): Promise<void> {
     if (err) {
       this.log.fatal(
         { err },
@@ -816,13 +766,11 @@ class Hexo extends EventEmitter {
     });
   }
 
-  execFilter(...args: any[]): any;
-  execFilter(type: string, data: any, options?: Record<string, any>) {
+  execFilter(type: string, data: any, options?) {
     return this.extend.filter.exec(type, data, options);
   }
 
-  execFilterSync(...args: any[]): any;
-  execFilterSync(type: string, data: any, options?: Record<string, any>) {
+  execFilterSync(type: string, data: any, options?) {
     return this.extend.filter.execSync(type, data, options);
   }
 }
