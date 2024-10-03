@@ -12,10 +12,6 @@
       "mocha"
     ]
   },
-  "include": [
-    "lib/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["lib/**/*.ts"],
+  "exclude": ["node_modules", "**/.tmp*", "dist"]
 }
