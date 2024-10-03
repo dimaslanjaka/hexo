@@ -184,13 +184,13 @@ const formatNunjucksError = (err: Error, input: string, source = ''): Error => {
   if (isNaN(errLine)) return err;
 
   // trim useless info from Nunjucks Error
-  const splitted = err.message.split('\n');
+  const splited = err.message.split('\n');
 
   const e = new NunjucksError();
   e.name = 'Nunjucks Error';
   e.line = errLine;
-  e.location = splitted[0];
-  e.type = splitted[1].trim();
+  e.location = splited[0];
+  e.type = splited[1].trim();
   e.message = getContext(input.split(/\r?\n/), errLine, e.location, e.type).join('\n');
   return e;
 };
@@ -205,7 +205,7 @@ type RegisterOptions = {
  */
 class Tag {
   public env: Environment;
-  public source: string;
+  public source: any;
 
   constructor() {
     this.env = new Environment(null, {
