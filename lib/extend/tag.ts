@@ -3,7 +3,7 @@ import { cyan, magenta, red, bold } from 'picocolors';
 import { Environment } from 'nunjucks';
 import Promise from 'bluebird';
 import type { NodeJSLikeCallback } from '../types';
-import { AsyncTagFunction, TagFunction } from './tag-d';
+import { AsyncTagFunction, RegisterOptions, TagFunction } from './tag-d';
 
 const rSwigRawFullBlock = /{% *raw *%}/;
 const rCodeTag = /<code[^<>]*>[\s\S]+?<\/code>/g;
@@ -53,7 +53,7 @@ class NunjucksTag {
     return node;
   }
 
-  run(context, args, _body, _callback) {
+  run(context: any, args: any, _body: any, _callback: any) {
     return this._run(context, args, '');
   }
 
@@ -163,9 +163,9 @@ class NunjucksError extends Error {
 
 /**
  * Provide context for Nunjucks error
- * @param err Nunjucks error
- * @param input string input for Nunjucks
- * @return  New error object with embedded context
+ * @param  {Error}    err Nunjucks error
+ * @param  {string}   input string input for Nunjucks
+ * @return {Error}    New error object with embedded context
  */
 const formatNunjucksError = (err: Error, input: string, source = ''): Error => {
   err.message = err.message.replace('(unknown path)', source ? magenta(source) : '');
@@ -176,29 +176,20 @@ const formatNunjucksError = (err: Error, input: string, source = ''): Error => {
   if (isNaN(errLine)) return err;
 
   // trim useless info from Nunjucks Error
-  const splited = err.message.split('\n');
+  const splitted = err.message.split('\n');
 
   const e = new NunjucksError();
   e.name = 'Nunjucks Error';
   e.line = errLine;
-  e.location = splited[0];
-  e.type = splited[1].trim();
+  e.location = splitted[0];
+  e.type = splitted[1].trim();
   e.message = getContext(input.split(/\r?\n/), errLine, e.location, e.type).join('\n');
   return e;
 };
 
-type RegisterOptions = {
-  async?: boolean;
-  ends?: boolean;
-};
-
-interface RegisterAsyncOptions extends RegisterOptions {
-  async: boolean;
-}
-
 class Tag {
   public env: Environment;
-  public source: any;
+  public source: string;
 
   constructor() {
     this.env = new Environment(null, {
@@ -209,116 +200,43 @@ class Tag {
   /**
    * register shortcode tag
    * @param name shortcode tag name
-   * @param fn shortcode tag function
+   * @param fn shortcode tag function (synchronous or asynchronous)
    */
-  register(name: string, fn: TagFunction): void;
-
-  /**
-   * register shortcode tag with RegisterOptions.ends boolean directly
-   * @param name shortcode tag name
-   * @param fn callback shortcode tag
-   * @param ends use endblock
-   */
-  register(name: string, fn: TagFunction, ends: boolean): void;
+  register(name: string, fn: TagFunction | AsyncTagFunction): void;
 
   /**
    * register shortcode tag with synchronous function callback
    * @param name shortcode tag name
    * @param fn synchronous function callback
-   * @param options register options
+   * @param endsOrOptions register options or use endblock
    */
-  register(name: string, fn: TagFunction, options: RegisterOptions): void;
-
-  /**
-   * register shortcode tag with synchronous function callback
-   * @param name shortcode tag name
-   * @param fn synchronous function callback
-   * @param options register options
-   */
-  register(name: string, fn: TagFunction, options: { async: false; ends?: boolean }): void;
+  register(name: string, fn: TagFunction, endsOrOptions: RegisterOptions | boolean): void;
 
   /**
    * register shortcode tag with asynchronous function callback
    * @param name shortcode tag name
    * @param fn asynchronous function callback
-   * @param options register options
+   * @param endsOrOptions register options
    */
-  register(
-    name: string,
-    fn: AsyncTagFunction,
-    options: { async: true; ends?: boolean } | { async: true; ends: boolean }
-  ): void;
-
-  /**
-   * register shortcode tag
-   * @param name shortcode tag name
-   * @param fn asynchronous or synchronous function callback
-   * @param ends add support for end tag
-   * @example
-   * without ends
-   * ```html
-   * {% youtube video_id [type] [cookie] %}
-   * ```
-   *
-   * using ends
-   * ```nunjucks
-   * {% blockquote [author[, source]] [link] [source_link_title] %}
-   * content
-   * {% endblockquote %}
-   * ```
-   */
-  register(name: string, fn: TagFunction, ends: boolean): void;
-  register(name: string, fn: TagFunction): void;
-
-  /**
-   * register shortcode tag with RegisterOptions.ends boolean directly
-   * @param name shortcode tag name
-   * @param fn callback shortcode tag
-   * @param ends use endblock
-   */
-  register(name: string, fn: TagFunction, ends: boolean): void;
+  register(name: string, fn: AsyncTagFunction, endsOrOptions: RegisterOptions | boolean): void;
 
   /**
    * register shortcode tag with synchronous function callback
    * @param name shortcode tag name
    * @param fn synchronous function callback
-   * @param options register options
+   * @param endsOrOptions register options
    */
-  register(name: string, fn: TagFunction, options: RegisterOptions): void;
-
-  /**
-   * register shortcode tag
-   * @param name shortcode tag name
-   * @param fn shortcode tag function (synchronous or asynchronous)
-   * @param endsOrOptions either a boolean indicating end tag support, or options with more configurations
-   */
-  register(
-    name: string,
-    fn: TagFunction | AsyncTagFunction,
-    endsOrOptions?: boolean | RegisterOptions | { async: boolean; ends?: boolean }
-  ): void;
-
-  /**
-   * register shortcode tag
-   * @param name shortcode tag name
-   * @param fn asynchronous or synchronous function callback
-   * @param options register options
-   */
-  register(
-    name: string,
-    fn: TagFunction | AsyncTagFunction,
-    options?: RegisterOptions | RegisterAsyncOptions | boolean
-  ): void {
+  register(name: string, fn: TagFunction | AsyncTagFunction, endsOrOptions?: RegisterOptions | boolean): void {
     if (!name) throw new TypeError('name is required');
     if (typeof fn !== 'function') throw new TypeError('fn must be a function');
 
-    if (options == null || typeof options === 'boolean') {
-      options = { ends: options as boolean };
+    if (endsOrOptions == null || typeof endsOrOptions === 'boolean') {
+      endsOrOptions = { ends: endsOrOptions as boolean };
     }
 
     let tag: NunjucksTag;
 
-    if (options.async) {
+    if (endsOrOptions.async) {
       let asyncFn: AsyncTagFunction;
       if (fn.length > 2) {
         asyncFn = Promise.promisify(fn);
@@ -326,12 +244,12 @@ class Tag {
         asyncFn = Promise.method(fn);
       }
 
-      if (options.ends) {
+      if (endsOrOptions.ends) {
         tag = new NunjucksAsyncBlock(name, asyncFn);
       } else {
         tag = new NunjucksAsyncTag(name, asyncFn);
       }
-    } else if (options.ends) {
+    } else if (endsOrOptions.ends) {
       tag = new NunjucksBlock(name, fn);
     } else {
       tag = new NunjucksTag(name, fn);
@@ -340,10 +258,6 @@ class Tag {
     this.env.addExtension(name, tag);
   }
 
-  /**
-   * unregister shortcode tag
-   * @param name shortcode tag name
-   */
   unregister(name: string): void {
     if (!name) throw new TypeError('name is required');
 
@@ -352,12 +266,17 @@ class Tag {
     if (env.hasExtension(name)) env.removeExtension(name);
   }
 
-  render(str: string, options: { source?: string }): Promise<string>;
-  render(str: string, callback: NodeJSLikeCallback<any, string> | NodeJSLikeCallback<any>): Promise<any>;
+  render(str: string): Promise<any>;
+  render(str: string, callback: NodeJSLikeCallback<any>): Promise<any>;
   render(
     str: string,
-    options: { source?: string; [key: string]: any } | NodeJSLikeCallback<any, string> | NodeJSLikeCallback<any> = {},
-    callback?: NodeJSLikeCallback<any, string> | NodeJSLikeCallback<any>
+    options: { source?: string; [key: string]: any },
+    callback?: NodeJSLikeCallback<any>
+  ): Promise<any>;
+  render(
+    str: string,
+    options: { source?: string; [key: string]: any } | NodeJSLikeCallback<any> = {},
+    callback?: NodeJSLikeCallback<any>
   ): Promise<any> {
     if (!callback && typeof options === 'function') {
       callback = options;

@@ -33,3 +33,13 @@ export type AsyncTagFunction =
   | ((this: ExtendedTagProperty, content: string) => PromiseLike<string> | Promise<string>)
   | ((this: ExtendedTagProperty, ...args: any[]) => PromiseLike<string> | Promise<string>)
   | ((this: ExtendedTagProperty, args: any[], content: string) => PromiseLike<string> | Promise<string>);
+
+export type RegisterOptions = {
+  async?: boolean;
+  ends?: boolean;
+};
+
+export interface RegisterAsyncOptions extends RegisterOptions {
+  async: boolean;
+}
+
