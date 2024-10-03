@@ -1,6 +1,12 @@
 name: Commenter
 
-on: [pull_request_target]
+on:
+  pull_request_target:
+
+  workflow_run:
+    workflows: ["Benchmark"]
+    types:
+      - completed
 
 permissions:
   contents: read
