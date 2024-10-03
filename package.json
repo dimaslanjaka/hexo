@@ -9,6 +9,7 @@
     "prepublishOnly": "npm install && npm run clean && npm run build",
     "build": "tsc --build tsconfig.build.json",
     "clean": "tsc --build tsconfig.build.json --clean",
+    "build:watch": "tsc --build tsconfig.build.json --watch",
     "eslint": "eslint lib test",
     "pretest": "npm run clean && npm run build",
     "test": "mocha --timeout=700000 test/index.js --require ts-node/register",
