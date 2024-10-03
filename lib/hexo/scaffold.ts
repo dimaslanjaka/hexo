@@ -46,25 +46,25 @@ class Scaffold {
       }));
   }
 
-  _getScaffold(name: string): Promise<{
-    name: string;
-    path: string;
-  }> {
-    return this._listDir().then(list => list.find(item => item.name === name));
+  _getScaffold(name) {
+    return this._listDir().then(list =>
+      list.find(item => item.name === name)
+    );
   }
 
-  get(name: string, callback?: NodeJSLikeCallback<any>): Promise<string> {
-    return this._getScaffold(name).then(item => {
-      if (item) {
-        return readFile(item.path);
-      }
+  get(name, callback?: NodeJSLikeCallback<any>) {
+    return this._getScaffold(name)
+      .then(item => {
+        if (item) {
+          return readFile(item.path);
+        }
 
-      return this.defaults[name];
-    })
+        return this.defaults[name];
+      })
       .asCallback(callback);
   }
 
-  set(name: string, content: any, callback?: NodeJSLikeCallback<void>): Promise<void> {
+  set(name, content, callback?: NodeJSLikeCallback<any>) {
     const { scaffoldDir } = this;
 
     return this._getScaffold(name)
@@ -77,12 +77,13 @@ class Scaffold {
       .asCallback(callback);
   }
 
-  remove(name: string, callback?: NodeJSLikeCallback<void>): Promise<void> {
-    return this._getScaffold(name).then(item => {
-      if (!item) return;
+  remove(name, callback?: NodeJSLikeCallback<any>) {
+    return this._getScaffold(name)
+      .then(item => {
+        if (!item) return;
 
-      return unlink(item.path);
-    })
+        return unlink(item.path);
+      })
       .asCallback(callback);
   }
 }

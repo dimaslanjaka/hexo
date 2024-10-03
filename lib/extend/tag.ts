@@ -201,7 +201,7 @@ class NunjucksError extends Error {
  * @param input string input for Nunjucks
  * @return  New error object with embedded context
  */
-const formatNunjucksError = (err: Error, input: string, source = ''): Error => {
+const formatNunjucksError = (err, input, source = '') => {
   err.message = err.message.replace('(unknown path)', source ? magenta(source) : '');
 
   const match = err.message.match(/Line (\d+), Column \d+/);
@@ -302,6 +302,21 @@ class Tag {
    * ```
    */
   register(name: string, fn: TagFunction, ends: boolean): void;
+  register(name: string, fn: TagFunction): void;
+  register(name: string, fn: TagFunction, ends: boolean): void;
+  register(name: string, fn: TagFunction, options: RegisterOptions): void;
+
+  /**
+   * register shortcode tag
+   * @param name shortcode tag name
+   * @param fn shortcode tag function (synchronous or asynchronous)
+   * @param endsOrOptions either a boolean indicating end tag support, or options with more configurations
+   */
+  register(
+    name: string,
+    fn: TagFunction | AsyncTagFunction,
+    endsOrOptions?: boolean | RegisterOptions | { async: boolean; ends?: boolean }
+  ): void;
 
   /**
    * register shortcode tag
@@ -309,7 +324,11 @@ class Tag {
    * @param fn asynchronous or synchronous function callback
    * @param options register options
    */
-  register(name: string, fn: TagFunction | AsyncTagFunction, options?: RegisterOptions | RegisterAsyncOptions | boolean): void {
+  register(
+    name: string,
+    fn: TagFunction | AsyncTagFunction,
+    options?: RegisterOptions | RegisterAsyncOptions | boolean
+  ): void {
     if (!name) throw new TypeError('name is required');
     if (typeof fn !== 'function') throw new TypeError('fn must be a function');
 
@@ -355,7 +374,11 @@ class Tag {
 
   render(str: string, options: { source?: string }): Promise<string>;
   render(str: string, callback: NodeJSLikeCallback<any, string> | NodeJSLikeCallback<any>): Promise<any>;
-  render(str: string, options: { source?: string, [key: string]: any } | NodeJSLikeCallback<any, string> | NodeJSLikeCallback<any> = {}, callback?: NodeJSLikeCallback<any, string> | NodeJSLikeCallback<any>): Promise<any> {
+  render(
+    str: string,
+    options: { source?: string; [key: string]: any } | NodeJSLikeCallback<any, string> | NodeJSLikeCallback<any> = {},
+    callback?: NodeJSLikeCallback<any, string> | NodeJSLikeCallback<any>
+  ): Promise<any> {
     if (!callback && typeof options === 'function') {
       callback = options;
       options = {};
