@@ -1,6 +1,7 @@
 import Filter from '../../../lib/extend/filter';
 import { spy } from 'sinon';
 import chai from 'chai';
+import { StoreFunction } from '../../../lib/extend/renderer-d';
 const should = chai.should();
 
 describe('Filter', () => {
@@ -106,8 +107,8 @@ describe('Filter', () => {
       return data + 'bar';
     });
 
-    f.register('test', filter1);
-    f.register('test', filter2);
+    f.register('test', filter1 as unknown as StoreFunction);
+    f.register('test', filter2 as unknown as StoreFunction);
 
     const data = await f.exec('test', '');
     filter1.calledOnce.should.be.true;
@@ -129,8 +130,8 @@ describe('Filter', () => {
       data.bar = 2;
     });
 
-    f.register('test', filter1);
-    f.register('test', filter2);
+    f.register('test', filter1 as unknown as StoreFunction);
+    f.register('test', filter2 as unknown as StoreFunction);
 
     const data = await f.exec('test', {});
     filter1.calledOnce.should.be.true;
@@ -152,8 +153,8 @@ describe('Filter', () => {
       arg2.should.eql(2);
     });
 
-    f.register('test', filter1);
-    f.register('test', filter2);
+    f.register('test', filter1 as unknown as StoreFunction);
+    f.register('test', filter2 as unknown as StoreFunction);
 
     await f.exec('test', {}, {
       args: [1, 2]
@@ -192,8 +193,8 @@ describe('Filter', () => {
       return data + 'bar';
     });
 
-    f.register('test', filter1);
-    f.register('test', filter2);
+    f.register('test', filter1 as unknown as StoreFunction);
+    f.register('test', filter2 as unknown as StoreFunction);
 
     f.execSync('test', '').should.eql('foobar');
     filter1.calledOnce.should.be.true;
@@ -214,8 +215,8 @@ describe('Filter', () => {
       data.bar = 2;
     });
 
-    f.register('test', filter1);
-    f.register('test', filter2);
+    f.register('test', filter1 as unknown as StoreFunction);
+    f.register('test', filter2 as unknown as StoreFunction);
 
     f.execSync('test', {}).should.eql({foo: 1, bar: 2});
     filter1.calledOnce.should.be.true;
@@ -236,8 +237,8 @@ describe('Filter', () => {
       arg2.should.eql(2);
     });
 
-    f.register('test', filter1);
-    f.register('test', filter2);
+    f.register('test', filter1 as unknown as StoreFunction);
+    f.register('test', filter2 as unknown as StoreFunction);
 
     f.execSync('test', {}, {
       args: [1, 2]
