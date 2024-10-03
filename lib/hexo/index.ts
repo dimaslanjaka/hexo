@@ -27,6 +27,7 @@ import { deepMerge, full_url_for } from 'hexo-util';
 import type Schema from 'warehouse/dist/schema';
 import type { AddSchemaTypeOptions } from 'warehouse/dist/types';
 import type Box from '../box';
+import { FilterOptions } from '../extend/filter-d';
 import Theme from '../theme';
 import type {
   AssetGenerator,
@@ -50,7 +51,6 @@ import Render from './render';
 import Router from './router';
 import Scaffold from './scaffold';
 import Source from './source';
-import { FilterOptions } from '../extend/filter-d';
 
 let resolveSync; // = require('resolve');
 
