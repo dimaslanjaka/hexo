@@ -11,14 +11,14 @@ export interface StoreSyncFunction {
     // callback: (err: Error, value: string) => any
   ): any;
   output?: string;
-  compile?: (local: object) => string;
+  compile?: (local: Record<string, any>) => string;
   disableNunjucks?: boolean;
 }
 export interface StoreFunction {
   (data: StoreFunctionData, options: object): Promise<any>;
   (data: StoreFunctionData, options: object, callback: (err: Error, value: string) => any): void;
   output?: string;
-  compile?: (local: object) => string;
+  compile?: (local: Record<string, any>) => string;
   disableNunjucks?: boolean;
 }
 

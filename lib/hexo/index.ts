@@ -630,12 +630,12 @@ class Hexo extends EventEmitter {
       page: NormalPageGenerator | NormalPostGenerator;
       path: string;
       url: string;
-      config: any;
-      theme: any;
+      config: Config;
+      theme: Record<string, any>;
       layout: string;
       env: any;
       view_dir: string;
-      site: SiteLocals;
+      site: Record<string, any>;
       cache?: boolean;
 
       constructor(path: string, locals: NormalPageGenerator | NormalPostGenerator) {
