@@ -303,7 +303,21 @@ class Tag {
    */
   register(name: string, fn: TagFunction, ends: boolean): void;
   register(name: string, fn: TagFunction): void;
+
+  /**
+   * register shortcode tag with RegisterOptions.ends boolean directly
+   * @param name shortcode tag name
+   * @param fn callback shortcode tag
+   * @param ends use endblock
+   */
   register(name: string, fn: TagFunction, ends: boolean): void;
+
+  /**
+   * register shortcode tag with synchronous function callback
+   * @param name shortcode tag name
+   * @param fn synchronous function callback
+   * @param options register options
+   */
   register(name: string, fn: TagFunction, options: RegisterOptions): void;
 
   /**
