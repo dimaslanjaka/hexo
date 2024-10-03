@@ -1,6 +1,6 @@
 import { extname } from 'path';
 import Promise from 'bluebird';
-import type { NodeJSLikeCallback } from '../types';
+import { Store, SyncStore, StoreSyncFunction, StoreFunction } from './renderer-d';
 
 const getExtname = (str: string) => {
   if (typeof str !== 'string') return '';
@@ -8,48 +8,6 @@ const getExtname = (str: string) => {
   const ext = extname(str) || str;
   return ext.startsWith('.') ? ext.slice(1) : ext;
 };
-
-export interface StoreFunctionData {
-  path?: any;
-  text?: string;
-  engine?: string;
-  toString?: any;
-  onRenderEnd?: (...args: any[]) => any;
-}
-
-export interface StoreSyncFunction {
-  [x: string]: any;
-  (
-    data: StoreFunctionData,
-    options: object,
-    // callback?: NodeJSLikeCallback<string>
-  ): any;
-  output?: string;
-  compile?: (local: object) => string;
-  disableNunjucks?: boolean;
-}
-export interface StoreFunction {
-  (
-    data: StoreFunctionData,
-    options: object,
-    callback?: NodeJSLikeCallback<any>
-  ): Promise<any>;
-  (
-    data: StoreFunctionData,
-    options: object,
-    callback: NodeJSLikeCallback<string>
-  ): void;
-  output?: string;
-  compile?: (local: object) => any;
-  disableNunjucks?: boolean;
-}
-
-interface SyncStore {
-  [key: string]: StoreSyncFunction;
-}
-interface Store {
-  [key: string]: StoreFunction;
-}
 
 class Renderer {
   public store: Store;

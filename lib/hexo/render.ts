@@ -1,11 +1,10 @@
-import { extname } from 'path';
 import Promise from 'bluebird';
 import { readFile, readFileSync } from 'hexo-fs';
-import type Hexo from './index';
+import { extname } from 'path';
 import type { Renderer } from '../extend';
-import { HexoRenderOptions } from './render-d';
-import type { StoreFunction, StoreFunctionData, StoreSyncFunction } from '../extend/renderer';
 import { NodeJSLikeCallback } from '../types';
+import { HexoRenderOptions } from './render-d';
+import { StoreFunctionData } from '../extend/renderer-d';
 
 const getExtname = (str: string) => {
   if (typeof str !== 'string') return '';
@@ -15,10 +14,7 @@ const getExtname = (str: string) => {
 };
 
 const toString = (result, options) => {
-  if (
-    !Object.prototype.hasOwnProperty.call(options, 'toString')
-    || typeof result === 'string'
-  ) {
+  if (!Object.prototype.hasOwnProperty.call(options, 'toString') || typeof result === 'string') {
     return result;
   }
 
@@ -34,10 +30,10 @@ const toString = (result, options) => {
 };
 
 class Render {
-  public context: Hexo;
+  public context: import('.');
   public renderer: Renderer;
 
-  constructor(ctx: Hexo) {
+  constructor(ctx: import('.')) {
     this.context = ctx;
     this.renderer = ctx.extend.renderer;
   }
@@ -54,11 +50,11 @@ class Render {
     return this.renderer.getOutput(path);
   }
 
-  getRenderer(ext: string, sync?: boolean): StoreSyncFunction | StoreFunction {
+  getRenderer(ext: string, sync?: boolean) {
     return this.renderer.get(ext, sync);
   }
 
-  getRendererSync(ext: string): StoreSyncFunction | StoreFunction {
+  getRendererSync(ext: string) {
     return this.getRenderer(ext, true);
   }
 
@@ -144,7 +140,7 @@ class Render {
     result = toString(result, data);
 
     if (data.onRenderEnd) {
-      result = data.onRenderEnd(result);
+      result = data.onRenderEnd(result) as string;
     }
 
     return ctx.execFilterSync(`after_render:${output}`, result, {

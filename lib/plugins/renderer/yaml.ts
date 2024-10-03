@@ -1,9 +1,6 @@
-import yaml from 'js-yaml';
 import { escape } from 'hexo-front-matter';
 import logger from 'hexo-log';
-import type { StoreFunctionData } from '../../extend/renderer';
-
-let schema = {} as yaml.Schema;
+import yaml from 'js-yaml';
 
 let schema = {} as yaml.Schema;
 
