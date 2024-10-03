@@ -1,13 +1,11 @@
+import I18n from 'hexo-i18n';
 import { extname } from 'path';
 import Box from '../box';
-import View from './view';
-import I18n from 'hexo-i18n';
 import { config } from './processors/config';
 import { i18n } from './processors/i18n';
 import { source } from './processors/source';
 import { view } from './processors/view';
-import type Hexo from '../hexo';
-import type { Pattern } from 'hexo-util';
+import View from './view';
 
 class Theme extends Box {
   public config: any;

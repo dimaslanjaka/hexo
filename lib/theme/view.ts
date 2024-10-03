@@ -5,6 +5,7 @@ import type Theme from '.';
 import type { Helper } from '../extend';
 import type Render from '../hexo/render';
 import type { NodeJSLikeCallback } from '../types';
+import { HexoRenderOptions } from '../hexo/render-d';
 
 const assignIn = (target: any, ...sources: any[]) => {
   const length = sources.length;
@@ -35,7 +36,7 @@ class View {
   public _helper: Helper;
   public _render: Render;
 
-  constructor(path: string, data: string) {
+  constructor(path: string, data: any) {
     this.path = path;
     this.source = join(this._theme.base, 'layout', path);
     this.data = typeof data === 'string' ? yfm(data, {}) : data;
@@ -54,20 +55,22 @@ class View {
     const { layout = (options as Options).layout } = data;
     const locals = this._buildLocals(options as Options);
 
-    return this._compiled(this._bindHelpers(locals)).then(result => {
-      if (result == null || !layout) return result;
+    return this._compiled(this._bindHelpers(locals))
+      .then(result => {
+        if (result == null || !layout) return result;
 
-      const layoutView = this._resolveLayout(layout);
-      if (!layoutView) return result;
+        const layoutView = this._resolveLayout(layout);
+        if (!layoutView) return result;
 
-      const layoutLocals = {
-        ...locals,
-        body: result,
-        layout: false
-      };
+        const layoutLocals = {
+          ...locals,
+          body: result,
+          layout: false
+        };
 
-      return layoutView.render(layoutLocals, callback);
-    }).asCallback(callback);
+        return layoutView.render(layoutLocals, callback);
+      })
+      .asCallback(callback);
   }
 
   renderSync(options: Options = {}) {
@@ -144,19 +147,19 @@ class View {
     }
 
     if (renderer && typeof renderer.compile === 'function') {
-      const compiled = renderer.compile(data);
+      const compiled = renderer.compile(data) as unknown as (...args: any[]) => string;
 
-      this._compiledSync = locals => {
+      this._compiledSync = (locals: any) => {
         const result = compiled(locals);
         return ctx.execFilterSync(...buildFilterArguments(result));
       };
 
-      this._compiled = locals => Promise.resolve(compiled(locals))
-        .then(result => ctx.execFilter(...buildFilterArguments(result)));
+      this._compiled = (locals: any) =>
+        Promise.resolve(compiled(locals)).then(result => ctx.execFilter(...buildFilterArguments(result)));
     } else {
-      this._compiledSync = locals => render.renderSync(data, locals);
+      this._compiledSync = (locals: Record<string, any>) => render.renderSync(data, locals);
 
-      this._compiled = locals => render.render(data, locals);
+      this._compiled = (locals: HexoRenderOptions) => render.render(data, locals);
     }
   }
 }
