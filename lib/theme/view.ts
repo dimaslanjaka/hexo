@@ -147,7 +147,7 @@ class View {
     }
 
     if (renderer && typeof renderer.compile === 'function') {
-      const compiled = renderer.compile(data) as unknown as (...args: any[]) => string;
+      const compiled = renderer.compile(data);
 
       this._compiledSync = (locals: any) => {
         const result = compiled(locals);
