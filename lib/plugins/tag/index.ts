@@ -1,7 +1,7 @@
 import moize from 'moize';
-import Hexo from '../../hexo';
+import type Hexo from '../../hexo';
 
-export default (ctx: import('../../hexo')) => {
+export default (ctx: Hexo) => {
   const { tag } = ctx.extend;
 
   const blockquote = require('./blockquote')(ctx);

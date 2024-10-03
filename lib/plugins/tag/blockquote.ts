@@ -8,8 +8,8 @@ const rFullCite = /(\S.*)\s+(https?:\/\/\S+)/i;
 const rAuthorTitle = /([^,]+),\s*([^,]+)/;
 
 /**
- * @param args
- * @param ctx
+ * @param {string[]} args
+ * @param {Hexo} ctx
  */
 const parseFooter = (args: string[], ctx: Hexo) => {
   const str = args.join(' ');
