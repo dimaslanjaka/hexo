@@ -52,86 +52,6 @@ import Router from './router';
 import Scaffold from './scaffold';
 import Source from './source';
 
-let resolveSync; // = require('resolve');
-
-const libDir = dirname(__dirname);
-const dbVersion = 1;
-
-const stopWatcher = (box: Box | Theme | Source) => {
-  if (box.isWatching()) box.unwatch();
-};
-
-const routeCache = new WeakMap();
-
-const castArray = (obj: any) => {
-  return Array.isArray(obj) ? obj : [obj];
-};
-
-const mergeCtxThemeConfig = (ctx: import('.')) => {
-  // Merge hexo.config.theme_config into hexo.theme.config before post rendering & generating
-  // config.theme_config has "_config.[theme].yml" merged in load_theme_config.js
-  if (ctx.config.theme_config) {
-    ctx.theme.config = deepMerge(ctx.theme.config, ctx.config.theme_config);
-  }
-};
-
-const createLoadThemeRoute = function(
-  generatorResult: NormalPageGenerator | NormalPostGenerator,
-  locals: LocalsType,
-  // eslint-disable-next-line no-use-before-define
-  ctx: Hexo
-) {
-  const { log, theme } = ctx;
-  const { path, cache: useCache } = locals;
-
-  const layout: string[] = [...new Set(castArray(generatorResult.layout))];
-  const layoutLength = layout.length;
-
-  // always use cache in fragment_cache
-  locals.cache = true;
-  return () => {
-    if (useCache && routeCache.has(generatorResult)) return routeCache.get(generatorResult);
-
-    for (let i = 0; i < layoutLength; i++) {
-      const name = layout[i];
-      const view = theme.getView(name);
-
-      if (view) {
-        log.debug(`Rendering HTML ${name}: ${magenta(path)}`);
-        return view
-          .render(locals)
-          .then(result => ctx.extend.injector.exec(result, locals))
-          .then(result =>
-            ctx.execFilter('_after_html_render', result, {
-              context: ctx,
-              args: [locals]
-            })
-          )
-          .tap(result => {
-            if (useCache) {
-              routeCache.set(generatorResult, result);
-            }
-          })
-          .tapCatch(err => {
-            log.error({ err }, `Render HTML failed: ${magenta(path)}`);
-          });
-      }
-    }
-
-    log.warn(`No layout: ${magenta(path)}`);
-  };
-};
-
-function debounce(func: () => void, wait: number): () => void {
-  let timeout: NodeJS.Timeout;
-  return function() {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => {
-      func.apply(this);
-    }, wait);
-  };
-}
-
 // Node.js internal APIs
 declare module 'module' {
   function _nodeModulePaths(path: string): string[];
@@ -219,6 +139,87 @@ interface Hexo {
    */
   on(event: string, listener: (...args: any[]) => any): any;
   emit(event: string, ...args: any[]): any;
+}
+
+let resolveSync: (arg0: string, arg1: { basedir: string }) => string; // = require('resolve');
+
+const libDir = dirname(__dirname);
+const dbVersion = 1;
+
+const stopWatcher = (box: Box) => {
+  if (box.isWatching()) box.unwatch();
+};
+
+const routeCache = new WeakMap();
+
+const castArray = (obj: any) => {
+  return Array.isArray(obj) ? obj : [obj];
+};
+
+// eslint-disable-next-line no-use-before-define
+const mergeCtxThemeConfig = (ctx: Hexo) => {
+  // Merge hexo.config.theme_config into hexo.theme.config before post rendering & generating
+  // config.theme_config has "_config.[theme].yml" merged in load_theme_config.js
+  if (ctx.config.theme_config) {
+    ctx.theme.config = deepMerge(ctx.theme.config, ctx.config.theme_config);
+  }
+};
+
+// eslint-disable-next-line no-use-before-define
+const createLoadThemeRoute = function(
+  generatorResult: NormalPageGenerator | NormalPostGenerator,
+  locals: LocalsType,
+  ctx: Hexo
+) {
+  const { log, theme } = ctx;
+  const { path, cache: useCache } = locals;
+
+  const layout: string[] = [...new Set(castArray(generatorResult.layout))];
+  const layoutLength = layout.length;
+
+  // always use cache in fragment_cache
+  locals.cache = true;
+  return () => {
+    if (useCache && routeCache.has(generatorResult)) return routeCache.get(generatorResult);
+
+    for (let i = 0; i < layoutLength; i++) {
+      const name = layout[i];
+      const view = theme.getView(name);
+
+      if (view) {
+        log.debug(`Rendering HTML ${name}: ${magenta(path)}`);
+        return view
+          .render(locals)
+          .then(result => ctx.extend.injector.exec(result, locals))
+          .then(result =>
+            ctx.execFilter('_after_html_render', result, {
+              context: ctx,
+              args: [locals]
+            })
+          )
+          .tap(result => {
+            if (useCache) {
+              routeCache.set(generatorResult, result);
+            }
+          })
+          .tapCatch(err => {
+            log.error({ err }, `Render HTML failed: ${magenta(path)}`);
+          });
+      }
+    }
+
+    log.warn(`No layout: ${magenta(path)}`);
+  };
+};
+
+function debounce(func: () => void, wait: number): () => void {
+  let timeout: NodeJS.Timeout;
+  return function() {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      func.apply(this);
+    }, wait);
+  };
 }
 
 class Hexo extends EventEmitter {
@@ -412,6 +413,9 @@ class Hexo extends EventEmitter {
       });
   }
 
+  call(name: string, callback?: NodeJSLikeCallback<any>): Promise<any>;
+  call(name: string, args: object, callback?: NodeJSLikeCallback<any>): Promise<any>;
+
   /**
    * CLI caller
    * @see {@link https://hexo.io/api/#Execute-Commands}
@@ -422,17 +426,9 @@ class Hexo extends EventEmitter {
    */
   call(
     name: string,
-    args:
-      | {
-          [key: string]: any;
-          _?: string[];
-        }
-      | ((...args: any[]) => any),
-    callback?: (...args: any[]) => any
-  ): any;
-  call(name: string, callback?: NodeJSLikeCallback<any>): Promise<any>;
-  call(name: string, args: object, callback?: NodeJSLikeCallback<any>): Promise<any>;
-  call(name: string, args?: object | NodeJSLikeCallback<any>, callback?: NodeJSLikeCallback<any>): Promise<any> {
+    args?: Record<string, any> | NodeJSLikeCallback<any>,
+    callback?: NodeJSLikeCallback<any>
+  ): Promise<any> {
     if (!callback && typeof args === 'function') {
       callback = args as NodeJSLikeCallback<any>;
       args = {};
@@ -588,7 +584,7 @@ class Hexo extends EventEmitter {
       layout: string;
       env: any;
       view_dir: string;
-      site: Record<string, any>;
+      site: SiteLocals;
       cache?: boolean;
 
       constructor(path: string, locals: NormalPageGenerator | NormalPostGenerator) {
