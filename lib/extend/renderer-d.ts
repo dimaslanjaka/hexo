@@ -3,6 +3,7 @@ export interface StoreFunctionData {
   text?: string;
   engine?: string;
   onRenderEnd?: (content: string) => string | Promise<string>;
+  toString?: boolean;
 }
 // export type RenderCompile = (
 //   local: Record<string, any>
