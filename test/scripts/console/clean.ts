@@ -5,7 +5,7 @@ type OriginalParams = Parameters<typeof cleanConsole>;
 type OriginalReturn = ReturnType<typeof cleanConsole>;
 
 describe('clean', () => {
-  let hexo: Hexo, clean: (...args: OriginalParams) => OriginalReturn;
+  let hexo: Hexo, clean: (...args: OriginalParams | []) => OriginalReturn;
 
   beforeEach(() => {
     hexo = new Hexo(__dirname, {silent: true});
