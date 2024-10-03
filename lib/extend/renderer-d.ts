@@ -4,9 +4,10 @@ export interface StoreFunctionData {
   engine?: string;
   onRenderEnd?: (content: string) => string | Promise<string>;
 }
-export type RenderCompile = (
-  local: Record<string, any>
-) => string | ((local: Record<string, any>) => (...args: any[]) => string);
+// export type RenderCompile = (
+//   local: Record<string, any>
+// ) => string | ((local: Record<string, any>) => (...args: any[]) => string);
+export type RenderCompile = ((local: Record<string, any>) => (...args: any[]) => string);
 export interface StoreSyncFunction {
   (
     data: StoreFunctionData,
