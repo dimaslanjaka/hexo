@@ -9,5 +9,14 @@ pnpm-lock.yaml
 .nyc_output/
 coverage/
 .tmp*
-.vscode
-dist/
+**/.vscode
+/dist/
+/releases/
+/packages/
+/test/hexo-theme-test
+**/.yarn/cache
+**/.yarn/versions
+**/.yarn/unplug*
+**/.yarn/patch*
+**/.yarn/*.gz
+.env
