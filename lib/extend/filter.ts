@@ -1,5 +1,7 @@
 import Promise from 'bluebird';
 import { extend_filter_before_post_render_data } from '../plugins/filter/before_post_render/dataType';
+import { FilterOptions } from './filter-d';
+import { StoreFunction, Store } from './renderer-d';
 
 const typeAlias = {
   pre: 'before_post_render',
@@ -7,19 +9,6 @@ const typeAlias = {
   'after_render:html': '_after_html_render'
 };
 
-interface FilterOptions {
-  context?: any;
-  args?: any[];
-}
-
-interface StoreFunction {
-  (data?: any, ...args: any[]): any;
-  priority?: number;
-}
-
-interface Store {
-  [key: string]: StoreFunction[];
-}
 
 class Filter {
   public store: Store;
@@ -44,7 +33,7 @@ class Filter {
   register(fn: StoreFunction, priority: number): void;
   register(type: string, fn: StoreFunction): void;
   register(type: string, fn: StoreFunction, priority: number): void;
-  register(type: string | StoreFunction, fn?: StoreFunction | number, priority?: number): void {
+  register(type: string | StoreFunction, fn?: any, priority?: number): void {
     if (!priority) {
       if (typeof type === 'function') {
         priority = fn as number;
@@ -62,9 +51,10 @@ class Filter {
     this.store[type as string] = store;
 
     fn.priority = priority;
-    store.push(fn);
-
-    store.sort((a, b) => a.priority - b.priority);
+    if (Array.isArray(store)) {
+      store.push(fn);
+      store.sort((a, b) => a.priority - b.priority);
+    }
   }
 
   unregister(type: string, fn: StoreFunction): void {
@@ -91,7 +81,7 @@ class Filter {
     args.unshift(data);
 
     return Promise.each(filters, filter =>
-      Reflect.apply(Promise.method(filter), ctx, args).then(result => {
+      Reflect.apply(Promise.method(filter), ctx, args).then((result: any) => {
         args[0] = result == null ? args[0] : result;
         return args[0];
       })

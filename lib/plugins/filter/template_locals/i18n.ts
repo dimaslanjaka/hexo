@@ -16,13 +16,7 @@ function i18nLocalsFilter(locals: HexoLocalsData) {
     // fix(TS2322): Type 'unknown' is not assignable to type 'string'.
     const data = pattern.match(locals.path) as Record<string, any>;
 
-    if (
-      typeof data !== 'undefined'
-      && !Array.isArray(data)
-      && typeof data !== 'boolean'
-      && data.lang
-      && i18nLanguages.includes(data.lang)
-    ) {
+    if (data && !Array.isArray(data) && typeof data === 'object' && data.lang && i18nLanguages.includes(data.lang)) {
       lang = data.lang;
       page.canonical_path = data.path;
     } else {

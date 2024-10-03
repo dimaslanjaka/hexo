@@ -7,7 +7,7 @@ export interface StoreFunctionData {
 // export type RenderCompile = (
 //   local: Record<string, any>
 // ) => string | ((local: Record<string, any>) => (...args: any[]) => string);
-export type RenderCompile = ((local: Record<string, any>) => (...args: any[]) => string);
+export type RenderCompile = (local: Record<string, any>) => (...args: any[]) => string;
 export interface StoreSyncFunction {
   (
     data: StoreFunctionData,
@@ -24,11 +24,12 @@ export interface StoreFunction {
   output?: string;
   compile?: RenderCompile;
   disableNunjucks?: boolean;
+  priority?: number;
 }
 
 export interface SyncStore {
-  [key: string]: StoreSyncFunction;
+  [key: string]: StoreSyncFunction | StoreSyncFunction[];
 }
 export interface Store {
-  [key: string]: StoreFunction;
+  [key: string]: StoreFunction | StoreFunction[];
 }

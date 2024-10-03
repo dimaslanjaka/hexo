@@ -5,7 +5,7 @@ import { Config } from '../../hexo/index-d';
 
 const DURATION_MINUTE = 1000 * 60;
 
-function isMatch(path: string, patterns: string | readonly string[]) {
+function isMatch(path: string, patterns?: string | string[]) {
   if (!patterns) return false;
 
   return micromatch.isMatch(path, patterns);
@@ -35,7 +35,7 @@ export { isTmpFile };
 export { isHiddenFile };
 export { isExcludedFile };
 
-export function toDate(date: string | number | Date) {
+export function toDate(date?: string | number | Date | moment.Moment) {
   if (!date || moment.isMoment(date)) return date;
 
   if (!(date instanceof Date)) {

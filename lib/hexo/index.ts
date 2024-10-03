@@ -50,6 +50,7 @@ import Render from './render';
 import Router from './router';
 import Scaffold from './scaffold';
 import Source from './source';
+import { FilterOptions } from '../extend/filter-d';
 
 let resolveSync; // = require('resolve');
 
@@ -718,7 +719,7 @@ class Hexo extends EventEmitter {
     });
   }
 
-  execFilter(type: string, data: any, options?) {
+  execFilter(type: string, data: any, options?: FilterOptions) {
     return this.extend.filter.exec(type, data, options);
   }
 

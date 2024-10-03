@@ -71,7 +71,7 @@ function njkRenderer(data: StoreFunctionData, locals?: any): string {
 
 njkRenderer.compile = (data: StoreFunctionData): ((locals: any) => string) => {
   // Need a closure to keep the compiled template.
-  return (locals: Record<string, any>) => njkCompile(data).render(locals);
+  return locals => njkCompile(data).render(locals);
 };
 
 export = njkRenderer;
