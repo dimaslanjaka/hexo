@@ -257,7 +257,10 @@ interface Result {
 
 
 class Post {
-  public context: Hexo;
+  public context: import('../hexo');
+  public config: any;
+  public tag: any;
+  public separator: any;
 
   constructor(context: Hexo) {
     this.context = context;

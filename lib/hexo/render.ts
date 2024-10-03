@@ -7,15 +7,20 @@ import { HexoRenderOptions } from './render-d';
 import type { StoreFunction, StoreFunctionData, StoreSyncFunction } from '../extend/renderer';
 import { NodeJSLikeCallback } from '../types';
 
-const getExtname = (str: string): string => {
+const getExtname = (str: string) => {
   if (typeof str !== 'string') return '';
 
   const ext = extname(str);
   return ext.startsWith('.') ? ext.slice(1) : ext;
 };
 
-const toString = (result: any, options: StoreFunctionData) => {
-  if (!Object.prototype.hasOwnProperty.call(options, 'toString') || typeof result === 'string') return result;
+const toString = (result, options) => {
+  if (
+    !Object.prototype.hasOwnProperty.call(options, 'toString')
+    || typeof result === 'string'
+  ) {
+    return result;
+  }
 
   if (typeof options.toString === 'function') {
     return options.toString(result);
@@ -120,7 +125,7 @@ class Render {
 
     if (data.text == null) {
       if (!data.path) throw new TypeError('No input file or string!');
-      data.text = readFileSync(data.path);
+      data.text = readFileSync(data.path).toString();
     }
 
     if (data.text == null) throw new TypeError('No input file or string!');
