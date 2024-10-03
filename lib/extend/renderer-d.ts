@@ -1,6 +1,6 @@
 export interface StoreFunctionData {
   path?: string;
-  text: string;
+  text?: string;
   engine?: string;
   onRenderEnd?: (content: string) => string | Promise<string>;
 }
