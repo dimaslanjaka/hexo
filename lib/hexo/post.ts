@@ -10,8 +10,7 @@ import { magenta } from 'picocolors';
 import type { NodeJSLikeCallback, PostSchema, RenderData } from '../types';
 const preservedKeys = ['title', 'slug', 'path', 'layout', 'date', 'content'];
 
-const rHexoPostRenderEscape
-  = /<hexoPostRenderCodeBlock>([\s\S]+?)<\/hexoPostRenderCodeBlock>/g;
+const rHexoPostRenderEscape = /<hexoPostRenderCodeBlock>([\s\S]+?)<\/hexoPostRenderCodeBlock>/g;
 
 const rSwigPlaceHolder = /(?:<|&lt;)!--swig\uFFFC(\d+)--(?:>|&gt;)/g;
 const rCodeBlockPlaceHolder = /(?:<|&lt;)!--code\uFFFC(\d+)--(?:>|&gt;)/g;
@@ -23,12 +22,7 @@ const STATE_SWIG_TAG = Symbol('swig_tag');
 const STATE_SWIG_FULL_TAG = Symbol('swig_full_tag');
 
 const isNonWhiteSpaceChar = (char: string) =>
-  char !== '\r'
-  && char !== '\n'
-  && char !== '\t'
-  && char !== '\f'
-  && char !== '\v'
-  && char !== ' ';
+  char !== '\r' && char !== '\n' && char !== '\t' && char !== '\f' && char !== '\v' && char !== ' ';
 
 class PostRenderEscape {
   public stored: any[];
@@ -52,18 +46,12 @@ class PostRenderEscape {
   }
 
   restoreAllSwigTags(str: string) {
-    const restored = str.replace(
-      rSwigPlaceHolder,
-      PostRenderEscape.restoreContent(this.stored)
-    );
+    const restored = str.replace(rSwigPlaceHolder, PostRenderEscape.restoreContent(this.stored));
     return restored;
   }
 
   restoreCodeBlocks(str: string) {
-    return str.replace(
-      rCodeBlockPlaceHolder,
-      PostRenderEscape.restoreContent(this.stored)
-    );
+    return str.replace(rCodeBlockPlaceHolder, PostRenderEscape.restoreContent(this.stored));
   }
 
   escapeCodeBlocks(str: string) {
@@ -124,11 +112,7 @@ class PostRenderEscape {
           } else {
             swig_tag_name = '';
             state = STATE_PLAINTEXT;
-            output += PostRenderEscape.escapeContent(
-              this.stored,
-              'swig',
-              `{%${buffer}%}`
-            );
+            output += PostRenderEscape.escapeContent(this.stored, 'swig', `{%${buffer}%}`);
           }
 
           buffer = '';
@@ -155,11 +139,7 @@ class PostRenderEscape {
         if (char === '}' && next_char === '}') {
           idx++;
           state = STATE_PLAINTEXT;
-          output += PostRenderEscape.escapeContent(
-            this.stored,
-            'swig',
-            `{{${buffer}}}`
-          );
+          output += PostRenderEscape.escapeContent(this.stored, 'swig', `{{${buffer}}}`);
           buffer = '';
         } else {
           buffer = buffer + char;
@@ -260,7 +240,6 @@ interface Result {
   content?: string;
 }
 
-
 class Post {
   public context: import('../hexo');
   public config: any;
@@ -273,7 +252,7 @@ class Post {
 
   create(data: PostSchema, callback?: NodeJSLikeCallback<any>);
   create(data: PostSchema, replace: boolean, callback?: NodeJSLikeCallback<any>);
-  create(data: PostSchema, replace: boolean | (NodeJSLikeCallback<any>), callback?: NodeJSLikeCallback<any>) {
+  create(data: PostSchema, replace: boolean | NodeJSLikeCallback<any>, callback?: NodeJSLikeCallback<any>) {
     if (!callback && typeof replace === 'function') {
       callback = replace;
       replace = false;
@@ -296,14 +275,14 @@ class Post {
       }),
       this._renderScaffold(data)
     ])
-      .spread((path, content) => {
-        const result = { path, content };
+      .then(results => {
+        const result = { path: results[0], content: results[1] };
 
         return Promise.all<void, void | string>([
           // Write content to file
-          writeFile(path, content),
+          writeFile(result.path, result.content),
           // Create asset folder
-          createAssetFolder(path, config.post_asset_folder)
+          createAssetFolder(result.path, config.post_asset_folder)
         ]).then(() => {
           ctx.emit('new', result);
           return result;
@@ -338,9 +317,7 @@ class Post {
         const jsonMode = separator.startsWith(';');
 
         // Parse front-matter
-        const obj = jsonMode
-          ? JSON.parse(`{${frontMatter}}`)
-          : load(frontMatter);
+        const obj = jsonMode ? JSON.parse(`{${frontMatter}}`) : load(frontMatter);
 
         Object.keys(data)
           .filter(key => !preservedKeys.includes(key) && obj[key] == null)
@@ -459,14 +436,16 @@ class Post {
         excerpt: string;
       },
       ...args: any[]
-    ) => any | Promise<{
-      [key: string]: any;
-      content: string;
-      more: string;
-      permalink: string;
-      excerpt: string;
-    }>
-  ): any
+    ) =>
+      | any
+      | Promise<{
+          [key: string]: any;
+          content: string;
+          more: string;
+          permalink: string;
+          excerpt: string;
+        }>
+  ): any;
   render(source: string, data: RenderData = {}, callback?: NodeJSLikeCallback<never>) {
     const ctx = this.context;
     const { config } = ctx;
@@ -481,16 +460,12 @@ class Post {
       // Read content from files
       promise = readFile(source);
     } else {
-      return Promise.reject(new Error('No input file or string!')).asCallback(
-        callback
-      );
+      return Promise.reject(new Error('No input file or string!')).asCallback(callback);
     }
 
     // Files like js and css are also processed by this function, but they do not require preprocessing like markdown
     // data.source does not exist when tag plugins call the markdown renderer
-    const isPost
-      = !data.source
-      || ['html', 'htm'].includes(ctx.render.getOutput(data.source));
+    const isPost = !data.source || ['html', 'htm'].includes(ctx.render.getOutput(data.source));
 
     if (!isPost) {
       return promise
@@ -513,10 +488,7 @@ class Post {
     }
 
     // disable Nunjucks when the renderer specify that.
-    let disableNunjucks
-      = ext
-      && ctx.render.renderer.get(ext)
-      && !!ctx.render.renderer.get(ext).disableNunjucks;
+    let disableNunjucks = ext && ctx.render.renderer.get(ext) && !!ctx.render.renderer.get(ext).disableNunjucks;
 
     // front-matter overrides renderer's option
     if (typeof data.disableNunjucks === 'boolean') {
