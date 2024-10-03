@@ -50,7 +50,7 @@ function listCategoriesHelper(this: LocalsType, categories?: Query<CategorySchem
   const hierarchicalList = (level: number, parent?: any) => {
     let result = '';
 
-    prepareQuery(parent).forEach((cat: CategorySchema) => {
+    prepareQuery(parent).forEach((cat, _i) => {
       let child;
       if (!depth || level + 1 < depth) {
         child = hierarchicalList(level + 1, cat._id);
