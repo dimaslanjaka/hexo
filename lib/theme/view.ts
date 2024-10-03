@@ -1,8 +1,10 @@
-import Promise from 'bluebird';
-import { parse as yfm } from 'hexo-front-matter';
 import { dirname, extname, join } from 'path';
-import type { Helper } from '../extend';
+import { parse as yfm } from 'hexo-front-matter';
+import Promise from 'bluebird';
+import type Theme from '.';
 import type Render from '../hexo/render';
+import type { NodeJSLikeCallback } from '../types';
+import type { Helper } from '../extend';
 import { HexoRenderOptions } from '../hexo/render-d';
 
 const assignIn = (target: any, ...sources: any[]) => {
@@ -25,10 +27,10 @@ class Options {
 }
 
 class View {
-  public path: any;
-  public source: any;
-  public _theme: any;
-  public data: ReturnType<typeof yfm>;
+  public path: string;
+  public source: string;
+  public _theme: Theme;
+  public data: any;
   public _compiled: any;
   public _compiledSync: any;
   public _helper: Helper;
@@ -42,7 +44,9 @@ class View {
     this._precompile();
   }
 
-  render(options: Options | ((...args: any[]) => any) = {}, callback: (...args: any[]) => any) {
+  render(callback: NodeJSLikeCallback<any>): Promise<any>;
+  render(options: Options, callback?: NodeJSLikeCallback<any>): Promise<any>;
+  render(options: Options | NodeJSLikeCallback<any> = {}, callback?: NodeJSLikeCallback<any>): Promise<any> {
     if (!callback && typeof options === 'function') {
       callback = options;
       options = {};
@@ -89,15 +93,15 @@ class View {
     return layoutView.renderSync(layoutLocals);
   }
 
-  _buildLocals(locals) {
-    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+  _buildLocals(locals: Options) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { layout, _content, ...data } = this.data;
     return assignIn({}, locals, data, {
       filename: this.source
     });
   }
 
-  _bindHelpers(locals: { [x: string]: any }) {
+  _bindHelpers(locals: Record<string, any>) {
     const helpers = this._helper.list();
     const keys = Object.keys(helpers);
 
