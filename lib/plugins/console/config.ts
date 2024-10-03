@@ -3,10 +3,11 @@ import { exists, writeFile } from 'hexo-fs';
 import { extname } from 'path';
 import Promise from 'bluebird';
 import type Hexo from '../../hexo';
+import { StoreFunctionData } from '../../extend/renderer-d';
 
 interface ConfigArgs {
-  _: string[]
-  [key: string]: any
+  _: string[];
+  [key: string]: any;
 }
 
 function configConsole(this: Hexo, args: ConfigArgs): Promise<void> {
@@ -27,18 +28,20 @@ function configConsole(this: Hexo, args: ConfigArgs): Promise<void> {
   const configPath = this.config_path;
   const ext = extname(configPath);
 
-  return exists(configPath).then(exist => {
-    if (!exist) return {};
-    return this.render.render({path: configPath});
-  }).then(config => {
-    if (!config) config = {};
+  return exists(configPath)
+    .then(exist => {
+      if (!exist) return {};
+      return this.render.render({ path: configPath } as StoreFunctionData);
+    })
+    .then(config => {
+      if (!config) config = {};
 
-    setProperty(config, key, castValue(value));
+      setProperty(config, key, castValue(value));
 
-    const result = ext === '.json' ? JSON.stringify(config) : yaml.dump(config);
+      const result = ext === '.json' ? JSON.stringify(config) : yaml.dump(config);
 
-    return writeFile(configPath, result);
-  });
+      return writeFile(configPath, result);
+    });
 }
 
 function getProperty(obj: object, key: string): any {
