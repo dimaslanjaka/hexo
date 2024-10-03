@@ -2,13 +2,12 @@ import assert from 'assert';
 import Promise from 'bluebird';
 import { parse as yfmParse, split as yfmSplit, stringify as yfmStringify } from 'hexo-front-matter';
 import { copyDir, exists, listDir, mkdirs, readFile, rmdir, unlink, writeFile } from 'hexo-fs';
-import { deepMerge, escapeRegExp, slugize } from 'hexo-util';
+import { escapeRegExp, slugize } from 'hexo-util';
 import { load } from 'js-yaml';
 import moment from 'moment';
 import { basename, extname, join } from 'path';
 import { magenta } from 'picocolors';
 import type { NodeJSLikeCallback, PostSchema, RenderData } from '../types';
-import type Hexo from './index';
 const preservedKeys = ['title', 'slug', 'path', 'layout', 'date', 'content'];
 
 const rHexoPostRenderEscape
@@ -23,7 +22,8 @@ const STATE_SWIG_COMMENT = Symbol('swig_comment');
 const STATE_SWIG_TAG = Symbol('swig_tag');
 const STATE_SWIG_FULL_TAG = Symbol('swig_full_tag');
 
-const isNonWhiteSpaceChar = (char: string) => char !== '\r'
+const isNonWhiteSpaceChar = (char: string) =>
+  char !== '\r'
   && char !== '\n'
   && char !== '\t'
   && char !== '\f'
@@ -52,16 +52,24 @@ class PostRenderEscape {
   }
 
   restoreAllSwigTags(str: string) {
-    const restored = str.replace(rSwigPlaceHolder, PostRenderEscape.restoreContent(this.stored));
+    const restored = str.replace(
+      rSwigPlaceHolder,
+      PostRenderEscape.restoreContent(this.stored)
+    );
     return restored;
   }
 
   restoreCodeBlocks(str: string) {
-    return str.replace(rCodeBlockPlaceHolder, PostRenderEscape.restoreContent(this.stored));
+    return str.replace(
+      rCodeBlockPlaceHolder,
+      PostRenderEscape.restoreContent(this.stored)
+    );
   }
 
   escapeCodeBlocks(str: string) {
-    return str.replace(rHexoPostRenderEscape, (_, content) => PostRenderEscape.escapeContent(this.stored, 'code', content));
+    return str.replace(rHexoPostRenderEscape, (_, content) =>
+      PostRenderEscape.escapeContent(this.stored, 'code', content)
+    );
   }
 
   /**
@@ -69,9 +77,6 @@ class PostRenderEscape {
    * @returns string
    */
   escapeAllSwigTags(str: string) {
-    if (!/(\{\{.+?\}\})|(\{#.+?#\})|(\{%.+?%\})/s.test(str)) {
-      return str;
-    }
     let state = STATE_PLAINTEXT;
     let buffer = '';
     let output = '';
@@ -262,7 +267,7 @@ class Post {
   public tag: any;
   public separator: any;
 
-  constructor(context: Hexo) {
+  constructor(context: import('.')) {
     this.context = context;
   }
 
@@ -318,40 +323,48 @@ class Post {
 
   _renderScaffold(data: PostSchema) {
     const { tag } = this.context.extend;
-    let splitted;
+    let splited;
 
-    return this._getScaffold(data.layout).then(scaffold => {
-      splitted = yfmSplit(scaffold);
-      const jsonMode = splitted.separator.startsWith(';');
-      const frontMatter = prepareFrontMatter({ ...data }, jsonMode);
+    return this._getScaffold(data.layout)
+      .then(scaffold => {
+        splited = yfmSplit(scaffold);
+        const jsonMode = splited.separator.startsWith(';');
+        const frontMatter = prepareFrontMatter({ ...data }, jsonMode);
 
-      return tag.render(splitted.data, frontMatter);
-    }).then(frontMatter => {
-      const { separator } = splitted;
-      const jsonMode = separator.startsWith(';');
+        return tag.render(splited.data, frontMatter);
+      })
+      .then(frontMatter => {
+        const { separator } = splited;
+        const jsonMode = separator.startsWith(';');
 
-      // Parse front-matter
-      let obj = jsonMode ? JSON.parse(`{${frontMatter}}`) : load(frontMatter);
+        // Parse front-matter
+        const obj = jsonMode
+          ? JSON.parse(`{${frontMatter}}`)
+          : load(frontMatter);
 
-      obj = deepMerge(obj, Object.fromEntries(Object.entries(data).filter(([key, value]) => !preservedKeys.includes(key) && value != null)));
+        Object.keys(data)
+          .filter(key => !preservedKeys.includes(key) && obj[key] == null)
+          .forEach(key => {
+            obj[key] = data[key];
+          });
 
-      let content = '';
-      // Prepend the separator
-      if (splitted.prefixSeparator) content += `${separator}\n`;
+        let content = '';
+        // Prepend the separator
+        if (splited.prefixSeparator) content += `${separator}\n`;
 
-      content += yfmStringify(obj, {
-        mode: jsonMode ? 'json' : ''
+        content += yfmStringify(obj, {
+          mode: jsonMode ? 'json' : ''
+        });
+
+        // Concat content
+        content += splited.content;
+
+        if (data.content) {
+          content += `\n${data.content}`;
+        }
+
+        return content;
       });
-
-      // Concat content
-      content += splitted.content;
-
-      if (data.content) {
-        content += `\n${data.content}`;
-      }
-
-      return content;
-    });
   }
 
   publish(data: PostSchema, replace: boolean, callback?: NodeJSLikeCallback<Result>) {
@@ -384,9 +397,10 @@ class Post {
         // Read the content
         src = join(draftDir, item);
         return readFile(src);
-      }).then((content: string) => {
-      // Create post
-        Object.assign(data, yfmParse(content));
+      })
+      .then(content => {
+        // Create post
+        Object.assign(data, yfmParse(String(content), {}));
         data.content = data._content;
         data._content = undefined;
 
