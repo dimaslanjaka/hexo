@@ -7,6 +7,7 @@ import Theme from '../theme';
 import findYarnRootWorkspace from './findYarnRootWorkspace';
 import Source from './source';
 import validateConfig from './validate_config';
+import { StoreFunctionData } from '../extend/renderer-d';
 
 export = async (ctx: import('.')) => {
   if (!ctx.env.init) return;
@@ -14,13 +15,11 @@ export = async (ctx: import('.')) => {
   const baseDir = ctx.base_dir;
   let configPath = ctx.config_path;
 
-  const path = await exists(configPath)
-    ? configPath
-    : await findConfigPath(configPath);
+  const path = await exists(configPath) ? configPath : await findConfigPath(configPath);
   if (!path) return;
   configPath = path;
 
-  let config = await ctx.render.render({ path });
+  let config = await ctx.render.render({ path } as StoreFunctionData);
   if (!config || typeof config !== 'object') return;
 
   ctx.log.debug('Config loaded: %s', magenta(tildify(configPath)));
@@ -52,12 +51,10 @@ export = async (ctx: import('.')) => {
   config.theme = theme;
 
   const themeDirFromThemes = join(baseDir, 'themes', theme) + sep; // base_dir/themes/[config.theme]/
-  const themeDirFromNodeModules
-    = join(ctx.plugin_dir, 'hexo-theme-' + theme) + sep; // base_dir/node_modules/hexo-theme-[config.theme]/
+  const themeDirFromNodeModules = join(ctx.plugin_dir, 'hexo-theme-' + theme) + sep; // base_dir/node_modules/hexo-theme-[config.theme]/
   const yarnRootWorkspace = findYarnRootWorkspace(ctx);
   const themeDirFromYarnNodeModules
-    = yarnRootWorkspace !== null
-    && join(yarnRootWorkspace, 'node_modules/hexo-theme-' + theme);
+    = yarnRootWorkspace !== null && join(yarnRootWorkspace, 'node_modules/hexo-theme-' + theme);
 
   // themeDirFromThemes has higher priority than themeDirFromNodeModules
   let ignored: string[] = [];
@@ -68,18 +65,12 @@ export = async (ctx: import('.')) => {
   } else if (await exists(themeDirFromNodeModules)) {
     // theme applied from project dir
     ctx.theme_dir = themeDirFromNodeModules;
-    ignored = [
-      '**/node_modules/hexo-theme-*/node_modules/**',
-      '**/node_modules/hexo-theme-*/.git/**'
-    ];
+    ignored = ['**/node_modules/hexo-theme-*/node_modules/**', '**/node_modules/hexo-theme-*/.git/**'];
     ignored = ['**/node_modules/hexo-theme-*/node_modules/**', '**/node_modules/hexo-theme-*/.git/**'];
   } else if (yarnRootWorkspace !== null && await exists(themeDirFromYarnNodeModules)) {
     // theme applied from yarn workspace root directory
     ctx.theme_dir = themeDirFromYarnNodeModules;
-    ignored = [
-      '**/node_modules/hexo-theme-*/node_modules/**',
-      '**/node_modules/hexo-theme-*/.git/**'
-    ];
+    ignored = ['**/node_modules/hexo-theme-*/node_modules/**', '**/node_modules/hexo-theme-*/.git/**'];
   }
 
   ctx.theme_script_dir = join(ctx.theme_dir, 'scripts') + sep;

@@ -4,6 +4,7 @@ import prettyHrtime from 'pretty-hrtime';
 import { writeFile } from 'hexo-fs';
 import { cyan, magenta } from 'picocolors';
 import type Hexo from '../../hexo';
+import { StoreFunctionData } from '../../extend/renderer-d';
 
 interface RenderArgs {
   _: string[]
@@ -29,7 +30,7 @@ function renderConsole(this: Hexo, args: RenderArgs) {
   return this.render.render({
     path: src,
     engine: args.engine
-  }).then(result => {
+  } as StoreFunctionData).then(result => {
     if (typeof result === 'object') {
       if (args.pretty) {
         result = JSON.stringify(result, null, '  ');

@@ -8,6 +8,7 @@ import { EventEmitter } from 'events';
 import { isMatch, makeRe } from 'micromatch';
 import type Hexo from '../hexo';
 import type { NodeJSLikeCallback } from '../types';
+import { StoreFunctionData } from '../extend/renderer-d';
 
 const defaultPattern = new Pattern(() => ({}));
 
@@ -32,12 +33,15 @@ class Box extends EventEmitter {
   constructor(ctx: import('../hexo'), base: string, options?: Record<string, any>) {
     super();
 
-    this.options = Object.assign({
-      persistent: true,
-      awaitWriteFinish: {
-        stabilityThreshold: 200
-      }
-    }, options);
+    this.options = Object.assign(
+      {
+        persistent: true,
+        awaitWriteFinish: {
+          stabilityThreshold: 200
+        }
+      },
+      options
+    );
 
     if (!base.endsWith(sep)) {
       base += sep;
@@ -65,15 +69,21 @@ class Box extends EventEmitter {
       public box: Box;
 
       render(options: any) {
-        return ctx.render.render({
-          path: this.source
-        }, options);
+        return ctx.render.render(
+          {
+            path: this.source
+          } as StoreFunctionData,
+          options
+        );
       }
 
       renderSync(options: Record<string, any>) {
-        return ctx.render.renderSync({
-          path: this.source
-        }, options);
+        return ctx.render.renderSync(
+          {
+            path: this.source
+          } as StoreFunctionData,
+          options
+        );
       }
     }
 
@@ -125,20 +135,25 @@ class Box extends EventEmitter {
   process(callback?: NodeJSLikeCallback<any>): BlueBirdPromise<any> {
     const { base, Cache, context: ctx } = this;
 
-    return stat(base).then(stats => {
-      if (!stats.isDirectory()) return;
+    return stat(base)
+      .then(stats => {
+        if (!stats.isDirectory()) return;
 
-      // Check existing files in cache
-      const relativeBase = escapeBackslash(base.substring(ctx.base_dir.length));
-      const cacheFiles = Cache.filter(item => item._id.startsWith(relativeBase)).map(item => item._id.substring(relativeBase.length));
+        // Check existing files in cache
+        const relativeBase = escapeBackslash(base.substring(ctx.base_dir.length));
+        const cacheFiles = Cache.filter(item => item._id.startsWith(relativeBase)).map(item =>
+          item._id.substring(relativeBase.length)
+        );
 
-      // Handle deleted files
-      return this._readDir(base)
-        .then((files: string[]) => cacheFiles.filter((path: string) => !files.includes(path)))
-        .map((path: string) => this._processFile(File.TYPE_DELETE, path) as PromiseLike<any>);
-    }).catch(err => {
-      if (err && err.code !== 'ENOENT') throw err;
-    }).asCallback(callback);
+        // Handle deleted files
+        return this._readDir(base)
+          .then((files: string[]) => cacheFiles.filter((path: string) => !files.includes(path)))
+          .map((path: string) => this._processFile(File.TYPE_DELETE, path) as PromiseLike<any>);
+      })
+      .catch(err => {
+        if (err && err.code !== 'ENOENT') throw err;
+      })
+      .asCallback(callback);
   }
 
   _processFile(type: string, path: string): BlueBirdPromise<void> | BlueBirdPromise<string> {
@@ -155,35 +170,42 @@ class Box extends EventEmitter {
       path
     });
 
-    return BlueBirdPromise.reduce(this.processors, (count, processor) => {
-      const params = processor.pattern.match(path);
-      if (!params) return count;
+    return BlueBirdPromise.reduce(
+      this.processors,
+      (count, processor) => {
+        const params = processor.pattern.match(path);
+        if (!params) return count;
 
-      const file = new File({
-        // source is used for filesystem path, keep backslashes on Windows
-        source: join(base, path),
-        // path is used for URL path, replace backslashes on Windows
-        path: escapeBackslash(path),
-        params,
-        type
-      });
+        const file = new File({
+          // source is used for filesystem path, keep backslashes on Windows
+          source: join(base, path),
+          // path is used for URL path, replace backslashes on Windows
+          path: escapeBackslash(path),
+          params,
+          type
+        });
 
-      return Reflect.apply(BlueBirdPromise.method(processor.process), ctx, [file])
-        .thenReturn(count + 1);
-    }, 0).then(count => {
-      if (count) {
-        ctx.log.debug('Processed: %s', magenta(path));
-      }
+        return Reflect.apply(BlueBirdPromise.method(processor.process), ctx, [file]).thenReturn(count + 1);
+      },
+      0
+    )
+      .then(count => {
+        if (count) {
+          ctx.log.debug('Processed: %s', magenta(path));
+        }
 
-      this.emit('processAfter', {
-        type,
-        path
-      });
-    }).catch(err => {
-      ctx.log.error({ err }, 'Process failed: %s', magenta(path));
-    }).finally(() => {
-      this._processingFiles[path] = false;
-    }).thenReturn(path);
+        this.emit('processAfter', {
+          type,
+          path
+        });
+      })
+      .catch(err => {
+        ctx.log.error({ err }, 'Process failed: %s', magenta(path));
+      })
+      .finally(() => {
+        this._processingFiles[path] = false;
+      })
+      .thenReturn(path);
   }
 
   watch(callback?: NodeJSLikeCallback<never>): BlueBirdPromise<void> {
@@ -197,28 +219,31 @@ class Box extends EventEmitter {
       return escapeBackslash(path.substring(base.length));
     }
 
-    return this.process().then(() => watch(base, this.options)).then(watcher => {
-      this.watcher = watcher;
+    return this.process()
+      .then(() => watch(base, this.options))
+      .then(watcher => {
+        this.watcher = watcher;
 
-      watcher.on('add', path => {
-        this._processFile(File.TYPE_CREATE, getPath(path));
-      });
+        watcher.on('add', path => {
+          this._processFile(File.TYPE_CREATE, getPath(path));
+        });
 
-      watcher.on('change', path => {
-        this._processFile(File.TYPE_UPDATE, getPath(path));
-      });
+        watcher.on('change', path => {
+          this._processFile(File.TYPE_UPDATE, getPath(path));
+        });
 
-      watcher.on('unlink', path => {
-        this._processFile(File.TYPE_DELETE, getPath(path));
-      });
+        watcher.on('unlink', path => {
+          this._processFile(File.TYPE_DELETE, getPath(path));
+        });
 
-      watcher.on('addDir', path => {
-        let prefix = getPath(path);
-        if (prefix) prefix += '/';
+        watcher.on('addDir', path => {
+          let prefix = getPath(path);
+          if (prefix) prefix += '/';
 
-        this._readDir(path, prefix);
-      });
-    }).asCallback(callback);
+          this._readDir(path, prefix);
+        });
+      })
+      .asCallback(callback);
   }
 
   unwatch(): void {
@@ -247,7 +272,9 @@ function getHash(path: string): BlueBirdPromise<string> {
     src.once('end', resolve);
   });
 
-  src.on('data', chunk => { hasher.update(chunk); });
+  src.on('data', chunk => {
+    hasher.update(chunk);
+  });
 
   return finishedPromise.then(() => hasher.digest('hex'));
 }
@@ -273,27 +300,30 @@ function isIgnoreMatch(path: string, ignore: string | any[]): boolean {
 function readDirWalker(ctx: Hexo, base: string, results: any[], ignore: any, prefix: string): BlueBirdPromise<any> {
   if (isIgnoreMatch(base, ignore)) return BlueBirdPromise.resolve();
 
-  return BlueBirdPromise.map(readdir(base).catch(err => {
-    ctx.log.error({ err }, 'Failed to read directory: %s', base);
-    if (err && err.code === 'ENOENT') return [];
-    throw err;
-  }), async path => {
-    const fullpath = join(base, path);
-    const stats = await stat(fullpath).catch(err => {
-      ctx.log.error({ err }, 'Failed to stat file: %s', fullpath);
-      if (err && err.code === 'ENOENT') return null;
+  return BlueBirdPromise.map(
+    readdir(base).catch(err => {
+      ctx.log.error({ err }, 'Failed to read directory: %s', base);
+      if (err && err.code === 'ENOENT') return [];
       throw err;
-    });
-    const prefixPath = `${prefix}${path}`;
-    if (stats) {
-      if (stats.isDirectory()) {
-        return readDirWalker(ctx, fullpath, results, ignore, `${prefixPath}/`);
-      }
-      if (!isIgnoreMatch(fullpath, ignore)) {
-        results.push(prefixPath);
+    }),
+    async path => {
+      const fullpath = join(base, path);
+      const stats = await stat(fullpath).catch(err => {
+        ctx.log.error({ err }, 'Failed to stat file: %s', fullpath);
+        if (err && err.code === 'ENOENT') return null;
+        throw err;
+      });
+      const prefixPath = `${prefix}${path}`;
+      if (stats) {
+        if (stats.isDirectory()) {
+          return readDirWalker(ctx, fullpath, results, ignore, `${prefixPath}/`);
+        }
+        if (!isIgnoreMatch(fullpath, ignore)) {
+          results.push(prefixPath);
+        }
       }
     }
-  });
+  );
 }
 
 export interface _File extends File {

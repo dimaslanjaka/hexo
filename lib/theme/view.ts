@@ -6,6 +6,7 @@ import type Render from '../hexo/render';
 import type { NodeJSLikeCallback } from '../types';
 import type { Helper } from '../extend';
 import { HexoRenderOptions } from '../hexo/render-d';
+import { StoreFunctionData } from '../extend/renderer-d';
 
 const assignIn = (target: any, ...sources: any[]) => {
   const length = sources.length;
@@ -157,9 +158,9 @@ class View {
       this._compiled = (locals: any) =>
         Promise.resolve(compiled(locals)).then(result => ctx.execFilter(...buildFilterArguments(result)));
     } else {
-      this._compiledSync = (locals: Record<string, any>) => render.renderSync(data, locals);
+      this._compiledSync = (locals: Record<string, any>) => render.renderSync(data as StoreFunctionData, locals);
 
-      this._compiled = (locals: HexoRenderOptions) => render.render(data, locals);
+      this._compiled = (locals: HexoRenderOptions) => render.render(data as StoreFunctionData, locals);
     }
   }
 }
