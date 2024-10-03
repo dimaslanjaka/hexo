@@ -19,3 +19,4 @@
 **/.yarn/patch*
 **/.yarn/*.gz
 *-no-index.*
+*.tsbuildinfo
