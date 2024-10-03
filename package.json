@@ -5,6 +5,7 @@
   "main": "dist/hexo",
   "bin": "./bin/hexo",
   "scripts": {
+    "prepare": "husky install",
     "prepublishOnly": "npm install && npm run clean && npm run build",
     "build": "tsc --build tsconfig.build.json",
     "clean": "tsc --build tsconfig.build.json --clean",
@@ -12,7 +13,7 @@
     "pretest": "npm run clean && npm run build",
     "test": "mocha --timeout=700000 test/index.js --require ts-node/register",
     "test-cov": "c8 --reporter=lcovonly npm test -- --no-parallel",
-    "prepare": "husky install"
+    "test-benchmark": "node test/benchmark.js --benchmark"
   },
   "files": [
     "dist/",
