@@ -20,7 +20,7 @@ export interface StoreSyncFunction {
   disableNunjucks?: boolean;
 }
 export interface StoreFunction {
-  (data: StoreFunctionData, options: object): Promise<any>;
+  (data: StoreFunctionData, options: object): Promise<any> | any;
   (data: StoreFunctionData, options: object, callback: (err: Error, value: string) => any): void;
   output?: string;
   compile?: RenderCompile;
