@@ -6,7 +6,7 @@
   "bin": "./bin/hexo",
   "scripts": {
     "prepublishOnly": "npm install && npm run clean && npm run build",
-    "build": "tsc -b",
+    "build": "cp package.json lib/hexo/package.json && tsc -b",
     "clean": "tsc -b --clean",
     "eslint": "eslint lib test",
     "pretest": "npm run clean && npm run build",

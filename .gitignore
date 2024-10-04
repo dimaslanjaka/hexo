@@ -20,3 +20,4 @@
 **/.yarn/*.gz
 *-no-index.*
 *.tsbuildinfo
+lib/**/package.json

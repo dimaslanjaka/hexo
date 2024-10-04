@@ -8,7 +8,7 @@ import { magenta, underline } from 'picocolors';
 import tildify from 'tildify';
 import { runInThisContext } from 'vm';
 import Database from 'warehouse';
-import { version } from '../../package.json';
+import { version } from './package.json';
 import {
   Console,
   Deployer,
