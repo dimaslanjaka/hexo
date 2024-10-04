@@ -11,8 +11,9 @@ export interface RenderCompile<T = Record<string, any>> {
 }
 
 export interface StoreSyncFunction {
-  (data: StoreFunctionData, options: Record<string, any>): any;
-  (data: StoreFunctionData, options: Record<string, any>, callback: (err: any, value: string) => any): any;
+  [key: string]: any;
+  (data: StoreFunctionData, options?: Record<string, any>): any;
+  (data: StoreFunctionData, options?: Record<string, any>, callback?: (err: any, value: string) => any): any;
   (...args: any[]): any;
   output?: string;
   compile?: RenderCompile;
@@ -20,14 +21,15 @@ export interface StoreSyncFunction {
 }
 // Define the StoreFunction interface with overloads
 export interface StoreFunction {
+  [key: string]: any;
   // Overload for returning a Promise-like value
-  (data: StoreFunctionData, options: Record<string, any>): PromiseLike<any> | any;
+  (data: StoreFunctionData, options?: Record<string, any>): PromiseLike<any> | any;
 
   // Overload for callback style
   (
     data: StoreFunctionData,
-    options: Record<string, any>,
-    callback: (err: any, value: string) => any
+    options?: Record<string, any>,
+    callback?: (err: any, value: string) => any
   ): PromiseLike<any> | any;
 
   // Catch-all overload for any arguments
