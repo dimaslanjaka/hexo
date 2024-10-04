@@ -34,11 +34,3 @@
 	path = packages/hexo-cli
 	url = https://github.com/dimaslanjaka/hexo-cli.git
 	branch = monorepo
-[submodule "themes"]
-	path = themes
-	url = https://github.com/dimaslanjaka/hexo-themes.git
-	branch = master
-[submodule "packages/cross-spawn"]
-	path = packages/cross-spawn
-	url = https://github.com/dimaslanjaka/node-cross-spawn
-	branch = private
