@@ -3,7 +3,7 @@ import { Pattern } from 'hexo-util';
 import type File from '../box/file';
 
 interface StoreFunction {
-  (file: File): any
+  (file: File | string): any
 }
 
 type Store = {
