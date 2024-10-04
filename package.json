@@ -15,7 +15,7 @@
     "build-commit": "nrs \"build:**\" && node -r ts-node/register build.ts --commit",
     "clean": "node -r ts-node/register build.ts --clean",
     "lint": "eslint --fix",
-    "prepare": "husky install && yarn workspaces foreach run prepare",
+    "prepare": "husky install && yarn workspaces foreach --all run prepare",
     "pretest": "npm run build",
     "test": "yarn workspce foreach --no-private exec \"npm run test --if-present\"",
     "site:serve": "yarn workspace hexo-site run start",
@@ -52,7 +52,7 @@
   "devDependencies": {
     "@types/eslint": "^8",
     "@types/minimist": "^1",
-    "@types/node": "^20.11.17",
+    "@types/node": "^22.7.4",
     "@types/nunjucks": "^3.2.6",
     "@types/prettier": "^2",
     "@typescript-eslint/eslint-plugin": "^7.0.1",
