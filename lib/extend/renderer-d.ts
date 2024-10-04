@@ -1,3 +1,5 @@
+import { PageSchema } from '../types';
+
 export interface StoreFunctionData {
   path?: string;
   text?: string;
@@ -18,6 +20,7 @@ export interface StoreSyncFunction {
   output?: string;
   compile?: RenderCompile;
   disableNunjucks?: boolean;
+  page?: PageSchema;
 }
 // Define the StoreFunction interface with overloads
 export interface StoreFunction {
@@ -40,6 +43,7 @@ export interface StoreFunction {
   compile?: RenderCompile;
   disableNunjucks?: boolean;
   priority?: number;
+  page?: PageSchema;
 }
 
 export interface SyncStore {
