@@ -8,7 +8,6 @@ import { magenta, underline } from 'picocolors';
 import tildify from 'tildify';
 import { runInThisContext } from 'vm';
 import Database from 'warehouse';
-import { version } from './package.json';
 import {
   Console,
   Deployer,
@@ -22,6 +21,7 @@ import {
   Renderer,
   Tag
 } from '../extend';
+import { version } from './package.json';
 
 import { deepMerge, full_url_for } from 'hexo-util';
 import type Schema from 'warehouse/dist/schema';
@@ -36,7 +36,6 @@ import type {
   NormalPageGenerator,
   NormalPostGenerator,
   PageGenerator,
-  PageSchema,
   PostGenerator,
   SiteLocals
 } from '../types';
@@ -239,7 +238,6 @@ class Hexo extends EventEmitter {
   public render: Render;
   public route: Router;
   public post: Post;
-  public page: PageSchema;
   public scaffold: Scaffold;
   public _dbLoaded: boolean;
   public _isGenerating: boolean;

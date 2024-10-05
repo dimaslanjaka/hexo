@@ -177,7 +177,7 @@ class Box extends EventEmitter {
         if (!params) return count;
 
         const file = new File({
-          // source is used for filesystem path, keep backslashes on Windows
+        // source is used for filesystem path, keep backslashes on Windows
           source: join(base, path),
           // path is used for URL path, replace backslashes on Windows
           path: escapeBackslash(path),

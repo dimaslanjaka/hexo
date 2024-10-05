@@ -5,7 +5,7 @@ import { Config } from '../../hexo/index-d';
 
 const DURATION_MINUTE = 1000 * 60;
 
-function isMatch(path: string, patterns?: string | string[]) {
+function isMatch(path: string, patterns?: string| string[]) {
   if (!patterns) return false;
 
   return micromatch.isMatch(path, patterns);

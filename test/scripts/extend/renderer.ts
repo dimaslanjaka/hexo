@@ -2,7 +2,6 @@ import Renderer from '../../../lib/extend/renderer';
 // @ts-ignore
 import Promise from 'bluebird';
 import chai from 'chai';
-import { StoreFunction, StoreFunctionData } from '../../../lib/extend/renderer-d';
 const should = chai.should();
 
 describe('Renderer', () => {
@@ -41,28 +40,27 @@ describe('Renderer', () => {
     const r = new Renderer();
 
     // async
-    const promiseCb = (_data, _options, callback) => {
+    r.register('yaml', 'json', (_data, _options, callback) => {
       callback && callback(null, 'foo');
       return Promise.resolve();
-    };
-    r.register('yaml', 'json', promiseCb as StoreFunction);
+    });
 
-    const yaml = await r.get('yaml')({} as StoreFunctionData, {});
+    const yaml = await r.get('yaml')({}, {});
     yaml.should.eql('foo');
 
     // sync
     r.register('swig', 'html', (data, options) => 'foo', true);
 
-    const swig = await r.get('swig')({} as StoreFunctionData, {});
+    const swig = await r.get('swig')({}, {});
     swig.should.eql('foo');
   });
 
   it('register() - compile', () => {
     const r = new Renderer();
 
-    const renderer: any = function(data, locals) {
+    function renderer(data, locals) {
       return Promise.resolve();
-    };
+    }
 
     renderer.compile = data => {
       //

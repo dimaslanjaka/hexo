@@ -4,7 +4,7 @@ import Promise from 'bluebird';
 import { join, extname, basename } from 'path';
 import { magenta } from 'picocolors';
 import { load } from 'js-yaml';
-import { slugize, escapeRegExp, deepMerge } from 'hexo-util';
+import { slugize, escapeRegExp, deepMerge} from 'hexo-util';
 import { copyDir, exists, listDir, mkdirs, readFile, rmdir, unlink, writeFile } from 'hexo-fs';
 import { parse as yfmParse, split as yfmSplit, stringify as yfmStringify } from 'hexo-front-matter';
 import type Hexo from './index';
@@ -23,8 +23,12 @@ const STATE_SWIG_COMMENT = Symbol('swig_comment');
 const STATE_SWIG_TAG = Symbol('swig_tag');
 const STATE_SWIG_FULL_TAG = Symbol('swig_full_tag');
 
-const isNonWhiteSpaceChar = (char: string) =>
-  char !== '\r' && char !== '\n' && char !== '\t' && char !== '\f' && char !== '\v' && char !== ' ';
+const isNonWhiteSpaceChar = (char: string) => char !== '\r'
+  && char !== '\n'
+  && char !== '\t'
+  && char !== '\f'
+  && char !== '\v'
+  && char !== ' ';
 
 class PostRenderEscape {
   public stored: any[];
@@ -57,9 +61,7 @@ class PostRenderEscape {
   }
 
   escapeCodeBlocks(str: string) {
-    return str.replace(rHexoPostRenderEscape, (_, content) =>
-      PostRenderEscape.escapeContent(this.stored, 'code', content)
-    );
+    return str.replace(rHexoPostRenderEscape, (_, content) => PostRenderEscape.escapeContent(this.stored, 'code', content));
   }
 
   /**
@@ -85,8 +87,7 @@ class PostRenderEscape {
       const char = str[idx];
       const next_char = str[idx + 1];
 
-      if (state === STATE_PLAINTEXT) {
-        // From plain text to swig
+      if (state === STATE_PLAINTEXT) { // From plain text to swig
         if (char === '{') {
           // check if it is a complete tag {{ }}
           if (next_char === '{') {
@@ -109,8 +110,7 @@ class PostRenderEscape {
           output += char;
         }
       } else if (state === STATE_SWIG_TAG) {
-        if (char === '%' && next_char === '}') {
-          // From swig back to plain text
+        if (char === '%' && next_char === '}') { // From swig back to plain text
           idx++;
           if (swig_tag_name !== '' && str.includes(`end${swig_tag_name}`)) {
             state = STATE_SWIG_FULL_TAG;
@@ -149,8 +149,7 @@ class PostRenderEscape {
         } else {
           buffer = buffer + char;
         }
-      } else if (state === STATE_SWIG_COMMENT) {
-        // From swig back to plain text
+      } else if (state === STATE_SWIG_COMMENT) { // From swig back to plain text
         if (char === '#' && next_char === '}') {
           idx++;
           state = STATE_PLAINTEXT;
@@ -175,11 +174,7 @@ class PostRenderEscape {
 
           if (swig_full_tag_end_buffer.includes(`end${swig_tag_name}`)) {
             state = STATE_PLAINTEXT;
-            output += PostRenderEscape.escapeContent(
-              this.stored,
-              'swig',
-              `{%${swig_full_tag_start_buffer}%}${buffer}{%${swig_full_tag_end_buffer}%}`
-            );
+            output += PostRenderEscape.escapeContent(this.stored, 'swig', `{%${swig_full_tag_start_buffer}%}${buffer}{%${swig_full_tag_end_buffer}%}`);
             idx = _idx;
             swig_full_tag_start_buffer = '';
             swig_full_tag_end_buffer = '';
@@ -204,25 +199,15 @@ const prepareFrontMatter = (data: any, jsonMode: boolean) => {
     } else if (moment.isDate(item)) {
       data[key] = moment.utc(item).format('YYYY-MM-DD HH:mm:ss');
     } else if (typeof item === 'string') {
-      if (
-        jsonMode
-        || item.includes(':')
-        || item.startsWith('#')
-        || item.startsWith('!!')
-        || item.includes('{')
-        || item.includes('}')
-        || item.includes('[')
-        || item.includes(']')
-        || item.includes('\'')
-        || item.includes('"')
-      ) {
-        data[key] = `"${item.replace(/"/g, '\\"')}"`;
-      }
+      if (jsonMode || item.includes(':') || item.startsWith('#') || item.startsWith('!!')
+      || item.includes('{') || item.includes('}') || item.includes('[') || item.includes(']')
+      || item.includes('\'') || item.includes('"')) data[key] = `"${item.replace(/"/g, '\\"')}"`;
     }
   }
 
   return data;
 };
+
 
 const removeExtname = (str: string) => {
   return str.substring(0, str.length - extname(str).length);
@@ -262,7 +247,7 @@ class Post {
 
   create(data: PostData, callback?: NodeJSLikeCallback<any>);
   create(data: PostData, replace: boolean, callback?: NodeJSLikeCallback<any>);
-  create(data: PostData, replace: boolean | NodeJSLikeCallback<any>, callback?: NodeJSLikeCallback<any>) {
+  create(data: PostData, replace: boolean | (NodeJSLikeCallback<any>), callback?: NodeJSLikeCallback<any>) {
     if (!callback && typeof replace === 'function') {
       callback = replace;
       replace = false;
@@ -282,21 +267,19 @@ class Post {
         context: ctx
       }),
       this._renderScaffold(data)
-    ])
-      .spread((path, content) => {
-        const result = { path, content };
+    ]).spread((path, content) => {
+      const result = { path, content };
 
-        return Promise.all<void, void | string>([
-          // Write content to file
-          writeFile(path, content),
-          // Create asset folder
-          createAssetFolder(path, config.post_asset_folder)
-        ]).then(() => {
-          ctx.emit('new', result);
-          return result;
-        });
-      })
-      .asCallback(callback);
+      return Promise.all<void, void | string>([
+        // Write content to file
+        writeFile(path, content),
+        // Create asset folder
+        createAssetFolder(path, config.post_asset_folder)
+      ]).then(() => {
+        ctx.emit('new', result);
+        return result;
+      });
+    }).asCallback(callback);
   }
 
   _getScaffold(layout: string) {
@@ -312,45 +295,38 @@ class Post {
     const { tag } = this.context.extend;
     let splitted;
 
-    return this._getScaffold(data.layout)
-      .then(scaffold => {
-        splitted = yfmSplit(scaffold);
-        const jsonMode = splitted.separator.startsWith(';');
-        const frontMatter = prepareFrontMatter({ ...data }, jsonMode);
+    return this._getScaffold(data.layout).then(scaffold => {
+      splitted = yfmSplit(scaffold);
+      const jsonMode = splitted.separator.startsWith(';');
+      const frontMatter = prepareFrontMatter({ ...data }, jsonMode);
 
-        return tag.render(splitted.data, frontMatter);
-      })
-      .then(frontMatter => {
-        const { separator } = splitted;
-        const jsonMode = separator.startsWith(';');
+      return tag.render(splitted.data, frontMatter);
+    }).then(frontMatter => {
+      const { separator } = splitted;
+      const jsonMode = separator.startsWith(';');
 
-        // Parse front-matter
-        let obj = jsonMode ? JSON.parse(`{${frontMatter}}`) : load(frontMatter);
+      // Parse front-matter
+      let obj = jsonMode ? JSON.parse(`{${frontMatter}}`) : load(frontMatter);
 
-        obj = deepMerge(
-          obj,
-          Object.fromEntries(
-            Object.entries(data).filter(([key, value]) => !preservedKeys.includes(key) && value != null)
-          )
-        );
+      obj = deepMerge(obj, Object.fromEntries(Object.entries(data).filter(([key, value]) => !preservedKeys.includes(key) && value != null)));
 
-        let content = '';
-        // Prepend the separator
-        if (splitted.prefixSeparator) content += `${separator}\n`;
+      let content = '';
+      // Prepend the separator
+      if (splitted.prefixSeparator) content += `${separator}\n`;
 
-        content += yfmStringify(obj, {
-          mode: jsonMode ? 'json' : ''
-        });
-
-        // Concat content
-        content += splitted.content;
-
-        if (data.content) {
-          content += `\n${data.content}`;
-        }
-
-        return content;
+      content += yfmStringify(obj, {
+        mode: jsonMode ? 'json' : ''
       });
+
+      // Concat content
+      content += splitted.content;
+
+      if (data.content) {
+        content += `\n${data.content}`;
+      }
+
+      return content;
+    });
   }
 
   publish(data: PostData, replace?: boolean);
@@ -376,70 +352,46 @@ class Post {
     data.layout = (data.layout || config.default_layout).toLowerCase();
 
     // Find the draft
-    return listDir(draftDir)
-      .then(list => {
-        const item = list.find(item => regex.test(item));
-        if (!item) throw new Error(`Draft "${slug}" does not exist.`);
+    return listDir(draftDir).then(list => {
+      const item = list.find(item => regex.test(item));
+      if (!item) throw new Error(`Draft "${slug}" does not exist.`);
 
-        // Read the content
-        src = join(draftDir, item);
-        return readFile(src);
-      })
-      .then(content => {
-        // Create post
-        Object.assign(data, yfmParse(content));
-        data.content = data._content;
-        data._content = undefined;
+      // Read the content
+      src = join(draftDir, item);
+      return readFile(src);
+    }).then(content => {
+      // Create post
+      Object.assign(data, yfmParse(content));
+      data.content = data._content;
+      data._content = undefined;
 
-        return this.create(data, replace as boolean);
-      })
-      .then(post => {
-        result.path = post.path;
-        result.content = post.content;
-        return unlink(src);
-      })
-      .then(() => {
-        // Remove the original draft file
-        if (!config.post_asset_folder) return;
+      return this.create(data, replace as boolean);
+    }).then(post => {
+      result.path = post.path;
+      result.content = post.content;
+      return unlink(src);
+    }).then(() => { // Remove the original draft file
+      if (!config.post_asset_folder) return;
 
-        // Copy assets
-        const assetSrc = removeExtname(src);
-        const assetDest = removeExtname(result.path);
+      // Copy assets
+      const assetSrc = removeExtname(src);
+      const assetDest = removeExtname(result.path);
 
-        return exists(assetSrc).then(exist => {
-          if (!exist) return;
+      return exists(assetSrc).then(exist => {
+        if (!exist) return;
 
-          return copyDir(assetSrc, assetDest).then(() => rmdir(assetSrc));
-        });
-      })
-      .thenReturn(result)
-      .asCallback(callback);
+        return copyDir(assetSrc, assetDest).then(() => rmdir(assetSrc));
+      });
+    }).thenReturn(result).asCallback(callback);
   }
 
-  /**
-   * renderer
-   * @param source source path file
-   * @param data
-   * @param callback
-   * @returns
-   * @see {@link https://hexo.io/api/rendering.html}
-   * @example
-   * // promise
-   * hexo.post.render("source/_posts/post-asset-link.md").then(function (rendered) {
-   *    console.log(rendered.content);
-   * });
-   * // callback
-   * hexo.post.render("source/_posts/post-asset-link.md", {}, function (err, rendered) {
-   *    console.log(rendered.content);
-   * });
-   */
   render(source: string, data: RenderData = {}, callback?: NodeJSLikeCallback<never>) {
     const ctx = this.context;
     const { config } = ctx;
     const { tag } = ctx.extend;
     const ext = data.engine || (source ? extname(source) : '');
 
-    let promise: Promise<string>;
+    let promise;
 
     if (data.content != null) {
       promise = Promise.resolve(data.content);
@@ -455,23 +407,20 @@ class Post {
     const isPost = !data.source || ['html', 'htm'].includes(ctx.render.getOutput(data.source));
 
     if (!isPost) {
-      return promise
-        .then(content => {
-          data.content = content;
-          ctx.log.debug('Rendering file: %s', magenta(source));
+      return promise.then(content => {
+        data.content = content;
+        ctx.log.debug('Rendering file: %s', magenta(source));
 
-          return ctx.render.render({
-            text: data.content,
-            path: source,
-            engine: data.engine,
-            toString: true
-          });
-        })
-        .then(content => {
-          data.content = content;
-          return data;
-        })
-        .asCallback(callback);
+        return ctx.render.render({
+          text: data.content,
+          path: source,
+          engine: data.engine,
+          toString: true
+        });
+      }).then(content => {
+        data.content = content;
+        return data;
+      }).asCallback(callback);
     }
 
     // disable Nunjucks when the renderer specify that.
@@ -482,55 +431,44 @@ class Post {
 
     const cacheObj = new PostRenderEscape();
 
-    return promise
-      .then(content => {
-        data.content = content;
-        // add more property for type extend_filter_before_post_render_data
-        // see more lib/plugins/filter/before_post_render/dataType.ts
-        data.source = source;
-        data.config = ctx.config;
-        // Run "before_post_render" filters
-        return ctx.execFilter('before_post_render', data, { context: ctx });
-      })
-      .then(() => {
-        data.content = cacheObj.escapeCodeBlocks(data.content);
-        // Escape all Nunjucks/Swig tags
-        if (disableNunjucks === false) {
-          data.content = cacheObj.escapeAllSwigTags(data.content);
+    return promise.then(content => {
+      data.content = content;
+      // Run "before_post_render" filters
+      return ctx.execFilter('before_post_render', data, { context: ctx });
+    }).then(() => {
+      data.content = cacheObj.escapeCodeBlocks(data.content);
+      // Escape all Nunjucks/Swig tags
+      if (disableNunjucks === false) {
+        data.content = cacheObj.escapeAllSwigTags(data.content);
+      }
+
+      const options: { highlight?: boolean; } = data.markdown || {};
+      if (!config.syntax_highlighter) options.highlight = null;
+
+      ctx.log.debug('Rendering post: %s', magenta(source));
+      // Render with markdown or other renderer
+      return ctx.render.render({
+        text: data.content,
+        path: source,
+        engine: data.engine,
+        toString: true,
+        onRenderEnd(content) {
+          // Replace cache data with real contents
+          data.content = cacheObj.restoreAllSwigTags(content);
+
+          // Return content after replace the placeholders
+          if (disableNunjucks) return data.content;
+
+          // Render with Nunjucks
+          return tag.render(data.content, data);
         }
+      }, options);
+    }).then(content => {
+      data.content = cacheObj.restoreCodeBlocks(content);
 
-        const options: { highlight?: boolean } = data.markdown || {};
-        if (!config.syntax_highlighter) options.highlight = null;
-
-        ctx.log.debug('Rendering post: %s', magenta(source));
-        // Render with markdown or other renderer
-        return ctx.render.render(
-          {
-            text: data.content,
-            path: source,
-            engine: data.engine,
-            toString: true,
-            onRenderEnd(content: string) {
-              // Replace cache data with real contents
-              data.content = cacheObj.restoreAllSwigTags(content);
-
-              // Return content after replace the placeholders
-              if (disableNunjucks) return data.content;
-
-              // Render with Nunjucks
-              return tag.render(data.content, data);
-            }
-          },
-          options
-        );
-      })
-      .then(content => {
-        data.content = cacheObj.restoreCodeBlocks(content);
-
-        // Run "after_post_render" filters
-        return ctx.execFilter('after_post_render', data, { context: ctx });
-      })
-      .asCallback(callback);
+      // Run "after_post_render" filters
+      return ctx.execFilter('after_post_render', data, { context: ctx });
+    }).asCallback(callback);
   }
 }
 

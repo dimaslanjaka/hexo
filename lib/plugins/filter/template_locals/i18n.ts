@@ -12,11 +12,9 @@ function i18nLocalsFilter(locals: HexoLocalsData) {
 
   if (!lang) {
     const pattern = new Pattern(`${i18nDir}/*path`);
-    // fix hexo-util/dist/pattern.d.ts is not object
-    // fix(TS2322): Type 'unknown' is not assignable to type 'string'.
     const data = pattern.match(locals.path) as Record<string, any>;
 
-    if (data && !Array.isArray(data) && typeof data === 'object' && data.lang && i18nLanguages.includes(data.lang)) {
+    if (data && typeof data.lang === 'string' && i18nLanguages.includes(data.lang)) {
       lang = data.lang;
       page.canonical_path = data.path;
     } else {

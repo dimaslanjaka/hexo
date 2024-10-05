@@ -49,7 +49,6 @@ export interface RenderData {
 
 // Schema
 export interface PostSchema {
-  [prop: string]: any;
   id?: string | number;
   _id?: string | number;
   title?: string;
@@ -84,6 +83,7 @@ export interface PostSchema {
   current?: number;
   total?: number;
   description?: string;
+  [key: string]: any;
 }
 
 export interface PageSchema {
