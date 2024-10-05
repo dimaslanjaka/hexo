@@ -58,7 +58,7 @@
     "@typescript-eslint/eslint-plugin": "^7.0.1",
     "@typescript-eslint/parser": "^7.0.1",
     "binary-collections": "https://github.com/dimaslanjaka/bin.git#master",
-    "cross-spawn": "https://github.com/dimaslanjaka/node-cross-spawn/raw/5560156/release/cross-spawn.tgz",
+    "cross-spawn": "https://github.com/dimaslanjaka/node-cross-spawn/raw/private/release/cross-spawn.tgz",
     "depcheck": "^1.4.7",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
@@ -74,23 +74,23 @@
     "typescript": "^5.3.3"
   },
   "workspaces": [
-    "packages/hexo-log",
-    "packages/hexo-util",
-    "packages/warehouse",
-    "packages/hexo-cli",
-    "packages/hexo-front-matter",
-    "packages/hexo",
-    "packages/hexo-asset-link",
-    "packages/hexo-theme-landscape",
+    "packages/*",
     "test/hexo-theme-test"
   ],
   "packageManager": "yarn@4.5.0",
   "resolutions": {
-    "sbg-utility": "https://github.com/dimaslanjaka/static-blog-generator/raw/master/packages/sbg-utility/release/sbg-utility.tgz",
-    "cross-spawn": "https://github.com/dimaslanjaka/node-cross-spawn/raw/5560156/release/cross-spawn.tgz",
-    "git-command-helper": "https://github.com/dimaslanjaka/git-command-helper/raw/pre-release/release/git-command-helper.tgz"
+    "sbg-utility": "https://github.com/dimaslanjaka/static-blog-generator/raw/sbg-utility/packages/sbg-utility/release/sbg-utility.tgz",
+    "cross-spawn": "https://github.com/dimaslanjaka/node-cross-spawn/raw/private/release/cross-spawn.tgz",
+    "git-command-helper": "https://github.com/dimaslanjaka/git-command-helper/raw/pre-release/release/git-command-helper.tgz",
+    "hexo-log": "workspace:^",
+    "hexo-util": "workspace:^",
+    "hexo-cli": "workspace:^",
+    "hexo": "workspace:^",
+    "warehouse": "workspace:^",
+    "hexo-front-matter": "workspace:^",
+    "hexo-asset-link": "workspace:^"
   },
   "engines": {
-    "node": "^14"
+    "node": ">=14"
   }
 }
