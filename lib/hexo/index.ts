@@ -36,6 +36,7 @@ import type {
   NormalPageGenerator,
   NormalPostGenerator,
   PageGenerator,
+  PageSchema,
   PostGenerator,
   SiteLocals
 } from '../types';
@@ -238,6 +239,7 @@ class Hexo extends EventEmitter {
   public render: Render;
   public route: Router;
   public post: Post;
+  public page: PageSchema;
   public scaffold: Scaffold;
   public _dbLoaded: boolean;
   public _isGenerating: boolean;

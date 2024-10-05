@@ -1,5 +1,7 @@
+import Hexo from '../hexo';
+
 interface StoreFunction {
-  (this: import('../hexo'), ...args: any[]): any;
+  (this: Hexo, ...args: any[]): any;
 }
 
 interface Store {
