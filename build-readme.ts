@@ -1,9 +1,9 @@
 import croSpawn from 'cross-spawn';
 import git from 'git-command-helper';
 import minimist from 'minimist';
-import { findYarnRootWorkspace, path, fs, writefile } from 'sbg-utility';
 import nunjucks from 'nunjucks';
 import picocolors from 'picocolors';
+import { fs, path, writefile } from 'sbg-utility';
 
 const parseWorkspaces = croSpawn
   .async('yarn', ['workspaces', 'list', '--no-private', '--json'], {
@@ -15,7 +15,7 @@ const parseWorkspaces = croSpawn
       .filter((str) => str.length > 4)
       .map((str) => {
         const parse: { location: string; name: string } = JSON.parse(str.trim());
-        parse.location = path.join(findYarnRootWorkspace({ base_dir: process.cwd() }), parse.location);
+        parse.location = path.join(__dirname, parse.location);
         return parse;
       })
       .filter((o) => fs.existsSync(o.location))

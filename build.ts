@@ -1,9 +1,8 @@
 import croSpawn from 'cross-spawn';
-import { renameSync, existsSync, rmSync, mkdirSync } from 'fs';
-import { join, dirname } from 'path';
-import utility from 'sbg-utility';
-import pc from 'picocolors';
+import { existsSync, mkdirSync, renameSync, rmSync } from 'fs';
 import minimist from 'minimist';
+import { dirname, join } from 'path';
+import pc from 'picocolors';
 import { createReadMe } from './build-readme';
 
 const argv = minimist(process.argv.slice(2));
@@ -18,7 +17,7 @@ const parseWorkspaces = croSpawn
       .filter((str) => str.length > 4)
       .map((str) => {
         const parse: { location: string; name: string } = JSON.parse(str.trim());
-        parse.location = join(utility.findYarnRootWorkspace({ base_dir: process.cwd() }), parse.location);
+        parse.location = join(__dirname, parse.location);
         return parse;
       })
       .filter((o) => existsSync(o.location))
