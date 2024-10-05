@@ -1,4 +1,4 @@
-import { PageSchema } from '../types';
+import { PageSchema, SiteLocals } from '../types';
 
 export interface StoreFunctionData {
   path?: string;
@@ -20,7 +20,7 @@ export interface StoreSyncFunction {
   output?: string;
   compile?: RenderCompile;
   disableNunjucks?: boolean;
-  page?: PageSchema;
+  page?: PageSchema & SiteLocals;
 }
 // Define the StoreFunction interface with overloads
 export interface StoreFunction {
@@ -43,7 +43,7 @@ export interface StoreFunction {
   compile?: RenderCompile;
   disableNunjucks?: boolean;
   priority?: number;
-  page?: PageSchema;
+  page?: PageSchema & SiteLocals;
 }
 
 export interface SyncStore {
