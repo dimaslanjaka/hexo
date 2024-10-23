@@ -4,6 +4,9 @@ import { Environment } from 'nunjucks';
 import Promise from 'bluebird';
 import type { NodeJSLikeCallback } from '../types';
 import { AsyncTagFunction, RegisterOptions, TagFunction } from './tag-d';
+import fs from 'fs';
+import path from 'path';
+import crypto from 'crypto';
 
 const rSwigRawFullBlock = /{% *raw *%}/;
 const rCodeTag = /<code[^<>]*>[\s\S]+?<\/code>/g;
@@ -168,6 +171,22 @@ class NunjucksError extends Error {
  * @return {Error}    New error object with embedded context
  */
 const formatNunjucksError = (err: Error, input: string, source = ''): Error => {
+  const errorData = `
+Source: ${source}
+Error:
+
+${err}
+
+Input:
+
+${input}
+  `;
+  const errorPath = path.join(process.cwd(), 'tmp/hexo/error', crypto.createHash('md5').update(errorData).digest('hex') + '.txt');
+  if (!fs.existsSync(path.dirname(errorPath))) {
+    fs.mkdirSync(path.dirname(errorPath), { recursive: true });
+  }
+  fs.writeFileSync(errorPath, errorData);
+  console.log('hexo error log', errorPath);
   err.message = err.message.replace('(unknown path)', source ? magenta(source) : '');
 
   const match = err.message.match(/Line (\d+), Column \d+/);
