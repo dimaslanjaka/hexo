@@ -99,6 +99,8 @@ async function buildPack(workspaces: Awaited<typeof parseWorkspaces>) {
       .then(() => runBuild('warehouse'))
       // need hexo-util
       .then(() => runBuild('hexo-asset-link'))
+      // need hexo-util
+      .then(() => runBuild('hexo-server'))
       // need hexo-util, hexo-log
       .then(() => runBuild('hexo-cli'))
       // need hexo-cli, hexo-util, hexo-log, warehouse, hexo-front-matter
