@@ -7,7 +7,7 @@
 **/tmp/
 *.log
 .idea/
-#**/yarn.lock
+**/yarn.lock
 **/package-lock.json
 .nyc_output/
 coverage/

@@ -88,7 +88,8 @@
     "hexo": "workspace:^",
     "warehouse": "workspace:^",
     "hexo-front-matter": "workspace:^",
-    "hexo-asset-link": "workspace:^"
+    "hexo-asset-link": "workspace:^",
+    "@types/node": "^20"
   },
   "engines": {
     "node": ">=14"

@@ -34,3 +34,7 @@
 	path = packages/hexo-cli
 	url = https://github.com/dimaslanjaka/hexo-cli.git
 	branch = monorepo
+[submodule "packages/hexo-server"]
+	path = packages/hexo-server
+	url = https://github.com/dimaslanjaka/hexo-server.git
+	branch = private

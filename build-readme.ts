@@ -1,4 +1,4 @@
-import croSpawn from 'cross-spawn';
+import * as croSpawn from 'cross-spawn';
 import git from 'git-command-helper';
 import minimist from 'minimist';
 import nunjucks from 'nunjucks';

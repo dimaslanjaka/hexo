@@ -1,7 +1,8 @@
-yarn workspace hexo exec "git remote add upstream https://github.com/hexojs/hexo" > nul
-yarn workspace hexo-front-matter exec "git remote add upstream https://github.com/hexojs/hexo-front-matter" > nul
-yarn workspace warehouse exec "git remote add upstream https://github.com/hexojs/warehouse" > nul
-yarn workspace hexo-asset-link exec "git remote add upstream https://github.com/liolok/hexo-asset-link" > nul
-yarn workspace hexo-site exec "git remote add upstream https://github.com/hexojs/hexo-theme-unit-test" > nul
-yarn workspace hexo-util exec "git remote add upstream https://github.com/hexojs/hexo-util" > nul
-yarn workspace hexo-log exec "git remote add upstream https://github.com/hexojs/hexo-log" > nul
+call yarn workspace hexo exec "git remote add upstream https://github.com/hexojs/hexo 2>NUL"
+call yarn workspace hexo-front-matter exec "git remote add upstream https://github.com/hexojs/hexo-front-matter 2>NUL"
+call yarn workspace warehouse exec "git remote add upstream https://github.com/hexojs/warehouse 2>NUL"
+call yarn workspace hexo-asset-link exec "git remote add upstream https://github.com/liolok/hexo-asset-link 2>NUL"
+call yarn workspace hexo-site exec "git remote add upstream https://github.com/hexojs/hexo-theme-unit-test 2>NUL"
+call yarn workspace hexo-util exec "git remote add upstream https://github.com/hexojs/hexo-util 2>NUL"
+call yarn workspace hexo-log exec "git remote add upstream https://github.com/hexojs/hexo-log 2>NUL"
+call yarn workspace hexo-server exec "git remote add upstream https://github.com/hexojs/hexo-server 2>NUL"

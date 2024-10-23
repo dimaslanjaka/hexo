@@ -1,4 +1,4 @@
-import croSpawn from 'cross-spawn';
+import * as croSpawn from 'cross-spawn';
 import { existsSync, mkdirSync, renameSync, rmSync } from 'fs';
 import minimist from 'minimist';
 import { dirname, join } from 'path';
