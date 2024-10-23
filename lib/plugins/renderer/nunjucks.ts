@@ -1,6 +1,6 @@
 import { readFileSync } from 'hexo-fs';
-import nunjucks, { Environment } from 'nunjucks';
-import { dirname } from 'path';
+import nunjucks from 'nunjucks';
+import path, { dirname } from 'path';
 import type { StoreFunctionData } from '../../extend/renderer-d';
 
 function toArray(value: any) {
@@ -30,25 +30,33 @@ function safeJsonStringify(json: any, spacer = undefined): string {
   return '""';
 }
 
-const nunjucksCfg = {
+const nunjucksCfg: nunjucks.ConfigureOptions = {
   autoescape: false,
   throwOnUndefined: false,
   trimBlocks: false,
   lstripBlocks: false
 };
 
-const nunjucksAddFilter = (env: Environment): void => {
+const nunjucksAddFilter = (env: nunjucks.Environment): void => {
   env.addFilter('toarray', toArray);
   env.addFilter('safedump', safeJsonStringify);
 };
 
 function njkCompile(data: StoreFunctionData): nunjucks.Template {
-  let env: Environment;
-  if (data.path) {
-    env = nunjucks.configure(dirname(data.path), nunjucksCfg);
-  } else {
-    env = nunjucks.configure(nunjucksCfg);
+  const paths = [] as string[];
+  if (typeof hexo !== 'undefined') {
+    paths.push(path.join(hexo.base_dir, 'themes', hexo.config.theme));
+    paths.push(path.join(hexo.base_dir, 'themes', hexo.config.theme, 'layout'));
   }
+  if (data.path) {
+    paths.push(dirname(data.path));
+  }
+  const env = nunjucks.configure(paths, nunjucksCfg);
+  // if (data.path) {
+  //   env = nunjucks.configure(dirname(data.path), nunjucksCfg);
+  // } else {
+  //   env = nunjucks.configure(nunjucksCfg);
+  // }
   nunjucksAddFilter(env);
 
   const text = 'text' in data ? data.text : readFileSync(data.path).toString();
