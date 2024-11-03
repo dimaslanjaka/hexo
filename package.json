@@ -77,7 +77,7 @@
     "packages/*",
     "test/hexo-theme-test"
   ],
-  "packageManager": "yarn@4.5.0",
+  "packageManager": "yarn@4.5.1",
   "resolutions": {
     "sbg-utility": "https://github.com/dimaslanjaka/static-blog-generator/raw/sbg-utility/packages/sbg-utility/release/sbg-utility.tgz",
     "cross-spawn": "https://github.com/dimaslanjaka/node-cross-spawn/raw/private/release/cross-spawn.tgz",
