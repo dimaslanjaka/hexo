@@ -62,7 +62,7 @@ function njkCompile(data: StoreFunctionData): nunjucks.Template {
   const text = 'text' in data ? data.text : readFileSync(data.path).toString();
 
   // return nunjucks.compile(text, env, data.path);
-  if (data.path) console.log('njkCompile', data.path);
+  // if (data.path) console.log('njkCompile', data.path);
   return nunjucks.compile(text, env);
 }
 
