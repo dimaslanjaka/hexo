@@ -43,32 +43,36 @@ const nunjucksAddFilter = (env: nunjucks.Environment): void => {
 };
 
 function njkCompile(data: StoreFunctionData): nunjucks.Template {
-  const paths = [] as string[];
-  if (typeof hexo !== 'undefined') {
-    paths.push(path.join(hexo.base_dir, 'themes', hexo.config.theme));
-    paths.push(path.join(hexo.base_dir, 'themes', hexo.config.theme, 'layout'));
-  }
-  if (data.path) {
-    paths.push(dirname(data.path));
-  }
-  const env = nunjucks.configure(paths, nunjucksCfg);
-  // if (data.path) {
-  //   env = nunjucks.configure(dirname(data.path), nunjucksCfg);
-  // } else {
-  //   env = nunjucks.configure(nunjucksCfg);
-  // }
-  nunjucksAddFilter(env);
+  try {
+    const paths = [] as string[];
+    if (typeof hexo !== 'undefined') {
+      paths.push(path.join(hexo.base_dir, 'themes', hexo.config.theme));
+      paths.push(path.join(hexo.base_dir, 'themes', hexo.config.theme, 'layout'));
+    }
+    if (data.path) {
+      paths.push(dirname(data.path));
+    }
+    const env = nunjucks.configure(paths, nunjucksCfg);
 
-  let text = '';
-  if ('text' in data && typeof data.text === 'string') {
-    text = data.text;
-  } else if (data.path) {
-    text = readFileSync(data.path).toString();
-  }
+    nunjucksAddFilter(env);
 
-  // return nunjucks.compile(text, env, data.path);
-  // if (data.path) console.log('njkCompile', data.path);
-  return nunjucks.compile(text, env);
+    let text = '';
+    if ('text' in data && typeof data.text === 'string') {
+      text = data.text;
+    } else if (data.path) {
+      text = readFileSync(data.path).toString();
+    }
+
+    // return nunjucks.compile(text, env, data.path);
+    return nunjucks.compile(text, env);
+  } catch (error) {
+    const msg = `Source: ${data.path ? data.path : data.text.substring(0, 150)}
+Error:
+
+${error}`;
+    console.log(msg);
+    throw error;
+  }
 }
 
 // function with internal exported function needs interface to detect from IDE
