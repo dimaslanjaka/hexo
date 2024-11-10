@@ -59,7 +59,12 @@ function njkCompile(data: StoreFunctionData): nunjucks.Template {
   // }
   nunjucksAddFilter(env);
 
-  const text = 'text' in data ? data.text : readFileSync(data.path).toString();
+  let text = '';
+  if ('text' in data && typeof data.text === 'string') {
+    text = data.text;
+  } else if (data.path) {
+    text = readFileSync(data.path).toString();
+  }
 
   // return nunjucks.compile(text, env, data.path);
   // if (data.path) console.log('njkCompile', data.path);
