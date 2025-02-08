@@ -14,7 +14,7 @@ function i18nLocalsFilter(locals: HexoLocalsData) {
     const pattern = new Pattern(`${i18nDir}/*path`);
     const data = pattern.match(locals.path) as Record<string, any>;
 
-    if (data && typeof data.lang === 'string' && i18nLanguages.includes(data.lang)) {
+    if (data && 'lang' in data && i18nLanguages.includes(data.lang)) {
       lang = data.lang;
       page.canonical_path = data.path;
     } else {
@@ -26,7 +26,7 @@ function i18nLocalsFilter(locals: HexoLocalsData) {
   page.lang = lang;
   page.canonical_path = page.canonical_path || locals.path;
 
-  const languages = [...new Set([].concat(lang, i18nConfigLanguages, i18nLanguages).filter(Boolean))];
+  const languages = [...new Set<string>([].concat(lang, i18nConfigLanguages, i18nLanguages).filter(Boolean))];
 
   locals.__ = i18n.__(languages);
   locals._p = i18n._p(languages);

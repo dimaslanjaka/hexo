@@ -1,4 +1,3 @@
-import { Pattern } from 'hexo-util';
 import moment from 'moment-timezone';
 import micromatch from 'micromatch';
 import { Config } from '../../hexo/index-d';
@@ -26,17 +25,12 @@ function isExcludedFile(path: string, config: Config) {
   return false;
 }
 
-export const ignoreTmpAndHiddenFile = new Pattern(path => {
-  if (isTmpFile(path) || isHiddenFile(path)) return false;
-  return true;
-});
+export {isTmpFile};
+export {isHiddenFile};
+export {isExcludedFile};
 
-export { isTmpFile };
-export { isHiddenFile };
-export { isExcludedFile };
-
-export function toDate(date?: string | number | Date | moment.Moment) {
-  if (!date || moment.isMoment(date)) return date;
+export function toDate(date?: string | number | Date | moment.Moment): Date | undefined | moment.Moment {
+  if (!date || moment.isMoment(date)) return date as any;
 
   if (!(date instanceof Date)) {
     date = new Date(date);

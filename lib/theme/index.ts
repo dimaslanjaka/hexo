@@ -5,14 +5,13 @@ import { config } from './processors/config';
 import { i18n } from './processors/i18n';
 import { source } from './processors/source';
 import { view } from './processors/view';
-import View from './view';
-import Hexo from '../hexo';
+import type Hexo from '../hexo';
 
 class Theme extends Box {
   public config: any;
   public views: any;
   public i18n: I18n;
-  public View: any;
+  public View: typeof View;
 
   constructor(ctx: Hexo, options?: Record<string, any>) {
     super(ctx, ctx.theme_dir, options);

@@ -206,6 +206,14 @@ ${input}
   return e;
 };
 
+type RegisterOptions = {
+  async?: boolean;
+  ends?: boolean;
+}
+
+/**
+ * A tag allows users to quickly and easily insert snippets into their posts.
+ */
 class Tag {
   public env: Environment;
   public source: string;

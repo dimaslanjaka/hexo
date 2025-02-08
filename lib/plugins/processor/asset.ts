@@ -5,7 +5,8 @@ import { extname, relative } from 'path';
 import { magenta } from 'picocolors';
 import type { _File } from '../../box';
 import type Hexo from '../../hexo';
-import { isExcludedFile, isMatch, timezone, toDate } from './common';
+import type { Stats } from 'fs';
+import { PageSchema } from '../../types';
 
 export = (ctx: Hexo) => {
   return {
@@ -50,33 +51,31 @@ function processPage(ctx: Hexo, file: _File) {
   return Promise.all([
     file.stat(),
     file.read()
-  ]).then(results => {
-    const stats = results[0];
-    const content = results[1];
-    const data = yfm(content, {});
+  ]).spread((stats: Stats, content: string) => {
+    const data: PageSchema = yfm(content);
     const output = ctx.render.getOutput(path);
 
     data.source = path;
     data.raw = content;
 
-    data.date = toDate(data.date);
+    data.date = toDate(data.date) as any;
 
     if (data.date) {
-      if (timezoneCfg) data.date = timezone(data.date, timezoneCfg);
+      if (timezoneCfg) data.date = timezone(data.date, timezoneCfg) as any;
     } else {
-      data.date = stats.ctime;
+      data.date = stats.ctime as any;
     }
 
-    data.updated = toDate(data.updated);
+    data.updated = toDate(data.updated) as any;
 
     if (data.updated) {
-      if (timezoneCfg) data.updated = timezone(data.updated, timezoneCfg);
+      if (timezoneCfg) data.updated = timezone(data.updated, timezoneCfg) as any;
     } else if (updated_option === 'date') {
       data.updated = data.date;
     } else if (updated_option === 'empty') {
       data.updated = undefined;
     } else {
-      data.updated = stats.mtime;
+      data.updated = stats.mtime as any;
     }
 
     if (data.permalink) {
