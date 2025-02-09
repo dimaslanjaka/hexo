@@ -9,6 +9,7 @@ import type Hexo from '../../hexo';
 import type { Stats } from 'fs';
 import { PostAssetSchema, PostSchema } from '../../types';
 import type Document from 'warehouse/dist/document';
+import { isExcludedFile, isHiddenFile, isMatch, isTmpFile, timezone, toDate } from './common';
 
 const postDir = '_posts/';
 const draftDir = '_drafts/';
@@ -91,7 +92,7 @@ function processPost(ctx: Hexo, file: _File) {
     file.stat(),
     file.read()
   ]).spread((stats: Stats, content: string) => {
-    const data: PostSchema = yfm(content);
+    const data: Partial<PostSchema> = yfm(content);
     const info = parseFilename(config.new_post_name, path);
     const keys = Object.keys(info);
 
