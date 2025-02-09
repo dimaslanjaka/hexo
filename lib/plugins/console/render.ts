@@ -5,6 +5,7 @@ import { writeFile } from 'hexo-fs';
 import { cyan, magenta } from 'picocolors';
 import type Hexo from '../../hexo';
 import type Promise from 'bluebird';
+import { StoreFunctionData } from '../../extend/renderer-d';
 
 interface RenderArgs {
   _: string[]
