@@ -9,6 +9,7 @@ import { isMatch, makeRe } from 'micromatch';
 import type Hexo from '../hexo';
 import type { NodeJSLikeCallback } from '../types';
 import type fs from 'fs';
+import { StoreFunctionData } from '../extend/renderer-d';
 
 const defaultPattern = new Pattern(() => ({}));
 
@@ -74,13 +75,13 @@ class Box extends EventEmitter {
       render(options?: any) {
         return ctx.render.render({
           path: this.source
-        }, options);
+        } as StoreFunctionData, options);
       }
 
       renderSync(options?: any) {
         return ctx.render.renderSync({
           path: this.source
-        }, options);
+        } as StoreFunctionData, options);
       }
     }
 
