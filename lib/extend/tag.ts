@@ -181,7 +181,11 @@ Input:
 
 ${input}
   `;
-  const errorPath = path.join(process.cwd(), 'tmp/hexo/error', crypto.createHash('md5').update(errorData).digest('hex') + '.txt');
+  const errorPath = path.join(
+    process.cwd(),
+    'tmp/hexo/error',
+    crypto.createHash('md5').update(errorData).digest('hex') + '.txt'
+  );
   if (!fs.existsSync(path.dirname(errorPath))) {
     fs.mkdirSync(path.dirname(errorPath), { recursive: true });
   }
@@ -205,11 +209,6 @@ ${input}
   e.message = getContext(input.split(/\r?\n/), errLine, e.location, e.type).join('\n');
   return e;
 };
-
-type RegisterOptions = {
-  async?: boolean;
-  ends?: boolean;
-}
 
 /**
  * A tag allows users to quickly and easily insert snippets into their posts.
