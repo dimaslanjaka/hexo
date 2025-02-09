@@ -111,11 +111,10 @@ function processPost(ctx: Hexo, file: _File) {
       if (!preservedKeys[key]) data[key] = info[key];
     }
 
-    // use `slug` as `title` of post when `title` is not specified.
+    // Use `slug` as `title` of post when `title` is not specified.
     // https://github.com/hexojs/hexo/issues/5372
-    if (use_slug_as_post_title && !('title' in data)) {
-      // @ts-expect-error - title is not in data
-      data.title = info.title;
+    if (use_slug_as_post_title && !data.title) {
+      data.title = info.title as unknown as string; // Ensures type compatibility
     }
 
     if (data.date) {
