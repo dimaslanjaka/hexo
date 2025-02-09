@@ -53,7 +53,7 @@ function processPage(ctx: Hexo, file: _File) {
     file.stat(),
     file.read()
   ]).spread((stats: Stats, content: string) => {
-    const data: PageSchema = yfm(content);
+    const data: Partial<PageSchema> = yfm(content);
     const output = ctx.render.getOutput(path);
 
     data.source = path;
