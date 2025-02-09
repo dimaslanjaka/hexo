@@ -1,7 +1,6 @@
 import { extname } from 'path';
 import Promise from 'bluebird';
-import { Store, SyncStore, StoreSyncFunction, StoreFunction } from './renderer-d';
-import { NodeJSLikeCallback } from '../types';
+import { Store, SyncStore, StoreSyncFunction, StoreFunction, StoreFunctionWithCallback } from './renderer-d';
 
 const getExtname = (str: string) => {
   if (typeof str !== 'string') return '';
@@ -9,55 +8,6 @@ const getExtname = (str: string) => {
   const ext = extname(str) || str;
   return ext.startsWith('.') ? ext.slice(1) : ext;
 };
-
-export interface StoreFunctionData {
-  path?: any;
-  text?: string;
-  engine?: string;
-  toString?: any;
-  onRenderEnd?: (data: string) => any;
-}
-
-export interface StoreSyncFunction {
-  (
-    data: StoreFunctionData,
-    options?: object
-  ): any;
-  output?: string;
-  compile?: (data: StoreFunctionData) => (local: any) => any;
-  disableNunjucks?: boolean;
-  [key: string]: any;
-}
-
-export interface StoreFunction {
-  (
-    data: StoreFunctionData,
-    options?: object
-  ): Promise<any>;
-  output?: string;
-  compile?: (data: StoreFunctionData) => (local: any) => any;
-  disableNunjucks?: boolean;
-  [key: string]: any;
-}
-
-interface StoreFunctionWithCallback {
-  (
-    data: StoreFunctionData,
-    options: object,
-    callback?: NodeJSLikeCallback<any>
-  ): Promise<any>;
-  output?: string;
-  compile?: (data: StoreFunctionData) => (local: any) => any;
-  disableNunjucks?: boolean;
-  [key: string]: any;
-}
-
-interface SyncStore {
-  [key: string]: StoreSyncFunction;
-}
-interface Store {
-  [key: string]: StoreFunction;
-}
 
 /**
  * A renderer is used to render content.

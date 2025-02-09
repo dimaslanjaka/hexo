@@ -1,15 +1,19 @@
-import { PageSchema, SiteLocals } from '../types';
+import { NodeJSLikeCallback, PageSchema, SiteLocals } from '../types';
 
 export interface StoreFunctionData {
   path?: string;
   text?: string;
   engine?: string;
   onRenderEnd?: (content: string) => string | Promise<string>;
-  toString?: boolean;
+  toString?: any;
 }
+
 export interface RenderCompile<T = Record<string, any>> {
-  (local: T): (...args: any[]) => string; // Function that takes local parameters and returns another function
+  // Function that takes local parameters and returns another function
+  (local: T): (...args: any[]) => string;
   (local: Record<string, any>): (...args: any[]) => string;
+  // Original function from upstream/master
+  (data: StoreFunctionData): (local: any) => any;
 }
 
 export interface StoreSyncFunction {
@@ -22,6 +26,7 @@ export interface StoreSyncFunction {
   disableNunjucks?: boolean;
   page?: PageSchema & SiteLocals;
 }
+
 // Define the StoreFunction interface with overloads
 export interface StoreFunction {
   [key: string]: any;
@@ -51,4 +56,12 @@ export interface SyncStore {
 }
 export interface Store {
   [key: string]: StoreFunction | StoreFunction[];
+}
+
+export interface StoreFunctionWithCallback {
+  (data: StoreFunctionData, options: object, callback?: NodeJSLikeCallback<any>): Promise<any>;
+  output?: string;
+  compile?: (data: StoreFunctionData) => (local: any) => any;
+  disableNunjucks?: boolean;
+  [key: string]: any;
 }
