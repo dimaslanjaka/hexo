@@ -6,6 +6,7 @@ import { i18n } from './processors/i18n';
 import { source } from './processors/source';
 import { view } from './processors/view';
 import type Hexo from '../hexo';
+import View from './view';
 
 class Theme extends Box {
   public config: any;
