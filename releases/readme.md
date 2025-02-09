@@ -3,14 +3,14 @@ because of HexoJS doesnt accept my PR, i bundled my improved version of hexo.
 
 | package name | commit |
 | :--- | :--- | 
-| hexo | [f6eba741](https://github.com/dimaslanjaka/hexo/commit/f6eba741)  [![Coverage Status](https://coveralls.io/repos/github/dimaslanjaka/hexo/badge.svg)](https://coveralls.io/github/dimaslanjaka/hexo) | 
+| hexo | [057d4885](https://github.com/dimaslanjaka/hexo/commit/057d4885)  [![Coverage Status](https://coveralls.io/repos/github/dimaslanjaka/hexo/badge.svg)](https://coveralls.io/github/dimaslanjaka/hexo) | 
 | hexo-asset-link | [1957ca7](https://github.com/dimaslanjaka/hexo-asset-link/commit/1957ca7) | 
-| hexo-cli | [053e90f](https://github.com/dimaslanjaka/hexo-cli/commit/053e90f) | 
+| hexo-cli | [a59adc9](https://github.com/dimaslanjaka/hexo-cli/commit/a59adc9) | 
 | hexo-front-matter | [8dd6b4d](https://github.com/dimaslanjaka/hexo-front-matter/commit/8dd6b4d) | 
 | hexo-log | [bf0d2a9](https://github.com/dimaslanjaka/hexo-log/commit/bf0d2a9) | 
-| hexo-server | [5c3701e](https://github.com/dimaslanjaka/hexo-server/commit/5c3701e) | 
+| hexo-server | [9d2f9cc](https://github.com/dimaslanjaka/hexo-server/commit/9d2f9cc) | 
 | hexo-util | [79cf148](https://github.com/dimaslanjaka/hexo-util/commit/79cf148) | 
-| warehouse | [c6e98c2](https://github.com/dimaslanjaka/warehouse/commit/c6e98c2) | 
+| warehouse | [67fada4](https://github.com/dimaslanjaka/warehouse/commit/67fada4) | 
 
 ## Installation by CLI
 Installation with command line interface
@@ -19,7 +19,7 @@ Installation with command line interface
 
 using `npm`
 ```bash
-npm i hexo@https://github.com/dimaslanjaka/hexo/raw/1c3a8b79/releases/hexo.tgz
+npm i hexo@https://github.com/dimaslanjaka/hexo/raw/43069ef6/releases/hexo.tgz
 npm i hexo-asset-link@https://github.com/dimaslanjaka/hexo/raw/a6cfcf19/releases/hexo-asset-link.tgz
 npm i hexo-cli@https://github.com/dimaslanjaka/hexo/raw/ff7502c9/releases/hexo-cli.tgz
 npm i hexo-front-matter@https://github.com/dimaslanjaka/hexo/raw/a6cfcf19/releases/hexo-front-matter.tgz
@@ -31,7 +31,7 @@ npm i warehouse@https://github.com/dimaslanjaka/hexo/raw/a6cfcf19/releases/wareh
 
 using `yarn`
 ```bash
-yarn add hexo@https://github.com/dimaslanjaka/hexo/raw/1c3a8b79/releases/hexo.tgz
+yarn add hexo@https://github.com/dimaslanjaka/hexo/raw/43069ef6/releases/hexo.tgz
 yarn add hexo-asset-link@https://github.com/dimaslanjaka/hexo/raw/a6cfcf19/releases/hexo-asset-link.tgz
 yarn add hexo-cli@https://github.com/dimaslanjaka/hexo/raw/ff7502c9/releases/hexo-cli.tgz
 yarn add hexo-front-matter@https://github.com/dimaslanjaka/hexo/raw/a6cfcf19/releases/hexo-front-matter.tgz
@@ -77,7 +77,7 @@ package.json
 {
   "name": "your package name",
   "resolutions": {
-    "hexo": "https://github.com/dimaslanjaka/hexo/raw/1c3a8b79/releases/hexo.tgz",
+    "hexo": "https://github.com/dimaslanjaka/hexo/raw/43069ef6/releases/hexo.tgz",
     "hexo-asset-link": "https://github.com/dimaslanjaka/hexo/raw/a6cfcf19/releases/hexo-asset-link.tgz",
     "hexo-cli": "https://github.com/dimaslanjaka/hexo/raw/ff7502c9/releases/hexo-cli.tgz",
     "hexo-front-matter": "https://github.com/dimaslanjaka/hexo/raw/a6cfcf19/releases/hexo-front-matter.tgz",
@@ -100,7 +100,7 @@ package.json
 {
   "name": "your package name",
   "overrides": {
-    "hexo": "https://github.com/dimaslanjaka/hexo/raw/1c3a8b79/releases/hexo.tgz",
+    "hexo": "https://github.com/dimaslanjaka/hexo/raw/43069ef6/releases/hexo.tgz",
     "hexo-asset-link": "https://github.com/dimaslanjaka/hexo/raw/a6cfcf19/releases/hexo-asset-link.tgz",
     "hexo-cli": "https://github.com/dimaslanjaka/hexo/raw/ff7502c9/releases/hexo-cli.tgz",
     "hexo-front-matter": "https://github.com/dimaslanjaka/hexo/raw/a6cfcf19/releases/hexo-front-matter.tgz",
