@@ -1,6 +1,7 @@
 import { extname } from 'path';
 import Promise from 'bluebird';
 import { Store, SyncStore, StoreSyncFunction, StoreFunction } from './renderer-d';
+import { NodeJSLikeCallback } from '../types';
 
 const getExtname = (str: string) => {
   if (typeof str !== 'string') return '';
