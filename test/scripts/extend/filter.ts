@@ -1,6 +1,6 @@
-import Filter from '../../../lib/extend/filter';
-import { spy } from 'sinon';
 import chai from 'chai';
+import { spy } from 'sinon';
+import Filter from '../../../lib/extend/filter';
 const should = chai.should();
 
 describe('Filter', () => {
@@ -152,8 +152,8 @@ describe('Filter', () => {
       arg2.should.eql(2);
     });
 
-    f.register('test', filter1);
-    f.register('test', filter2);
+    f.register('test', filter1 as any);
+    f.register('test', filter2 as any);
 
     await f.exec('test', {}, {
       args: [1, 2]
@@ -236,8 +236,8 @@ describe('Filter', () => {
       arg2.should.eql(2);
     });
 
-    f.register('test', filter1);
-    f.register('test', filter2);
+    f.register('test', filter1 as any);
+    f.register('test', filter2 as any);
 
     f.execSync('test', {}, {
       args: [1, 2]

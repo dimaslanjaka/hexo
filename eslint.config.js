@@ -1,3 +1,4 @@
+
 const config = require('eslint-config-hexo/ts');
 
 module.exports = [
@@ -25,7 +26,7 @@ module.exports = [
         }
       ],
       '@typescript-eslint/no-this-alias': [
-        // rules for this binding
+        // rules for `this` binding
         'error',
         {
           allowDestructuring: true, // Disallow `const { props, state } = this`; true by default
