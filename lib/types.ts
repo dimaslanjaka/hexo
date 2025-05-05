@@ -546,7 +546,7 @@ export interface StoreFunctionData {
   text?: string;
   engine?: string;
   onRenderEnd?: (content: string) => string | Promise<string>;
-  toString?: boolean;
+  toString?: boolean | ((content: string) => string);
 }
 
 export interface RenderCompile<T = Record<string, any>> {
