@@ -1,7 +1,6 @@
 import { sep, join } from 'path';
 import { mkdirs, rmdir, unlink, writeFile } from 'hexo-fs';
-// @ts-ignore
-import Promise from 'bluebird';
+import BluebirdPromise from 'bluebird';
 import { spy } from 'sinon';
 import { readStream } from '../../util';
 import { full_url_for } from 'hexo-util';
@@ -154,6 +153,45 @@ describe('Hexo', () => {
 
   it('load() - theme', async () => await testLoad(join(hexo.theme_dir, 'source')));
 
+
+  it('load() - load database', async () => {
+    hexo._dbLoaded = false;
+    const dbPath = hexo.database.options.path;
+
+    const fixture = {
+      meta: {
+        version: 1,
+        warehouse: require('warehouse').version
+      },
+      models: {
+        PostTag: [
+          { _id: 'cuid111111111111111111113', post_id: 'cuid111111111111111111111', tag_id: 'cuid111111111111111111112' }
+        ],
+        Tag: [
+          { _id: 'cuid111111111111111111112', name: 'foo' }
+        ],
+        Post: [
+          { _id: 'cuid111111111111111111111', source: 'test', slug: 'test' }
+        ]
+      }
+    };
+    await writeFile(dbPath, JSON.stringify(fixture));
+    await hexo.load();
+    // check Model
+    hexo.model('PostTag').toArray({lean: true}).length.should.eql(fixture.models.PostTag.length);
+    hexo.model('Tag').toArray({lean: true}).length.should.eql(fixture.models.Tag.length);
+    hexo.model('Post').toArray({lean: true}).length.should.eql(fixture.models.Post.length);
+    hexo._binaryRelationIndex.post_tag.keyIndex.size.should.eql(1);
+    hexo._binaryRelationIndex.post_tag.valueIndex.size.should.eql(1);
+    await unlink(dbPath);
+    // clean up
+    await hexo.model('PostTag').removeById('cuid111111111111111111113');
+    await hexo.model('Tag').removeById('cuid111111111111111111112');
+    await hexo.model('Post').removeById('cuid111111111111111111111');
+    hexo._binaryRelationIndex.post_tag.keyIndex.clear();
+    hexo._binaryRelationIndex.post_tag.valueIndex.clear();
+  });
+
   // Issue #3964
   it('load() - merge theme config - deep clone', async () => {
     const hexo = new Hexo(__dirname, { silent: true });
@@ -229,7 +267,7 @@ describe('Hexo', () => {
     await hexo.watch();
     await checkStream(route.get('test.txt'), body); // Test for first generation
     await writeFile(target, newBody); // Update the file
-    await Promise.delay(300);
+    await BluebirdPromise.delay(300);
     await checkStream(route.get('test.txt'), newBody); // Check the new route
     hexo.unwatch(); // Stop watching
     await unlink(target); // Delete the file
@@ -298,9 +336,9 @@ describe('Hexo', () => {
   });
 
   it('exit() - error handling - promise', () => {
-    return Promise.all([
+    return BluebirdPromise.all([
       hexo.exit({ foo: 'bar' }),
-      new Promise((resolve, reject) => {
+      new BluebirdPromise((resolve, reject) => {
         hexo.once('exit', err => {
           try {
             err.should.eql({ foo: 'bar' });
@@ -391,7 +429,7 @@ describe('Hexo', () => {
 
   it('_generate()', async () => {
     // object
-    hexo.extend.generator.register('test_obj', locals => {
+    hexo.extend.generator.register('test_obj', (locals: any) => {
       locals.test.should.eql('foo');
 
       return {
@@ -401,7 +439,7 @@ describe('Hexo', () => {
     });
 
     // array
-    hexo.extend.generator.register('test_arr', locals => {
+    hexo.extend.generator.register('test_arr', (locals: any) => {
       locals.test.should.eql('foo');
 
       return [
@@ -431,7 +469,7 @@ describe('Hexo', () => {
     beforeHook.calledOnce.should.be.true;
     afterHook.calledOnce.should.be.true;
 
-    await Promise.all([
+    await BluebirdPromise.all([
       checkStream(route.get('foo'), 'foo'),
       checkStream(route.get('bar'), 'bar'),
       checkStream(route.get('baz'), 'baz')
@@ -531,7 +569,7 @@ describe('Hexo', () => {
   });
 
   it('_generate() - return nothing in generator', async () => {
-    // @ts-ignore
+    // @ts-expect-error
     hexo.extend.generator.register('test_nothing', () => {
       //
     });
@@ -673,7 +711,7 @@ describe('Hexo', () => {
 
   it('execFilter() - promise', async () => {
     const fn = str => {
-      return new Promise((resolve, reject) => {
+      return new BluebirdPromise((resolve, _reject) => {
         resolve(str + 'bar');
       });
     };

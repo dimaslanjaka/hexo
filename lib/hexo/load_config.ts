@@ -1,15 +1,16 @@
-import { exists, readdir } from 'hexo-fs';
-import { deepMerge } from 'hexo-util';
-import { join, parse, resolve, sep } from 'path';
-import { magenta } from 'picocolors';
+import { sep, resolve, join, parse, basename, extname } from 'path';
 import tildify from 'tildify';
 import Theme from '../theme';
-import findYarnRootWorkspace from './findYarnRootWorkspace';
 import Source from './source';
+import { exists, readdir } from 'hexo-fs';
+import { magenta } from 'picocolors';
+import { deepMerge } from 'hexo-util';
 import validateConfig from './validate_config';
-import { StoreFunctionData } from '../extend/renderer-d';
+import type Hexo from './index';
+import findYarnRootWorkspace from './findYarnRootWorkspace';
+import { StoreFunctionData } from '../types';
 
-export = async (ctx: import('.')) => {
+export = async (ctx: Hexo): Promise<void> => {
   if (!ctx.env.init) return;
 
   const baseDir = ctx.base_dir;
@@ -59,20 +60,18 @@ export = async (ctx: import('.')) => {
   // themeDirFromThemes has higher priority than themeDirFromNodeModules
   let ignored: string[] = [];
   if (await exists(themeDirFromThemes)) {
-    // theme applied from theme dir
+    // theme applied from project theme directory
     ctx.theme_dir = themeDirFromThemes;
     ignored = ['**/themes/*/node_modules/**', '**/themes/*/.git/**'];
   } else if (await exists(themeDirFromNodeModules)) {
-    // theme applied from project dir
+    // theme applied from project node_modules directory
     ctx.theme_dir = themeDirFromNodeModules;
-    ignored = ['**/node_modules/hexo-theme-*/node_modules/**', '**/node_modules/hexo-theme-*/.git/**'];
     ignored = ['**/node_modules/hexo-theme-*/node_modules/**', '**/node_modules/hexo-theme-*/.git/**'];
   } else if (yarnRootWorkspace !== null && await exists(themeDirFromYarnNodeModules)) {
     // theme applied from yarn workspace root directory
     ctx.theme_dir = themeDirFromYarnNodeModules;
     ignored = ['**/node_modules/hexo-theme-*/node_modules/**', '**/node_modules/hexo-theme-*/.git/**'];
   }
-
   ctx.theme_script_dir = join(ctx.theme_dir, 'scripts') + sep;
   ctx.theme = new Theme(ctx, { ignored });
 };
@@ -81,6 +80,6 @@ async function findConfigPath(path: string): Promise<string> {
   const { dir, name } = parse(path);
 
   const files = await readdir(dir);
-  const item = files.find(item => item.startsWith(name));
+  const item = files.find(item => basename(item, extname(item)) === name);
   if (item != null) return join(dir, item);
 }

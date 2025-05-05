@@ -1,4 +1,4 @@
-import { StoreFunctionData } from '../../extend/renderer-d';
+import { StoreFunctionData } from '../../types';
 
 function plainRenderer(data: StoreFunctionData): string {
   return data.text;

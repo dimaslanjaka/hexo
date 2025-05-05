@@ -1,6 +1,7 @@
 import { exists } from 'hexo-fs';
 import { underline, magenta } from 'picocolors';
 import type Hexo from '../../hexo';
+import type Promise from 'bluebird';
 
 interface DeployArgs {
   _?: string[]
@@ -9,7 +10,7 @@ interface DeployArgs {
   [key: string]: any
 }
 
-function deployConsole(this: Hexo, args: DeployArgs) {
+function deployConsole(this: Hexo, args: DeployArgs): Promise<any> {
   let config = this.config.deploy;
   const deployers = this.extend.deployer.list();
 
@@ -25,7 +26,7 @@ function deployConsole(this: Hexo, args: DeployArgs) {
     return;
   }
 
-  let promise;
+  let promise: Promise<void>;
 
   if (args.g || args.generate) {
     promise = this.call('generate', args);
@@ -52,7 +53,6 @@ function deployConsole(this: Hexo, args: DeployArgs) {
 
     this.log.info('Deploying: %s', magenta(type));
 
-    // eslint-disable-next-line no-extra-parens
     return (Reflect.apply(deployers[type], this, [{ ...item, ...args }]) as any).then(() => {
       this.log.info('Deploy done: %s', magenta(type));
     });

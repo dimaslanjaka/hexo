@@ -1,6 +1,6 @@
-import { extname } from 'path';
 import Promise from 'bluebird';
-import { Store, SyncStore, StoreSyncFunction, StoreFunction } from './renderer-d';
+import { extname } from 'path';
+import type { Store, StoreFunction, StoreSyncFunction, SyncStore } from '../types';
 
 const getExtname = (str: string) => {
   if (typeof str !== 'string') return '';
@@ -9,6 +9,9 @@ const getExtname = (str: string) => {
   return ext.startsWith('.') ? ext.slice(1) : ext;
 };
 
+/**
+ * A renderer is used to render content.
+ */
 class Renderer {
   public store: Store | StoreSyncFunction;
   public storeSync: SyncStore | StoreFunction;

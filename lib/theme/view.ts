@@ -1,12 +1,11 @@
-import { dirname, extname, join } from 'path';
-import { parse as yfm } from 'hexo-front-matter';
 import Promise from 'bluebird';
+import { parse as yfm } from 'hexo-front-matter';
+import { dirname, extname, join } from 'path';
 import type Theme from '.';
-import type Render from '../hexo/render';
-import type { NodeJSLikeCallback } from '../types';
 import type { Helper } from '../extend';
-import { HexoRenderOptions } from '../hexo/render-d';
-import { StoreFunctionData } from '../extend/renderer-d';
+import type Render from '../hexo/render';
+import type { HexoRenderOptions } from '../hexo/render-d';
+import type { NodeJSLikeCallback, StoreFunctionData } from '../types';
 
 const assignIn = (target: any, ...sources: any[]) => {
   const length = sources.length;
@@ -32,8 +31,8 @@ class View {
   public source: string;
   public _theme: Theme;
   public data: any;
-  public _compiled: any;
-  public _compiledSync: any;
+  public _compiled: (locals: any) => Promise<any>;
+  public _compiledSync: (locals: any) => any;
   public _helper: Helper;
   public _render: Render;
 
@@ -135,7 +134,7 @@ class View {
       text: this.data._content
     };
 
-    function buildFilterArguments(result: any): [string, any, any] {
+    function buildFilterArguments(result: any): [string, any, { context: any, args: any[] }] {
       const output = render.getOutput(ext) || ext;
       return [
         `after_render:${output}`,

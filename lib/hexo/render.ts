@@ -1,10 +1,9 @@
-import { extname } from 'path';
 import Promise from 'bluebird';
 import { readFile, readFileSync } from 'hexo-fs';
-import type Hexo from './index';
+import { extname } from 'path';
 import type { Renderer } from '../extend';
-import type { StoreFunction, StoreFunctionData, StoreSyncFunction } from '../extend/renderer-d';
-import { NodeJSLikeCallback } from '../types';
+import type { NodeJSLikeCallback, StoreFunction, StoreFunctionData, StoreSyncFunction } from '../types';
+import type Hexo from './index';
 
 const getExtname = (str: string): string => {
   if (typeof str !== 'string') return '';
@@ -13,7 +12,7 @@ const getExtname = (str: string): string => {
   return ext.startsWith('.') ? ext.slice(1) : ext;
 };
 
-const toString = (result: any, options: StoreFunctionData) => {
+const toString = (result: any, options: StoreFunctionData): string => {
   if (!Object.prototype.hasOwnProperty.call(options, 'toString') || typeof result === 'string') return result;
 
   if (typeof options.toString === 'function') {

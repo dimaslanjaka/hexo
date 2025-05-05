@@ -3,7 +3,7 @@ import { HexoLocalsData, HexoLocalsFunc } from './locals-d';
 
 class Locals {
   public cache: InstanceType<typeof Cache<HexoLocalsData>>;
-  public getters: Record<string, HexoLocalsData | HexoLocalsFunc>;
+  public getters: Record<string, HexoLocalsData | HexoLocalsFunc /* | ((...args: any) => any)*/>;
   public page: any;
   public path: string;
 
@@ -12,13 +12,7 @@ class Locals {
     this.getters = {};
   }
 
-  get(name: 'posts'): HexoLocalsData;
-  get(name: 'pages'): HexoLocalsData;
-  get(name: 'categories'): HexoLocalsData;
-  get(name: 'data'): HexoLocalsData;
-  get(name: 'tags'): HexoLocalsData;
-  get(name: string): HexoLocalsData;
-  get(name: string) {
+  get(name: 'posts' | 'pages' | 'categories' | 'data' | 'tags' | string): HexoLocalsData {
     if (typeof name !== 'string') throw new TypeError('name must be a string!');
 
     return this.cache.apply(name, () => {
@@ -63,7 +57,7 @@ class Locals {
     return this;
   }
 
-  toObject() {
+  toObject(): Record<string, any> {
     const result = {};
     const keys = Object.keys(this.getters);
 

@@ -1,4 +1,4 @@
-import { StoreFunctionData } from '../../extend/renderer-d';
+import { StoreFunctionData } from '../../types';
 import type Hexo from '../../hexo';
 
 export = (ctx: Hexo) =>

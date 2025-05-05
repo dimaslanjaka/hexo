@@ -1,14 +1,14 @@
-import { join } from 'path';
-import moment from 'moment';
-import { readFile, mkdirs, unlink, rmdir, writeFile, exists, stat, listDir } from 'hexo-fs';
-import { spy, useFakeTimers } from 'sinon';
-import { parse as yfm } from 'hexo-front-matter';
-import { expected, content, expected_disable_nunjucks, content_for_issue_3346, expected_for_issue_3346, content_for_issue_4460 } from '../../fixtures/post_render';
-import { highlight, deepMerge } from 'hexo-util';
-import Hexo from '../../../lib/hexo';
 import chai from 'chai';
+import { parse as yfm } from 'hexo-front-matter';
+import { exists, listDir, mkdirs, readFile, rmdir, stat, unlink, writeFile } from 'hexo-fs';
+import { deepMerge, highlight } from 'hexo-util';
+import moment from 'moment';
+import { join } from 'path';
+import { spy, useFakeTimers } from 'sinon';
+import Hexo from '../../../lib/hexo';
+import { content, content_for_issue_3346, content_for_issue_4460, expected, expected_disable_nunjucks, expected_for_issue_3346 } from '../../fixtures/post_render';
 const should = chai.should();
-const escapeSwigTag = str => str.replace(/{/g, '&#123;').replace(/}/g, '&#125;');
+const escapeSwigTag = (str: string) => str.replace(/{/g, '&#123;').replace(/}/g, '&#125;');
 
 describe('Post', () => {
   const hexo = new Hexo(join(__dirname, 'post_test'));
@@ -666,7 +666,7 @@ describe('Post', () => {
     ].join('\n'));
 
     const path = join(hexo.source_dir, '_posts', 'fooo.md');
-    const data = await post.create({
+    await post.create({
       title: 'fooo',
       layout: 'draft',
       tags: customTags,
@@ -1423,6 +1423,108 @@ describe('Post', () => {
     data.content.should.not.contains('&#96;'); // `
   });
 
+  it('render() - should support quotes in tags', async () => {
+    let content = '{{ "{{ }" }}';
+    let data = await post.render('', {
+      content,
+      engine: 'markdown'
+    });
+    data.content.should.eql('{{ }');
+
+    content = '{% blockquote "{% }"  %}test{% endblockquote %}';
+    data = await post.render('', {
+      content,
+      engine: 'markdown'
+    });
+    data.content.should.eql('<blockquote><p>test</p>\n<footer><strong>{% }</strong></footer></blockquote>');
+  });
+
+  it('render() - dont escape incomplete tags with complete tags', async () => {
+    // lost one character
+    let content = '{{ 1 }} \n `{% "%}" }` 22222';
+    let data = await post.render('', {
+      content,
+      engine: 'markdown'
+    });
+    data.content.should.contains('&#123;% &quot;%&#125;&quot; &#125;');
+    data.content.should.contains('1');
+    data.content.should.contains('22222');
+
+    content = '{{ 1 }} \n `{% "%}" %` 22222';
+    data = await post.render('', {
+      content,
+      engine: 'markdown'
+    });
+    data.content.should.contains('&#123;% &quot;%&#125;&quot; %');
+    data.content.should.contains('1');
+    data.content.should.contains('22222');
+
+    content = '{{ 1 }} \n `{# }` 22222';
+    data = await post.render('', {
+      content,
+      engine: 'markdown'
+    });
+    data.content.should.contains('&#123;# &#125;');
+    data.content.should.contains('1');
+    data.content.should.contains('22222');
+
+    content = '{{ 1 }} \n `{{ "}}" }` 22222';
+    data = await post.render('', {
+      content,
+      engine: 'markdown'
+    });
+    data.content.should.contains('&#123;&#123; &quot;&#125;&#125;&quot; &#125;');
+    data.content.should.contains('1');
+    data.content.should.contains('22222');
+
+    content = '{{ 1 }} \n `{{ %}` 22222';
+    data = await post.render('', {
+      content,
+      engine: 'markdown'
+    });
+    data.content.should.contains('&#123;&#123; %&#125;');
+    data.content.should.contains('1');
+    data.content.should.contains('22222');
+
+    content = '{{ 1 }} \n `{% custom %}` 22222  `{% endcustom }`';
+    data = await post.render('', {
+      content,
+      engine: 'markdown'
+    });
+    data.content.should.contains('1');
+    data.content.should.contains('&#123;% custom %&#125;');
+    data.content.should.contains('22222');
+    data.content.should.contains('&#123;% endcustom &#125;');
+
+    // lost two characters
+    content = '{{ 1 }} \n `{#` \n 22222';
+    data = await post.render('', {
+      content,
+      engine: 'markdown'
+    });
+    data.content.should.contains('&#123;#');
+    data.content.should.contains('1');
+    data.content.should.contains('22222');
+
+    content = '{{ 1 }} \n `{%` \n 22222';
+    data = await post.render('', {
+      content,
+      engine: 'markdown'
+    });
+    data.content.should.contains('&#123;%');
+    data.content.should.contains('1');
+    data.content.should.contains('22222');
+
+    content = '{{ 1 }} \n `{{ ` 22222';
+    data = await post.render('', {
+      content,
+      engine: 'markdown'
+    });
+    data.content.should.contains('1');
+    data.content.should.contains('&#123;&#123; ');
+    data.content.should.contains('22222');
+  });
+
   it('render() - incomplete tags throw error', async () => {
     const content = 'nunjucks should throw {#  } error';
 
@@ -1432,7 +1534,9 @@ describe('Post', () => {
         engine: 'markdown'
       });
       should.fail();
-    } catch (err) {}
+    } catch (_err) {
+      // eslint fix inline empty bracket
+    }
   });
 
   // https://github.com/hexojs/hexo/issues/5401

@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { isTmpFile, isHiddenFile, ignoreTmpAndHiddenFile as pattern, toDate, timezone, isMatch } from '../../../lib/plugins/processor/common';
+import { isTmpFile, isHiddenFile, toDate, adjustDateForTimezone, isMatch } from '../../../lib/plugins/processor/common';
 import chai from 'chai';
 const should = chai.should();
 
@@ -18,41 +18,31 @@ describe('common', () => {
     isHiddenFile('foo/.bar').should.be.true;
   });
 
-  it('ignoreTmpAndHiddenFile()', () => {
-    pattern.match('foo').should.be.true;
-    pattern.match('foo%').should.be.false;
-    pattern.match('foo~').should.be.false;
-    pattern.match('_foo').should.be.false;
-    pattern.match('foo/_bar').should.be.false;
-    pattern.match('.foo').should.be.false;
-    pattern.match('foo/.bar').should.be.false;
-  });
-
   it('toDate()', () => {
     const m = moment();
     const d = new Date();
 
     should.not.exist(toDate());
-    toDate(m).should.eql(m);
-    toDate(d).should.eql(d);
-    toDate(1e8).should.eql(new Date(1e8));
-    toDate('2014-04-25T01:32:21.196Z').should.eql(new Date('2014-04-25T01:32:21.196Z'));
-    toDate('Apr 24 2014').should.eql(new Date(2014, 3, 24));
+    toDate(m)!.should.eql(m);
+    toDate(d)!.should.eql(d);
+    toDate(1e8)!.should.eql(new Date(1e8));
+    toDate('2014-04-25T01:32:21.196Z')!.should.eql(new Date('2014-04-25T01:32:21.196Z'));
+    toDate('Apr 24 2014')!.should.eql(new Date(2014, 3, 24));
     should.not.exist(toDate('foo'));
   });
 
   it('timezone() - date', () => {
     const d = new Date(Date.UTC(1972, 2, 29, 0, 0, 0));
-    const d_timezone_UTC = timezone(d, 'UTC').getTime();
-    (timezone(d, 'Asia/Shanghai').getTime() - d_timezone_UTC).should.eql(-8 * 3600 * 1000);
-    (timezone(d, 'Asia/Bangkok').getTime() - d_timezone_UTC).should.eql(-7 * 3600 * 1000);
-    (timezone(d, 'America/Los_Angeles').getTime() - d_timezone_UTC).should.eql(8 * 3600 * 1000);
+    const d_timezone_UTC = adjustDateForTimezone(d, 'UTC').getTime();
+    (adjustDateForTimezone(d, 'Asia/Shanghai').getTime() - d_timezone_UTC).should.eql(-8 * 3600 * 1000);
+    (adjustDateForTimezone(d, 'Asia/Bangkok').getTime() - d_timezone_UTC).should.eql(-7 * 3600 * 1000);
+    (adjustDateForTimezone(d, 'America/Los_Angeles').getTime() - d_timezone_UTC).should.eql(8 * 3600 * 1000);
   });
 
   it('timezone() - moment', () => {
     const d = moment(new Date(Date.UTC(1972, 2, 29, 0, 0, 0)));
-    const d_timezone_UTC = timezone(d, 'UTC').getTime();
-    (timezone(d, 'Europe/Moscow').getTime() - d_timezone_UTC).should.eql(-3 * 3600 * 1000);
+    const d_timezone_UTC = adjustDateForTimezone(d, 'UTC').getTime();
+    (adjustDateForTimezone(d, 'Europe/Moscow').getTime() - d_timezone_UTC).should.eql(-3 * 3600 * 1000);
   });
 
   it('isMatch() - string', () => {

@@ -2,9 +2,9 @@ import { join, dirname } from 'path';
 import { writeFile, mkdir, rmdir, unlink } from 'hexo-fs';
 import Hexo from '../../../lib/hexo';
 import loadPlugins from '../../../lib/hexo/load_plugins';
-// @ts-ignore
-import Promise from 'bluebird';
+import BluebirdPromise from 'bluebird';
 import chai from 'chai';
+import { spy } from 'sinon';
 const should = chai.should();
 
 describe('Load plugins', () => {
@@ -85,7 +85,7 @@ describe('Load plugins', () => {
     const name = 'hexo-plugin-test';
     const path = join(hexo.plugin_dir, name, 'index.js');
 
-    return Promise.all([
+    return BluebirdPromise.all([
       createPackageFile(name),
       writeFile(path, script)
     ]).then(() => loadPlugins(hexo)).then(() => {
@@ -94,11 +94,25 @@ describe('Load plugins', () => {
     });
   });
 
+  it('fail to load plugins', () => {
+    const logSpy = spy();
+    hexo.log.error = logSpy;
+    const name = 'hexo-plugin-test';
+    const path = join(hexo.plugin_dir, name, 'index.js');
+    return BluebirdPromise.all([
+      createPackageFile(name),
+      writeFile(path, 'throw new Error("test")')
+    ]).then(() => loadPlugins(hexo)).then(() => {
+      logSpy.args[0][1].should.contains('Plugin load failed: %s');
+      logSpy.args[0][2].should.contains('hexo-plugin-test');
+    });
+  });
+
   it('load async plugins', () => {
     const name = 'hexo-async-plugin-test';
     const path = join(hexo.plugin_dir, name, 'index.js');
 
-    return Promise.all([
+    return BluebirdPromise.all([
       createPackageFile(name),
       writeFile(path, asyncScript)
     ]).then(() => loadPlugins(hexo)).then(() => {
@@ -111,7 +125,7 @@ describe('Load plugins', () => {
     const name = '@some-scope/hexo-plugin-test';
     const path = join(hexo.plugin_dir, name, 'index.js');
 
-    return Promise.all([
+    return BluebirdPromise.all([
       createPackageFile(name),
       writeFile(path, script)
     ]).then(() => loadPlugins(hexo)).then(() => {
@@ -124,7 +138,7 @@ describe('Load plugins', () => {
     const name = 'hexo-plugin-test';
     const path = join(hexo.plugin_dir, name, 'index.js');
 
-    return Promise.all([
+    return BluebirdPromise.all([
       createPackageFileWithDevDeps(name),
       writeFile(path, script)
     ]).then(() => loadPlugins(hexo)).then(() => {
@@ -136,7 +150,7 @@ describe('Load plugins', () => {
   it('load plugins in the theme\'s package.json', async () => {
     const name = 'hexo-plugin-test';
     const path = join(hexo.plugin_dir, name, 'index.js');
-    return Promise.all([
+    return BluebirdPromise.all([
       createPackageFile(name, join(hexo.theme_dir, 'package.json')),
       writeFile(path, script)
     ]).then(() => loadPlugins(hexo)).then(() => {
@@ -150,7 +164,7 @@ describe('Load plugins', () => {
     const name = 'hexo-theme-test_theme';
     const path = join(hexo.plugin_dir, name, 'index.js');
 
-    await Promise.all([
+    await BluebirdPromise.all([
       createPackageFile(name),
       writeFile(path, script)
     ]);
@@ -166,7 +180,7 @@ describe('Load plugins', () => {
     const name = '@hexojs/hexo-theme-test_theme';
     const path = join(hexo.plugin_dir, name, 'index.js');
 
-    await Promise.all([
+    await BluebirdPromise.all([
       createPackageFile(name),
       writeFile(path, script)
     ]);
@@ -182,7 +196,7 @@ describe('Load plugins', () => {
     const name = 'another-plugin';
     const path = join(hexo.plugin_dir, name, 'index.js');
 
-    await Promise.all([
+    await BluebirdPromise.all([
       createPackageFile(name),
       writeFile(path, script)
     ]);
@@ -197,7 +211,7 @@ describe('Load plugins', () => {
     const name = '@types/hexo-test-plugin';
     const path = join(hexo.plugin_dir, name, 'index.js');
 
-    return Promise.all([
+    return BluebirdPromise.all([
       createPackageFile(name),
       writeFile(path, script)
     ]).then(() => loadPlugins(hexo)).then(() => {
@@ -217,6 +231,20 @@ describe('Load plugins', () => {
     validate(path);
     return unlink(path);
   });
+
+  it('fail to load scripts', async () => {
+    const logSpy = spy();
+    hexo.log.error = logSpy;
+    const path = join(hexo.script_dir, 'test.js');
+
+    writeFile(path, 'throw new Error("test")');
+    await loadPlugins(hexo);
+
+    logSpy.args[0][1].should.contains('Script load failed: %s');
+    logSpy.args[0][2].should.contains('test.js');
+    return unlink(path);
+  });
+
 
   it('load theme scripts', () => {
     const path = join(hexo.theme_script_dir, 'test.js');

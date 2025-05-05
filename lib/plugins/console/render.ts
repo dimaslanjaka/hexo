@@ -4,7 +4,8 @@ import prettyHrtime from 'pretty-hrtime';
 import { writeFile } from 'hexo-fs';
 import { cyan, magenta } from 'picocolors';
 import type Hexo from '../../hexo';
-import { StoreFunctionData } from '../../extend/renderer-d';
+import { StoreFunctionData } from '../../types';
+import type Promise from 'bluebird';
 
 interface RenderArgs {
   _: string[]
@@ -15,7 +16,7 @@ interface RenderArgs {
   [key: string]: any
 }
 
-function renderConsole(this: Hexo, args: RenderArgs) {
+function renderConsole(this: Hexo, args: RenderArgs): Promise<void> {
   // Display help message if user didn't input any arguments
   if (!args._.length) {
     return this.call('help', {_: 'render'});

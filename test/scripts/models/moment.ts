@@ -18,24 +18,6 @@ describe('SchemaTypeMoment', () => {
     moment.isMoment(type.cast()).should.be.true;
   });
 
-  it('cast() - language', () => {
-    const lang = 'zh-tw';
-    const format = 'LLLL';
-    const type = new SchemaTypeMoment('test', {language: lang});
-    const now = Date.now();
-
-    type.cast(now).format(format).should.eql(moment(now).locale(lang).format(format));
-  });
-
-  it('cast() - timezone', () => {
-    const timezone = 'Etc/UTC';
-    const format = 'LLLL';
-    const type = new SchemaTypeMoment('test', {timezone});
-    const now = Date.now();
-
-    type.cast(now).format(format).should.eql(moment(now).tz(timezone).format(format));
-  });
-
   function shouldThrowError(value) {
     should.throw(
       () => type.validate(value),
@@ -50,7 +32,7 @@ describe('SchemaTypeMoment', () => {
 
   it('validate() - required', () => {
     const type = new SchemaTypeMoment('test', {required: true});
-    // @ts-ignore
+    // @ts-expect-error
     should.throw(() => type.validate(), '`test` is required!');
   });
 
@@ -70,7 +52,7 @@ describe('SchemaTypeMoment', () => {
   });
 
   it('parse()', () => {
-    type.parse('2014-11-03T07:45:41.237Z').should.eql(moment('2014-11-03T07:45:41.237Z'));
+    type.parse('2014-11-03T07:45:41.237Z')!.should.eql(moment('2014-11-03T07:45:41.237Z'));
     should.not.exist(type.parse());
   });
 

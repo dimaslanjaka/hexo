@@ -1,16 +1,15 @@
 import Renderer from '../../../lib/extend/renderer';
-// @ts-ignore
-import Promise from 'bluebird';
+import type { StoreFunction } from '../../../lib/types';
+import BluebirdPromise from 'bluebird';
 import chai from 'chai';
 const should = chai.should();
 
 describe('Renderer', () => {
-
   it('register()', () => {
     const r = new Renderer();
 
     // name, output, fn
-    r.register('yaml', 'json', () => Promise.resolve());
+    r.register('yaml', 'json', () => BluebirdPromise.resolve());
 
     r.get('yaml').should.exist;
     r.get('yaml').output!.should.eql('json');
@@ -24,15 +23,15 @@ describe('Renderer', () => {
     r.get('yaml', true).output!.should.eql('json');
 
     // no fn
-    // @ts-ignore
+    // @ts-expect-error
     should.throw(() => r.register('yaml', 'json'), TypeError, 'fn must be a function');
 
     // no output
-    // @ts-ignore
+    // @ts-expect-error
     should.throw(() => r.register('yaml'), TypeError, 'output is required');
 
     // no name
-    // @ts-ignore
+    // @ts-expect-error
     should.throw(() => r.register(), TypeError, 'name is required');
   });
 
@@ -40,16 +39,17 @@ describe('Renderer', () => {
     const r = new Renderer();
 
     // async
-    r.register('yaml', 'json', (_data, _options, callback) => {
+    const asynccb = (_data, _options, callback) => {
       callback && callback(null, 'foo');
-      return Promise.resolve();
-    });
+      return BluebirdPromise.resolve();
+    };
+    r.register('yaml', 'json', asynccb as StoreFunction);
 
     const yaml = await r.get('yaml')({}, {});
     yaml.should.eql('foo');
 
     // sync
-    r.register('swig', 'html', (data, options) => 'foo', true);
+    r.register('swig', 'html', (_data, _options) => 'foo', true);
 
     const swig = await r.get('swig')({}, {});
     swig.should.eql('foo');
@@ -58,22 +58,22 @@ describe('Renderer', () => {
   it('register() - compile', () => {
     const r = new Renderer();
 
-    function renderer(data, locals) {
-      return Promise.resolve();
+    function renderer(_data, _locals) {
+      return BluebirdPromise.resolve();
     }
 
-    renderer.compile = data => {
-      //
+    renderer.compile = _data => {
+      return () => {};
     };
 
-    r.register('swig', 'html', renderer);
+    r.register('swig', 'html', renderer as StoreFunction);
     r.get('swig').compile!.should.eql(renderer.compile);
   });
 
   it('getOutput()', () => {
     const r = new Renderer();
 
-    r.register('yaml', 'json', () => Promise.resolve());
+    r.register('yaml', 'json', () => BluebirdPromise.resolve());
 
     r.getOutput('yaml').should.eql('json');
     r.getOutput('.yaml').should.eql('json');
@@ -84,7 +84,7 @@ describe('Renderer', () => {
   it('isRenderable()', () => {
     const r = new Renderer();
 
-    r.register('yaml', 'json', () => Promise.resolve());
+    r.register('yaml', 'json', () => BluebirdPromise.resolve());
 
     r.isRenderable('yaml').should.be.true;
     r.isRenderable('.yaml').should.be.true;
@@ -95,7 +95,7 @@ describe('Renderer', () => {
   it('isRenderableSync()', () => {
     const r = new Renderer();
 
-    r.register('yaml', 'json', () => Promise.resolve());
+    r.register('yaml', 'json', () => BluebirdPromise.resolve());
 
     r.isRenderableSync('yaml').should.be.false;
 
@@ -110,7 +110,7 @@ describe('Renderer', () => {
   it('get()', () => {
     const r = new Renderer();
 
-    r.register('yaml', 'json', () => Promise.resolve());
+    r.register('yaml', 'json', () => BluebirdPromise.resolve());
 
     r.get('yaml').should.exist;
     r.get('.yaml').should.exist;
@@ -127,7 +127,7 @@ describe('Renderer', () => {
   it('list()', () => {
     const r = new Renderer();
 
-    r.register('yaml', 'json', () => Promise.resolve());
+    r.register('yaml', 'json', () => BluebirdPromise.resolve());
 
     r.register('swig', 'html', () => {}, true);
 

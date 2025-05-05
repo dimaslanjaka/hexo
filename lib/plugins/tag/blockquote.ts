@@ -2,7 +2,7 @@
 
 import titlecase from 'titlecase';
 import type Hexo from '../../hexo';
-import { StoreFunctionData } from '../../extend/renderer-d';
+import { StoreFunctionData } from '../../types';
 
 const rFullCiteWithTitle = /(\S.*)\s+(https?:\/\/\S+)\s+(.+)/i;
 const rFullCite = /(\S.*)\s+(https?:\/\/\S+)/i;

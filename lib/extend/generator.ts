@@ -1,30 +1,26 @@
 import Promise from 'bluebird';
-import { NodeJSLikeCallback } from '../types';
+import type { BaseGeneratorReturn, NodeJSLikeCallback, SiteLocals } from '../types';
 
-interface BaseObj {
-  path: string;
-  data?: any;
-  layout?: string | string[];
-}
-type ReturnType = BaseObj | BaseObj[];
+type ReturnType = BaseGeneratorReturn | BaseGeneratorReturn[];
 type GeneratorReturnType = ReturnType | Promise<ReturnType>;
 
 interface GeneratorFunction {
-  (locals: Record<string, any>, callback?: NodeJSLikeCallback<ReturnType>): GeneratorReturnType;
-  (...args: any[]): GeneratorReturnType; // Allow multiple arguments
+  (locals: SiteLocals, callback?: NodeJSLikeCallback<any>): GeneratorReturnType;
 }
 
 type StoreFunctionReturn = Promise<ReturnType>;
 
 interface StoreFunction {
-  (locals: Record<string, any>, callback?: NodeJSLikeCallback<ReturnType>): StoreFunctionReturn;
-  (...args: any[]): StoreFunctionReturn; // Allow multiple arguments
+  (locals: SiteLocals): StoreFunctionReturn;
 }
 
 interface Store {
   [key: string]: StoreFunction
 }
 
+/**
+ * A generator builds routes based on processed files.
+ */
 class Generator {
   public id: number;
   public store: Store;

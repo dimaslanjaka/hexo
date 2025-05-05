@@ -1,7 +1,7 @@
 import { readFileSync } from 'hexo-fs';
 import nunjucks from 'nunjucks';
 import path, { dirname } from 'path';
-import type { StoreFunctionData } from '../../extend/renderer-d';
+import type { StoreFunctionData } from '../../types';
 
 function toArray(value: any) {
   if (Array.isArray(value)) {

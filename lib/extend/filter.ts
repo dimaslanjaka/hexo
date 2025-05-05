@@ -1,7 +1,6 @@
 import Promise from 'bluebird';
 import { extend_filter_before_post_render_data } from '../plugins/filter/before_post_render/dataType';
-import { FilterOptions } from './filter-d';
-import { StoreFunction, Store } from './renderer-d';
+import { FilterOptions, Store, StoreFunction } from '../types';
 
 const typeAlias = {
   pre: 'before_post_render',
@@ -9,7 +8,10 @@ const typeAlias = {
   'after_render:html': '_after_html_render'
 };
 
-
+/**
+ * A filter is used to modify some specified data. Hexo passes data to filters in sequence and the filters then modify the data one after the other.
+ * This concept was borrowed from WordPress.
+ */
 class Filter {
   public store: Store;
 

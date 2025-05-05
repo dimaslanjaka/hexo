@@ -3,7 +3,7 @@ import { exists, writeFile } from 'hexo-fs';
 import { extname } from 'path';
 import Promise from 'bluebird';
 import type Hexo from '../../hexo';
-import { StoreFunctionData } from '../../extend/renderer-d';
+import { StoreFunctionData } from '../../types';
 
 interface ConfigArgs {
   _: string[];

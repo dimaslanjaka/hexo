@@ -1,13 +1,15 @@
-import { StoreFunctionData } from '../../extend/renderer-d';
+import { StoreFunctionData } from '../../types';
 import type Hexo from '../../hexo';
 
 /**
 * Pullquote tag
 *
-* Syntax:
+* @example
+* ```markdown
 *   {% pullquote [class] %}
 *   Quote string
 *   {% endpullquote %}
+* ```
 */
 export = (ctx: Hexo) => function pullquoteTag(args: string[], content: string) {
   args.unshift('pullquote');
