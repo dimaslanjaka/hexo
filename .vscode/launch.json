@@ -5,19 +5,31 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "command": "yarn install && yarn workspace wmi exec \"hexo clean && hexo server\"",
+      "command": "yarn install && yarn workspace hexo-site exec \"hexo clean && hexo server\"",
       "name": "install-clean-serve",
       "request": "launch",
       "type": "node-terminal"
     },
     {
-      "command": "yarn install && yarn workspace wmi exec \"node hexo-test.js\"",
+      "command": "yarn install && yarn workspace hexo-site exec \"hexo clean && hexo g\"",
+      "name": "generate site",
+      "request": "launch",
+      "type": "node-terminal"
+    },
+    {
+      "command": "yarn install && yarn workspace hexo-site exec \"hexo clean && hexo g && hexo deploy\"",
+      "name": "deploy site",
+      "request": "launch",
+      "type": "node-terminal"
+    },
+    {
+      "command": "yarn install && yarn workspace hexo-site exec \"node hexo-test.js\"",
       "name": "install-test",
       "request": "launch",
       "type": "node-terminal"
     },
     {
-      "command": "yarn workspace wmi exec \"node hexo-test.js\"",
+      "command": "yarn workspace hexo-site exec \"node hexo-test.js\"",
       "name": "test",
       "request": "launch",
       "type": "node-terminal"
