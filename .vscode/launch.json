@@ -23,6 +23,12 @@
       "type": "node-terminal"
     },
     {
+      "command": "yarn install && yarn workspace hexo-site exec \"hexo server\"",
+      "name": "serve site",
+      "request": "launch",
+      "type": "node-terminal"
+    },
+    {
       "command": "yarn install && yarn workspace hexo-site exec \"node hexo-test.js\"",
       "name": "install-test",
       "request": "launch",
