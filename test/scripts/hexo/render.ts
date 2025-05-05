@@ -1,9 +1,10 @@
-import { writeFile, rmdir } from 'hexo-fs';
-import { join } from 'path';
-import yaml from 'js-yaml';
-import { spy, assert as sinonAssert } from 'sinon';
-import Hexo from '../../../lib/hexo';
 import chai from 'chai';
+import { rmdir, writeFile } from 'hexo-fs';
+import yaml from 'js-yaml';
+import { join } from 'path';
+import { assert as sinonAssert, spy } from 'sinon';
+import Hexo from '../../../lib/hexo';
+import { StoreFunctionData } from '../../../lib/types';
 const should = chai.should();
 
 describe('Render', () => {
@@ -11,17 +12,7 @@ describe('Render', () => {
 
   hexo.config.meta_generator = false;
 
-  const body = [
-    'name:',
-    '  first: John',
-    '  last: Doe',
-    '',
-    'age: 23',
-    '',
-    'list:',
-    '- Apple',
-    '- Banana'
-  ].join('\n');
+  const body = ['name:', '  first: John', '  last: Doe', '', 'age: 23', '', 'list:', '- Apple', '- Banana'].join('\n');
 
   const obj = yaml.load(body);
   const path = join(hexo.base_dir, 'test.yml');
@@ -81,17 +72,17 @@ describe('Render', () => {
   });
 
   it('render() - path', async () => {
-    const result = await hexo.render.render({path});
+    const result = await hexo.render.render({ path } as StoreFunctionData);
     result.should.eql(obj);
   });
 
   it('render() - text (without engine)', async () => {
-    const result = await hexo.render.render({text: body});
+    const result = await hexo.render.render({ text: body } as StoreFunctionData);
     result.should.eql(body);
   });
 
   it('render() - text (with engine)', async () => {
-    const result = await hexo.render.render({text: body, engine: 'yaml'});
+    const result = await hexo.render.render({ text: body, engine: 'yaml' } as StoreFunctionData);
     result.should.eql(obj);
   });
 
@@ -108,7 +99,7 @@ describe('Render', () => {
   it('render() - null path and text', async () => {
     try {
       // @ts-ignore
-      await hexo.render.render({text: null, engine: null});
+      await hexo.render.render({ text: null, engine: null });
       should.fail('Return value must be rejected');
     } catch (err) {
       err.message.should.eql('No input file or string!');
@@ -116,20 +107,17 @@ describe('Render', () => {
   });
 
   it('render() - options', async () => {
-    const result = await hexo.render.render({
-      text: [
-        '<title>{{ title }}</title>',
-        '<body>{{ content }}</body>'
-      ].join('\n'),
-      engine: 'njk'
-    }, {
-      title: 'Hello world',
-      content: 'foobar'
-    });
-    result.should.eql([
-      '<title>Hello world</title>',
-      '<body>foobar</body>'
-    ].join('\n'));
+    const result = await hexo.render.render(
+      {
+        text: ['<title>{{ title }}</title>', '<body>{{ content }}</body>'].join('\n'),
+        engine: 'njk'
+      } as StoreFunctionData,
+      {
+        title: 'Hello world',
+        content: 'foobar'
+      }
+    );
+    result.should.eql(['<title>Hello world</title>', '<body>foobar</body>'].join('\n'));
   });
 
   it('render() - toString', async () => {
@@ -221,17 +209,17 @@ describe('Render', () => {
   });
 
   it('renderSync() - path', () => {
-    const result = hexo.render.renderSync({path});
+    const result = hexo.render.renderSync({ path });
     result.should.eql(obj);
   });
 
   it('renderSync() - text (without engine)', () => {
-    const result = hexo.render.renderSync({text: body});
+    const result = hexo.render.renderSync({ text: body });
     result.should.eql(body);
   });
 
   it('renderSync() - text (with engine)', () => {
-    const result = hexo.render.renderSync({text: body, engine: 'yaml'});
+    const result = hexo.render.renderSync({ text: body, engine: 'yaml' });
     result.should.eql(obj);
   });
 
@@ -242,25 +230,22 @@ describe('Render', () => {
 
   it('renderSync() - null path and text', () => {
     // @ts-ignore
-    should.throw(() => hexo.render.renderSync({text: null, engine: null}), 'No input file or string!');
+    should.throw(() => hexo.render.renderSync({ text: null, engine: null }), 'No input file or string!');
   });
 
   it('renderSync() - options', () => {
-    const result = hexo.render.renderSync({
-      text: [
-        '<title>{{ title }}</title>',
-        '<body>{{ content }}</body>'
-      ].join('\n'),
-      engine: 'njk'
-    }, {
-      title: 'Hello world',
-      content: 'foobar'
-    });
+    const result = hexo.render.renderSync(
+      {
+        text: ['<title>{{ title }}</title>', '<body>{{ content }}</body>'].join('\n'),
+        engine: 'njk'
+      } as StoreFunctionData,
+      {
+        title: 'Hello world',
+        content: 'foobar'
+      }
+    );
 
-    result.should.eql([
-      '<title>Hello world</title>',
-      '<body>foobar</body>'
-    ].join('\n'));
+    result.should.eql(['<title>Hello world</title>', '<body>foobar</body>'].join('\n'));
   });
 
   it('renderSync() - toString', () => {
@@ -334,7 +319,7 @@ describe('Render', () => {
 
     hexo.extend.filter.register('after_render:txt', filter);
 
-    hexo.render.renderSync(data);
+    hexo.render.renderSync(data as any);
     onRenderEnd.calledOnce.should.be.true;
     filter.calledOnce.should.be.true;
 
