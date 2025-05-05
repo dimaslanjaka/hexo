@@ -3,7 +3,15 @@ import type default_config from './hexo/default_config';
 import type i18n from 'hexo-i18n';
 import type Query from 'warehouse/dist/query';
 import type css from './plugins/helper/css';
-import type { date, date_xml, time, full_date, relative_date, time_tag, moment as _moment } from './plugins/helper/date';
+import type {
+  date,
+  date_xml,
+  time,
+  full_date,
+  relative_date,
+  time_tag,
+  moment as _moment
+} from './plugins/helper/date';
 import type { inspectObject, log } from './plugins/helper/debug';
 import type favicon_tag from './plugins/helper/favicon_tag';
 import type feed_tag from './plugins/helper/feed_tag';
@@ -12,7 +20,18 @@ import type fragment_cache from './plugins/helper/fragment_cache';
 import type full_url_for from './plugins/helper/full_url_for';
 import type gravatar from './plugins/helper/gravatar';
 import type image_tag from './plugins/helper/image_tag';
-import type { current, home, home_first_page, post, page, archive, year, month, category, tag } from './plugins/helper/is';
+import type {
+  current,
+  home,
+  home_first_page,
+  post,
+  page,
+  archive,
+  year,
+  month,
+  category,
+  tag
+} from './plugins/helper/is';
 import type js from './plugins/helper/js';
 import type link_to from './plugins/helper/link_to';
 import type list_archives from './plugins/helper/list_archives';
@@ -32,7 +51,7 @@ import type tag_cloud from './plugins/helper/tagcloud';
 import type toc from './plugins/helper/toc';
 import type url_for from './plugins/helper/url_for';
 
-export type NodeJSLikeCallback<R, E = any> = (err: E, result?: R) => void
+export type NodeJSLikeCallback<R, E = any> = (err: E, result?: R) => void;
 
 export interface RenderData {
   [key: string]: any;
@@ -113,12 +132,12 @@ export interface BasePagePostSchema {
   /**
    * 	Article created date
    */
-  date: moment.Moment,
+  date: moment.Moment;
 
   /**
    * Article last updated date
    */
-  updated: moment.Moment,
+  updated: moment.Moment;
 
   /**
    * 	Comment enabled or not
@@ -576,4 +595,3 @@ export interface SyncStore {
 export interface Store {
   [key: string]: StoreFunction | StoreFunction[];
 }
-
