@@ -3,14 +3,14 @@ because of HexoJS doesnt accept my PR, i bundled my improved version of hexo.
 
 | package name | commit |
 | :--- | :--- | 
-| hexo | [1c65c44d](https://github.com/dimaslanjaka/hexo/commit/1c65c44d)  [![Coverage Status](https://coveralls.io/repos/github/dimaslanjaka/hexo/badge.svg)](https://coveralls.io/github/dimaslanjaka/hexo) | 
+| hexo | [5b3621a5](https://github.com/dimaslanjaka/hexo/commit/5b3621a5)  [![Coverage Status](https://coveralls.io/repos/github/dimaslanjaka/hexo/badge.svg)](https://coveralls.io/github/dimaslanjaka/hexo) | 
 | hexo-asset-link | [1957ca7](https://github.com/dimaslanjaka/hexo-asset-link/commit/1957ca7) | 
 | hexo-cli | [a59adc9](https://github.com/dimaslanjaka/hexo-cli/commit/a59adc9) | 
 | hexo-front-matter | [04c79bf](https://github.com/dimaslanjaka/hexo-front-matter/commit/04c79bf) | 
 | hexo-log | [bf0d2a9](https://github.com/dimaslanjaka/hexo-log/commit/bf0d2a9) | 
-| hexo-server | [ac37587](https://github.com/dimaslanjaka/hexo-server/commit/ac37587) | 
+| hexo-server | [ed96edf](https://github.com/dimaslanjaka/hexo-server/commit/ed96edf) | 
 | hexo-util | [2294de6](https://github.com/dimaslanjaka/hexo-util/commit/2294de6) | 
-| warehouse | [8b3be86](https://github.com/dimaslanjaka/warehouse/commit/8b3be86) | 
+| warehouse | [999c8e2](https://github.com/dimaslanjaka/warehouse/commit/999c8e2) | 
 
 ## Installation by CLI
 Installation with command line interface
