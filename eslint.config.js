@@ -1,7 +1,9 @@
 
 const config = require('eslint-config-hexo/ts');
+const testConfig = require('eslint-config-hexo/test');
 
 module.exports = [
+  // Configurations applied globally
   ...config,
   {
     rules: {
@@ -31,6 +33,27 @@ module.exports = [
         {
           allowDestructuring: true, // Disallow `const { props, state } = this`; true by default
           allowedNames: ['self', 'hexo'] // Allow `const self = this`; `[]` by default
+        }
+      ]
+    }
+  },
+  // Configurations applied only to test files
+  {
+    files: [
+      'test/**/*.ts'
+    ],
+    languageOptions: {
+      ...testConfig.languageOptions
+    },
+    rules: {
+      ...testConfig.rules,
+      '@typescript-eslint/ban-ts-comment': 0,
+      '@typescript-eslint/no-unused-expressions': 0,
+      '@typescript-eslint/no-unused-vars': [
+        'error', {
+          'varsIgnorePattern': '^_',
+          'argsIgnorePattern': '^_',
+          'caughtErrorsIgnorePattern': '^_'
         }
       ]
     }

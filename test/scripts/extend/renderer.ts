@@ -62,7 +62,7 @@ describe('Renderer', () => {
       return BluebirdPromise.resolve();
     }
 
-    renderer.compile = _data => {
+    renderer.compile = _ => {
       return () => {};
     };
 
