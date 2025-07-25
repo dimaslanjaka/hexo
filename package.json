@@ -1,47 +1,47 @@
 {
   "name": "hexo-monorepo",
-  "private": true,
   "version": "1.0.0",
+  "private": true,
   "description": "Hexo Monorepo",
   "main": "packages/hexo/dist/hexo/index.js",
   "types": "packages/hexo/dist/hexo/index.d.ts",
-  "scripts": {
-    "prestart": "npm run build",
-    "start": "yarn run site:serve",
-    "build:util": "yarn workspace hexo-util run build:highlight && yarn workspace hexo-util run build",
-    "build:log": "yarn workspace hexo-log run build",
-    "build:fm": "yarn workspace hexo-front-matter run build",
-    "build": "nrs \"build:**\" && node -r ts-node/register build.ts",
-    "build-commit": "nrs \"build:**\" && node -r ts-node/register build.ts --commit",
-    "clean": "node -r ts-node/register build.ts --clean",
-    "lint": "eslint --fix",
-    "prepare": "husky && yarn workspaces foreach --all run prepare",
-    "pretest": "npm run build",
-    "test": "yarn workspace foreach --no-private exec \"npm run test --if-present\"",
-    "site:serve": "yarn workspace hexo-site run start",
-    "site:clean": "yarn workspace hexo-site run clean",
-    "site:build": "yarn workspace hexo-site run build"
+  "author": {
+    "name": "Dimas Lanjaka",
+    "email": "dimaslanjaka@gmail.com",
+    "url": "https://www.webmanajemen.com"
   },
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dimaslanjaka/hexo.git"
+  },
+  "homepage": "https://github.com/dimaslanjaka/hexo#readme",
+  "bugs": {
+    "url": "https://github.com/dimaslanjaka/hexo/issues"
   },
   "keywords": [
     "hexo",
     "monorepo"
   ],
-  "author": {
-    "email": "dimaslanjaka@gmail.com",
-    "name": "Dimas Lanjaka",
-    "url": "https://www.webmanajemen.com"
+  "scripts": {
+    "build": "nrs \"build:**\" && node -r ts-node/register build.ts",
+    "build-commit": "nrs \"build:**\" && node -r ts-node/register build.ts --commit",
+    "build:fm": "yarn workspace hexo-front-matter run build",
+    "build:log": "yarn workspace hexo-log run build",
+    "build:util": "yarn workspace hexo-util run build:highlight && yarn workspace hexo-util run build",
+    "clean": "node -r ts-node/register build.ts --clean",
+    "lint": "eslint --fix",
+    "prepare": "husky && yarn workspaces foreach --all run prepare",
+    "prestart": "npm run build",
+    "pretest": "npm run build",
+    "site:build": "yarn workspace hexo-site run build",
+    "site:clean": "yarn workspace hexo-site run clean",
+    "site:serve": "yarn workspace hexo-site run start",
+    "start": "yarn run site:serve",
+    "test": "yarn workspace foreach --no-private exec \"npm run test --if-present\""
   },
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/dimaslanjaka/hexo/issues"
-  },
-  "homepage": "https://github.com/dimaslanjaka/hexo#readme",
   "dependencies": {
-    "dotenv": "^17.2.1",
+    "fs-extra": "^11.3.0",
     "git-command-helper": "^2.0.2",
     "minimist": "^1.2.8",
     "nunjucks": "^3.2.4",
@@ -51,15 +51,17 @@
   },
   "devDependencies": {
     "@types/eslint": "^9",
+    "@types/fs-extra": "^11.0.4",
     "@types/minimist": "^1",
     "@types/node": "^24.1.0",
     "@types/nunjucks": "^3.2.6",
     "@types/prettier": "^3",
     "@typescript-eslint/eslint-plugin": "^8.38.0",
     "@typescript-eslint/parser": "^8.38.0",
-    "binary-collections": "https://github.com/dimaslanjaka/bin.git#master",
-    "cross-spawn": "https://github.com/dimaslanjaka/node-cross-spawn/raw/private/release/cross-spawn.tgz",
+    "binary-collections": "^2.0.9",
+    "cross-spawn": "^7.0.6",
     "depcheck": "^1.4.7",
+    "dotenv": "^17.2.1",
     "eslint": "^9.31.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.3",
@@ -72,26 +74,27 @@
     "tslib": "^2.8.1",
     "typescript": "^5.8.3"
   },
+  "engines": {
+    "node": ">=14"
+  },
+  "packageManager": "yarn@4.9.2",
+  "resolutions": {
+    "@types/node": "^20",
+    "binary-collections": "https://github.com/dimaslanjaka/bin/raw/c15be83361935cefeb80a62467ee79db82567b0f/releases/bin.tgz",
+    "cross-spawn": "https://github.com/dimaslanjaka/node-cross-spawn/raw/80999ac7a7031a81e11ddb5fab0f8ba433041c98/release/cross-spawn.tgz",
+    "git-command-helper": "https://github.com/dimaslanjaka/git-command-helper/raw/991214dbbea1769747acf40cbbdbe677c4f1ee2e/release/git-command-helper.tgz",
+    "hexo": "workspace:^",
+    "hexo-asset-link": "workspace:^",
+    "hexo-cli": "workspace:^",
+    "hexo-front-matter": "workspace:^",
+    "hexo-is": "workspace:^",
+    "hexo-log": "workspace:^",
+    "hexo-util": "workspace:^",
+    "sbg-utility": "https://github.com/dimaslanjaka/static-blog-generator/raw/df939d4cb3e31fded39412534bcef11de9fe0dcc/packages/sbg-utility/release/sbg-utility.tgz",
+    "warehouse": "workspace:^"
+  },
   "workspaces": [
     "packages/*",
     "test/hexo-theme-test"
-  ],
-  "packageManager": "yarn@4.9.2",
-  "resolutions": {
-    "binary-collections": "https://github.com/dimaslanjaka/bin/raw/c15be83361935cefeb80a62467ee79db82567b0f/releases/bin.tgz",
-    "cross-spawn": "https://github.com/dimaslanjaka/node-cross-spawn/raw/80999ac7a7031a81e11ddb5fab0f8ba433041c98/release/cross-spawn.tgz",
-    "sbg-utility": "https://github.com/dimaslanjaka/static-blog-generator/raw/df939d4cb3e31fded39412534bcef11de9fe0dcc/packages/sbg-utility/release/sbg-utility.tgz",
-    "git-command-helper": "https://github.com/dimaslanjaka/git-command-helper/raw/991214dbbea1769747acf40cbbdbe677c4f1ee2e/release/git-command-helper.tgz",
-    "hexo-log": "workspace:^",
-    "hexo-util": "workspace:^",
-    "hexo-cli": "workspace:^",
-    "hexo": "workspace:^",
-    "warehouse": "workspace:^",
-    "hexo-front-matter": "workspace:^",
-    "hexo-asset-link": "workspace:^",
-    "@types/node": "^20"
-  },
-  "engines": {
-    "node": ">=14"
-  }
+  ]
 }
