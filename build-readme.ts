@@ -3,23 +3,26 @@ import git from 'git-command-helper';
 import minimist from 'minimist';
 import nunjucks from 'nunjucks';
 import picocolors from 'picocolors';
-import { fs, path, writefile } from 'sbg-utility';
+import { writefile } from 'sbg-utility';
+import fs from 'fs-extra';
+import path from 'upath';
 
-const parseWorkspaces = croSpawn
-  .async('yarn', ['workspaces', 'list', '--no-private', '--json'], {
-    cwd: process.cwd()
-  })
-  .then((o) =>
-    o.stdout
-      .split(/\r?\n/gm)
-      .filter((str) => str.length > 4)
-      .map((str) => {
-        const parse: { location: string; name: string } = JSON.parse(str.trim());
-        parse.location = path.join(__dirname, parse.location);
-        return parse;
-      })
-      .filter((o) => fs.existsSync(o.location))
-  );
+const parseWorkspaces = () =>
+  croSpawn
+    .async('yarn', ['workspaces', 'list', '--no-private', '--json'], {
+      cwd: process.cwd()
+    })
+    .then((o) =>
+      o.stdout
+        .split(/\r?\n/gm)
+        .filter((str) => str.length > 4)
+        .map((str) => {
+          const parse: { location: string; name: string } = JSON.parse(str.trim());
+          parse.location = path.join(__dirname, parse.location);
+          return parse;
+        })
+        .filter((o) => fs.existsSync(o.location))
+    );
 
 /**
  * is current device is Github Actions
@@ -29,7 +32,7 @@ const argv = minimist(process.argv.slice(2));
 const gh = new git(__dirname, 'monorepo-v7');
 
 export async function createReadMe() {
-  const workspaces = await parseWorkspaces;
+  const workspaces = await parseWorkspaces();
   if (Array.isArray(workspaces)) {
     // set username and email on CI
     if (_isCI) {
