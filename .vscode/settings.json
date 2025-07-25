@@ -34,5 +34,22 @@
   "git.enabled": true,
   "git.detectSubmodules": true,
   "git.ignoreLimitWarning": true,
-  "git.ignoredRepositories": ["packages/hexo-cli/assets", "packages/hexo-theme-landscape"]
+  "git.ignoredRepositories": ["packages/hexo-cli/assets", "packages/hexo-theme-landscape"],
+  "git.autofetch": false,
+  "git.autorefresh": false,
+  "git.autoRepositoryDetection": "openEditors",
+  "git.autoStash": true,
+  "git.branchSortOrder": "committerdate",
+  "git.defaultBranchName": "master",
+  "git.detectSubmodulesLimit": 3,
+  "git.diagnosticsCommitHook.enabled": true,
+  "git.mergeEditor": true,
+  "git.promptToSaveFilesBeforeCommit": "always",
+  "git.promptToSaveFilesBeforeStash": "always",
+  "git.rememberPostCommitCommand": true,
+  "git.repositoryScanIgnoredFolders": ["node_modules", "dist", "tmp/"],
+  "git.repositoryScanMaxDepth": 1,
+  "git.supportCancellation": true,
+  "git.verboseCommit": false,
+  "github.gitProtocol": "https"
 }
