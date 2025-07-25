@@ -38,3 +38,15 @@
 	path = packages/hexo-server
 	url = https://github.com/dimaslanjaka/hexo-server.git
 	branch = private
+[submodule "packages/hexo-is"]
+	path = packages/hexo-is
+	url = https://github.com/dimaslanjaka/hexo-is
+	branch = master
+[submodule "packages/hexo-renderers"]
+	path = packages/hexo-renderers
+	url = https://github.com/dimaslanjaka/hexo-renderers
+	branch = pre-release
+[submodule "packages/hexo-themes"]
+	path = packages/hexo-themes
+	url = https://github.com/dimaslanjaka/hexo-themes
+	branch = master
