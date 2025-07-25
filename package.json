@@ -29,6 +29,7 @@
     "build:fm": "yarn workspace hexo-front-matter run build",
     "build:log": "yarn workspace hexo-log run build",
     "build:util": "yarn workspace hexo-util run build:highlight && yarn workspace hexo-util run build",
+    "build:packages": "yarn workspaces foreach --worktree --no-private run build",
     "clean": "node -r ts-node/register build.ts --clean",
     "lint": "eslint --fix",
     "prepare": "husky && yarn workspaces foreach --all run prepare",
@@ -80,7 +81,7 @@
   "packageManager": "yarn@4.9.2",
   "resolutions": {
     "@types/node": "^20",
-    "binary-collections": "https://github.com/dimaslanjaka/bin/raw/c15be83361935cefeb80a62467ee79db82567b0f/releases/bin.tgz",
+    "binary-collections": "https://github.com/dimaslanjaka/bin/raw/22e0e798d99c851b803552874559b761153a0cc1/releases/bin.tgz",
     "cross-spawn": "https://github.com/dimaslanjaka/node-cross-spawn/raw/80999ac7a7031a81e11ddb5fab0f8ba433041c98/release/cross-spawn.tgz",
     "git-command-helper": "https://github.com/dimaslanjaka/git-command-helper/raw/991214dbbea1769747acf40cbbdbe677c4f1ee2e/release/git-command-helper.tgz",
     "hexo": "workspace:^",
