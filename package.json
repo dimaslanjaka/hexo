@@ -39,11 +39,12 @@
     "site:clean": "yarn workspace hexo-site run clean",
     "site:serve": "yarn workspace hexo-site run start",
     "start": "yarn run site:serve",
-    "test": "yarn workspace foreach --no-private exec \"npm run test --if-present\""
+    "test": "yarn workspace foreach --no-private exec \"npm run test --if-present\"",
+    "update:ncu": "npx npm-check-updates -u && yarn workspaces foreach --no-private --worktree run update:ncu"
   },
   "dependencies": {
     "fs-extra": "^11.3.0",
-    "git-command-helper": "^2.0.2",
+    "git-command-helper": "^2.1.0",
     "minimist": "^1.2.8",
     "nunjucks": "^3.2.4",
     "picocolors": "^1.1.1",
@@ -63,7 +64,7 @@
     "cross-spawn": "^7.0.6",
     "depcheck": "^1.4.7",
     "dotenv": "^17.2.1",
-    "eslint": "^9.31.0",
+    "eslint": "^9.32.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.3",
     "husky": "^9.1.7",
