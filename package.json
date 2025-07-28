@@ -2,8 +2,18 @@
   "name": "hexo",
   "version": "7.3.0",
   "description": "A fast, simple & powerful blog framework, powered by Node.js.",
-  "main": "dist/hexo/index.js",
+  "main": "dist/cjs/hexo/index.js",
+  "module": "dist/esm/hexo/index.js",
+  "types": "dist/esm/hexo/index.d.ts",
   "bin": "./bin/hexo",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/hexo/index.js",
+      "require": "./dist/cjs/hexo/index.js",
+      "types": "./dist/esm/hexo/index.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
   "scripts": {
     "prepublishOnly": "npm install && npm run clean && npm run build",
     "build:cjs": "tsc -p tsconfig.cjs.json",
@@ -20,7 +30,6 @@
     "dist/",
     "bin/"
   ],
-  "types": "./dist/hexo/index.d.ts",
   "repository": "hexojs/hexo",
   "homepage": "https://hexo.io/",
   "funding": {
