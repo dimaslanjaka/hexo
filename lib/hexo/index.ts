@@ -776,10 +776,10 @@ Hexo.prototype.version = Hexo.version;
 
 // Assign the Hexo class to the global scope for backward compatibility
 if (typeof globalThis !== 'undefined') {
-  (globalThis as any).Hexo = Hexo;
+  (globalThis as any).hexo = Hexo;
 }
 if (typeof global !== 'undefined') {
-  (global as any).Hexo = Hexo;
+  (global as any).hexo = Hexo;
 }
 
 // For ESM compatibility
