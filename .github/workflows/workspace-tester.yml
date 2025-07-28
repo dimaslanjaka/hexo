@@ -50,9 +50,8 @@ jobs:
           git submodule sync
           git submodule foreach "git submodule sync"
           echo "update submodules"
-          npm install -g rimraf binary-collections@https://raw.githubusercontent.com/dimaslanjaka/bin/master/releases/bin.tgz
-          npx rimraf .git/modules
-          npx submodule-install
+          yarn dlx rimraf .git/modules
+          yarn dlx binary-collections@https://raw.githubusercontent.com/dimaslanjaka/bin/master/releases/bin.tgz submodule-install
         shell: bash
       - name: Use Node.js ${{ env.node_version }}
         uses: actions/setup-node@v3
