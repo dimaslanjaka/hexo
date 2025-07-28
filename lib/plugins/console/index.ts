@@ -1,6 +1,6 @@
 import type Hexo from '../../hexo';
 
-export default function(ctx: Hexo) {
+function Console(ctx: Hexo) {
   const { console } = ctx.extend;
 
   console.register('clean', 'Remove generated files and cache.', require('./clean'));
@@ -77,4 +77,13 @@ export default function(ctx: Hexo) {
       {name: '--pretty', desc: 'Prettify JSON output'}
     ]
   }, require('./render'));
+}
+
+// For ESM compatibility
+export default Console;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = Console;
+  // For ESM compatibility
+  module.exports.default = Console;
 }
