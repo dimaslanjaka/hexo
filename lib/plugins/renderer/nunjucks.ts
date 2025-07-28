@@ -88,4 +88,4 @@ njkRenderer.compile = (data: StoreFunctionData): (locals: any) => string => {
   };
 };
 
-export = njkRenderer;
+export default njkRenderer;

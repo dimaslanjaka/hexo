@@ -54,4 +54,4 @@ function linkTag(args: string[]) {
   return htmlTag('a', attrs, text.join(' '));
 }
 
-export = linkTag;
+export default linkTag;

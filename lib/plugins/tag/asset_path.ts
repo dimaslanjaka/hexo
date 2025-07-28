@@ -7,7 +7,7 @@ import type Hexo from '../../hexo';
  * Syntax:
  *   {% asset_path slug %}
  */
-export = (ctx: Hexo) => {
+const assetPath = (ctx: Hexo) => {
   const PostAsset = ctx.model('PostAsset');
 
   return function assetPathTag(args: string[]) {
@@ -22,3 +22,5 @@ export = (ctx: Hexo) => {
     return path;
   };
 };
+
+export default assetPath;

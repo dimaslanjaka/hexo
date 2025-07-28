@@ -8,7 +8,7 @@ import type Hexo from '../../hexo';
  * Syntax:
  *   {% asset_img [class names] slug [width] [height] [title text [alt text]]%}
  */
-export = (ctx: Hexo) => {
+const assetImg = (ctx: Hexo) => {
   const PostAsset = ctx.model('PostAsset');
 
   return function assetImgTag(args: string[]) {
@@ -25,3 +25,5 @@ export = (ctx: Hexo) => {
     }
   };
 };
+
+export default assetImg;

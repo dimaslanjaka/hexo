@@ -3,7 +3,7 @@ import { join } from 'path';
 import type Hexo from '../hexo';
 import type { AssetSchema } from '../types';
 
-export = (ctx: Hexo) => {
+const assetModel = (ctx: Hexo) => {
   const Asset = new warehouse.Schema<AssetSchema>({
     _id: {type: String, required: true},
     path: {type: String, required: true},
@@ -17,3 +17,5 @@ export = (ctx: Hexo) => {
 
   return Asset;
 };
+
+export default assetModel;

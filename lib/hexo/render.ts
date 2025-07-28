@@ -138,4 +138,4 @@ class Render {
   }
 }
 
-export = Render;
+export default Render;

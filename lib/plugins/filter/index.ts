@@ -1,6 +1,6 @@
 import type Hexo from '../../hexo';
 
-export = (ctx: Hexo) => {
+const filterIndex = (ctx: Hexo) => {
   const { filter } = ctx.extend;
 
   require('./after_render')(ctx);
@@ -13,3 +13,5 @@ export = (ctx: Hexo) => {
   filter.register('new_post_path', require('./new_post_path'));
   filter.register('post_permalink', require('./post_permalink'));
 };
+
+export default filterIndex;

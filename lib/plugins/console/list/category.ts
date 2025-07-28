@@ -25,4 +25,4 @@ function listCategory(this: Hexo): void {
   if (data.length === 1) console.log('No categories.');
 }
 
-export = listCategory;
+export default listCategory;

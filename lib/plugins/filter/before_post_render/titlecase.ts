@@ -9,4 +9,4 @@ function titlecaseFilter(data: RenderData): void {
   data.title = titlecase(data.title);
 }
 
-export = titlecaseFilter;
+export default titlecaseFilter;

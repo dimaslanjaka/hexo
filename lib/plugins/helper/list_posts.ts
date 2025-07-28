@@ -67,4 +67,4 @@ function listPostsHelper(this: LocalsType, posts?: Query<PostSchema> | Options, 
   return result;
 }
 
-export = listPostsHelper;
+export default listPostsHelper;

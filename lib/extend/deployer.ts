@@ -51,4 +51,4 @@ class Deployer {
   }
 }
 
-export = Deployer;
+export default Deployer;

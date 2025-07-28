@@ -44,4 +44,4 @@ function linkToHelper(this: LocalsType, path: string, text?: string, options: Op
   return htmlTag('a', attrs as Attrs, text);
 }
 
-export = linkToHelper;
+export default linkToHelper;

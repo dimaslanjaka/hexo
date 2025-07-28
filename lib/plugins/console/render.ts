@@ -49,4 +49,4 @@ function renderConsole(this: Hexo, args: RenderArgs): Promise<void> {
   });
 }
 
-export = renderConsole;
+export default renderConsole;

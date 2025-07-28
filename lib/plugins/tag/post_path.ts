@@ -8,7 +8,7 @@ import type Hexo from '../../hexo';
  * Syntax:
  *   {% post_path slug | title %}
  */
-export = (ctx: Hexo) => {
+const postPath = (ctx: Hexo) => {
   return function postPathTag(args: any[]) {
     const slug = args.shift();
     if (!slug) return;
@@ -22,3 +22,5 @@ export = (ctx: Hexo) => {
     return link;
   };
 };
+
+export default postPath;

@@ -24,4 +24,4 @@ function publishConsole(this: Hexo, args: PublishArgs): Promise<void> {
   });
 }
 
-export = publishConsole;
+export default publishConsole;

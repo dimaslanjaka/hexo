@@ -223,4 +223,4 @@ function generateConsole(this: Hexo, args: GenerateArgs = {}): Promise<any> {
   });
 }
 
-export = generateConsole;
+export default generateConsole;

@@ -81,4 +81,4 @@ class Scaffold {
   }
 }
 
-export = Scaffold;
+export default Scaffold;

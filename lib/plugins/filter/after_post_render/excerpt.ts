@@ -20,4 +20,4 @@ function excerptFilter(data: RenderData): void {
   }
 }
 
-export = excerptFilter;
+export default excerptFilter;

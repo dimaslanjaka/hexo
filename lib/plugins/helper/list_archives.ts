@@ -127,4 +127,4 @@ function listArchivesHelper(this: LocalsType, options: Options = {}) {
   return result;
 }
 
-export = listArchivesHelper;
+export default listArchivesHelper;

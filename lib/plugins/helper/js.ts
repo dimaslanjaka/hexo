@@ -26,7 +26,7 @@ function jsHelper(this: LocalsType, ...args: any[]) {
   return result;
 }
 
-export = moize(jsHelper, {
+export default moize(jsHelper, {
   maxSize: 10,
   isDeepEqual: true,
   updateCacheForKey() {

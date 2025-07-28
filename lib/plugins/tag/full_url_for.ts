@@ -7,7 +7,7 @@ import type Hexo from '../../hexo';
  * Syntax:
  *   {% full_url_for text path %}
  */
-export = (ctx: Hexo) => {
+const fullUrlFor = (ctx: Hexo) => {
   return function fullUrlForTag([text, path]) {
     const url = full_url_for.call(ctx, path);
     const attrs = {
@@ -16,3 +16,5 @@ export = (ctx: Hexo) => {
     return htmlTag('a', attrs, text);
   };
 };
+
+export default fullUrlFor;

@@ -4,4 +4,4 @@ function markdownHelper(this: LocalsType, text: string, options?: any) {
   return this.render(text, 'markdown', options);
 }
 
-export = markdownHelper;
+export default markdownHelper;

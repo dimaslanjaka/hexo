@@ -25,4 +25,4 @@ function imageTagHelper(this: LocalsType, path: string, options: Options = {}) {
   return htmlTag('img', attrs as Attrs);
 }
 
-export = imageTagHelper;
+export default imageTagHelper;

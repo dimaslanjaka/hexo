@@ -47,4 +47,4 @@ function externalLinkFilter(this: Hexo, data: string): string {
   return result;
 }
 
-export = externalLinkFilter;
+export default externalLinkFilter;

@@ -84,4 +84,4 @@ class Theme extends Box {
   }
 }
 
-export = Theme;
+export default Theme;

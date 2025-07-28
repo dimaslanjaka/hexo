@@ -3,7 +3,7 @@ import { writeFile, exists, readFile } from 'hexo-fs';
 import type Hexo from './index';
 import type Promise from 'bluebird';
 
-export = (ctx: Hexo): Promise<void> => {
+const updatePackage = (ctx: Hexo): Promise<void> => {
   const pkgPath = join(ctx.base_dir, 'package.json');
 
   return readPkg(pkgPath).then(pkg => {
@@ -19,6 +19,8 @@ export = (ctx: Hexo): Promise<void> => {
     return writeFile(pkgPath, JSON.stringify(pkg, null, '  '));
   });
 };
+
+export default updatePackage;
 
 function readPkg(path: string): Promise<any> {
   return exists(path).then(exist => {

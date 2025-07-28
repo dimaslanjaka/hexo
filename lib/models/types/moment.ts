@@ -89,4 +89,4 @@ function toMoment(value) {
   return moment(value);
 }
 
-export = SchemaTypeMoment;
+export default SchemaTypeMoment;

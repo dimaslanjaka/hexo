@@ -1,4 +1,4 @@
-export = {
+const defaultConfig = {
   // Site
   title: 'Hexo',
   subtitle: '',
@@ -87,3 +87,5 @@ export = {
   // Category & Tag
   meta_generator: true
 };
+
+export default defaultConfig;

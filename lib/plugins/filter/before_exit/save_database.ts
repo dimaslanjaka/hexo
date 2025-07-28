@@ -8,4 +8,4 @@ function saveDatabaseFilter(this: Hexo): Promise<void> | undefined {
   });
 }
 
-export = saveDatabaseFilter;
+export default saveDatabaseFilter;

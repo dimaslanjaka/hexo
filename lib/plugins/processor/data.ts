@@ -3,7 +3,7 @@ import { extname } from 'path';
 import type Hexo from '../../hexo';
 import type { _File } from '../../box';
 
-export = (ctx: Hexo) => ({
+const dataProcessor = (ctx: Hexo) => ({
   pattern: new Pattern('_data/*path'),
 
   process: function dataProcessor(file: _File) {
@@ -33,4 +33,7 @@ export = (ctx: Hexo) => ({
       });
     });
   }
+
 });
+
+export default dataProcessor;

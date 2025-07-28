@@ -98,4 +98,4 @@ function newPostPathFilter(this: Hexo, data: Partial<PostSchema> = {}, replace?:
   return ensurePath(target);
 }
 
-export = newPostPathFilter;
+export default newPostPathFilter;

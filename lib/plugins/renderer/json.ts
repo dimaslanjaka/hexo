@@ -4,4 +4,4 @@ function jsonRenderer(data: StoreFunctionData): any {
   return JSON.parse(data.text);
 }
 
-export = jsonRenderer;
+export default jsonRenderer;

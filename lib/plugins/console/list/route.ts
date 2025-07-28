@@ -49,4 +49,4 @@ function buildNodes(tree: Record<string, any>) {
   return nodes;
 }
 
-export = listRoute;
+export default listRoute;

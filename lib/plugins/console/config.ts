@@ -90,4 +90,4 @@ function castValue(value: string): any {
   return value;
 }
 
-export = configConsole;
+export default configConsole;

@@ -14,7 +14,7 @@ const rTo = /\s*to:(\d+)/i;
 *   {% include_code [title] [lang:language] path/to/file %}
 */
 
-export = (ctx: Hexo) => function includeCodeTag(args: string[]) {
+const includeCode = (ctx: Hexo) => function includeCodeTag(args: string[]) {
   let codeDir = ctx.config.code_dir;
   let arg = args.join(' ');
 
@@ -75,3 +75,5 @@ const caption = htmlTag('span', {}, title) + `<a href="${url_for.call(ctx, doc.p
   }
   return `<pre><code>${code}</code></pre>`;
 };
+
+export default includeCode;

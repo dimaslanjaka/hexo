@@ -211,4 +211,4 @@ function openGraphHelper(this: LocalsType, options: Options = {}) {
   return result.trim();
 }
 
-export = openGraphHelper;
+export default openGraphHelper;

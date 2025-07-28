@@ -32,4 +32,4 @@ function pageGenerator(locals: SiteLocals): PageGenerator[] {
   });
 }
 
-export = pageGenerator;
+export default pageGenerator;

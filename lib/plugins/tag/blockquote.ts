@@ -57,7 +57,7 @@ const parseFooter = (args: string[], ctx: Hexo) => {
 *   {% endblockquote %}
 */
 
-export = (ctx: Hexo) => function blockquoteTag(args: string[], content: string) {
+const blockquoteTag = (ctx: Hexo) => function blockquoteTag(args: string[], content: string) {
   const footer = parseFooter(args, ctx);
 
   let result = '<blockquote>';
@@ -67,3 +67,5 @@ export = (ctx: Hexo) => function blockquoteTag(args: string[], content: string) 
 
   return result;
 };
+
+export default blockquoteTag;

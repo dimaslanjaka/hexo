@@ -32,4 +32,4 @@ function externalLinkFilter(this: Hexo, data: RenderData): void {
   });
 }
 
-export = externalLinkFilter;
+export default externalLinkFilter;

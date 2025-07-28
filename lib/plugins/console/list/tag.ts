@@ -25,4 +25,4 @@ function listTag(this: Hexo): void {
   if (data.length === 1) console.log('No tags.');
 }
 
-export = listTag;
+export default listTag;

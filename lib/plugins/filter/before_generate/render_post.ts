@@ -19,4 +19,4 @@ function renderPostFilter(this: Hexo): Promise<[any[], any[]]> {
   ]);
 }
 
-export = renderPostFilter;
+export default renderPostFilter;

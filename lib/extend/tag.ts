@@ -286,4 +286,4 @@ class Tag {
   }
 }
 
-export = Tag;
+export default Tag;
