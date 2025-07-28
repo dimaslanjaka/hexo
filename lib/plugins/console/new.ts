@@ -64,4 +64,4 @@ function newConsole(this: Hexo, args: NewArgs): Promise<void> {
   });
 }
 
-export = newConsole;
+export default newConsole;

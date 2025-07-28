@@ -121,4 +121,4 @@ function listTagsHelperFactory(tags?: Query<TagSchema> | Options, options?: Opti
   }).call(this, tags, options);
 }
 
-export = listTagsHelperFactory;
+export default listTagsHelperFactory;

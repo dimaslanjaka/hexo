@@ -9,7 +9,7 @@ import type Hexo from '../../hexo';
 import type { Stats } from 'fs';
 import { PageSchema } from '../../types';
 
-export = (ctx: Hexo) => {
+const assetProcessor = (ctx: Hexo) => {
   return {
     pattern: new Pattern(path => {
       if (isExcludedFile(path, ctx.config)) return;
@@ -28,6 +28,8 @@ export = (ctx: Hexo) => {
     }
   };
 };
+
+export default assetProcessor;
 
 function processPage(ctx: Hexo, file: _File) {
   const Page = ctx.model('Page');

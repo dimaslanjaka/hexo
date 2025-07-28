@@ -17,7 +17,7 @@ function removeEmptyTag(tags: string[]) {
 
 const tagsGetterCache = new Cache();
 
-export = (ctx: Hexo) => {
+export default (ctx: Hexo) => {
   const Post = new warehouse.Schema<PostSchema>({
     id: String,
     title: {type: String, default: ''},

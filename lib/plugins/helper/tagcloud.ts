@@ -114,4 +114,4 @@ function tagcloudHelperFactory(this: LocalsType, tags?: Query<TagSchema> | Optio
   }).call(this, tags, options);
 }
 
-export = tagcloudHelperFactory;
+export default tagcloudHelperFactory;

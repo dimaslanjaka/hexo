@@ -7,7 +7,7 @@ import type Hexo from '../../hexo';
  * Syntax:
  *   {% asset_link slug [title] [escape] %}
  */
-export = (ctx: Hexo) => {
+const assetLink = (ctx: Hexo) => {
   const PostAsset = ctx.model('PostAsset');
 
   return function assetLinkTag(args: string[]) {
@@ -33,3 +33,5 @@ export = (ctx: Hexo) => {
     return `<a href="${link}" title="${attrTitle}">${title}</a>`;
   };
 };
+
+export default assetLink;

@@ -171,4 +171,4 @@ function paginatorHelper(this: LocalsType, options: Options = {}) {
   return tags.join('');
 }
 
-export = paginatorHelper;
+export default paginatorHelper;

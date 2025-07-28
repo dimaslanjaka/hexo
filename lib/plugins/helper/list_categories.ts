@@ -123,4 +123,4 @@ function listCategoriesHelper(this: LocalsType, categories?: Query<CategorySchem
   return flatList(0);
 }
 
-export = listCategoriesHelper;
+export default listCategoriesHelper;

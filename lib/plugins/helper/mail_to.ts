@@ -54,7 +54,7 @@ function mailToHelper(path: string | string[], text?: string, options: Options =
   return htmlTag('a', attrs as Attrs, text);
 }
 
-export = moize(mailToHelper, {
+export default moize(mailToHelper, {
   maxSize: 10,
   isDeepEqual: true
 });

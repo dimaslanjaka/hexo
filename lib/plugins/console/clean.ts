@@ -34,4 +34,4 @@ function deletePublicDir(ctx: Hexo): Promise<void> {
   });
 }
 
-export = cleanConsole;
+export default cleanConsole;

@@ -24,4 +24,4 @@ function iframeTag(args: string[]) {
   return htmlTag('iframe', attrs, '');
 }
 
-export = iframeTag;
+export default iframeTag;

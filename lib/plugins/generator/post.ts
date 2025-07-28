@@ -38,4 +38,4 @@ function postGenerator(locals: SiteLocals): PostGenerator[] {
   });
 }
 
-export = postGenerator;
+export default postGenerator;

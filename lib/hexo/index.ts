@@ -180,13 +180,7 @@ interface Config extends DefaultConfigType {
   [key: string]: any;
 }
 
-// Node.js internal APIs
-declare module 'module' {
-  function _nodeModulePaths(path: string): string[];
-  function _resolveFilename(request: string, parent: Module, isMain?: any, options?: any): string;
-  const _extensions: NodeJS.RequireExtensions,
-    _cache: any;
-}
+// Node.js internal APIs are now declared in global.d.ts
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 interface Hexo {
@@ -758,11 +752,4 @@ Hexo.prototype.core_dir = Hexo.core_dir;
 Hexo.version = version;
 Hexo.prototype.version = Hexo.version;
 
-// define global variable
-// this useful for plugin written in typescript
-declare global {
-  // eslint-disable-next-line one-var
-  const hexo: Hexo;
-}
-
-export = Hexo;
+export default Hexo;

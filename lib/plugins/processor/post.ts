@@ -25,7 +25,7 @@ const preservedKeys = {
   hash: true
 };
 
-export = (ctx: Hexo) => {
+const postProcessor = (ctx: Hexo) => {
   return {
     pattern: new Pattern(path => {
       if (isTmpFile(path)) return;
@@ -66,6 +66,8 @@ export = (ctx: Hexo) => {
     }
   };
 };
+
+export default postProcessor;
 
 function processPost(ctx: Hexo, file: _File) {
   const Post = ctx.model('Post');

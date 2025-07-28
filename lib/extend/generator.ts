@@ -55,4 +55,4 @@ class Generator {
   }
 }
 
-export = Generator;
+export default Generator;

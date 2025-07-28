@@ -15,4 +15,4 @@ function searchFormHelper(this: LocalsType, options: Options = {}) {
   return `<form action="//google.com/search" method="get" accept-charset="UTF-8" class="${className}"><input type="search" name="q" class="${className}-input"${text ? ` placeholder="${text}"` : ''}>${button ? `<button type="submit" class="${className}-submit">${typeof button === 'string' ? button : text}</button>` : ''}<input type="hidden" name="sitesearch" value="${config.url}"></form>`;
 }
 
-export = moize.deep(searchFormHelper);
+export default moize.deep(searchFormHelper);

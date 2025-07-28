@@ -177,4 +177,4 @@ class Router extends EventEmitter {
   }
 }
 
-export = Router;
+export default Router;

@@ -5,4 +5,4 @@ function faviconTagHelper(this: LocalsType, path: string) {
   return `<link rel="shortcut icon" href="${url_for.call(this, path)}">`;
 }
 
-export = faviconTagHelper;
+export default faviconTagHelper;

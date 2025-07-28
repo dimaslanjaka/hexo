@@ -32,4 +32,4 @@ function i18nLocalsFilter(locals: HexoLocalsData) {
   locals._p = i18n._p(languages);
 }
 
-export = i18nLocalsFilter;
+export default i18nLocalsFilter;

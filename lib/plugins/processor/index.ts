@@ -1,6 +1,6 @@
 import type Hexo from '../../hexo';
 
-export = (ctx: Hexo) => {
+const processorIndex = (ctx: Hexo) => {
   const { processor } = ctx.extend;
 
   function register(name: string) {
@@ -12,3 +12,5 @@ export = (ctx: Hexo) => {
   register('data');
   register('post');
 };
+
+export default processorIndex;

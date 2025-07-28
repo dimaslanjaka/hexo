@@ -1,6 +1,6 @@
 import type Hexo from '../../hexo';
 
-export = (ctx: Hexo) => {
+export default (ctx: Hexo) => {
   const { helper } = ctx.extend;
 
   const date = require('./date');

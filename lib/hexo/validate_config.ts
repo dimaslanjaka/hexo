@@ -1,7 +1,7 @@
 import assert from 'assert';
 import type Hexo from './index';
 
-export = (ctx: Hexo): void => {
+const validateConfig = (ctx: Hexo): void => {
   const { config, log } = ctx;
 
   log.info('Validating config');
@@ -25,4 +25,6 @@ export = (ctx: Hexo): void => {
     throw new TypeError('Invalid config detected: "root" should not be empty!');
   }
 };
+
+export default validateConfig;
 

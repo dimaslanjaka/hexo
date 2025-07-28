@@ -42,4 +42,4 @@ class Migrator {
   }
 }
 
-export = Migrator;
+export default Migrator;

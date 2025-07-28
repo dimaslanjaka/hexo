@@ -17,4 +17,4 @@ function hexoMetaGeneratorInject(this: Hexo, data: string): string {
   return data.replace('</head>', `${META_GENERATOR_TAG}</head>`);
 }
 
-export = hexoMetaGeneratorInject;
+export default hexoMetaGeneratorInject;

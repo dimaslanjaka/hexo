@@ -6,8 +6,11 @@
   "bin": "./bin/hexo",
   "scripts": {
     "prepublishOnly": "npm install && npm run clean && npm run build",
-    "build": "cp package.json lib/hexo/package.json && tsc -b",
-    "clean": "tsc -b --clean",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:copy": "cp package.json lib/hexo/package.json",
+    "build": "npm run build:copy && npm run build:cjs && npm run build:esm",
+    "clean": "npx --yes rimraf dist tmp/dist && npm run build",
     "eslint": "eslint lib test",
     "test": "mocha test/scripts/**/*.ts --require ts-node/register",
     "test-cov": "c8 --reporter=lcovonly npm test -- --no-parallel",

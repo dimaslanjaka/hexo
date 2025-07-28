@@ -21,3 +21,4 @@
 *-no-index.*
 *.tsbuildinfo
 lib/**/package.json
+__*ignore

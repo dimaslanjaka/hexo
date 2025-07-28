@@ -5,7 +5,7 @@ import type fs from 'fs';
 import type Document from 'warehouse/dist/document';
 import type { CacheSchema } from '../types';
 
-export = (_ctx: Hexo) => {
+export default (_ctx: Hexo) => {
   const Cache = new warehouse.Schema<CacheSchema>({
     _id: {type: String, required: true},
     hash: {type: String, default: ''},

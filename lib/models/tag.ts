@@ -4,7 +4,7 @@ const { hasOwnProperty: hasOwn } = Object.prototype;
 import type Hexo from '../hexo';
 import type { TagSchema } from '../types';
 
-export = (ctx: Hexo) => {
+const tagModel = (ctx: Hexo) => {
   const Tag = new warehouse.Schema<TagSchema>({
     name: {type: String, required: true}
   });
@@ -71,3 +71,5 @@ export = (ctx: Hexo) => {
 
   return Tag;
 };
+
+export default tagModel;

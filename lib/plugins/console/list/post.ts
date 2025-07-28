@@ -40,4 +40,4 @@ function listPost(this: Hexo): void {
   if (data.length === 1) console.log('No posts.');
 }
 
-export = listPost;
+export default listPost;

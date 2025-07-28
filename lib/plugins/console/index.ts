@@ -1,6 +1,6 @@
 import type Hexo from '../../hexo';
 
-export = function(ctx: Hexo) {
+export default function(ctx: Hexo) {
   const { console } = ctx.extend;
 
   console.register('clean', 'Remove generated files and cache.', require('./clean'));

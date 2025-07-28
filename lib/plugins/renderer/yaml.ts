@@ -19,4 +19,4 @@ function yamlHelper(data: { text: string; }) {
   return yaml.load(escape(data.text), { schema });
 }
 
-export = yamlHelper;
+export default yamlHelper;

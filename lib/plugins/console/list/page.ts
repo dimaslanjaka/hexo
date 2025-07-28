@@ -27,4 +27,4 @@ function listPage(this: Hexo): void {
   if (data.length === 1) console.log('No pages.');
 }
 
-export = listPage;
+export default listPage;

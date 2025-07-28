@@ -116,4 +116,4 @@ class Console {
   }
 }
 
-export = Console;
+export default Console;

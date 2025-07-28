@@ -12,4 +12,4 @@ const RegisterModel = (ctx: Hexo) => {
   }
 };
 
-export = RegisterModel;
+export default RegisterModel;

@@ -7,7 +7,7 @@ import type Hexo from './index';
 import type Promise from 'bluebird';
 import { StoreFunctionData } from '../types';
 
-export = (ctx: Hexo): Promise<void> => {
+const loadThemeConfig = (ctx: Hexo): Promise<void> => {
   if (!ctx.env.init) return;
   if (!ctx.config.theme) return;
 
@@ -34,6 +34,8 @@ export = (ctx: Hexo): Promise<void> => {
       ctx.config.theme_config = ctx.config.theme_config ? deepMerge(config, ctx.config.theme_config) : config;
     });
 };
+
+export default loadThemeConfig;
 
 function findConfigPath(path: string): Promise<string> {
   const { dir, name } = parse(path);

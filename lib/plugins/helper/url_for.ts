@@ -5,6 +5,6 @@ interface Options {
   relative?: boolean
 }
 
-export = function(this: LocalsType, path: string, options: Options = {}) {
+export default function(this: LocalsType, path: string, options: Options = {}) {
   return url_for.call(this, path, options);
 }

@@ -38,4 +38,4 @@ const ModelPage = (ctx: Hexo) => {
   return Page;
 };
 
-export = ModelPage;
+export default ModelPage;

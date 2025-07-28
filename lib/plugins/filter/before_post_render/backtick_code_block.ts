@@ -80,7 +80,7 @@ function parseArgs(args: string) {
   };
 }
 
-export = (ctx: Hexo): (data: RenderData) => void => {
+export default (ctx: Hexo): (data: RenderData) => void => {
   return function backtickCodeBlock(data: RenderData): void {
     const dataContent = data.content;
 

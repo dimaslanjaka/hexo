@@ -93,4 +93,4 @@ function postPermalinkFilter(this: Hexo, data: PostSchema): string {
   return permalink_stringify;
 }
 
-export = postPermalinkFilter;
+export default postPermalinkFilter;

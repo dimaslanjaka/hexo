@@ -113,4 +113,4 @@ class Injector {
   }
 }
 
-export = Injector;
+export default Injector;

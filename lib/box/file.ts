@@ -63,4 +63,4 @@ File.TYPE_UPDATE = 'update';
 File.TYPE_SKIP = 'skip';
 File.TYPE_DELETE = 'delete';
 
-export = File;
+export default File;

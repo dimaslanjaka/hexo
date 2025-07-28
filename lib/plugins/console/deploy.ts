@@ -61,4 +61,4 @@ function deployConsole(this: Hexo, args: DeployArgs): Promise<any> {
   });
 }
 
-export = deployConsole;
+export default deployConsole;
