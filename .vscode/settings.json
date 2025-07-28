@@ -37,7 +37,7 @@
   "git.autoStash": true,
   "git.branchSortOrder": "committerdate",
   "git.defaultBranchName": "master",
-  "git.detectSubmodules": false,
+  "git.detectSubmodules": true,
   "git.detectSubmodulesLimit": 20,
   "git.diagnosticsCommitHook.enabled": true,
   "git.enabled": true,
@@ -48,7 +48,7 @@
   "git.promptToSaveFilesBeforeStash": "always",
   "git.rememberPostCommitCommand": true,
   "git.repositoryScanIgnoredFolders": ["node_modules", "dist", "tmp/"],
-  "git.repositoryScanMaxDepth": 3,
+  "git.repositoryScanMaxDepth": 6,
   "git.supportCancellation": true,
   "git.verboseCommit": false,
   "eslint.useFlatConfig": true
