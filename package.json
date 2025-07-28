@@ -82,9 +82,9 @@
   "packageManager": "yarn@4.9.2",
   "resolutions": {
     "@types/node": "^20",
-    "binary-collections": "https://github.com/dimaslanjaka/bin/raw/22e0e798d99c851b803552874559b761153a0cc1/releases/bin.tgz",
+    "binary-collections": "https://github.com/dimaslanjaka/bin/raw/26bd53205081195770fe9b7b83d94f1531caccf0/releases/bin.tgz",
     "cross-spawn": "https://github.com/dimaslanjaka/node-cross-spawn/raw/80999ac7a7031a81e11ddb5fab0f8ba433041c98/release/cross-spawn.tgz",
-    "git-command-helper": "https://github.com/dimaslanjaka/git-command-helper/raw/991214dbbea1769747acf40cbbdbe677c4f1ee2e/release/git-command-helper.tgz",
+    "git-command-helper": "https://github.com/dimaslanjaka/git-command-helper/raw/40f673205b55bd451a689079b47fde804ce14559/release/git-command-helper.tgz",
     "hexo": "workspace:^",
     "hexo-asset-link": "workspace:^",
     "hexo-cli": "workspace:^",
