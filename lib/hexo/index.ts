@@ -785,10 +785,8 @@ if (typeof global !== 'undefined') {
 // For ESM compatibility
 export default Hexo;
 // For CommonJS compatibility
-if (typeof module != 'undefined') {
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = Hexo;
   // For ESM compatibility
-  if (typeof module.exports === 'object' && module.exports !== null) {
-    module.exports.default = Hexo;
-  }
+  module.exports.default = Hexo;
 }
