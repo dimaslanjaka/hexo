@@ -9,7 +9,7 @@ because of HexoJS doesnt accept my PR, i bundled my improved version of hexo.
 | hexo-front-matter | [04c79bf](https://github.com/dimaslanjaka/hexo-front-matter/commit/04c79bf) | 
 | hexo-log | [bf0d2a9](https://github.com/dimaslanjaka/hexo-log/commit/bf0d2a9) | 
 | hexo-server | [ed96edf](https://github.com/dimaslanjaka/hexo-server/commit/ed96edf) | 
-| hexo-util | [c5c2030](https://github.com/dimaslanjaka/hexo-util/commit/c5c2030) | 
+| hexo-util | [8dfbd62](https://github.com/dimaslanjaka/hexo-util/commit/8dfbd62) | 
 | warehouse | [999c8e2](https://github.com/dimaslanjaka/warehouse/commit/999c8e2) | 
 
 ## Installation by CLI
@@ -25,7 +25,7 @@ npm i hexo-cli@https://github.com/dimaslanjaka/hexo/raw/6adae4a3/releases/hexo-c
 npm i hexo-front-matter@https://github.com/dimaslanjaka/hexo/raw/6adae4a3/releases/hexo-front-matter.tgz
 npm i hexo-log@https://github.com/dimaslanjaka/hexo/raw/6adae4a3/releases/hexo-log.tgz
 npm i hexo-server@https://github.com/dimaslanjaka/hexo/raw/6adae4a3/releases/hexo-server.tgz
-npm i hexo-util@https://github.com/dimaslanjaka/hexo/raw/0666569d/releases/hexo-util.tgz
+npm i hexo-util@https://github.com/dimaslanjaka/hexo/raw/ac85edfd/releases/hexo-util.tgz
 npm i warehouse@https://github.com/dimaslanjaka/hexo/raw/6adae4a3/releases/warehouse.tgz
 ```
 
@@ -37,7 +37,7 @@ yarn add hexo-cli@https://github.com/dimaslanjaka/hexo/raw/6adae4a3/releases/hex
 yarn add hexo-front-matter@https://github.com/dimaslanjaka/hexo/raw/6adae4a3/releases/hexo-front-matter.tgz
 yarn add hexo-log@https://github.com/dimaslanjaka/hexo/raw/6adae4a3/releases/hexo-log.tgz
 yarn add hexo-server@https://github.com/dimaslanjaka/hexo/raw/6adae4a3/releases/hexo-server.tgz
-yarn add hexo-util@https://github.com/dimaslanjaka/hexo/raw/0666569d/releases/hexo-util.tgz
+yarn add hexo-util@https://github.com/dimaslanjaka/hexo/raw/ac85edfd/releases/hexo-util.tgz
 yarn add warehouse@https://github.com/dimaslanjaka/hexo/raw/6adae4a3/releases/warehouse.tgz
 
 ```
@@ -83,7 +83,7 @@ package.json
     "hexo-front-matter": "https://github.com/dimaslanjaka/hexo/raw/6adae4a3/releases/hexo-front-matter.tgz",
     "hexo-log": "https://github.com/dimaslanjaka/hexo/raw/6adae4a3/releases/hexo-log.tgz",
     "hexo-server": "https://github.com/dimaslanjaka/hexo/raw/6adae4a3/releases/hexo-server.tgz",
-    "hexo-util": "https://github.com/dimaslanjaka/hexo/raw/0666569d/releases/hexo-util.tgz",
+    "hexo-util": "https://github.com/dimaslanjaka/hexo/raw/ac85edfd/releases/hexo-util.tgz",
     "warehouse": "https://github.com/dimaslanjaka/hexo/raw/6adae4a3/releases/warehouse.tgz"
   }
 }
@@ -106,7 +106,7 @@ package.json
     "hexo-front-matter": "https://github.com/dimaslanjaka/hexo/raw/6adae4a3/releases/hexo-front-matter.tgz",
     "hexo-log": "https://github.com/dimaslanjaka/hexo/raw/6adae4a3/releases/hexo-log.tgz",
     "hexo-server": "https://github.com/dimaslanjaka/hexo/raw/6adae4a3/releases/hexo-server.tgz",
-    "hexo-util": "https://github.com/dimaslanjaka/hexo/raw/0666569d/releases/hexo-util.tgz",
+    "hexo-util": "https://github.com/dimaslanjaka/hexo/raw/ac85edfd/releases/hexo-util.tgz",
     "warehouse": "https://github.com/dimaslanjaka/hexo/raw/6adae4a3/releases/warehouse.tgz"
   }
 }
