@@ -45,6 +45,7 @@
   "dependencies": {
     "fs-extra": "^11.3.0",
     "git-command-helper": "^2.1.0",
+    "glob": "^11.0.3",
     "minimist": "^1.2.8",
     "nunjucks": "^3.2.4",
     "picocolors": "^1.1.1",
@@ -82,9 +83,9 @@
   "packageManager": "yarn@4.9.2",
   "resolutions": {
     "@types/node": "^20",
-    "binary-collections": "https://github.com/dimaslanjaka/bin/raw/26bd53205081195770fe9b7b83d94f1531caccf0/releases/bin.tgz",
+    "binary-collections": "https://github.com/dimaslanjaka/bin/raw/4f7a91de49cc841de80e6d24848d34772460b7e0/releases/bin.tgz",
     "cross-spawn": "https://github.com/dimaslanjaka/node-cross-spawn/raw/80999ac7a7031a81e11ddb5fab0f8ba433041c98/release/cross-spawn.tgz",
-    "git-command-helper": "https://github.com/dimaslanjaka/git-command-helper/raw/100b6294c7b7fd879d87be7a550758bc2f6ff0e1/release/git-command-helper.tgz",
+    "git-command-helper": "https://github.com/dimaslanjaka/git-command-helper/raw/47133aa918c1292c15949c7f190be9cb302cd6f4/release/git-command-helper.tgz",
     "hexo": "workspace:^",
     "hexo-asset-link": "workspace:^",
     "hexo-cli": "workspace:^",
