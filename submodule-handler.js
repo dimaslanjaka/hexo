@@ -52,6 +52,12 @@ const config = {
     origin: 'https://github.com/dimaslanjaka/hexo-cli.git',
     branch: 'monorepo',
     upstream: 'https://github.com/hexojs/hexo-cli'
+  },
+  'submodule "packages/hexo-fs"': {
+    path: 'packages/hexo-fs',
+    origin: 'https://github.com/dimaslanjaka/hexo-fs.git',
+    branch: 'monorepo',
+    upstream: 'https://github.com/hexojs/hexo-fs'
   }
 };
 

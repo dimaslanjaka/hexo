@@ -50,3 +50,7 @@
 	path = packages/hexo-themes
 	url = https://github.com/dimaslanjaka/hexo-themes
 	branch = master
+[submodule "packages/hexo-fs"]
+	path = packages/hexo-fs
+	url = https://github.com/dimaslanjaka/hexo-fs.git
+	branch = monorepo
