@@ -28,7 +28,7 @@
     "build-commit": "nrs \"build:**\" && node -r ts-node/register build.ts --commit",
     "build:fm": "yarn workspace hexo-front-matter run build",
     "build:log": "yarn workspace hexo-log run build",
-    "build:util": "yarn workspace hexo-util run build:highlight && yarn workspace hexo-util run build",
+    "build:util": "yarn workspace hexo-util run build",
     "build:packages": "yarn workspaces foreach --worktree --no-private run build",
     "clean": "node -r ts-node/register build.ts --clean",
     "lint": "eslint --fix",
