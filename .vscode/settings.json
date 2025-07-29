@@ -37,7 +37,7 @@
   "git.autoStash": true,
   "git.branchSortOrder": "committerdate",
   "git.defaultBranchName": "master",
-  "git.detectSubmodules": true,
+  "git.detectSubmodules": false,
   "git.detectSubmodulesLimit": 20,
   "git.diagnosticsCommitHook.enabled": true,
   "git.enabled": true,
