@@ -32,7 +32,7 @@
     "build:packages": "yarn workspaces foreach --worktree --no-private run build",
     "clean": "node -r ts-node/register build.ts --clean",
     "lint": "eslint --fix",
-    "prepare": "husky && node submodule-handler.js && yarn workspaces foreach --all run prepare",
+    "prepare": "husky && node submodule-handler.mjs && yarn workspaces foreach --all run prepare",
     "prestart": "npm run build",
     "pretest": "npm run build",
     "site:build": "yarn workspace hexo-site run build",
