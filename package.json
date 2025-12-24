@@ -83,9 +83,9 @@
   "packageManager": "yarn@4.9.2",
   "resolutions": {
     "@types/node": "^20",
-    "binary-collections": "https://github.com/dimaslanjaka/bin/raw/4f7a91de49cc841de80e6d24848d34772460b7e0/releases/bin.tgz",
+    "binary-collections": "https://github.com/dimaslanjaka/bin/raw/9d2f7ebf4c37cf1d58487951c9e2ad3a20b917c1/releases/bin.tgz",
     "cross-spawn": "https://github.com/dimaslanjaka/node-cross-spawn/raw/80999ac7a7031a81e11ddb5fab0f8ba433041c98/release/cross-spawn.tgz",
-    "git-command-helper": "https://github.com/dimaslanjaka/git-command-helper/raw/47133aa918c1292c15949c7f190be9cb302cd6f4/release/git-command-helper.tgz",
+    "git-command-helper": "https://github.com/dimaslanjaka/git-command-helper/raw/678044cf286b2bd122e3ee937852a739e804e0a5/release/git-command-helper.tgz",
     "hexo": "workspace:^",
     "hexo-asset-link": "workspace:^",
     "hexo-cli": "workspace:^",
@@ -93,7 +93,7 @@
     "hexo-is": "workspace:^",
     "hexo-log": "workspace:^",
     "hexo-util": "workspace:^",
-    "sbg-utility": "https://github.com/dimaslanjaka/static-blog-generator/raw/df939d4cb3e31fded39412534bcef11de9fe0dcc/packages/sbg-utility/release/sbg-utility.tgz",
+    "sbg-utility": "https://github.com/dimaslanjaka/static-blog-generator/raw/3f36c7384fa414d0207460e00c0d7d362dba995f/packages/sbg-utility/release/sbg-utility.tgz",
     "warehouse": "workspace:^"
   },
   "workspaces": [
