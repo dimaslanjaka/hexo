@@ -1,13 +1,14 @@
 import moment from 'moment';
-import Hexo from '../../lib/hexo';
-import postPermalinkFilter from '../../lib/plugins/filter/post_permalink';
+import Hexo from '../../lib/hexo/index.js';
+import postPermalinkFilter from '../../lib/plugins/filter/post_permalink.js';
 import path from 'node:path';
 import picocolors from 'picocolors';
+import * as hexoUtil from 'hexo-util';
 
 type PostPermalinkFilterParams = Parameters<typeof postPermalinkFilter>;
 type PostPermalinkFilterReturn = ReturnType<typeof postPermalinkFilter>;
 
-const hexo = new Hexo(path.resolve(__dirname, '../fixtures'));
+const hexo = new Hexo(path.resolve(hexoUtil.getDirname(), '../fixtures'));
 const postPermalink: (...args: PostPermalinkFilterParams) => PostPermalinkFilterReturn = postPermalinkFilter.bind(hexo);
 const permalinkPatterns = [':filepath.html'];
 const permalinkDefaults = [{}, { lang: 'en' }];
@@ -42,13 +43,7 @@ const permalinkDefaults = [{}, { lang: 'en' }];
         }
       ]);
 
-      const colors = [
-        picocolors.green,
-        picocolors.blue,
-        picocolors.yellow,
-        picocolors.magenta,
-        picocolors.cyan
-      ];
+      const colors = [picocolors.green, picocolors.blue, picocolors.yellow, picocolors.magenta, picocolors.cyan];
 
       for (let i = 0; i < inserted.length; i++) {
         const post = inserted[i]; // Ensure post is defined for each iteration
