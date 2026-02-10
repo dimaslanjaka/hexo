@@ -479,12 +479,12 @@ class Hexo extends EventEmitter {
         // Load config modules in sequence as before
         Promise.each(
           [
-            'update_package', // Update package.json
-            'load_config', // Load config
-            'load_theme_config', // Load alternate theme config
-            'load_plugins' // Load external plugins & scripts
+            './update_package.js', // Update package.json
+            './load_config.js', // Load config
+            './load_theme_config.js', // Load alternate theme config
+            './load_plugins.js' // Load external plugins & scripts
           ],
-          (name) => callModule(`./${name}`)
+          (name) => callModule(name)
         )
       )
       .then(() => this.execFilter('after_init', null, { context: this }))
