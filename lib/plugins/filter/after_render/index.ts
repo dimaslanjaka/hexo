@@ -1,8 +1,17 @@
 import type Hexo from '../../../hexo/index.js';
+import { createRequire } from 'node:module';
+
+const require = createRequire(import.meta.url);
+
+// Normalize CJS + ESM default exports
+const load = <T = any>(path: string): T => {
+  const mod = require(path);
+  return (mod && mod.default) || mod;
+};
 
 export default (ctx: Hexo) => {
   const { filter } = ctx.extend;
 
-  filter.register('after_render:html', require('./external_link.js'));
-  filter.register('after_render:html', require('./meta_generator.js'));
+  filter.register('after_render:html', load('./external_link.js'));
+  filter.register('after_render:html', load('./meta_generator.js'));
 };

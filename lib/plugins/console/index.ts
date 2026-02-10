@@ -1,18 +1,18 @@
 import type Hexo from '../../hexo/index.js';
+import { createRequire } from 'node:module';
 
-// Provide a global require for ESM environments using createRequire
-import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
 
-// Only define global require if it doesn't exist (for ESM)
-if (typeof require === 'undefined') {
-  // @ts-ignore: TypeScript does not recognize 'require' on global in ESM, but this is safe in Node.js
-  global.require = createRequire(import.meta.url);
-}
+// Normalize CJS + ESM default exports
+const load = <T = any>(path: string): T => {
+  const mod = require(path);
+  return (mod && mod.default) || mod;
+};
 
 function Console(ctx: Hexo) {
   const { console } = ctx.extend;
 
-  console.register('clean', 'Remove generated files and cache.', require('./clean.js'));
+  console.register('clean', 'Remove generated files and cache.', load('./clean.js'));
 
   console.register(
     'config',
@@ -27,7 +27,7 @@ function Console(ctx: Hexo) {
         }
       ]
     },
-    require('./config.js')
+    load('./config.js')
   );
 
   console.register(
@@ -39,7 +39,7 @@ function Console(ctx: Hexo) {
         { name: '-g, --generate', desc: 'Generate before deployment' }
       ]
     },
-    require('./deploy.js')
+    load('./deploy.js')
   );
 
   console.register(
@@ -54,7 +54,7 @@ function Console(ctx: Hexo) {
         { name: '-c, --concurrency', desc: 'Maximum number of files to be generated in parallel. Default is infinity' }
       ]
     },
-    require('./generate.js')
+    load('./generate.js')
   );
 
   console.register(
@@ -65,7 +65,7 @@ function Console(ctx: Hexo) {
       usage: '<type>',
       arguments: [{ name: 'type', desc: 'Available types: page, post, route, tag, category' }]
     },
-    require('./list/index.js')
+    load('./list/index.js')
   );
 
   console.register(
@@ -76,7 +76,7 @@ function Console(ctx: Hexo) {
       usage: '<type>',
       arguments: [{ name: 'type', desc: 'Migrator type.' }]
     },
-    require('./migrate.js')
+    load('./migrate.js')
   );
 
   console.register(
@@ -94,7 +94,7 @@ function Console(ctx: Hexo) {
         { name: '-p, --path', desc: 'Post path. Customize the path of the post.' }
       ]
     },
-    require('./new.js')
+    load('./new.js')
   );
 
   console.register(
@@ -107,7 +107,7 @@ function Console(ctx: Hexo) {
         { name: 'filename', desc: 'Draft filename. "hello-world" for example.' }
       ]
     },
-    require('./publish.js')
+    load('./publish.js')
   );
 
   console.register(
@@ -126,15 +126,8 @@ function Console(ctx: Hexo) {
         { name: '--pretty', desc: 'Prettify JSON output' }
       ]
     },
-    require('./render.js')
+    load('./render.js')
   );
 }
 
-// For ESM compatibility
 export default Console;
-// For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
-  module.exports = Console;
-  // For ESM compatibility
-  module.exports.default = Console;
-}

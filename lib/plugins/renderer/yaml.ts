@@ -1,6 +1,9 @@
 import { escape } from 'hexo-front-matter';
 import logger from 'hexo-log';
 import yaml from 'js-yaml';
+import { createRequire } from 'node:module';
+
+const require = createRequire(import.meta.url);
 
 let schema = {} as yaml.Schema;
 
@@ -15,7 +18,7 @@ try {
   }
 }
 
-function yamlHelper(data: { text: string; }) {
+function yamlHelper(data: { text: string }) {
   return yaml.load(escape(data.text), { schema });
 }
 
