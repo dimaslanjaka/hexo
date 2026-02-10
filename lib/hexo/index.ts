@@ -1,15 +1,14 @@
 /// <reference path="./global.d.ts" />
 import Promise from 'bluebird';
-import { sep, join, dirname } from 'path';
-import tildify from 'tildify';
-import Database from 'warehouse';
-import * as picocolors from 'picocolors';
 import { EventEmitter } from 'events';
 import { readFile } from 'hexo-fs';
-import Module from 'module';
-import { runInThisContext } from 'vm';
-const { version } = require('../../package.json');
 import logger from 'hexo-log';
+import Module from 'module';
+import { dirname, join, sep } from 'path';
+import * as picocolors from 'picocolors';
+import tildify from 'tildify';
+import { runInThisContext } from 'vm';
+import Database from 'warehouse';
 
 import {
   Console,
@@ -25,23 +24,23 @@ import {
   Tag
 } from '../extend';
 
-import Render from './render.js';
-import registerModels from './register_models.js';
-import Post from './post.js';
-import Scaffold from './scaffold.js';
-import Source from './source.js';
-import Router from './router.js';
+import { deepMerge, full_url_for } from 'hexo-util';
+import type Schema from 'warehouse/dist/schema';
+import type { AddSchemaTypeOptions } from 'warehouse/dist/types';
+import type Box from '../box/index.js';
+import BinaryRelationIndex from '../models/binary_relation_index.js';
 import Theme from '../theme/index.js';
-import Locals from './locals.js';
+import type { BaseGeneratorReturn, FilterOptions, LocalsType, NodeJSLikeCallback, SiteLocals } from '../types.js';
 import defaultConfig from './default_config.js';
 import loadDatabase from './load_database.js';
+import Locals from './locals.js';
 import multiConfigPath from './multi_config_path.js';
-import { deepMerge, full_url_for } from 'hexo-util';
-import type Box from '../box/index.js';
-import type { BaseGeneratorReturn, FilterOptions, LocalsType, NodeJSLikeCallback, SiteLocals } from '../types.js';
-import type { AddSchemaTypeOptions } from 'warehouse/dist/types';
-import type Schema from 'warehouse/dist/schema';
-import BinaryRelationIndex from '../models/binary_relation_index.js';
+import Post from './post.js';
+import registerModels from './register_models.js';
+import Render from './render.js';
+import Router from './router.js';
+import Scaffold from './scaffold.js';
+import Source from './source.js';
 
 const libDir = dirname(__dirname);
 const dbVersion = 1;
@@ -327,7 +326,7 @@ class Hexo extends EventEmitter {
       safe: Boolean(args.safe),
       silent: Boolean(args.silent),
       env: process.env.NODE_ENV || 'development',
-      version,
+      version: '__VERSION__',
       cmd: args._ ? args._[0] : '',
       init: false
     };
@@ -448,27 +447,46 @@ class Hexo extends EventEmitter {
     this.log.debug('Hexo version: %s', picocolors.magenta(this.version));
     this.log.debug('Working directory: %s', picocolors.magenta(tildify(this.base_dir)));
 
-    // Load internal plugins
-    require('../plugins/console.js')(this);
-    require('../plugins/filter.js')(this);
-    require('../plugins/generator.js')(this);
-    require('../plugins/helper.js')(this);
-    require('../plugins/highlight.js')(this);
-    require('../plugins/injector.js')(this);
-    require('../plugins/processor.js')(this);
-    require('../plugins/renderer.js')(this);
-    require('../plugins/tag.js').default(this);
+    const callModule = (path: string) =>
+      // Wrap dynamic import with Bluebird so we keep using Bluebird helpers
+      Promise.resolve(import(path)).then((mod: any) => {
+        const fn = mod && (mod.default ?? mod);
 
-    // Load config
+        if (typeof fn === 'function') return fn(this);
+
+        if (mod && typeof mod.init === 'function') return mod.init(this);
+
+        this.log.warn('Module %s does not export a callable function', path);
+        return undefined;
+      });
+
+    // Load internal plugins sequentially (preserve original init order)
     return Promise.each(
       [
-        'update_package', // Update package.json
-        'load_config', // Load config
-        'load_theme_config', // Load alternate theme config
-        'load_plugins' // Load external plugins & scripts
+        '../plugins/console/index.js',
+        '../plugins/filter/index.js',
+        '../plugins/generator/index.js',
+        '../plugins/helper/index.js',
+        '../plugins/highlight/index.js',
+        '../plugins/injector/index.js',
+        '../plugins/processor/index.js',
+        '../plugins/renderer/index.js',
+        '../plugins/tag/index.js'
       ],
-      (name) => require(`./${name}`)(this)
+      (p) => callModule(p)
     )
+      .then(() =>
+        // Load config modules in sequence as before
+        Promise.each(
+          [
+            'update_package', // Update package.json
+            'load_config', // Load config
+            'load_theme_config', // Load alternate theme config
+            'load_plugins' // Load external plugins & scripts
+          ],
+          (name) => callModule(`./${name}`)
+        )
+      )
       .then(() => this.execFilter('after_init', null, { context: this }))
       .then(() => {
         // Ready to go!
@@ -773,7 +791,7 @@ Hexo.prototype.lib_dir = Hexo.lib_dir;
 Hexo.core_dir = dirname(libDir) + sep;
 Hexo.prototype.core_dir = Hexo.core_dir;
 
-Hexo.version = version;
+Hexo.version = '__VERSION__';
 Hexo.prototype.version = Hexo.version;
 
 // Assign the Hexo class to the global scope for backward compatibility
