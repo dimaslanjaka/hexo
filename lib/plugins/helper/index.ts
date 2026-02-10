@@ -1,10 +1,18 @@
 import type Hexo from '../../hexo/index.js';
+import { createRequire } from 'node:module';
+
+const require = createRequire(import.meta.url);
+
+// Normalize CJS + ESM default exports
+const load = <T = any>(path: string): T => {
+  const mod = require(path);
+  return (mod && mod.default) || mod;
+};
 
 export default (ctx: Hexo) => {
   const { helper } = ctx.extend;
 
-  const date = require('./date.js');
-
+  const date = load<any>('./date.js');
   helper.register('date', date.date);
   helper.register('date_xml', date.date_xml);
   helper.register('time', date.time);
@@ -13,9 +21,9 @@ export default (ctx: Hexo) => {
   helper.register('time_tag', date.time_tag);
   helper.register('moment', date.moment);
 
-  helper.register('search_form', require('./search_form.js'));
+  helper.register('search_form', load('./search_form.js'));
 
-  const { strip_html, trim, titlecase, word_wrap, truncate, escape_html } = require('./format.js');
+  const { strip_html, trim, titlecase, word_wrap, truncate, escape_html } = load<any>('./format.js');
 
   helper.register('strip_html', strip_html);
   helper.register('trim', trim);
@@ -24,11 +32,11 @@ export default (ctx: Hexo) => {
   helper.register('truncate', truncate);
   helper.register('escape_html', escape_html);
 
-  helper.register('fragment_cache', require('./fragment_cache.js')(ctx));
+  helper.register('fragment_cache', load<any>('./fragment_cache.js')(ctx));
 
-  helper.register('gravatar', require('./gravatar.js'));
+  helper.register('gravatar', load('./gravatar.js'));
 
-  const is = require('./is.js');
+  const is = load<any>('./is.js');
   helper.register('is_current', is.current);
   helper.register('is_home', is.home);
   helper.register('is_home_first_page', is.home_first_page);
@@ -40,43 +48,40 @@ export default (ctx: Hexo) => {
   helper.register('is_category', is.category);
   helper.register('is_tag', is.tag);
 
-  helper.register('list_archives', require('./list_archives.js'));
-  helper.register('list_categories', require('./list_categories.js'));
-  helper.register('list_tags', require('./list_tags.js'));
-  helper.register('list_posts', require('./list_posts.js'));
+  helper.register('list_archives', load('./list_archives.js'));
+  helper.register('list_categories', load('./list_categories.js'));
+  helper.register('list_tags', load('./list_tags.js'));
+  helper.register('list_posts', load('./list_posts.js'));
 
-  helper.register('meta_generator', require('./meta_generator.js'));
+  helper.register('meta_generator', load('./meta_generator.js'));
+  helper.register('open_graph', load('./open_graph.js'));
+  helper.register('number_format', load('./number_format.js'));
+  helper.register('paginator', load('./paginator.js'));
 
-  helper.register('open_graph', require('./open_graph.js'));
+  helper.register('partial', load<any>('./partial.js')(ctx));
 
-  helper.register('number_format', require('./number_format.js'));
+  helper.register('markdown', load('./markdown.js'));
+  helper.register('render', load<any>('./render.js')(ctx));
 
-  helper.register('paginator', require('./paginator.js'));
+  helper.register('css', load('./css.js'));
+  helper.register('js', load('./js.js'));
+  helper.register('link_to', load('./link_to.js'));
+  helper.register('mail_to', load('./mail_to.js'));
+  helper.register('image_tag', load('./image_tag.js'));
+  helper.register('favicon_tag', load('./favicon_tag.js'));
+  helper.register('feed_tag', load('./feed_tag.js'));
 
-  helper.register('partial', require('./partial.js')(ctx));
-
-  helper.register('markdown', require('./markdown.js'));
-  helper.register('render', require('./render.js')(ctx));
-
-  helper.register('css', require('./css.js'));
-  helper.register('js', require('./js.js'));
-  helper.register('link_to', require('./link_to.js'));
-  helper.register('mail_to', require('./mail_to.js'));
-  helper.register('image_tag', require('./image_tag.js'));
-  helper.register('favicon_tag', require('./favicon_tag.js'));
-  helper.register('feed_tag', require('./feed_tag.js'));
-
-  const tagcloud = require('./tagcloud.js');
+  const tagcloud = load('./tagcloud.js');
   helper.register('tagcloud', tagcloud);
   helper.register('tag_cloud', tagcloud);
 
-  helper.register('toc', require('./toc.js'));
+  helper.register('toc', load('./toc.js'));
 
-  helper.register('relative_url', require('./relative_url.js'));
-  helper.register('url_for', require('./url_for.js'));
-  helper.register('full_url_for', require('./full_url_for.js'));
+  helper.register('relative_url', load('./relative_url.js'));
+  helper.register('url_for', load('./url_for.js'));
+  helper.register('full_url_for', load('./full_url_for.js'));
 
-  const debug = require('./debug.js');
+  const debug = load<any>('./debug.js');
   helper.register('inspect', debug.inspectObject);
   helper.register('log', debug.log);
 };
