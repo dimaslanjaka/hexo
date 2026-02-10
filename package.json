@@ -2,6 +2,7 @@
   "name": "hexo",
   "version": "8.1.1",
   "description": "A fast, simple & powerful blog framework, powered by Node.js.",
+  "type": "module",
   "main": "dist/cjs/hexo/index.js",
   "module": "dist/esm/hexo/index.js",
   "types": "dist/esm/hexo/index.d.ts",
@@ -16,10 +17,8 @@
   },
   "scripts": {
     "prepublishOnly": "npm install && npm run clean && npm run build",
-    "build:cjs": "tsc -p tsconfig.cjs.json",
-    "build:esm": "tsc -p tsconfig.esm.json",
     "build:copy": "cp package.json lib/hexo/package.json",
-    "build": "npm run build:copy && npm run build:cjs && npm run build:esm",
+    "build": "node build.js && node scripts/build_exports.mjs",
     "clean": "npx --yes rimraf dist tmp/dist && npm run build",
     "eslint": "eslint lib test",
     "test": "mocha test/scripts/**/*.ts --require ts-node/register",
@@ -101,6 +100,7 @@
     "mocha": "^10.0.0",
     "sinon": "^17.0.1",
     "ts-node": "^10.9.1",
+    "tsup": "^8.5.1",
     "typescript": "^5.3.2"
   },
   "engines": {
