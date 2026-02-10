@@ -2,10 +2,10 @@ import Promise from 'bluebird';
 import { parse as yfm } from 'hexo-front-matter';
 import { dirname, extname, join } from 'path';
 import type Theme from '.';
-import type { Helper } from '../extend';
-import type Render from '../hexo/render';
-import type { HexoRenderOptions } from '../hexo/render-d';
-import type { NodeJSLikeCallback, StoreFunctionData } from '../types';
+import type { Helper } from '../extend/index.js';
+import type Render from '../hexo/render.js';
+import type { HexoRenderOptions } from '../hexo/render-d.js';
+import type { NodeJSLikeCallback, StoreFunctionData } from '../types.js';
 
 const assignIn = (target: any, ...sources: any[]) => {
   const length = sources.length;
@@ -56,7 +56,7 @@ class View {
     const locals = this._buildLocals(options as Options);
 
     return this._compiled(this._bindHelpers(locals))
-      .then(result => {
+      .then((result) => {
         if (result == null || !layout) return result;
 
         const layoutView = this._resolveLayout(layout);
@@ -134,7 +134,7 @@ class View {
       text: this.data._content
     };
 
-    function buildFilterArguments(result: any): [string, any, { context: any, args: any[] }] {
+    function buildFilterArguments(result: any): [string, any, { context: any; args: any[] }] {
       const output = render.getOutput(ext) || ext;
       return [
         `after_render:${output}`,
@@ -155,7 +155,7 @@ class View {
       };
 
       this._compiled = (locals: any) =>
-        Promise.resolve(compiled(locals)).then(result => ctx.execFilter(...buildFilterArguments(result)));
+        Promise.resolve(compiled(locals)).then((result) => ctx.execFilter(...buildFilterArguments(result)));
     } else {
       this._compiledSync = (locals: Record<string, any>) => render.renderSync(data as StoreFunctionData, locals);
 

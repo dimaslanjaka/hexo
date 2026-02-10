@@ -3,23 +3,23 @@ import tildify from 'tildify';
 import prettyHrtime from 'pretty-hrtime';
 import { writeFile } from 'hexo-fs';
 import { cyan, magenta } from 'picocolors';
-import type Hexo from '../../hexo';
-import { StoreFunctionData } from '../../types';
+import type Hexo from '../../hexo/index.js';
+import { StoreFunctionData } from '../../types.js';
 import type Promise from 'bluebird';
 
 interface RenderArgs {
-  _: string[]
-  o?: string
-  output?: string
-  pretty?: boolean
-  engine?: string
-  [key: string]: any
+  _: string[];
+  o?: string;
+  output?: string;
+  pretty?: boolean;
+  engine?: string;
+  [key: string]: any;
 }
 
 function renderConsole(this: Hexo, args: RenderArgs): Promise<void> {
   // Display help message if user didn't input any arguments
   if (!args._.length) {
-    return this.call('help', {_: 'render'});
+    return this.call('help', { _: 'render' });
   }
 
   const baseDir = this.base_dir;
@@ -28,26 +28,28 @@ function renderConsole(this: Hexo, args: RenderArgs): Promise<void> {
   const start = process.hrtime();
   const { log } = this;
 
-  return this.render.render({
-    path: src,
-    engine: args.engine
-  } as StoreFunctionData).then(result => {
-    if (typeof result === 'object') {
-      if (args.pretty) {
-        result = JSON.stringify(result, null, '  ');
-      } else {
-        result = JSON.stringify(result);
+  return this.render
+    .render({
+      path: src,
+      engine: args.engine
+    } as StoreFunctionData)
+    .then((result) => {
+      if (typeof result === 'object') {
+        if (args.pretty) {
+          result = JSON.stringify(result, null, '  ');
+        } else {
+          result = JSON.stringify(result);
+        }
       }
-    }
 
-    if (!output) return console.log(result);
+      if (!output) return console.log(result);
 
-    const dest = resolve(baseDir, output);
-    const interval = prettyHrtime(process.hrtime(start));
+      const dest = resolve(baseDir, output);
+      const interval = prettyHrtime(process.hrtime(start));
 
-    log.info('Rendered in %s: %s -> %s', cyan(interval), magenta(tildify(src)), magenta(tildify(dest)));
-    return writeFile(dest, result);
-  });
+      log.info('Rendered in %s: %s -> %s', cyan(interval), magenta(tildify(src)), magenta(tildify(dest)));
+      return writeFile(dest, result);
+    });
 }
 
 export default renderConsole;

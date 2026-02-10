@@ -1,9 +1,9 @@
 import Promise from 'bluebird';
 import { readFile, readFileSync } from 'hexo-fs';
 import { extname } from 'path';
-import type { Renderer } from '../extend';
-import type { NodeJSLikeCallback, StoreFunction, StoreFunctionData, StoreSyncFunction } from '../types';
-import type Hexo from './index';
+import type { Renderer } from '../extend/index.js';
+import type { NodeJSLikeCallback, StoreFunction, StoreFunctionData, StoreSyncFunction } from '../types.js';
+import type Hexo from './index.js';
 
 const getExtname = (str: string): string => {
   if (typeof str !== 'string') return '';
@@ -83,7 +83,7 @@ class Render {
     }
 
     return promise
-      .then(text => {
+      .then((text) => {
         if (Buffer.isBuffer(text)) {
           // avoid conflict on buffer data
           data.text = text.toString();
@@ -97,7 +97,7 @@ class Render {
         const renderer = this.getRenderer(ext);
         return Reflect.apply(renderer, ctx, [data, options]);
       })
-      .then(result => {
+      .then((result) => {
         result = toString(result, data);
         if (data.onRenderEnd) {
           return data.onRenderEnd(result);
@@ -105,7 +105,7 @@ class Render {
 
         return result;
       })
-      .then(result => {
+      .then((result) => {
         const output = this.getOutput(ext) || ext;
         return ctx.execFilter(`after_render:${output}`, result, {
           context: ctx,

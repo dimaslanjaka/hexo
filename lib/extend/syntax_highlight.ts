@@ -1,4 +1,4 @@
-import type Hexo from '../hexo';
+import type Hexo from '../hexo/index.js';
 
 export interface HighlightOptions {
   // plugins/filter/before_post_render/backtick_code_block

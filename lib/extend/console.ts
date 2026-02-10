@@ -1,21 +1,21 @@
 import Promise from 'bluebird';
 import abbrev from 'abbrev';
-import type { NodeJSLikeCallback } from '../types';
-import type Hexo from '../hexo';
+import type { NodeJSLikeCallback } from '../types.js';
+import type Hexo from '../hexo/index.js';
 
 type Option = Partial<{
   usage: string;
   desc: string;
   init: boolean;
   arguments: {
-      name: string;
-      desc: string;
-    }[];
+    name: string;
+    desc: string;
+  }[];
   options: {
     name: string;
     desc: string;
   }[];
-}>
+}>;
 
 interface Args {
   _: string[];
@@ -29,10 +29,10 @@ interface StoreFunction {
 }
 
 interface Store {
-  [key: string]: StoreFunction
+  [key: string]: StoreFunction;
 }
 interface Alias {
-  [abbreviation: string]: string
+  [abbreviation: string]: string;
 }
 
 /**
@@ -68,10 +68,10 @@ class Console {
    * @param {Option} options - The description of each option of a console command
    * @param {AnyFn} fn - The console plugin to be registered
    */
-  register(name: string, fn: AnyFn): void
-  register(name: string, desc: string, fn: AnyFn): void
-  register(name: string, options: Option, fn: AnyFn): void
-  register(name: string, desc: string, options: Option, fn: AnyFn): void
+  register(name: string, fn: AnyFn): void;
+  register(name: string, desc: string, fn: AnyFn): void;
+  register(name: string, options: Option, fn: AnyFn): void;
+  register(name: string, desc: string, options: Option, fn: AnyFn): void;
   register(name: string, desc: string | Option | AnyFn, options?: Option | AnyFn, fn?: AnyFn): void {
     if (!name) throw new TypeError('name is required');
 
@@ -80,10 +80,12 @@ class Console {
         if (typeof options === 'function') {
           fn = options;
 
-          if (typeof desc === 'object') { // name, options, fn
+          if (typeof desc === 'object') {
+            // name, options, fn
             options = desc;
             desc = '';
-          } else { // name, desc, fn
+          } else {
+            // name, desc, fn
             options = {};
           }
         } else {

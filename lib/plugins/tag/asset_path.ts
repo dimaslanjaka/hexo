@@ -1,5 +1,5 @@
 import { url_for } from 'hexo-util';
-import type Hexo from '../../hexo';
+import type Hexo from '../../hexo/index.js';
 
 /**
  * Asset path tag
@@ -14,7 +14,7 @@ const assetPath = (ctx: Hexo) => {
     const slug = args.shift();
     if (!slug) return;
 
-    const asset = PostAsset.findOne({post: this._id, slug});
+    const asset = PostAsset.findOne({ post: this._id, slug });
     if (!asset) return;
 
     const path = url_for.call(ctx, asset.path);

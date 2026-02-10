@@ -1,17 +1,17 @@
-import { adjustDateForTimezone, toDate, isExcludedFile, isMatch } from './common';
+import { adjustDateForTimezone, toDate, isExcludedFile, isMatch } from './common.js';
 import Promise from 'bluebird';
 import { parse as yfm } from 'hexo-front-matter';
 import { extname, relative } from 'path';
 import { Pattern } from 'hexo-util';
 import { magenta } from 'picocolors';
-import type { _File } from '../../box';
-import type Hexo from '../../hexo';
+import type { _File } from '../../box/index.js';
+import type Hexo from '../../hexo/index.js';
 import type { Stats } from 'fs';
-import { PageSchema } from '../../types';
+import { PageSchema } from '../../types.js';
 
 const assetProcessor = (ctx: Hexo) => {
   return {
-    pattern: new Pattern(path => {
+    pattern: new Pattern((path) => {
       if (isExcludedFile(path, ctx.config)) return;
 
       return {
@@ -34,7 +34,7 @@ export default assetProcessor;
 function processPage(ctx: Hexo, file: _File) {
   const Page = ctx.model('Page');
   const { path } = file;
-  const doc = Page.findOne({source: path});
+  const doc = Page.findOne({ source: path });
   const { config } = ctx;
   const { timezone } = config;
   const updated_option = config.updated_option;
@@ -51,10 +51,7 @@ function processPage(ctx: Hexo, file: _File) {
     return;
   }
 
-  return Promise.all([
-    file.stat(),
-    file.read()
-  ]).spread((stats: Stats, content: string) => {
+  return Promise.all([file.stat(), file.read()]).spread((stats: Stats, content: string) => {
     const data = yfm(content) as PageSchema;
     const output = ctx.render.getOutput(path);
 

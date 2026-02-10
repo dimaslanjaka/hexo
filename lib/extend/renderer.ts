@@ -1,6 +1,6 @@
 import Promise from 'bluebird';
 import { extname } from 'path';
-import type { Store, StoreFunction, StoreSyncFunction, SyncStore } from '../types';
+import type { Store, StoreFunction, StoreSyncFunction, SyncStore } from '../types.js';
 
 const getExtname = (str: string) => {
   if (typeof str !== 'string') return '';

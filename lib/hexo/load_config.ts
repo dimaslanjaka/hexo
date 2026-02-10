@@ -1,14 +1,14 @@
 import { sep, resolve, join, parse, basename, extname } from 'path';
 import tildify from 'tildify';
-import Theme from '../theme';
-import Source from './source';
+import Theme from '../theme/index.js';
+import Source from './source.js';
 import { exists, readdir } from 'hexo-fs';
 import { magenta } from 'picocolors';
 import { deepMerge } from 'hexo-util';
-import validateConfig from './validate_config';
-import type Hexo from './index';
-import findYarnRootWorkspace from './findYarnRootWorkspace';
-import { StoreFunctionData } from '../types';
+import validateConfig from './validate_config.js';
+import type Hexo from './index.js';
+import findYarnRootWorkspace from './findYarnRootWorkspace.js';
+import { StoreFunctionData } from '../types.js';
 
 const loadConfig = async (ctx: Hexo): Promise<void> => {
   if (!ctx.env.init) return;
@@ -16,7 +16,7 @@ const loadConfig = async (ctx: Hexo): Promise<void> => {
   const baseDir = ctx.base_dir;
   let configPath = ctx.config_path;
 
-  const path = await exists(configPath) ? configPath : await findConfigPath(configPath);
+  const path = (await exists(configPath)) ? configPath : await findConfigPath(configPath);
   if (!path) return;
   configPath = path;
 
@@ -54,8 +54,8 @@ const loadConfig = async (ctx: Hexo): Promise<void> => {
   const themeDirFromThemes = join(baseDir, 'themes', theme) + sep; // base_dir/themes/[config.theme]/
   const themeDirFromNodeModules = join(ctx.plugin_dir, 'hexo-theme-' + theme) + sep; // base_dir/node_modules/hexo-theme-[config.theme]/
   const yarnRootWorkspace = findYarnRootWorkspace(ctx);
-  const themeDirFromYarnNodeModules
-    = yarnRootWorkspace !== null && join(yarnRootWorkspace, 'node_modules/hexo-theme-' + theme);
+  const themeDirFromYarnNodeModules =
+    yarnRootWorkspace !== null && join(yarnRootWorkspace, 'node_modules/hexo-theme-' + theme);
 
   // themeDirFromThemes has higher priority than themeDirFromNodeModules
   let ignored: string[] = [];
@@ -67,7 +67,7 @@ const loadConfig = async (ctx: Hexo): Promise<void> => {
     // theme applied from project node_modules directory
     ctx.theme_dir = themeDirFromNodeModules;
     ignored = ['**/node_modules/hexo-theme-*/node_modules/**', '**/node_modules/hexo-theme-*/.git/**'];
-  } else if (yarnRootWorkspace !== null && await exists(themeDirFromYarnNodeModules)) {
+  } else if (yarnRootWorkspace !== null && (await exists(themeDirFromYarnNodeModules))) {
     // theme applied from yarn workspace root directory
     ctx.theme_dir = themeDirFromYarnNodeModules;
     ignored = ['**/node_modules/hexo-theme-*/node_modules/**', '**/node_modules/hexo-theme-*/.git/**'];
@@ -82,6 +82,6 @@ async function findConfigPath(path: string): Promise<string> {
   const { dir, name } = parse(path);
 
   const files = await readdir(dir);
-  const item = files.find(item => basename(item, extname(item)) === name);
+  const item = files.find((item) => basename(item, extname(item)) === name);
   if (item != null) return join(dir, item);
 }

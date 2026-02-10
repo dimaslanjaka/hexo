@@ -1,13 +1,13 @@
 import { exists } from 'hexo-fs';
 import { underline, magenta } from 'picocolors';
-import type Hexo from '../../hexo';
+import type Hexo from '../../hexo/index.js';
 import type Promise from 'bluebird';
 
 interface DeployArgs {
-  _?: string[]
-  g?: boolean
-  generate?: boolean
-  [key: string]: any
+  _?: string[];
+  g?: boolean;
+  generate?: boolean;
+  [key: string]: any;
 }
 
 function deployConsole(this: Hexo, args: DeployArgs): Promise<any> {
@@ -31,34 +31,37 @@ function deployConsole(this: Hexo, args: DeployArgs): Promise<any> {
   if (args.g || args.generate) {
     promise = this.call('generate', args);
   } else {
-    promise = exists(this.public_dir).then(exist => {
+    promise = exists(this.public_dir).then((exist) => {
       if (!exist) return this.call('generate', args);
     });
   }
 
-  return promise.then(() => {
-    this.emit('deployBefore');
+  return promise
+    .then(() => {
+      this.emit('deployBefore');
 
-    if (!Array.isArray(config)) config = [config];
-    return config;
-  }).each(item => {
-    if (!item.type) return;
+      if (!Array.isArray(config)) config = [config];
+      return config;
+    })
+    .each((item) => {
+      if (!item.type) return;
 
-    const { type } = item;
+      const { type } = item;
 
-    if (!deployers[type]) {
-      this.log.error('Deployer not found: %s', magenta(type));
-      return;
-    }
+      if (!deployers[type]) {
+        this.log.error('Deployer not found: %s', magenta(type));
+        return;
+      }
 
-    this.log.info('Deploying: %s', magenta(type));
+      this.log.info('Deploying: %s', magenta(type));
 
-    return (Reflect.apply(deployers[type], this, [{ ...item, ...args }]) as any).then(() => {
-      this.log.info('Deploy done: %s', magenta(type));
+      return (Reflect.apply(deployers[type], this, [{ ...item, ...args }]) as any).then(() => {
+        this.log.info('Deploy done: %s', magenta(type));
+      });
+    })
+    .then(() => {
+      this.emit('deployAfter');
     });
-  }).then(() => {
-    this.emit('deployAfter');
-  });
 }
 
 export default deployConsole;

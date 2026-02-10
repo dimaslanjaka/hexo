@@ -1,4 +1,4 @@
-import type Hexo from '../hexo';
+import type Hexo from '../hexo/index.js';
 
 type BinaryRelationType<K extends PropertyKey, V extends PropertyKey> = {
   [key in K]: PropertyKey;
@@ -74,20 +74,20 @@ class BinaryRelationIndex<K extends PropertyKey, V extends PropertyKey> {
       const ids = this.keyIndex.get(key);
       if (!ids) return [];
       return Array.from(ids)
-        .map(_id => this.findById(_id))
-        .filter(record => record?.[this.value] === value);
+        .map((_id) => this.findById(_id))
+        .filter((record) => record?.[this.value] === value);
     }
 
     if (key) {
       const ids = this.keyIndex.get(key);
       if (!ids) return [];
-      return Array.from(ids).map(_id => this.findById(_id));
+      return Array.from(ids).map((_id) => this.findById(_id));
     }
 
     if (value) {
       const ids = this.valueIndex.get(value);
       if (!ids) return [];
-      return Array.from(ids).map(_id => this.findById(_id));
+      return Array.from(ids).map((_id) => this.findById(_id));
     }
 
     return [];

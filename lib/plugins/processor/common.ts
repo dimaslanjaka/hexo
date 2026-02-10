@@ -1,6 +1,6 @@
 import moment from 'moment-timezone';
 import micromatch from 'micromatch';
-import { Config } from '../../hexo/index-d';
+import { Config } from '../../hexo/index-d.js';
 
 const DURATION_MINUTE = 1000 * 60;
 

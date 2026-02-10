@@ -1,13 +1,13 @@
 import { join, sep } from 'path';
 import BlueBirdPromise from 'bluebird';
-import File from './file';
+import File from './file.js';
 import { Pattern, createSha1Hash } from 'hexo-util';
 import { createReadStream, readdir, stat, watch } from 'hexo-fs';
 import { magenta } from 'picocolors';
 import { EventEmitter } from 'events';
 import { isMatch, makeRe } from 'micromatch';
-import type Hexo from '../hexo';
-import type { NodeJSLikeCallback, StoreFunctionData } from '../types';
+import type Hexo from '../hexo/index.js';
+import type { NodeJSLikeCallback, StoreFunctionData } from '../types.js';
 import type fs from 'fs';
 
 const defaultPattern = new Pattern(() => ({}));
@@ -22,7 +22,7 @@ interface BoxOptions {
   persistent: boolean;
   awaitWriteFinish: {
     [key: string]: any;
-    stabilityThreshold: number
+    stabilityThreshold: number;
   };
   ignored: RegExp[];
 }
@@ -64,12 +64,12 @@ class Box extends EventEmitter {
     this.watcher = null;
     this.Cache = ctx.model('Cache');
     this.File = this._createFileClass();
-    let targets = this.options.ignored as unknown as string[] || [];
+    let targets = (this.options.ignored as unknown as string[]) || [];
     if (ctx.config.ignore && ctx.config.ignore.length) {
       targets = targets.concat(ctx.config.ignore);
     }
     this.ignore = targets;
-    this.options.ignored = targets.map(s => toRegExp(ctx, s)).filter(x => x);
+    this.options.ignored = targets.map((s) => toRegExp(ctx, s)).filter((x) => x);
   }
 
   _createFileClass() {
@@ -79,15 +79,21 @@ class Box extends EventEmitter {
       public box: Box;
 
       render(options?: Record<string, any>) {
-        return ctx.render.render({
-          path: this.source
-        } as StoreFunctionData, options);
+        return ctx.render.render(
+          {
+            path: this.source
+          } as StoreFunctionData,
+          options
+        );
       }
 
       renderSync(options?: Record<string, any>) {
-        return ctx.render.renderSync({
-          path: this.source
-        } as StoreFunctionData, options);
+        return ctx.render.renderSync(
+          {
+            path: this.source
+          } as StoreFunctionData,
+          options
+        );
       }
     }
 
@@ -118,8 +124,8 @@ class Box extends EventEmitter {
     const results: string[] = [];
     return readDirWalker(ctx, base, results, this.ignore, prefix)
       .return(results)
-      .map(path => this._checkFileStatus(path))
-      .map(file => this._processFile(file.type, file.path).return(file.path));
+      .map((path) => this._checkFileStatus(path))
+      .map((file) => this._processFile(file.type, file.path).return(file.path));
   }
 
   _checkFileStatus(path: string): { type: string; path: string } {
@@ -130,7 +136,7 @@ class Box extends EventEmitter {
       escapeBackslash(src.substring(ctx.base_dir.length)),
       () => getHash(src),
       () => stat(src)
-    ).then(result => ({
+    ).then((result) => ({
       type: result.type,
       path
     }));
@@ -140,20 +146,24 @@ class Box extends EventEmitter {
     const { base, Cache, context: ctx } = this;
 
     return stat(base)
-      .then(stats => {
+      .then((stats) => {
         if (!stats.isDirectory()) return;
 
         // Check existing files in cache
         const relativeBase = escapeBackslash(base.substring(ctx.base_dir.length));
-        const cacheFiles: string[] = Cache.filter(item => item._id.startsWith(relativeBase)).map(item => item._id.substring(relativeBase.length));
+        const cacheFiles: string[] = Cache.filter((item) => item._id.startsWith(relativeBase)).map((item) =>
+          item._id.substring(relativeBase.length)
+        );
 
         // Handle deleted files
         return this._readDir(base)
-          .then(files => cacheFiles.filter(path => !files.includes(path)))
-          .map(path => this._processFile(File.TYPE_DELETE, path));
-      }).catch(err => {
+          .then((files) => cacheFiles.filter((path) => !files.includes(path)))
+          .map((path) => this._processFile(File.TYPE_DELETE, path));
+      })
+      .catch((err) => {
         if (err && err.code !== 'ENOENT') throw err;
-      }).asCallback(callback);
+      })
+      .asCallback(callback);
   }
 
   _processFile(type: string, path: string): BlueBirdPromise<void | string> {
@@ -177,7 +187,7 @@ class Box extends EventEmitter {
         if (!params) return count;
 
         const file: File = new File({
-        // source is used for filesystem path, keep backslashes on Windows
+          // source is used for filesystem path, keep backslashes on Windows
           source: join(base, path),
           // path is used for URL path, replace backslashes on Windows
           path: escapeBackslash(path),
@@ -189,7 +199,7 @@ class Box extends EventEmitter {
       },
       0
     )
-      .then(count => {
+      .then((count) => {
         if (count) {
           ctx.log.debug('Processed: %s', magenta(path));
         }
@@ -199,7 +209,7 @@ class Box extends EventEmitter {
           path
         });
       })
-      .catch(err => {
+      .catch((err) => {
         ctx.log.error({ err }, 'Process failed: %s', magenta(path));
       })
       .finally(() => {
@@ -221,22 +231,22 @@ class Box extends EventEmitter {
 
     return this.process()
       .then(() => watch(base, this.options))
-      .then(watcher => {
+      .then((watcher) => {
         this.watcher = watcher;
 
-        watcher.on('add', path => {
+        watcher.on('add', (path) => {
           this._processFile(File.TYPE_CREATE, getPath(path));
         });
 
-        watcher.on('change', path => {
+        watcher.on('change', (path) => {
           this._processFile(File.TYPE_UPDATE, getPath(path));
         });
 
-        watcher.on('unlink', path => {
+        watcher.on('unlink', (path) => {
           this._processFile(File.TYPE_DELETE, getPath(path));
         });
 
-        watcher.on('addDir', path => {
+        watcher.on('addDir', (path) => {
           let prefix = getPath(path);
           if (prefix) prefix += '/';
 
@@ -272,7 +282,7 @@ function getHash(path: string): BlueBirdPromise<string> {
     src.once('end', resolve);
   });
 
-  src.on('data', chunk => {
+  src.on('data', (chunk) => {
     hasher.update(chunk);
   });
 
@@ -297,30 +307,39 @@ function isIgnoreMatch(path: string, ignore: string | string[]): boolean {
   return path && ignore && ignore.length && isMatch(path, ignore);
 }
 
-function readDirWalker(ctx: Hexo, base: string, results: string[], ignore: string | string[], prefix: string): BlueBirdPromise<any> {
+function readDirWalker(
+  ctx: Hexo,
+  base: string,
+  results: string[],
+  ignore: string | string[],
+  prefix: string
+): BlueBirdPromise<any> {
   if (isIgnoreMatch(base, ignore)) return BlueBirdPromise.resolve();
 
-  return BlueBirdPromise.map(readdir(base).catch(err => {
-    ctx.log.error({ err }, 'Failed to read directory: %s', base);
-    if (err && err.code === 'ENOENT') return [];
-    throw err;
-  }), async (path: string) => {
-    const fullPath = join(base, path);
-    const stats: fs.Stats | null = await stat(fullPath).catch(err => {
-      ctx.log.error({ err }, 'Failed to stat file: %s', fullPath);
-      if (err && err.code === 'ENOENT') return null;
+  return BlueBirdPromise.map(
+    readdir(base).catch((err) => {
+      ctx.log.error({ err }, 'Failed to read directory: %s', base);
+      if (err && err.code === 'ENOENT') return [];
       throw err;
-    });
-    const prefixPath = `${prefix}${path}`;
-    if (stats) {
-      if (stats.isDirectory()) {
-        return readDirWalker(ctx, fullPath, results, ignore, `${prefixPath}/`);
-      }
-      if (!isIgnoreMatch(fullPath, ignore)) {
-        results.push(prefixPath);
+    }),
+    async (path: string) => {
+      const fullPath = join(base, path);
+      const stats: fs.Stats | null = await stat(fullPath).catch((err) => {
+        ctx.log.error({ err }, 'Failed to stat file: %s', fullPath);
+        if (err && err.code === 'ENOENT') return null;
+        throw err;
+      });
+      const prefixPath = `${prefix}${path}`;
+      if (stats) {
+        if (stats.isDirectory()) {
+          return readDirWalker(ctx, fullPath, results, ignore, `${prefixPath}/`);
+        }
+        if (!isIgnoreMatch(fullPath, ignore)) {
+          results.push(prefixPath);
+        }
       }
     }
-  });
+  );
 }
 
 export interface _File extends File {

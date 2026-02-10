@@ -1,5 +1,5 @@
 import { Cache } from 'hexo-util';
-import { HexoLocalsData, HexoLocalsFunc } from './locals-d';
+import { HexoLocalsData, HexoLocalsFunc } from './locals-d.js';
 
 class Locals {
   public cache: InstanceType<typeof Cache<HexoLocalsData>>;

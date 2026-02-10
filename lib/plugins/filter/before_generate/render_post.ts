@@ -1,10 +1,10 @@
 import Promise from 'bluebird';
-import type Hexo from '../../../hexo';
+import type Hexo from '../../../hexo/index.js';
 import type Model from 'warehouse/dist/model';
 
 function renderPostFilter(this: Hexo): Promise<[any[], any[]]> {
   const renderPosts = (model: Model<any>) => {
-    const posts = model.toArray().filter(post => post.content == null);
+    const posts = model.toArray().filter((post) => post.content == null);
 
     return Promise.map(posts, (post: any) => {
       post.content = post._content;
@@ -13,10 +13,7 @@ function renderPostFilter(this: Hexo): Promise<[any[], any[]]> {
     });
   };
 
-  return Promise.all([
-    renderPosts(this.model('Post')),
-    renderPosts(this.model('Page'))
-  ]);
+  return Promise.all([renderPosts(this.model('Post')), renderPosts(this.model('Page'))]);
 }
 
 export default renderPostFilter;

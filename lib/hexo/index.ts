@@ -25,23 +25,23 @@ import {
   Tag
 } from '../extend';
 
-import Render from './render';
-import registerModels from './register_models';
-import Post from './post';
-import Scaffold from './scaffold';
-import Source from './source';
-import Router from './router';
-import Theme from '../theme';
-import Locals from './locals';
-import defaultConfig from './default_config';
-import loadDatabase from './load_database';
-import multiConfigPath from './multi_config_path';
+import Render from './render.js';
+import registerModels from './register_models.js';
+import Post from './post.js';
+import Scaffold from './scaffold.js';
+import Source from './source.js';
+import Router from './router.js';
+import Theme from '../theme/index.js';
+import Locals from './locals.js';
+import defaultConfig from './default_config.js';
+import loadDatabase from './load_database.js';
+import multiConfigPath from './multi_config_path.js';
 import { deepMerge, full_url_for } from 'hexo-util';
-import type Box from '../box';
-import type { BaseGeneratorReturn, FilterOptions, LocalsType, NodeJSLikeCallback, SiteLocals } from '../types';
+import type Box from '../box/index.js';
+import type { BaseGeneratorReturn, FilterOptions, LocalsType, NodeJSLikeCallback, SiteLocals } from '../types.js';
 import type { AddSchemaTypeOptions } from 'warehouse/dist/types';
 import type Schema from 'warehouse/dist/schema';
-import BinaryRelationIndex from '../models/binary_relation_index';
+import BinaryRelationIndex from '../models/binary_relation_index.js';
 
 const libDir = dirname(__dirname);
 const dbVersion = 1;
@@ -449,15 +449,15 @@ class Hexo extends EventEmitter {
     this.log.debug('Working directory: %s', magenta(tildify(this.base_dir)));
 
     // Load internal plugins
-    require('../plugins/console')(this);
-    require('../plugins/filter')(this);
-    require('../plugins/generator')(this);
-    require('../plugins/helper')(this);
-    require('../plugins/highlight')(this);
-    require('../plugins/injector')(this);
-    require('../plugins/processor')(this);
-    require('../plugins/renderer')(this);
-    require('../plugins/tag').default(this);
+    require('../plugins/console.js')(this);
+    require('../plugins/filter.js')(this);
+    require('../plugins/generator.js')(this);
+    require('../plugins/helper.js')(this);
+    require('../plugins/highlight.js')(this);
+    require('../plugins/injector.js')(this);
+    require('../plugins/processor.js')(this);
+    require('../plugins/renderer.js')(this);
+    require('../plugins/tag.js').default(this);
 
     // Load config
     return Promise.each(

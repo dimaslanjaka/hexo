@@ -1,4 +1,4 @@
-import type { StoreFunctionData } from '../../types';
+import type { StoreFunctionData } from '../../types.js';
 
 function jsonRenderer(data: StoreFunctionData): any {
   return JSON.parse(data.text);

@@ -1,14 +1,14 @@
 import warehouse from 'warehouse';
 import { join } from 'path';
-import Moment from './types/moment';
+import Moment from './types/moment.js';
 import moment from 'moment';
 import { full_url_for } from 'hexo-util';
-import type Hexo from '../hexo';
-import type { PageSchema } from '../types';
+import type Hexo from '../hexo/index.js';
+import type { PageSchema } from '../types.js';
 
 const ModelPage = (ctx: Hexo) => {
   const Page = new warehouse.Schema<PageSchema>({
-    title: {type: String, default: ''},
+    title: { type: String, default: '' },
     date: {
       type: Moment,
       default: moment
@@ -27,11 +27,11 @@ const ModelPage = (ctx: Hexo) => {
     more: { type: String }
   });
 
-  Page.virtual('permalink').get(function() {
+  Page.virtual('permalink').get(function () {
     return full_url_for.call(ctx, this.path);
   });
 
-  Page.virtual('full_source').get(function() {
+  Page.virtual('full_source').get(function () {
     return join(ctx.source_dir, this.source || '');
   });
 

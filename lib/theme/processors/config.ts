@@ -1,5 +1,5 @@
 import { Pattern } from 'hexo-util';
-import type { _File } from '../../box';
+import type { _File } from '../../box/index.js';
 import Theme from '..';
 
 function process(file: _File) {
@@ -8,13 +8,16 @@ function process(file: _File) {
     return;
   }
 
-  return file.render().then(result => {
-    (file.box as Theme).config = result;
-    this.log.debug('Theme config loaded.');
-  }).catch(err => {
-    this.log.error('Theme config load failed.');
-    throw err;
-  });
+  return file
+    .render()
+    .then((result) => {
+      (file.box as Theme).config = result;
+      this.log.debug('Theme config loaded.');
+    })
+    .catch((err) => {
+      this.log.error('Theme config load failed.');
+      throw err;
+    });
 }
 
 const pattern = new Pattern(/^_config\.\w+$/);
