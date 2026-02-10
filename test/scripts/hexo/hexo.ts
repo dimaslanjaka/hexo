@@ -18,7 +18,7 @@ describe('Hexo', () => {
   const Data = hexo.model('Data');
   const { route } = hexo;
 
-  async function checkStream(stream, expected) {
+  async function checkStream(stream: NodeJS.ReadableStream, expected: string) {
     const data = await readStream(stream);
     data.should.eql(expected);
   }
@@ -41,7 +41,7 @@ describe('Hexo', () => {
 
   after(() => rmdir(hexo.base_dir));
 
-  hexo.extend.console.register('test', args => args);
+  hexo.extend.console.register('test', (args) => args);
 
   it('constructor', () => {
     const hexo = new Hexo(__dirname);
@@ -78,11 +78,11 @@ describe('Hexo', () => {
   });
 
   it('call()', async () => {
-    const data = await hexo.call('test', {foo: 'bar'});
-    data.should.eql({foo: 'bar'});
+    const data = await hexo.call('test', { foo: 'bar' });
+    data.should.eql({ foo: 'bar' });
   });
 
-  it('call() - callback', callback => {
+  it('call() - callback', (callback) => {
     hexo.call('test', { foo: 'bar' }, (err, data) => {
       should.not.exist(err);
       data.should.eql({ foo: 'bar' });
@@ -91,7 +91,7 @@ describe('Hexo', () => {
     });
   });
 
-  it('call() - callback without args', callback => {
+  it('call() - callback without args', (callback) => {
     hexo.call('test', (err, data) => {
       should.not.exist(err);
       data.should.eql({});
@@ -110,7 +110,7 @@ describe('Hexo', () => {
   });
 
   it('init()', async () => {
-    const hexo = new Hexo(join(__dirname, 'hexo_test'), {silent: true});
+    const hexo = new Hexo(join(__dirname, 'hexo_test'), { silent: true });
     const hook = spy();
 
     hexo.extend.filter.register('after_init', hook);
@@ -153,7 +153,6 @@ describe('Hexo', () => {
 
   it('load() - theme', async () => await testLoad(join(hexo.theme_dir, 'source')));
 
-
   it('load() - load database', async () => {
     hexo._dbLoaded = false;
     const dbPath = hexo.database.options.path;
@@ -165,22 +164,22 @@ describe('Hexo', () => {
       },
       models: {
         PostTag: [
-          { _id: 'cuid111111111111111111113', post_id: 'cuid111111111111111111111', tag_id: 'cuid111111111111111111112' }
+          {
+            _id: 'cuid111111111111111111113',
+            post_id: 'cuid111111111111111111111',
+            tag_id: 'cuid111111111111111111112'
+          }
         ],
-        Tag: [
-          { _id: 'cuid111111111111111111112', name: 'foo' }
-        ],
-        Post: [
-          { _id: 'cuid111111111111111111111', source: 'test', slug: 'test' }
-        ]
+        Tag: [{ _id: 'cuid111111111111111111112', name: 'foo' }],
+        Post: [{ _id: 'cuid111111111111111111111', source: 'test', slug: 'test' }]
       }
     };
     await writeFile(dbPath, JSON.stringify(fixture));
     await hexo.load();
     // check Model
-    hexo.model('PostTag').toArray({lean: true}).length.should.eql(fixture.models.PostTag.length);
-    hexo.model('Tag').toArray({lean: true}).length.should.eql(fixture.models.Tag.length);
-    hexo.model('Post').toArray({lean: true}).length.should.eql(fixture.models.Post.length);
+    hexo.model('PostTag').toArray({ lean: true }).length.should.eql(fixture.models.PostTag.length);
+    hexo.model('Tag').toArray({ lean: true }).length.should.eql(fixture.models.Tag.length);
+    hexo.model('Post').toArray({ lean: true }).length.should.eql(fixture.models.Post.length);
     hexo._binaryRelationIndex.post_tag.keyIndex.size.should.eql(1);
     hexo._binaryRelationIndex.post_tag.valueIndex.size.should.eql(1);
     await unlink(dbPath);
@@ -206,7 +205,7 @@ describe('Hexo', () => {
     themeConfig.a.b.should.eql(3);
 
     const Locals = hexo._generateLocals();
-    const { theme: themeLocals } = new Locals('', {path: '', layout: [], data: {}});
+    const { theme: themeLocals } = new Locals('', { path: '', layout: [], data: {} });
 
     themeLocals.a.should.have.own.property('c');
     themeLocals.a.b.should.eql(3);
@@ -225,7 +224,7 @@ describe('Hexo', () => {
     themeConfig.c.should.eql(3);
 
     const Locals = hexo._generateLocals();
-    const { theme: themeLocals } = new Locals('', {path: '', layout: [], data: {}});
+    const { theme: themeLocals } = new Locals('', { path: '', layout: [], data: {} });
 
     themeLocals.should.have.own.property('c');
     themeLocals.c.should.eql(3);
@@ -238,7 +237,7 @@ describe('Hexo', () => {
   it('load() - merge theme config - filter', async () => {
     const hexo = new Hexo(__dirname, { silent: true });
 
-    const validateThemeConfig = function() {
+    const validateThemeConfig = function () {
       this.theme.config.a.b.should.eql(3);
     };
 
@@ -278,16 +277,8 @@ describe('Hexo', () => {
   it('watch() - theme', async () => await testWatch(join(hexo.theme_dir, 'source')));
 
   it('watch() - merge theme config', () => {
-    const theme_config_1 = [
-      'a:',
-      '  b: 1',
-      '  c: 2'
-    ].join('\n');
-    const theme_config_2 = [
-      'a:',
-      '  b: 1',
-      '  c: 3'
-    ].join('\n');
+    const theme_config_1 = ['a:', '  b: 1', '  c: 2'].join('\n');
+    const theme_config_2 = ['a:', '  b: 1', '  c: 3'].join('\n');
 
     const hexo = new Hexo(__dirname, { silent: true });
     hexo.config.theme_config = { a: { b: 3, d: 4 } };
@@ -326,8 +317,8 @@ describe('Hexo', () => {
     listener.calledOnce.should.be.true;
   });
 
-  it('exit() - error handling - callback', callback => {
-    hexo.once('exit', err => {
+  it('exit() - error handling - callback', (callback) => {
+    hexo.once('exit', (err) => {
       err.should.eql({ foo: 'bar' });
       callback();
     });
@@ -339,7 +330,7 @@ describe('Hexo', () => {
     return BluebirdPromise.all([
       hexo.exit({ foo: 'bar' }),
       new BluebirdPromise((resolve, reject) => {
-        hexo.once('exit', err => {
+        hexo.once('exit', (err) => {
           try {
             err.should.eql({ foo: 'bar' });
             resolve();
@@ -353,8 +344,8 @@ describe('Hexo', () => {
 
   it('draft visibility', async () => {
     const posts = await Post.insert([
-      {source: 'foo', slug: 'foo', published: true},
-      {source: 'bar', slug: 'bar', published: false}
+      { source: 'foo', slug: 'foo', published: true },
+      { source: 'bar', slug: 'bar', published: false }
     ]);
     hexo.locals.invalidate();
     hexo.locals.get('posts').toArray().should.eql(posts.slice(0, 1));
@@ -365,13 +356,13 @@ describe('Hexo', () => {
     hexo.locals.get('posts').toArray().should.eql(posts);
     hexo.config.render_drafts = false;
 
-    posts.map(post => Post.removeById(post._id));
+    posts.map((post) => Post.removeById(post._id));
   });
 
   it('future posts', async () => {
     const posts = await Post.insert([
-      {source: 'foo', slug: 'foo', date: Date.now() - 3600},
-      {source: 'bar', slug: 'bar', date: Date.now() + 3600}
+      { source: 'foo', slug: 'foo', date: Date.now() - 3600 },
+      { source: 'bar', slug: 'bar', date: Date.now() + 3600 }
     ]);
 
     function mapper(post) {
@@ -388,13 +379,13 @@ describe('Hexo', () => {
     hexo.locals.invalidate();
     hexo.locals.get('posts').map(mapper).should.eql([posts[0]._id]);
 
-    posts.map(post => Post.removeById(post._id));
+    posts.map((post) => Post.removeById(post._id));
   });
 
   it('future pages', async () => {
     const pages = await Page.insert([
-      {source: 'foo', path: 'foo', date: Date.now() - 3600},
-      {source: 'bar', path: 'bar', date: Date.now() + 3600}
+      { source: 'foo', path: 'foo', date: Date.now() - 3600 },
+      { source: 'bar', path: 'bar', date: Date.now() + 3600 }
     ]);
     function mapper(page) {
       return page._id;
@@ -410,13 +401,13 @@ describe('Hexo', () => {
     hexo.locals.invalidate();
     hexo.locals.get('pages').map(mapper).should.eql([pages[0]._id]);
 
-    pages.map(page => Page.removeById(page._id));
+    pages.map((page) => Page.removeById(page._id));
   });
 
   it('locals.data', async () => {
     const data = await Data.insert([
-      {_id: 'users', data: {foo: 1}},
-      {_id: 'comments', data: {bar: 2}}
+      { _id: 'users', data: { foo: 1 } },
+      { _id: 'comments', data: { bar: 2 } }
     ]);
     hexo.locals.invalidate();
     hexo.locals.get('data').should.eql({
@@ -424,7 +415,7 @@ describe('Hexo', () => {
       comments: { bar: 2 }
     });
 
-    data.map(data => data.remove());
+    data.map((data) => data.remove());
   });
 
   it('_generate()', async () => {
@@ -477,12 +468,10 @@ describe('Hexo', () => {
   });
 
   it('_generate() - layout', async () => {
-    hexo.theme.setView('test.njk', [
-      '{{ config.title }}',
-      '{{ page.foo }}',
-      '{{ layout }}',
-      '{{ view_dir }}'
-    ].join('\n'));
+    hexo.theme.setView(
+      'test.njk',
+      ['{{ config.title }}', '{{ page.foo }}', '{{ layout }}', '{{ view_dir }}'].join('\n')
+    );
 
     hexo.extend.generator.register('test', () => ({
       path: 'test',
@@ -493,12 +482,7 @@ describe('Hexo', () => {
       }
     }));
 
-    const expected = [
-      hexo.config.title,
-      'bar',
-      'layout',
-      join(hexo.theme_dir, 'layout') + sep
-    ].join('\n');
+    const expected = [hexo.config.title, 'bar', 'layout', join(hexo.theme_dir, 'layout') + sep].join('\n');
 
     await hexo._generate();
     await checkStream(route.get('test'), expected);
@@ -543,7 +527,7 @@ describe('Hexo', () => {
   });
 
   it('_generate() - _after_html_render filter', async () => {
-    const hook = spy(result => result.replace('foo', 'bar'));
+    const hook = spy((result) => result.replace('foo', 'bar'));
     hexo.extend.filter.register('after_render:html', hook);
     hexo.theme.setView('test.njk', 'foo');
     hexo.extend.generator.register('test', () => ({
@@ -556,7 +540,7 @@ describe('Hexo', () => {
   });
 
   it('_generate() - after_render:html is alias of _after_html_render', async () => {
-    const hook = spy(result => result.replace('foo', 'bar'));
+    const hook = spy((result) => result.replace('foo', 'bar'));
     hexo.extend.filter.register('after_render:html', hook);
     hexo.theme.setView('test.njk', 'foo');
     hexo.extend.generator.register('test', () => ({
@@ -584,11 +568,7 @@ describe('Hexo', () => {
   });
 
   it('_generate() - validate locals', async () => {
-    hexo.theme.setView('test.njk', [
-      '{{ path }}',
-      '{{ url }}',
-      '{{ view_dir }}'
-    ].join('\n'));
+    hexo.theme.setView('test.njk', ['{{ path }}', '{{ url }}', '{{ view_dir }}'].join('\n'));
 
     hexo.extend.generator.register('test', () => ({
       path: 'test',
@@ -596,11 +576,10 @@ describe('Hexo', () => {
     }));
 
     await hexo._generate();
-    await checkStream(route.get('test'), [
-      'test',
-      hexo.config.url + '/test',
-      join(hexo.theme_dir, 'layout') + sep
-    ].join('\n'));
+    await checkStream(
+      route.get('test'),
+      ['test', hexo.config.url + '/test', join(hexo.theme_dir, 'layout') + sep].join('\n')
+    );
   });
 
   it('_generate() - should encode url', async () => {
@@ -618,7 +597,7 @@ describe('Hexo', () => {
     await checkStream(route.get(path), full_url_for.call(hexo, path));
   });
 
-  it('_generate() - do nothing if it\'s generating', () => {
+  it("_generate() - do nothing if it's generating", () => {
     const hook = spy();
     hexo.extend.generator.register('test', hook);
 
@@ -639,12 +618,11 @@ describe('Hexo', () => {
       data: { count: () => count++ }
     }));
 
-
-    await hexo._generate({cache: true}); // First generate
+    await hexo._generate({ cache: true }); // First generate
     await checkStream(route.get('test'), '0');
     await checkStream(route.get('test'), '0'); // should return cached result
 
-    await hexo._generate({cache: true}); // Second generate
+    await hexo._generate({ cache: true }); // Second generate
     await checkStream(route.get('test'), '1');
     await checkStream(route.get('test'), '1'); // should return cached result
   });
@@ -659,7 +637,6 @@ describe('Hexo', () => {
       layout: 'test',
       data: { count: () => count++ }
     }));
-
 
     await hexo._generate({ cache: false }); // First generate
     await checkStream(route.get('test'), '0');
@@ -699,7 +676,7 @@ describe('Hexo', () => {
   });
 
   it('execFilter()', async () => {
-    const fn = str => {
+    const fn = (str) => {
       return str + 'foo';
     };
     hexo.extend.filter.register('exec_test', fn);
@@ -710,7 +687,7 @@ describe('Hexo', () => {
   });
 
   it('execFilter() - promise', async () => {
-    const fn = str => {
+    const fn = (str) => {
       return new BluebirdPromise((resolve, _reject) => {
         resolve(str + 'bar');
       });
@@ -723,7 +700,7 @@ describe('Hexo', () => {
   });
 
   it('execFilterSync()', () => {
-    hexo.extend.filter.register('exec_sync_test', data => {
+    hexo.extend.filter.register('exec_sync_test', (data) => {
       data.should.eql('');
       return data + 'foo';
     });
