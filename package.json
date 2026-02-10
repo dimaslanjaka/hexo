@@ -3,9 +3,9 @@
   "version": "8.1.1",
   "description": "A fast, simple & powerful blog framework, powered by Node.js.",
   "type": "module",
-  "main": "dist/cjs/hexo/index.cjs",
-  "module": "dist/esm/hexo/index.js",
-  "types": "dist/esm/hexo/index.d.ts",
+  "main": "dist/hexo/index.cjs",
+  "module": "dist/hexo/index.js",
+  "types": "dist/hexo/index.d.ts",
   "bin": "./bin/hexo",
   "exports": {
     ".": {
