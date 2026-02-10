@@ -2,7 +2,7 @@
   // This is the TypeScript configuration file for the Hexo project.
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "module": "es2015",
+    "module": "es2020",
     "target": "es2020",
     "sourceMap": true,
     "outDir": "dist",
