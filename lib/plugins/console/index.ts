@@ -1,5 +1,14 @@
 import type Hexo from '../../hexo/index.js';
 
+// Provide a global require for ESM environments using createRequire
+import { createRequire } from 'module';
+
+// Only define global require if it doesn't exist (for ESM)
+if (typeof require === 'undefined') {
+  // @ts-ignore: TypeScript does not recognize 'require' on global in ESM, but this is safe in Node.js
+  global.require = createRequire(import.meta.url);
+}
+
 function Console(ctx: Hexo) {
   const { console } = ctx.extend;
 
@@ -56,7 +65,7 @@ function Console(ctx: Hexo) {
       usage: '<type>',
       arguments: [{ name: 'type', desc: 'Available types: page, post, route, tag, category' }]
     },
-    require('./list.js')
+    require('./list/index.js')
   );
 
   console.register(
