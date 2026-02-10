@@ -16,7 +16,23 @@ const RegisterModel = (ctx: Hexo) => {
       model = models[key] as unknown as CallableFunction;
     }
     if (!model) continue;
+    // Might be an object containing multiple models
+    if (typeof model === 'object') {
+      for (const keyModel in model) {
+        if (Object.prototype.hasOwnProperty.call(model, keyModel)) {
+          const valueModel = (model as any)[keyModel];
+          if (typeof valueModel !== 'function') {
+            console.log(valueModel);
+            console.warn(`Value model "${keyModel}" is ${typeof valueModel} and will be skipped.`);
+            continue;
+          }
+          db.model(keyModel, valueModel(ctx));
+        }
+      }
+      continue;
+    }
     if (typeof model !== 'function') {
+      console.log(model);
       console.warn(`Model "${key}" is ${typeof model} and will be skipped.`);
       continue;
     }
