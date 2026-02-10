@@ -77,6 +77,13 @@ class Console {
 
     if (!fn) {
       if (options) {
+        if (
+          typeof options === 'object' &&
+          Object.hasOwnProperty.call(options, 'default') &&
+          typeof (options as any).default === 'function'
+        ) {
+          options = (options as any).default;
+        }
         if (typeof options === 'function') {
           fn = options;
 
@@ -89,18 +96,35 @@ class Console {
             options = {};
           }
         } else {
-          throw new TypeError('fn must be a function');
+          console.log(options);
+          throw new TypeError(`Failed to register console "${name}": fn must be a function`);
         }
       } else {
         // name, fn
+        if (
+          typeof desc === 'object' &&
+          Object.hasOwnProperty.call(desc, 'default') &&
+          typeof (desc as any).default === 'function'
+        ) {
+          desc = (desc as any).default;
+        }
         if (typeof desc === 'function') {
           fn = desc;
           options = {};
           desc = '';
         } else {
-          throw new TypeError('fn must be a function');
+          throw new TypeError(`Failed to register console "${name}": fn must be a function`);
         }
       }
+    }
+
+    // Might be an object containing default export
+    if (
+      typeof fn === 'object' &&
+      Object.hasOwnProperty.call(fn, 'default') &&
+      typeof (fn as any).default === 'function'
+    ) {
+      fn = (fn as any).default;
     }
 
     if (fn.length > 1) {
