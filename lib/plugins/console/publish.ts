@@ -1,5 +1,5 @@
 import tildify from 'tildify';
-import { magenta } from 'picocolors';
+import * as picocolors from 'picocolors';
 import type Hexo from '../../hexo/index.js';
 import type Promise from 'bluebird';
 
@@ -25,7 +25,7 @@ function publishConsole(this: Hexo, args: PublishArgs): Promise<void> {
       args.r || args.replace
     )
     .then((post) => {
-      this.log.info('Published: %s', magenta(tildify(post.path)));
+      this.log.info('Published: %s', picocolors.magenta(tildify(post.path)));
     });
 }
 
