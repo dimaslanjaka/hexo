@@ -10,7 +10,7 @@ const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
 const defaultExports = {
   '.': {
     import: './dist/hexo/index.js',
-    require: './dist/hexo/index.js',
+    require: './dist/hexo/index.cjs',
     types: './dist/hexo/index.d.ts'
   },
   './package.json': './package.json'
