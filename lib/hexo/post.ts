@@ -4,11 +4,12 @@ import Promise from 'bluebird';
 import { join, extname, basename } from 'path';
 import * as picocolors from 'picocolors';
 import { load } from 'js-yaml';
-import { slugize, escapeRegExp, deepMerge} from 'hexo-util';
+import { slugize, escapeRegExp, deepMerge } from 'hexo-util';
 import { copyDir, exists, listDir, mkdirs, readFile, rmdir, unlink, writeFile } from 'hexo-fs';
 import { parse as yfmParse, split as yfmSplit, stringify as yfmStringify } from 'hexo-front-matter';
 import type Hexo from './index.js';
 import type { NodeJSLikeCallback, RenderData } from '../types.js';
+import { isDate } from '../plugins/helper/date.js';
 
 const preservedKeys = ['title', 'slug', 'path', 'layout', 'date', 'content'];
 
@@ -27,12 +28,8 @@ const STATE_SWIG_TAG = 3;
 const STATE_SWIG_FULL_TAG = 4;
 const STATE_PLAINTEXT_COMMENT = 5;
 
-const isNonWhiteSpaceChar = (char: string) => char !== '\r'
-  && char !== '\n'
-  && char !== '\t'
-  && char !== '\f'
-  && char !== '\v'
-  && char !== ' ';
+const isNonWhiteSpaceChar = (char: string) =>
+  char !== '\r' && char !== '\n' && char !== '\t' && char !== '\f' && char !== '\v' && char !== ' ';
 
 class PostRenderEscape {
   public stored: string[];
@@ -73,7 +70,9 @@ class PostRenderEscape {
   }
 
   escapeCodeBlocks(str: string) {
-    return str.replace(rHexoPostRenderEscape, (_, content) => PostRenderEscape.escapeContent(this.stored, 'code', content));
+    return str.replace(rHexoPostRenderEscape, (_, content) =>
+      PostRenderEscape.escapeContent(this.stored, 'code', content)
+    );
   }
 
   /**
@@ -126,7 +125,8 @@ class PostRenderEscape {
         const char = str[idx];
         const next_char = str[idx + 1];
 
-        if (state === STATE_PLAINTEXT) { // From plain text to swig
+        if (state === STATE_PLAINTEXT) {
+          // From plain text to swig
           ensurePlainTextStart(idx);
           if (char === '{') {
             // check if it is a complete tag {{ }}
@@ -162,14 +162,15 @@ class PostRenderEscape {
             idx += 3;
           }
         } else if (state === STATE_SWIG_TAG) {
-          if (char === '"' || char === '\'') {
+          if (char === '"' || char === "'") {
             if (swig_string_quote === '') {
               swig_string_quote = char;
             } else if (swig_string_quote === char) {
               swig_string_quote = '';
             }
           }
-          if (char === '%' && next_char === '}' && swig_string_quote === '') { // From swig back to plain text
+          if (char === '%' && next_char === '}' && swig_string_quote === '') {
+            // From swig back to plain text
             idx++;
             if (swig_tag_name !== '' && str.includes(`end${swig_tag_name}`)) {
               state = STATE_SWIG_FULL_TAG;
@@ -181,9 +182,10 @@ class PostRenderEscape {
               swig_tag_name = '';
               state = STATE_PLAINTEXT;
               // since we have already move idx to next char of '}', so here is idx -1
-              pushAndReset(PostRenderEscape.escapeContent(this.stored, 'swig', `{%${str.slice(buffer_start, idx - 1)}%}`));
+              pushAndReset(
+                PostRenderEscape.escapeContent(this.stored, 'swig', `{%${str.slice(buffer_start, idx - 1)}%}`)
+              );
             }
-
           } else {
             if (isNonWhiteSpaceChar(char)) {
               if (!swig_tag_name_begin && !swig_tag_name_end) {
@@ -201,7 +203,7 @@ class PostRenderEscape {
             }
           }
         } else if (state === STATE_SWIG_VAR) {
-          if (char === '"' || char === '\'') {
+          if (char === '"' || char === "'") {
             if (swig_string_quote === '') {
               swig_string_quote = char;
             } else if (swig_string_quote === char) {
@@ -218,7 +220,8 @@ class PostRenderEscape {
             idx++;
             state = STATE_PLAINTEXT;
           }
-        } else if (state === STATE_SWIG_COMMENT) { // From swig back to plain text
+        } else if (state === STATE_SWIG_COMMENT) {
+          // From swig back to plain text
           if (char === '#' && next_char === '}') {
             idx++;
             state = STATE_PLAINTEXT;
@@ -245,7 +248,13 @@ class PostRenderEscape {
 
             if (swig_full_tag_found && swig_full_tag_end_buffer.includes(`end${swig_tag_name}`)) {
               state = STATE_PLAINTEXT;
-              pushAndReset(PostRenderEscape.escapeContent(this.stored, 'swig', `{%${str.slice(swig_full_tag_start_start, swig_full_tag_start_end)}%}${str.slice(buffer_start, idx)}{%${swig_full_tag_end_buffer}%}`));
+              pushAndReset(
+                PostRenderEscape.escapeContent(
+                  this.stored,
+                  'swig',
+                  `{%${str.slice(swig_full_tag_start_start, swig_full_tag_start_end)}%}${str.slice(buffer_start, idx)}{%${swig_full_tag_end_buffer}%}`
+                )
+              );
               idx = _idx;
               swig_full_tag_end_buffer = '';
             }
@@ -292,18 +301,27 @@ const prepareFrontMatter = (data: any, jsonMode: boolean): Record<string, string
   for (const [key, item] of Object.entries(data)) {
     if (moment.isMoment(item)) {
       data[key] = item.utc().format('YYYY-MM-DD HH:mm:ss');
-    } else if (moment.isDate(item)) {
+    } else if (isDate(item)) {
       data[key] = moment.utc(item).format('YYYY-MM-DD HH:mm:ss');
     } else if (typeof item === 'string') {
-      if (jsonMode || item.includes(':') || item.startsWith('#') || item.startsWith('!!')
-      || item.includes('{') || item.includes('}') || item.includes('[') || item.includes(']')
-      || item.includes('\'') || item.includes('"')) data[key] = `"${item.replace(/"/g, '\\"')}"`;
+      if (
+        jsonMode ||
+        item.includes(':') ||
+        item.startsWith('#') ||
+        item.startsWith('!!') ||
+        item.includes('{') ||
+        item.includes('}') ||
+        item.includes('[') ||
+        item.includes(']') ||
+        item.includes("'") ||
+        item.includes('"')
+      )
+        data[key] = `"${item.replace(/"/g, '\\"')}"`;
     }
   }
 
   return data;
 };
-
 
 const removeExtname = (str: string) => {
   return str.substring(0, str.length - extname(str).length);
@@ -316,7 +334,7 @@ const createAssetFolder = (path: string, assetFolder: boolean) => {
 
   if (basename(target) === 'index') return Promise.resolve();
 
-  return exists(target).then(exist => {
+  return exists(target).then((exist) => {
     if (!exist) return mkdirs(target);
   });
 };
@@ -344,7 +362,11 @@ class Post {
 
   create(data: PostData, callback?: NodeJSLikeCallback<any>): Promise<Result>;
   create(data: PostData, replace: boolean, callback?: NodeJSLikeCallback<any>): Promise<Result>;
-  create(data: PostData, replace: boolean | (NodeJSLikeCallback<any>), callback?: NodeJSLikeCallback<any>): Promise<Result> {
+  create(
+    data: PostData,
+    replace: boolean | NodeJSLikeCallback<any>,
+    callback?: NodeJSLikeCallback<any>
+  ): Promise<Result> {
     if (!callback && typeof replace === 'function') {
       callback = replace;
       replace = false;
@@ -364,25 +386,27 @@ class Post {
         context: ctx
       }),
       this._renderScaffold(data)
-    ]).spread((path: string, content: string) => {
-      const result = { path, content };
+    ])
+      .spread((path: string, content: string) => {
+        const result = { path, content };
 
-      return Promise.all<void, void | string>([
-        // Write content to file
-        writeFile(path, content),
-        // Create asset folder
-        createAssetFolder(path, config.post_asset_folder)
-      ]).then(() => {
-        ctx.emit('new', result);
-        return result;
-      });
-    }).asCallback(callback);
+        return Promise.all<void, void | string>([
+          // Write content to file
+          writeFile(path, content),
+          // Create asset folder
+          createAssetFolder(path, config.post_asset_folder)
+        ]).then(() => {
+          ctx.emit('new', result);
+          return result;
+        });
+      })
+      .asCallback(callback);
   }
 
   _getScaffold(layout: string) {
     const ctx = this.context;
 
-    return ctx.scaffold.get(layout).then(result => {
+    return ctx.scaffold.get(layout).then((result) => {
       if (result != null) return result;
       return ctx.scaffold.get('normal');
     });
@@ -392,44 +416,55 @@ class Post {
     const { tag } = this.context.extend;
     let splitted: ReturnType<typeof yfmSplit>;
 
-    return this._getScaffold(data.layout).then(scaffold => {
-      splitted = yfmSplit(scaffold);
-      const jsonMode = splitted.separator.startsWith(';');
-      const frontMatter = prepareFrontMatter({ ...data }, jsonMode);
+    return this._getScaffold(data.layout)
+      .then((scaffold) => {
+        splitted = yfmSplit(scaffold);
+        const jsonMode = splitted.separator.startsWith(';');
+        const frontMatter = prepareFrontMatter({ ...data }, jsonMode);
 
-      return tag.render(splitted.data, frontMatter);
-    }).then(frontMatter => {
-      const { separator } = splitted;
-      const jsonMode = separator.startsWith(';');
+        return tag.render(splitted.data, frontMatter);
+      })
+      .then((frontMatter) => {
+        const { separator } = splitted;
+        const jsonMode = separator.startsWith(';');
 
-      // Parse front-matter
-      let obj = jsonMode ? JSON.parse(`{${frontMatter}}`) : load(frontMatter);
+        // Parse front-matter
+        let obj = jsonMode ? JSON.parse(`{${frontMatter}}`) : load(frontMatter);
 
-      obj = deepMerge(obj, Object.fromEntries(Object.entries(data).filter(([key, value]) => !preservedKeys.includes(key) && value != null)));
+        obj = deepMerge(
+          obj,
+          Object.fromEntries(
+            Object.entries(data).filter(([key, value]) => !preservedKeys.includes(key) && value != null)
+          )
+        );
 
-      let content = '';
-      // Prepend the separator
-      if (splitted.prefixSeparator) content += `${separator}\n`;
+        let content = '';
+        // Prepend the separator
+        if (splitted.prefixSeparator) content += `${separator}\n`;
 
-      content += yfmStringify(obj, {
-        mode: jsonMode ? 'json' : ''
+        content += yfmStringify(obj, {
+          mode: jsonMode ? 'json' : ''
+        });
+
+        // Concat content
+        content += splitted.content;
+
+        if (data.content) {
+          content += `\n${data.content}`;
+        }
+
+        return content;
       });
-
-      // Concat content
-      content += splitted.content;
-
-      if (data.content) {
-        content += `\n${data.content}`;
-      }
-
-      return content;
-    });
   }
 
   publish(data: PostData, replace?: boolean): Promise<Result>;
   publish(data: PostData, callback?: NodeJSLikeCallback<Result>): Promise<Result>;
   publish(data: PostData, replace: boolean, callback?: NodeJSLikeCallback<Result>): Promise<Result>;
-  publish(data: PostData, replace?: boolean | NodeJSLikeCallback<Result>, callback?: NodeJSLikeCallback<Result>): Promise<Result> {
+  publish(
+    data: PostData,
+    replace?: boolean | NodeJSLikeCallback<Result>,
+    callback?: NodeJSLikeCallback<Result>
+  ): Promise<Result> {
     if (!callback && typeof replace === 'function') {
       callback = replace;
       replace = false;
@@ -449,37 +484,44 @@ class Post {
     data.layout = (data.layout || config.default_layout).toLowerCase();
 
     // Find the draft
-    return listDir(draftDir).then(list => {
-      const item = list.find(item => regex.test(item));
-      if (!item) throw new Error(`Draft "${slug}" does not exist.`);
+    return listDir(draftDir)
+      .then((list) => {
+        const item = list.find((item) => regex.test(item));
+        if (!item) throw new Error(`Draft "${slug}" does not exist.`);
 
-      // Read the content
-      src = join(draftDir, item);
-      return readFile(src);
-    }).then(content => {
-      // Create post
-      Object.assign(data, yfmParse(content));
-      data.content = data._content;
-      data._content = undefined;
+        // Read the content
+        src = join(draftDir, item);
+        return readFile(src);
+      })
+      .then((content) => {
+        // Create post
+        Object.assign(data, yfmParse(content));
+        data.content = data._content;
+        data._content = undefined;
 
-      return this.create(data, replace as boolean);
-    }).then(post => {
-      result.path = post.path;
-      result.content = post.content;
-      return unlink(src);
-    }).then(() => { // Remove the original draft file
-      if (!config.post_asset_folder) return;
+        return this.create(data, replace as boolean);
+      })
+      .then((post) => {
+        result.path = post.path;
+        result.content = post.content;
+        return unlink(src);
+      })
+      .then(() => {
+        // Remove the original draft file
+        if (!config.post_asset_folder) return;
 
-      // Copy assets
-      const assetSrc = removeExtname(src);
-      const assetDest = removeExtname(result.path);
+        // Copy assets
+        const assetSrc = removeExtname(src);
+        const assetDest = removeExtname(result.path);
 
-      return exists(assetSrc).then(exist => {
-        if (!exist) return;
+        return exists(assetSrc).then((exist) => {
+          if (!exist) return;
 
-        return copyDir(assetSrc, assetDest).then(() => rmdir(assetSrc));
-      });
-    }).thenReturn(result).asCallback(callback);
+          return copyDir(assetSrc, assetDest).then(() => rmdir(assetSrc));
+        });
+      })
+      .thenReturn(result)
+      .asCallback(callback);
   }
 
   render(source: string, data: RenderData = {}, callback?: NodeJSLikeCallback<never>) {
@@ -504,20 +546,23 @@ class Post {
     const isPost = !data.source || ['html', 'htm'].includes(ctx.render.getOutput(data.source));
 
     if (!isPost) {
-      return promise.then(content => {
-        data.content = content;
-        ctx.log.debug('Rendering file: %s', picocolors.magenta(source));
+      return promise
+        .then((content) => {
+          data.content = content;
+          ctx.log.debug('Rendering file: %s', picocolors.magenta(source));
 
-        return ctx.render.render({
-          text: data.content,
-          path: source,
-          engine: data.engine,
-          toString: true
-        });
-      }).then(content => {
-        data.content = content;
-        return data;
-      }).asCallback(callback);
+          return ctx.render.render({
+            text: data.content,
+            path: source,
+            engine: data.engine,
+            toString: true
+          });
+        })
+        .then((content) => {
+          data.content = content;
+          return data;
+        })
+        .asCallback(callback);
     }
 
     // disable Nunjucks when the renderer specify that.
@@ -528,50 +573,57 @@ class Post {
 
     const cacheObj = new PostRenderEscape();
 
-    return promise.then(content => {
-      data.content = content;
-      // Run "before_post_render" filters
-      return ctx.execFilter('before_post_render', data, { context: ctx });
-    }).then(() => {
-      // Escape all comments to avoid conflict with Nunjucks and code block
-      data.content = cacheObj.escapeCodeBlocks(data.content);
-      // Escape all Nunjucks/Swig tags
-      let hasSwigTag = true;
-      if (disableNunjucks === false) {
-        hasSwigTag = rSwigTag.test(data.content);
-        if (hasSwigTag) {
-          data.content = cacheObj.escapeAllSwigTags(data.content);
+    return promise
+      .then((content) => {
+        data.content = content;
+        // Run "before_post_render" filters
+        return ctx.execFilter('before_post_render', data, { context: ctx });
+      })
+      .then(() => {
+        // Escape all comments to avoid conflict with Nunjucks and code block
+        data.content = cacheObj.escapeCodeBlocks(data.content);
+        // Escape all Nunjucks/Swig tags
+        let hasSwigTag = true;
+        if (disableNunjucks === false) {
+          hasSwigTag = rSwigTag.test(data.content);
+          if (hasSwigTag) {
+            data.content = cacheObj.escapeAllSwigTags(data.content);
+          }
         }
-      }
 
-      const options: { highlight?: boolean; } = data.markdown || {};
-      if (!config.syntax_highlighter) options.highlight = null;
+        const options: { highlight?: boolean } = data.markdown || {};
+        if (!config.syntax_highlighter) options.highlight = null;
 
-      ctx.log.debug('Rendering post: %s', picocolors.magenta(source));
-      // Render with markdown or other renderer
-      return ctx.render.render({
-        text: data.content,
-        path: source,
-        engine: data.engine,
-        toString: true,
-        onRenderEnd(content) {
-          // Replace cache data with real contents
-          data.content = cacheObj.restoreAllSwigTags(content);
+        ctx.log.debug('Rendering post: %s', picocolors.magenta(source));
+        // Render with markdown or other renderer
+        return ctx.render.render(
+          {
+            text: data.content,
+            path: source,
+            engine: data.engine,
+            toString: true,
+            onRenderEnd(content) {
+              // Replace cache data with real contents
+              data.content = cacheObj.restoreAllSwigTags(content);
 
-          // Return content after replace the placeholders
-          if (disableNunjucks || !hasSwigTag) return data.content;
+              // Return content after replace the placeholders
+              if (disableNunjucks || !hasSwigTag) return data.content;
 
-          // Render with Nunjucks if there are Swig tags
-          return tag.render(data.content, data);
-        }
-      }, options);
-    }).then(content => {
-      data.content = cacheObj.restoreComments(content);
-      data.content = cacheObj.restoreCodeBlocks(data.content);
+              // Render with Nunjucks if there are Swig tags
+              return tag.render(data.content, data);
+            }
+          },
+          options
+        );
+      })
+      .then((content) => {
+        data.content = cacheObj.restoreComments(content);
+        data.content = cacheObj.restoreCodeBlocks(data.content);
 
-      // Run "after_post_render" filters
-      return ctx.execFilter('after_post_render', data, { context: ctx });
-    }).asCallback(callback);
+        // Run "after_post_render" filters
+        return ctx.execFilter('after_post_render', data, { context: ctx });
+      })
+      .asCallback(callback);
   }
 }
 
