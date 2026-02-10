@@ -2,8 +2,8 @@ import { exists, createReadStream } from 'hexo-fs';
 import Promise from 'bluebird';
 import { extname } from 'path';
 import { magenta } from 'picocolors';
-import type Hexo from '../../hexo';
-import type { AssetSchema, BaseGeneratorReturn } from '../../types';
+import type Hexo from '../../hexo/index.js';
+import type { AssetSchema, BaseGeneratorReturn } from '../../types.js';
 import type Document from 'warehouse/dist/document';
 
 interface AssetData {
@@ -15,13 +15,15 @@ interface AssetGenerator extends BaseGeneratorReturn {
   data: {
     modified: boolean;
     data?: () => any;
-  }
+  };
 }
 
 const process = (name: string, ctx: Hexo) => {
-  return Promise.filter(ctx.model(name).toArray(), (asset: Document<AssetSchema>) => exists(asset.source).tap(exist => {
-    if (!exist) return asset.remove();
-  })).map((asset: Document<AssetSchema>) => {
+  return Promise.filter(ctx.model(name).toArray(), (asset: Document<AssetSchema>) =>
+    exists(asset.source).tap((exist) => {
+      if (!exist) return asset.remove();
+    })
+  ).map((asset: Document<AssetSchema>) => {
     const { source } = asset;
     let { path } = asset;
     const data: AssetData = {
@@ -34,12 +36,15 @@ const process = (name: string, ctx: Hexo) => {
 
       path = `${filename}.${ctx.render.getOutput(path)}`;
 
-      data.data = () => ctx.render.render({
-        path: source,
-        toString: true
-      }).catch((err: Error) => {
-        ctx.log.error({err}, 'Asset render failed: %s', magenta(path));
-      });
+      data.data = () =>
+        ctx.render
+          .render({
+            path: source,
+            toString: true
+          })
+          .catch((err: Error) => {
+            ctx.log.error({ err }, 'Asset render failed: %s', magenta(path));
+          });
     } else {
       data.data = () => createReadStream(source);
     }
@@ -49,10 +54,7 @@ const process = (name: string, ctx: Hexo) => {
 };
 
 function assetGenerator(this: Hexo): Promise<AssetGenerator[]> {
-  return Promise.all([
-    process('Asset', this),
-    process('PostAsset', this)
-  ]).then(data => [].concat(...data));
+  return Promise.all([process('Asset', this), process('PostAsset', this)]).then((data) => [].concat(...data));
 }
 
 export default assetGenerator;

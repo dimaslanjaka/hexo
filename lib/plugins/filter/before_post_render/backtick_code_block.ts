@@ -1,8 +1,9 @@
-import type { HighlightOptions } from '../../../extend/syntax_highlight';
-import type Hexo from '../../../hexo';
-import type { RenderData } from '../../../types';
+import type { HighlightOptions } from '../../../extend/syntax_highlight.js';
+import type Hexo from '../../../hexo/index.js';
+import type { RenderData } from '../../../types.js';
 
-const rBacktick = /^((?:(?:[^\S\r\n]*>){0,3}|[-*+]|[0-9]+\.)[^\S\r\n]*)(`{3,}|~{3,})[^\S\r\n]*((?:.*?[^`\s])?)[^\S\r\n]*\n((?:[\s\S]*?\n)?)(?:(?:[^\S\r\n]*>){0,3}[^\S\r\n]*)\2[^\S\r\n]?(\n+|$)/gm;
+const rBacktick =
+  /^((?:(?:[^\S\r\n]*>){0,3}|[-*+]|[0-9]+\.)[^\S\r\n]*)(`{3,}|~{3,})[^\S\r\n]*((?:.*?[^`\s])?)[^\S\r\n]*\n((?:[\s\S]*?\n)?)(?:(?:[^\S\r\n]*>){0,3}[^\S\r\n]*)\2[^\S\r\n]?(\n+|$)/gm;
 const rAllOptions = /([^\s]+)\s+(.+?)\s+(https?:\/\/\S+|\/\S+)\s*(.+)?/;
 const rLangCaption = /([^\s]+)\s*(.+)?/;
 const rCommentEscape = /(<!--[\s\S]*?-->)/g;
@@ -13,8 +14,11 @@ const escapeSwigTag = (str: string) => str.replace(/{/g, '&#123;').replace(/}/g,
 function parseArgs(args: string) {
   const matches = [];
 
-  let match: RegExpExecArray | null, language_attr: boolean,
-    line_number: boolean, line_threshold: number, wrap: boolean;
+  let match: RegExpExecArray | null,
+    language_attr: boolean,
+    line_number: boolean,
+    line_threshold: number,
+    wrap: boolean;
   let enableHighlight = true;
   while ((match = rAdditionalOptions.exec(args)) !== null) {
     matches.push(match[1]);
@@ -49,7 +53,8 @@ function parseArgs(args: string) {
             let a = +cur.slice(0, hyphen);
             let b = +cur.slice(hyphen + 1);
             if (Number.isNaN(a) || Number.isNaN(b)) continue;
-            if (b < a) { // switch a & b
+            if (b < a) {
+              // switch a & b
               [a, b] = [b, a];
             }
 
@@ -81,11 +86,15 @@ function parseArgs(args: string) {
   };
 }
 
-export default (ctx: Hexo): (data: RenderData) => void => {
+export default (ctx: Hexo): ((data: RenderData) => void) => {
   return function backtickCodeBlock(data: RenderData): void {
     const dataContent = data.content;
 
-    if ((!dataContent.includes('```') && !dataContent.includes('~~~')) || !ctx.extend.highlight.query(ctx.config.syntax_highlighter)) return;
+    if (
+      (!dataContent.includes('```') && !dataContent.includes('~~~')) ||
+      !ctx.extend.highlight.query(ctx.config.syntax_highlighter)
+    )
+      return;
     // get all comment starts and ends
     const commentStarts = [];
     const commentEnds = [];
@@ -105,7 +114,11 @@ export default (ctx: Hexo): (data: RenderData) => void => {
       while (commentIndex < commentStarts.length && commentEnds[commentIndex] <= codeBlockStart) {
         commentIndex++;
       }
-      if (commentIndex < commentStarts.length && commentStarts[commentIndex] < codeBlockStart && commentEnds[commentIndex] > codeBlockEnd) {
+      if (
+        commentIndex < commentStarts.length &&
+        commentStarts[commentIndex] < codeBlockStart &&
+        commentEnds[commentIndex] > codeBlockEnd
+      ) {
         // the code block is nested in a comment, return escaped content directly
         return escapeSwigTag($0);
       }
@@ -164,11 +177,7 @@ export default (ctx: Hexo): (data: RenderData) => void => {
         args: [content, options]
       });
 
-      return start
-        + '<hexoPostRenderCodeBlock>'
-        + escapeSwigTag(content)
-        + '</hexoPostRenderCodeBlock>'
-        + end;
+      return start + '<hexoPostRenderCodeBlock>' + escapeSwigTag(content) + '</hexoPostRenderCodeBlock>' + end;
     });
   };
 };

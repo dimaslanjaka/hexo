@@ -1,5 +1,5 @@
 import { url_for, escapeHTML } from 'hexo-util';
-import type Hexo from '../../hexo';
+import type Hexo from '../../hexo/index.js';
 
 /**
  * Asset link tag
@@ -14,7 +14,7 @@ const assetLink = (ctx: Hexo) => {
     const slug = args.shift();
     if (!slug) return;
 
-    const asset = PostAsset.findOne({post: this._id, slug});
+    const asset = PostAsset.findOne({ post: this._id, slug });
     if (!asset) return;
 
     let escape = args[args.length - 1];

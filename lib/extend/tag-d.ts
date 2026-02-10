@@ -1,4 +1,4 @@
-import type { NodeJSLikeCallback } from '../types';
+import type { NodeJSLikeCallback } from '../types.js';
 export interface ExtendedTagProperty {
 
   /**

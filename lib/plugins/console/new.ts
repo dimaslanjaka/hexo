@@ -1,7 +1,7 @@
 import tildify from 'tildify';
 import { magenta } from 'picocolors';
 import { basename } from 'path';
-import Hexo from '../../hexo';
+import Hexo from '../../hexo/index.js';
 import type Promise from 'bluebird';
 
 const reservedKeys = {
@@ -22,14 +22,14 @@ const reservedKeys = {
 };
 
 interface NewArgs {
-  _?: string[]
-  p?: string
-  path?: string
-  s?: string
-  slug?: string
-  r?: boolean
-  replace?: boolean
-  [key: string]: any
+  _?: string[];
+  p?: string;
+  path?: string;
+  s?: string;
+  slug?: string;
+  r?: boolean;
+  replace?: boolean;
+  [key: string]: any;
 }
 
 function newConsole(this: Hexo, args: NewArgs): Promise<void> {
@@ -59,7 +59,7 @@ function newConsole(this: Hexo, args: NewArgs): Promise<void> {
     if (!reservedKeys[key]) data[key] = args[key];
   }
 
-  return this.post.create(data, args.r || args.replace).then(post => {
+  return this.post.create(data, args.r || args.replace).then((post) => {
     this.log.info('Created: %s', magenta(tildify(post.path)));
   });
 }

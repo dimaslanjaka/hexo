@@ -3,8 +3,8 @@ import moment from 'moment';
 import Promise from 'bluebird';
 import { createSha1Hash, Permalink } from 'hexo-util';
 import { ensurePath } from 'hexo-fs';
-import type Hexo from '../../hexo';
-import type { PostSchema } from '../../types';
+import type Hexo from '../../hexo/index.js';
+import type { PostSchema } from '../../types.js';
 
 let permalink: Permalink;
 
@@ -59,8 +59,10 @@ function newPostPathFilter(this: Hexo, data: Partial<PostSchema> = {}, replace?:
       default: {
         const date = moment(data.date || Date.now());
         const keys = Object.keys(data);
-        const hash = createSha1Hash().update(slug + date.unix().toString())
-          .digest('hex').slice(0, 12);
+        const hash = createSha1Hash()
+          .update(slug + date.unix().toString())
+          .digest('hex')
+          .slice(0, 12);
 
         const filenameData = {
           year: date.format('YYYY'),
@@ -77,10 +79,13 @@ function newPostPathFilter(this: Hexo, data: Partial<PostSchema> = {}, replace?:
           if (!reservedKeys[key]) filenameData[key] = data[key];
         }
 
-        target = join(postDir, permalink.stringify({
-          ...permalinkDefaults,
-          ...filenameData
-        }));
+        target = join(
+          postDir,
+          permalink.stringify({
+            ...permalinkDefaults,
+            ...filenameData
+          })
+        );
       }
     }
   } else {

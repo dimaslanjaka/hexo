@@ -1,5 +1,5 @@
-import type { Config } from './index-d';
-export type HexoLocalsFunc = import('../hexo').default['_generateLocals'];
+import type { Config } from './index-d.js';
+export type HexoLocalsFunc = import('../hexo/index.js').default['_generateLocals'];
 export type HexoLocalsData = {
   [key: string]: any;
   page: {

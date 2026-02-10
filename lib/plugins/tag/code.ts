@@ -1,8 +1,8 @@
 // Based on: https://raw.github.com/imathis/octopress/master/plugins/code_block.rb
 
 import { escapeHTML, htmlTag } from 'hexo-util';
-import type Hexo from '../../hexo';
-import type { HighlightOptions } from '../../extend/syntax_highlight';
+import type Hexo from '../../hexo/index.js';
+import type { HighlightOptions } from '../../extend/syntax_highlight.js';
 
 const rCaptionUrlTitle = /(\S[\S\s]*)\s+(https?:\/\/\S+)\s+(.+)/i;
 const rCaptionUrl = /(\S[\S\s]*)\s+(https?:\/\/\S+)/i;
@@ -25,13 +25,12 @@ const rCaption = /\S[\S\s]*/;
  * Example: `mark:1,4-7,10` will mark line 1, 4 to 7 and 10.
  * @param {Object} wrap Wrap the code block in <table>, value must be a boolean
  * @returns {String} Code snippet with code highlighting
-*/
+ */
 
 function parseArgs(args: string[]): HighlightOptions {
   const _else = [];
   const len = args.length;
-  let lang: string, language_attr: boolean,
-    line_number: boolean, line_threshold: number, wrap: boolean;
+  let lang: string, language_attr: boolean, line_number: boolean, line_threshold: number, wrap: boolean;
   let firstLine = 1;
   const mark = [];
   for (let i = 0; i < len; i++) {
@@ -68,7 +67,8 @@ function parseArgs(args: string[]): HighlightOptions {
             let a = +cur.slice(0, hyphen);
             let b = +cur.slice(hyphen + 1);
             if (Number.isNaN(a) || Number.isNaN(b)) continue;
-            if (b < a) { // switch a & b
+            if (b < a) {
+              // switch a & b
               [a, b] = [b, a];
             }
 
@@ -92,7 +92,8 @@ function parseArgs(args: string[]): HighlightOptions {
 
   const arg = _else.join(' ');
   // eslint-disable-next-line one-var
-  let match, caption = '';
+  let match,
+    caption = '';
 
   if ((match = arg.match(rCaptionUrlTitle)) != null) {
     caption = htmlTag('span', {}, match[1]) + htmlTag('a', { href: match[2] }, match[3]);
@@ -114,36 +115,36 @@ function parseArgs(args: string[]): HighlightOptions {
   };
 }
 
-const codeTag = (ctx: Hexo) => function codeTag(args: string[], content: string) {
+const codeTag = (ctx: Hexo) =>
+  function codeTag(args: string[], content: string) {
+    // If neither highlight.js nor prism.js is enabled, return escaped code directly
+    if (!ctx.extend.highlight.query(ctx.config.syntax_highlighter)) {
+      return `<pre><code>${escapeHTML(content)}</code></pre>`;
+    }
 
-  // If neither highlight.js nor prism.js is enabled, return escaped code directly
-  if (!ctx.extend.highlight.query(ctx.config.syntax_highlighter)) {
-    return `<pre><code>${escapeHTML(content)}</code></pre>`;
-  }
+    let index: number;
+    let enableHighlight = true;
 
-  let index: number;
-  let enableHighlight = true;
+    if ((index = args.findIndex((item) => item.startsWith('highlight:'))) !== -1) {
+      const arg = args[index];
+      const highlightStr = arg.slice(10);
+      enableHighlight = highlightStr === 'true';
+      args.splice(index, 1);
+    }
 
-  if ((index = args.findIndex(item => item.startsWith('highlight:'))) !== -1) {
-    const arg = args[index];
-    const highlightStr = arg.slice(10);
-    enableHighlight = highlightStr === 'true';
-    args.splice(index, 1);
-  }
+    // If 'highlight: false' is given, return escaped code directly
+    if (!enableHighlight) {
+      return `<pre><code>${escapeHTML(content)}</code></pre>`;
+    }
 
-  // If 'highlight: false' is given, return escaped code directly
-  if (!enableHighlight) {
-    return `<pre><code>${escapeHTML(content)}</code></pre>`;
-  }
+    const options = parseArgs(args);
+    options.lines_length = content.split('\n').length;
+    content = ctx.extend.highlight.exec(ctx.config.syntax_highlighter, {
+      context: ctx,
+      args: [content, options]
+    });
 
-  const options = parseArgs(args);
-  options.lines_length = content.split('\n').length;
-  content = ctx.extend.highlight.exec(ctx.config.syntax_highlighter, {
-    context: ctx,
-    args: [content, options]
-  });
-
-  return content.replace(/{/g, '&#123;').replace(/}/g, '&#125;');
-};
+    return content.replace(/{/g, '&#123;').replace(/}/g, '&#125;');
+  };
 
 export default codeTag;

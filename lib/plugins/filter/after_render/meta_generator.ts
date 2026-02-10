@@ -1,4 +1,4 @@
-import type Hexo from '../../../hexo';
+import type Hexo from '../../../hexo/index.js';
 
 let NEED_INJECT = true;
 let HAS_CHECKED = false;
@@ -9,8 +9,7 @@ function hexoMetaGeneratorInject(this: Hexo, data: string): string {
 
   if (!HAS_CHECKED) {
     HAS_CHECKED = true;
-    if (!this.config.meta_generator
-    || data.match(/<meta\s+(?:[^<>/]+\s)?name=['"]generator['"]/i)) {
+    if (!this.config.meta_generator || data.match(/<meta\s+(?:[^<>/]+\s)?name=['"]generator['"]/i)) {
       NEED_INJECT = false;
       return;
     }

@@ -1,18 +1,18 @@
 import { htmlTag, url_for } from 'hexo-util';
-import type Hexo from '../../hexo';
+import type Hexo from '../../hexo/index.js';
 
-const rUrl = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[.!/\\w]*))?)/;
+const rUrl =
+  /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[.!/\\w]*))?)/;
 const rMetaDoubleQuote = /"?([^"]+)?"?/;
 const rMetaSingleQuote = /'?([^']+)?'?/;
 
 /**
-* Image tag
-*
-* Syntax:
-*   {% img [class names] /path/to/image [width] [height] [title text [alt text]] %}
-*/
+ * Image tag
+ *
+ * Syntax:
+ *   {% img [class names] /path/to/image [width] [height] [title text [alt text]] %}
+ */
 const img = (ctx: Hexo) => {
-
   return function imgTag(args: string[]) {
     const classes = [];
     let src, width, height, title, alt;

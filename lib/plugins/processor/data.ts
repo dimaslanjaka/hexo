@@ -1,7 +1,7 @@
 import { Pattern } from 'hexo-util';
 import { extname } from 'path';
-import type Hexo from '../../hexo';
-import type { _File } from '../../box';
+import type Hexo from '../../hexo/index.js';
+import type { _File } from '../../box/index.js';
 
 const dataProcessor = (ctx: Hexo) => ({
   pattern: new Pattern('_data/*path'),
@@ -24,7 +24,7 @@ const dataProcessor = (ctx: Hexo) => ({
       return;
     }
 
-    return file.render().then(result => {
+    return file.render().then((result) => {
       if (result == null) return;
 
       return Data.save({
@@ -33,7 +33,6 @@ const dataProcessor = (ctx: Hexo) => ({
       });
     });
   }
-
 });
 
 export default dataProcessor;

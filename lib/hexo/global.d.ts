@@ -1,4 +1,4 @@
-import type Hexo from './index';
+import type Hexo from './index.js';
 
 // Node.js internal APIs module augmentation for TypeScript
 declare module 'module' {

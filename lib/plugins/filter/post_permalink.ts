@@ -1,7 +1,7 @@
 import { createSha1Hash, Permalink, slugize } from 'hexo-util';
 import { basename } from 'path';
-import type Hexo from '../../hexo';
-import type { PostSchema } from '../../types';
+import type Hexo from '../../hexo/index.js';
+import type { PostSchema } from '../../types.js';
 
 let permalink: Permalink;
 
@@ -19,12 +19,12 @@ function postPermalinkFilter(this: Hexo, data: PostSchema): string {
     return __permalink;
   }
 
-  const hash
-    = slug && date
+  const hash =
+    slug && date
       ? createSha1Hash()
-        .update(slug + date.unix().toString())
-        .digest('hex')
-        .slice(0, 12)
+          .update(slug + date.unix().toString())
+          .digest('hex')
+          .slice(0, 12)
       : null;
 
   const relativeSourcePath = data.full_source

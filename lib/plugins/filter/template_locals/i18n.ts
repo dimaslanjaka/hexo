@@ -1,5 +1,5 @@
 import { Pattern } from 'hexo-util';
-import { HexoLocalsData } from '../../../hexo/locals-d';
+import { HexoLocalsData } from '../../../hexo/locals-d.js';
 
 function i18nLocalsFilter(locals: HexoLocalsData) {
   const { i18n } = this.theme;
