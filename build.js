@@ -28,6 +28,9 @@ const externalDeps = [...Object.keys(packageJson.dependencies), ...Object.keys(p
  */
 function buildTsup() {
   const baseConfig = defineConfig({
+    define: {
+      __VERSION__: JSON.stringify(packageJson.version)
+    },
     entry: ['lib/**/*.ts'],
     splitting: true,
     treeshake: true,
@@ -35,7 +38,8 @@ function buildTsup() {
     shims: true,
     sourcemap: true,
     removeNodeProtocol: true,
-    clean: false,
+    clean: true,
+    // skipNodeModulesBundle: true,
     external: externalDeps,
     format: ['esm', 'cjs'],
     dts: true,
@@ -47,7 +51,19 @@ function buildTsup() {
         default:
           return { js: '.js', dts: '.d.ts' };
       }
-    }
+    },
+    plugins: [
+      {
+        name: 'fix-cjs',
+        renderChunk(_, chunk) {
+          if (this.format === 'cjs') {
+            // replace `from '...js'` with `from '...cjs'` for cjs imports & exports
+            const code = chunk.code.replace(/from ['"](.*)\.js['"]/g, "from '$1.cjs'");
+            return { code };
+          }
+        }
+      }
+    ]
   });
   return build(baseConfig);
 }
