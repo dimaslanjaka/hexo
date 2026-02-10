@@ -1,6 +1,6 @@
 import { join, sep, resolve } from 'path';
 import { writeFile, unlink, mkdirs, rmdir } from 'hexo-fs';
-import { makeRe } from 'micromatch';
+import micromatch from 'micromatch';
 import loadConfig from '../../../lib/hexo/load_config';
 import defaultConfig from '../../../lib/hexo/default_config';
 import Hexo from '../../../lib/hexo';
@@ -91,10 +91,7 @@ describe('Load config', () => {
   });
 
   it('handle trailing "/" of url', async () => {
-    const content = [
-      'root: foo',
-      'url: https://hexo.io/'
-    ].join('\n');
+    const content = ['root: foo', 'url: https://hexo.io/'].join('\n');
 
     try {
       await writeFile(hexo.config_path, content);
@@ -171,7 +168,7 @@ describe('Load config', () => {
       hexo.theme.base.should.eql(hexo.theme_dir);
       const ignore = ['**/themes/*/node_modules/**', '**/themes/*/.git/**'];
       hexo.theme.ignore.should.eql(ignore);
-      hexo.theme.options.ignored.should.eql(ignore.map(item => makeRe(item)));
+      hexo.theme.options.ignored.should.eql(ignore.map((item) => micromatch.makeRe(item)));
     } finally {
       await rmdir(join(hexo.base_dir, 'themes', 'test'));
       await unlink(hexo.config_path);
@@ -189,7 +186,7 @@ describe('Load config', () => {
       hexo.theme.base.should.eql(hexo.theme_dir);
       const ignore = ['**/node_modules/hexo-theme-*/node_modules/**', '**/node_modules/hexo-theme-*/.git/**'];
       hexo.theme.ignore.should.eql(ignore);
-      hexo.theme.options.ignored.should.eql(ignore.map(item => makeRe(item)));
+      hexo.theme.options.ignored.should.eql(ignore.map((item) => micromatch.makeRe(item)));
     } finally {
       await rmdir(join(hexo.plugin_dir, 'hexo-theme-test'));
       await unlink(hexo.config_path);
@@ -197,10 +194,7 @@ describe('Load config', () => {
   });
 
   it('merge config', async () => {
-    const content = [
-      'highlight:',
-      '  tab_replace: yoooo'
-    ].join('\n');
+    const content = ['highlight:', '  tab_replace: yoooo'].join('\n');
 
     try {
       await writeFile(hexo.config_path, content);
