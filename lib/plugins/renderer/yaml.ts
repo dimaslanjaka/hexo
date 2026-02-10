@@ -18,8 +18,9 @@ try {
   }
 }
 
-function yamlHelper(data: { text: string }) {
-  return yaml.load(escape(data.text), { schema });
+function yamlHelper<T = any>(data: { text: string }): T {
+  if (!data || !data.text) return {} as T;
+  return yaml.load(escape(data.text), { schema }) as T;
 }
 
 export default yamlHelper;
