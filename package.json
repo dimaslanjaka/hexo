@@ -912,8 +912,10 @@
     "clean": "npx --yes rimraf dist tmp/dist && npm run build",
     "eslint": "eslint lib test",
     "test": "mocha test/scripts/**/*.ts --require ts-node/register",
+    "test2": "mocha --node-option loader=ts-node/esm --node-option experimental-specifier-resolution=node test/scripts/**/*.ts",
     "test-cov": "c8 --reporter=lcovonly npm test -- --no-parallel",
-    "prepare": "husky"
+    "prepare": "husky",
+    "watch": "npx -y nodemon --watch lib --ext js,ts --exec \"npm run build\""
   },
   "files": [
     "dist/",
@@ -956,7 +958,7 @@
     "micromatch": "^4.0.8",
     "moize": "^6.1.6",
     "moment": "^2.30.1",
-    "moment-timezone": "^0.5.46",
+    "moment-timezone": "^0.6.0",
     "nunjucks": "^3.2.4",
     "picocolors": "^1.1.1",
     "pretty-hrtime": "^1.0.3",
