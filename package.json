@@ -903,7 +903,8 @@
   "scripts": {
     "prepublishOnly": "npm install && npm run clean && npm run build",
     "build:copy": "cp package.json lib/hexo/package.json",
-    "build": "node build.js && node scripts/build_exports.mjs",
+    "build:dts": "tsc --emitDeclarationOnly --declaration --outDir dist --project tsconfig.json",
+    "build": "node build.js && node scripts/build_exports.mjs && npm run build:dts && npm run build:copy",
     "clean": "npx --yes rimraf dist tmp/dist && npm run build",
     "eslint": "eslint lib test",
     "test": "mocha test/scripts/**/*.ts --require ts-node/register",
