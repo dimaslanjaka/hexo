@@ -1,14 +1,14 @@
-import { toDate, adjustDateForTimezone, isExcludedFile, isTmpFile, isHiddenFile, isMatch } from './common.js';
+import { toDate, adjustDateForTimezone, isExcludedFile, isTmpFile, isHiddenFile, isMatch } from './common';
 import Promise from 'bluebird';
 import { parse as yfm } from 'hexo-front-matter';
 import { extname, join, posix, sep } from 'path';
 import { stat, listDir } from 'hexo-fs';
 import { slugize, Pattern, Permalink } from 'hexo-util';
 import * as picocolors from 'picocolors';
-import type { _File } from '../../box/index.js';
-import type Hexo from '../../hexo/index.js';
+import type { _File } from '../../box';
+import type Hexo from '../../hexo';
 import type { Stats } from 'fs';
-import { PostAssetSchema, PostSchema } from '../../types.js';
+import { PostAssetSchema, PostSchema } from '../../types';
 import type Document from 'warehouse/dist/document';
 
 const postDir = '_posts/';
@@ -25,7 +25,7 @@ const preservedKeys = {
   hash: true
 };
 
-const postProcessor = (ctx: Hexo) => {
+export default (ctx: Hexo) => {
   return {
     pattern: new Pattern((path) => {
       if (isTmpFile(path)) return;
@@ -66,8 +66,6 @@ const postProcessor = (ctx: Hexo) => {
     }
   };
 };
-
-export default postProcessor;
 
 function processPost(ctx: Hexo, file: _File) {
   const Post = ctx.model('Post');

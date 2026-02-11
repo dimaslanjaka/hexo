@@ -1,7 +1,7 @@
-import moize from 'moize';
 import moment from 'moment-timezone';
 const { isMoment } = moment;
-import type { LocalsType } from '../../types.js';
+import moize from 'moize';
+import type { LocalsType } from '../../types';
 
 const isDate = (value: moment.MomentInput | moment.Moment): boolean =>
   typeof value === 'object' && value instanceof Date && !isNaN(value.getTime());
@@ -26,7 +26,7 @@ function toISOString(date?: string | number | Date | moment.Moment) {
     return date.toISOString();
   }
 
-  return new Date(date as string | number).toISOString();
+  return new Date(date as (string | number)).toISOString();
 }
 
 function dateHelper(this: LocalsType, date?: moment.Moment | moment.MomentInput, format?: string) {
@@ -61,9 +61,7 @@ function timeTagHelper(this: LocalsType, date?: string | number | Date | moment.
 }
 
 function getLanguage(ctx: LocalsType) {
-  let configLang = Array.isArray(ctx.config.language) ? ctx.config.language[0] : 'en';
-  if (!configLang || configLang.length === 0) configLang = 'en';
-  return ctx.page.lang || ctx.page.language || configLang;
+  return ctx.page.lang || ctx.page.language || ctx.config.language;
 }
 
 /**
@@ -87,14 +85,11 @@ function _toMomentLocale(lang?: string) {
   return lang.toLowerCase().replace('_', '-');
 }
 
-export {
-  dateHelper as date,
-  toISOString as date_xml,
-  fullDateHelper as full_date,
-  moment,
-  relativeDateHelper as relative_date,
-  timeHelper as time,
-  timeTagHelper as time_tag,
-  isDate
-};
+export {dateHelper as date};
+export {toISOString as date_xml};
+export {timeHelper as time};
+export {fullDateHelper as full_date};
+export {relativeDateHelper as relative_date};
+export {timeTagHelper as time_tag};
+export {moment};
 export const toMomentLocale = moize.shallow(_toMomentLocale);

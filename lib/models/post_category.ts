@@ -1,8 +1,8 @@
 import warehouse from 'warehouse';
-import type Hexo from '../hexo/index.js';
-import { PostCategorySchema } from '../types.js';
+import type Hexo from '../hexo';
+import { PostCategorySchema } from '../types';
 
-const postCategoryModel = (ctx: Hexo) => {
+export default (ctx: Hexo) => {
   const PostCategory = new warehouse.Schema<PostCategorySchema>({
     post_id: { type: warehouse.Schema.Types.CUID, ref: 'Post' },
     category_id: { type: warehouse.Schema.Types.CUID, ref: 'Category' }
@@ -25,5 +25,3 @@ const postCategoryModel = (ctx: Hexo) => {
 
   return PostCategory;
 };
-
-export default postCategoryModel;

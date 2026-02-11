@@ -2,15 +2,18 @@ import { stripIndent } from 'hexo-util';
 import * as picocolors from 'picocolors';
 import { Environment } from 'nunjucks';
 import Promise from 'bluebird';
-import type { NodeJSLikeCallback } from '../types.js';
-import { AsyncTagFunction, RegisterOptions, TagFunction } from './tag-d.js';
-import fs from 'fs';
-import path from 'path';
-import crypto from 'crypto';
+import type { NodeJSLikeCallback } from '../types';
 
 const rSwigRawFullBlock = /{% *raw *%}/;
 const rCodeTag = /<code[^<>]*>[\s\S]+?<\/code>/g;
 const escapeSwigTag = (str: string) => str.replace(/{/g, '&#123;').replace(/}/g, '&#125;');
+
+interface TagFunction {
+  (args: any[], content: string, callback?: NodeJSLikeCallback<any>): string | PromiseLike<string>;
+}
+interface AsyncTagFunction {
+  (args: any[], content: string): Promise<string>;
+}
 
 class NunjucksTag {
   public tags: string[];
@@ -56,7 +59,7 @@ class NunjucksTag {
     return node;
   }
 
-  run(context: any, args: any, _body: any, _callback: any) {
+  run(context, args, _body, _callback) {
     return this._run(context, args, '');
   }
 
@@ -77,14 +80,14 @@ class NunjucksBlock extends NunjucksTag {
     return new nodes.CallExtension(this, 'run', node, [body]);
   }
 
-  _parseBody(parser, _nodes?, _lexer?) {
+  _parseBody(parser, _nodes, _lexer) {
     const body = parser.parseUntilBlocks(`end${this.tags[0]}`);
 
     parser.advanceAfterBlockEnd();
     return body;
   }
 
-  run(context, args, body, _callback?) {
+  run(context, args, body, _callback) {
     return this._run(context, args, trimBody(body));
   }
 }
@@ -97,7 +100,7 @@ class NunjucksAsyncTag extends NunjucksTag {
   }
 
   run(context, args, callback) {
-    return this._run(context, args, '').then(result => {
+    return this._run(context, args, '').then((result) => {
       callback(null, result);
     }, callback);
   }
@@ -118,7 +121,7 @@ class NunjucksAsyncBlock extends NunjucksBlock {
       // body to be a function
       body = () => result || '';
 
-      this._run(context, args, trimBody(body)).then(result => {
+      this._run(context, args, trimBody(body)).then((result) => {
         callback(err, result);
       });
     });
@@ -144,7 +147,7 @@ const getContext = (lines: string[], errLine: number, location: string, type: st
 
   message.push(
     // get LINES_OF_CONTEXT lines surrounding `errLine`
-    ...getContextLineNums(1, lines.length, errLine, LINES_OF_CONTEXT).map(lnNum => {
+    ...getContextLineNums(1, lines.length, errLine, LINES_OF_CONTEXT).map((lnNum) => {
       const line = '  ' + lnNum + ' | ' + lines[lnNum - 1];
       if (lnNum === errLine) {
         return picocolors.cyan(picocolors.bold(line));
@@ -167,26 +170,10 @@ class NunjucksError extends Error {
 /**
  * Provide context for Nunjucks error
  * @param  {Error}    err Nunjucks error
- * @param  {string}   input string input for Nunjucks
+ * @param  {string}   str string input for Nunjucks
  * @return {Error}    New error object with embedded context
  */
 const formatNunjucksError = (err: Error, input: string, source = ''): Error => {
-  const errorData = `
-Source: ${source}
-Error:
-
-${err}
-
-Input:
-
-${input}
-  `;
-  const errorPath = path.join(process.cwd(), 'tmp/hexo/error', crypto.createHash('md5').update(errorData).digest('hex') + '.txt');
-  if (!fs.existsSync(path.dirname(errorPath))) {
-    fs.mkdirSync(path.dirname(errorPath), { recursive: true });
-  }
-  fs.writeFileSync(errorPath, errorData);
-  console.log('hexo error log', errorPath);
   err.message = err.message.replace('(unknown path)', source ? picocolors.magenta(source) : '');
 
   const match = err.message.match(/Line (\d+), Column \d+/);
@@ -206,6 +193,11 @@ ${input}
   return e;
 };
 
+type RegisterOptions = {
+  async?: boolean;
+  ends?: boolean;
+};
+
 /**
  * A tag allows users to quickly and easily insert snippets into their posts.
  */
@@ -219,46 +211,20 @@ class Tag {
     });
   }
 
-  /**
-   * register shortcode tag
-   * @param name shortcode tag name
-   * @param fn shortcode tag function (synchronous or asynchronous)
-   */
-  register(name: string, fn: TagFunction | AsyncTagFunction): void;
-
-  /**
-   * register shortcode tag with synchronous function callback
-   * @param name shortcode tag name
-   * @param fn synchronous function callback
-   * @param endsOrOptions register options or use endblock
-   */
-  register(name: string, fn: TagFunction, endsOrOptions: RegisterOptions | boolean): void;
-
-  /**
-   * register shortcode tag with asynchronous function callback
-   * @param name shortcode tag name
-   * @param fn asynchronous function callback
-   * @param endsOrOptions register options
-   */
-  register(name: string, fn: AsyncTagFunction, endsOrOptions: RegisterOptions | boolean): void;
-
-  /**
-   * register shortcode tag with synchronous function callback
-   * @param name shortcode tag name
-   * @param fn synchronous function callback
-   * @param endsOrOptions register options
-   */
-  register(name: string, fn: TagFunction | AsyncTagFunction, endsOrOptions?: RegisterOptions | boolean): void {
+  register(name: string, fn: TagFunction): void;
+  register(name: string, fn: TagFunction, ends: boolean): void;
+  register(name: string, fn: TagFunction, options: RegisterOptions): void;
+  register(name: string, fn: TagFunction, options?: RegisterOptions | boolean): void {
     if (!name) throw new TypeError('name is required');
     if (typeof fn !== 'function') throw new TypeError('fn must be a function');
 
-    if (endsOrOptions == null || typeof endsOrOptions === 'boolean') {
-      endsOrOptions = { ends: endsOrOptions as boolean };
+    if (options == null || typeof options === 'boolean') {
+      options = { ends: options as boolean };
     }
 
     let tag: NunjucksTag;
 
-    if (endsOrOptions.async) {
+    if (options.async) {
       let asyncFn: AsyncTagFunction;
       if (fn.length > 2) {
         asyncFn = Promise.promisify(fn);
@@ -266,12 +232,12 @@ class Tag {
         asyncFn = Promise.method(fn);
       }
 
-      if (endsOrOptions.ends) {
+      if (options.ends) {
         tag = new NunjucksAsyncBlock(name, asyncFn);
       } else {
         tag = new NunjucksAsyncTag(name, asyncFn);
       }
-    } else if (endsOrOptions.ends) {
+    } else if (options.ends) {
       tag = new NunjucksBlock(name, fn);
     } else {
       tag = new NunjucksTag(name, fn);
@@ -308,9 +274,9 @@ class Tag {
     // Get path of post from source
     const { source = '' } = options as { source?: string };
 
-    return Promise.fromCallback(cb => {
+    return Promise.fromCallback((cb) => {
       this.env.renderString(
-        str.replace(rCodeTag, s => {
+        str.replace(rCodeTag, (s) => {
           // https://hexo.io/docs/tag-plugins#Raw
           // https://mozilla.github.io/nunjucks/templating.html#raw
           // Only escape code block when there is no raw tag included
@@ -320,7 +286,7 @@ class Tag {
         cb
       );
     })
-      .catch(err => {
+      .catch((err) => {
         return Promise.reject(formatNunjucksError(err, str, source));
       })
       .asCallback(callback);

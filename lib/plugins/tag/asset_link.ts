@@ -1,5 +1,5 @@
 import { url_for, escapeHTML } from 'hexo-util';
-import type Hexo from '../../hexo/index.js';
+import type Hexo from '../../hexo';
 
 /**
  * Asset link tag
@@ -7,7 +7,7 @@ import type Hexo from '../../hexo/index.js';
  * Syntax:
  *   {% asset_link slug [title] [escape] %}
  */
-const assetLink = (ctx: Hexo) => {
+export default (ctx: Hexo) => {
   const PostAsset = ctx.model('PostAsset');
 
   return function assetLinkTag(args: string[]) {
@@ -33,5 +33,3 @@ const assetLink = (ctx: Hexo) => {
     return `<a href="${link}" title="${attrTitle}">${title}</a>`;
   };
 };
-
-export default assetLink;

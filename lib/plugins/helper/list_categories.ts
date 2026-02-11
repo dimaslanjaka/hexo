@@ -1,5 +1,5 @@
 import { url_for } from 'hexo-util';
-import type { CategorySchema, LocalsType } from '../../types.js';
+import type { CategorySchema, LocalsType } from '../../types';
 import type Query from 'warehouse/dist/query';
 import type Document from 'warehouse/dist/document';
 
@@ -34,15 +34,17 @@ function listCategoriesHelper(this: LocalsType, categories?: Query<CategorySchem
   const orderby = options.orderby || 'name';
   const order = options.order || 1;
   const showCurrent = options.show_current || false;
-  const childrenIndicator = Object.prototype.hasOwnProperty.call(options, 'children_indicator') ? options.children_indicator : false;
+  const childrenIndicator = Object.prototype.hasOwnProperty.call(options, 'children_indicator')
+    ? options.children_indicator
+    : false;
 
-  const prepareQuery = parent => {
+  const prepareQuery = (parent) => {
     const query: { parent?: any } = {};
 
     if (parent) {
       query.parent = parent;
     } else {
-      query.parent = {$exists: false};
+      query.parent = { $exists: false };
     }
 
     return (categories as Query<CategorySchema>).find(query).sort(orderby, order);

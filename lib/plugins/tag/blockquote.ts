@@ -1,8 +1,7 @@
 // Based on: https://raw.github.com/imathis/octopress/master/plugins/blockquote.rb
 
 import titlecase from 'titlecase';
-import type Hexo from '../../hexo/index.js';
-import { StoreFunctionData } from '../../types.js';
+import type Hexo from '../../hexo';
 
 const rFullCiteWithTitle = /(\S.*)\s+(https?:\/\/\S+)\s+(.+)/i;
 const rFullCite = /(\S.*)\s+(https?:\/\/\S+)/i;
@@ -57,16 +56,14 @@ const parseFooter = (args: string[], ctx: Hexo) => {
  *   {% endblockquote %}
  */
 
-const blockquoteTag = (ctx: Hexo) =>
+export default (ctx: Hexo) =>
   function blockquoteTag(args: string[], content: string) {
     const footer = parseFooter(args, ctx);
 
     let result = '<blockquote>';
-    result += ctx.render.renderSync({ text: content, engine: 'markdown' } as StoreFunctionData);
+    result += ctx.render.renderSync({ text: content, engine: 'markdown' });
     if (footer) result += `<footer>${footer}</footer>`;
     result += '</blockquote>';
 
     return result;
   };
-
-export default blockquoteTag;

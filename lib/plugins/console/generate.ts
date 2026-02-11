@@ -6,8 +6,8 @@ import * as picocolors from 'picocolors';
 import tildify from 'tildify';
 import { PassThrough, type Readable } from 'stream';
 import { createSha1Hash } from 'hexo-util';
-import type Hexo from '../../hexo/index.js';
-import type Router from '../../hexo/router.js';
+import type Hexo from '../../hexo';
+import type Router from '../../hexo/router';
 
 interface GenerateArgs {
   f?: boolean;

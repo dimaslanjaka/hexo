@@ -1,6 +1,6 @@
 import { url_for, escapeHTML } from 'hexo-util';
 import moize from 'moize';
-import type { LocalsType, TagSchema } from '../../types.js';
+import type { LocalsType, TagSchema } from '../../types';
 import type Query from 'warehouse/dist/query';
 
 interface Options {
@@ -66,7 +66,7 @@ function listTagsHelper(this: LocalsType, tags?: Query<TagSchema> | Options, opt
   if (style === 'list') {
     result += `<ul class="${ulClass}" itemprop="keywords">`;
 
-    tags.forEach(tag => {
+    tags.forEach((tag) => {
       result += `<li class="${liClass}">`;
 
       result += `<a class="${aClass}" href="${url_for.call(this, tag.path)}${suffix}" rel="tag">`;

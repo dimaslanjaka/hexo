@@ -1,6 +1,6 @@
 import type Query from 'warehouse/dist/query';
-import type { LocalsType, PostSchema } from '../../types.js';
-import { toMomentLocale } from './date.js';
+import type { LocalsType, PostSchema } from '../../types';
+import { toMomentLocale } from './date';
 import { url_for, Cache } from 'hexo-util';
 
 interface Options {
@@ -27,18 +27,17 @@ function listArchivesHelper(this: LocalsType, options: Options = {}) {
   const { config } = this;
   const archiveDir = config.archive_dir;
   const { timezone } = config;
-  let defaultLang = Array.isArray(config.language) ? config.language[0] || 'en' : 'en';
-  if (defaultLang.length === 0) defaultLang = 'en';
-  const lang = toMomentLocale(this.page.lang || this.page.language || defaultLang);
+  const lang = toMomentLocale(this.page.lang || this.page.language || config.language);
   let { format } = options;
   const type = options.type || 'monthly';
   const { style = 'list', transform, separator = ', ' } = options;
   const showCount = Object.prototype.hasOwnProperty.call(options, 'show_count') ? options.show_count : true;
   const className = options.class || 'archive';
   const order = options.order || -1;
-  const compareFunc = type === 'monthly'
-    ? (yearA, monthA, yearB, monthB) => yearA === yearB && monthA === monthB
-    : (yearA, _monthA, yearB, _monthB) => yearA === yearB;
+  const compareFunc =
+    type === 'monthly'
+      ? (yearA, monthA, yearB, monthB) => yearA === yearB && monthA === monthB
+      : (yearA, _monthA, yearB, _monthB) => yearA === yearB;
 
   let result = '';
 
@@ -46,13 +45,15 @@ function listArchivesHelper(this: LocalsType, options: Options = {}) {
     format = type === 'monthly' ? 'MMMM YYYY' : 'YYYY';
   }
 
-  const posts = config.relative_link ? postsCache.apply(`date-${order}`, () => this.site.posts.sort('date', order)) as Query<PostSchema> : this.site.posts.sort('date', order);
+  const posts = config.relative_link
+    ? (postsCache.apply(`date-${order}`, () => this.site.posts.sort('date', order)) as Query<PostSchema>)
+    : this.site.posts.sort('date', order);
   if (!posts.length) return result;
 
   const data: Data[] = [];
   let length = 0;
 
-  posts.forEach(post => {
+  posts.forEach((post) => {
     // Clone the date object to avoid pollution
     let date = post.date.clone();
 
@@ -76,7 +77,7 @@ function listArchivesHelper(this: LocalsType, options: Options = {}) {
     }
   });
 
-  const link = item => {
+  const link = (item) => {
     let url = `${archiveDir}/${item.year}/`;
 
     if (type === 'monthly') {

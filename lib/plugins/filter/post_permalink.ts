@@ -1,12 +1,12 @@
 import { createSha1Hash, Permalink, slugize } from 'hexo-util';
 import { basename } from 'path';
-import type Hexo from '../../hexo/index.js';
-import type { PostSchema } from '../../types.js';
+import type Hexo from '../../hexo';
+import type { PostSchema } from '../../types';
 
 let permalink: Permalink;
 
 function postPermalinkFilter(this: Hexo, data: PostSchema): string {
-  const config = this.config;
+  const { config } = this;
   const { id, _id, slug, title, date } = data;
   let { __permalink } = data;
   const { post_asset_folder } = config;
@@ -26,17 +26,6 @@ function postPermalinkFilter(this: Hexo, data: PostSchema): string {
           .digest('hex')
           .slice(0, 12)
       : null;
-
-  const relativeSourcePath = data.full_source
-    // Remove base directory
-    .replace(this.base_dir, '')
-    // Normalize path to handle both / and \ (cross-platform)
-    .replace(/\\/g, '/')
-    // Remove leading "source/" or "source/_posts/" if present
-    .replace(/^source\/(_posts\/)?/, '')
-    // Remove any extension
-    .replace(/\.[^/.]+$/, '');
-
   const meta = {
     id: id || _id,
     title: slug,
@@ -52,8 +41,7 @@ function postPermalinkFilter(this: Hexo, data: PostSchema): string {
     i_day: date.format('D'),
     timestamp: date.format('X'),
     hash,
-    category: config.default_category,
-    filepath: relativeSourcePath
+    category: config.default_category
   };
 
   if (!permalink || permalink.rule !== config.permalink) {

@@ -1,10 +1,9 @@
 import moment from 'moment-timezone';
 import micromatch from 'micromatch';
-import { Config } from '../../hexo/index-d.js';
 
 const DURATION_MINUTE = 1000 * 60;
 
-function isMatch(path: string, patterns?: string | string[]) {
+function isMatch(path: string, patterns?: string| string[]) {
   if (!patterns) return false;
 
   return micromatch.isMatch(path, patterns);
@@ -18,16 +17,16 @@ function isHiddenFile(path: string) {
   return /(^|\/)[_.]/.test(path);
 }
 
-function isExcludedFile(path: string, config: Config) {
+function isExcludedFile(path: string, config) {
   if (isTmpFile(path)) return true;
   if (isMatch(path, config.exclude)) return true;
   if (isHiddenFile(path) && !isMatch(path, config.include)) return true;
   return false;
 }
 
-export { isTmpFile };
-export { isHiddenFile };
-export { isExcludedFile };
+export {isTmpFile};
+export {isHiddenFile};
+export {isExcludedFile};
 
 export function toDate(date?: string | number | Date | moment.Moment): Date | undefined | moment.Moment {
   if (!date || moment.isMoment(date)) return date as any;
@@ -52,4 +51,4 @@ export function adjustDateForTimezone(date: Date | moment.Moment, timezone: stri
   return new Date(ms - diff);
 }
 
-export { isMatch };
+export {isMatch};

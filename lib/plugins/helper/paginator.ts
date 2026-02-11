@@ -1,5 +1,5 @@
 import { htmlTag, url_for } from 'hexo-util';
-import type { LocalsType } from '../../types.js';
+import type { LocalsType } from '../../types';
 
 interface Options {
   base?: string;
@@ -31,13 +31,7 @@ const createLink = (options: Options, ctx: LocalsType) => {
 
 const createPageTag = (options: Options, ctx: LocalsType) => {
   const link = createLink(options, ctx);
-  const {
-    current,
-    escape,
-    transform,
-    page_class: pageClass,
-    current_class: currentClass
-  } = options;
+  const { current, escape, transform, page_class: pageClass, current_class: currentClass } = options;
 
   return (i: number) => {
     if (i === current) {
@@ -58,14 +52,7 @@ const showAll = (tags: string[], options: Options, ctx: LocalsType) => {
 };
 
 const paginationPartShow = (tags, options, ctx: LocalsType) => {
-  const {
-    current,
-    total,
-    space,
-    end_size: endSize,
-    mid_size: midSize,
-    space_class: spaceClass
-  } = options;
+  const { current, total, space, end_size: endSize, mid_size: midSize, space_class: spaceClass } = options;
 
   const leftEnd = Math.min(endSize, current - 1);
   const rightEnd = Math.max(total - endSize + 1, current + 1);
@@ -110,25 +97,28 @@ const paginationPartShow = (tags, options, ctx: LocalsType) => {
 };
 
 function paginatorHelper(this: LocalsType, options: Options = {}) {
-  options = Object.assign({
-    base: this.page.base || '',
-    current: this.page.current || 0,
-    format: `${this.config.pagination_dir}/%d/`,
-    total: this.page.total || 1,
-    end_size: 1,
-    mid_size: 2,
-    space: '&hellip;',
-    next_text: 'Next',
-    prev_text: 'Prev',
-    prev_next: true,
-    escape: true,
-    page_class: 'page-number',
-    current_class: 'current',
-    space_class: 'space',
-    prev_class: 'extend prev',
-    next_class: 'extend next',
-    force_prev_next: false
-  }, options);
+  options = Object.assign(
+    {
+      base: this.page.base || '',
+      current: this.page.current || 0,
+      format: `${this.config.pagination_dir}/%d/`,
+      total: this.page.total || 1,
+      end_size: 1,
+      mid_size: 2,
+      space: '&hellip;',
+      next_text: 'Next',
+      prev_text: 'Prev',
+      prev_next: true,
+      escape: true,
+      page_class: 'page-number',
+      current_class: 'current',
+      space_class: 'space',
+      prev_class: 'extend prev',
+      next_class: 'extend next',
+      force_prev_next: false
+    },
+    options
+  );
 
   const {
     current,
@@ -150,7 +140,7 @@ function paginatorHelper(this: LocalsType, options: Options = {}) {
 
   // Display the link to the previous page
   if (prevNext && current > 1) {
-    tags.push(htmlTag('a', { class: prevClass, rel: 'prev', href: link(current - 1)}, prevText, escape));
+    tags.push(htmlTag('a', { class: prevClass, rel: 'prev', href: link(current - 1) }, prevText, escape));
   } else if (forcePrevNext) {
     tags.push(htmlTag('span', { class: prevClass, rel: 'prev' }, prevText, escape));
   }

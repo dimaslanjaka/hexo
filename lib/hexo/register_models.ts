@@ -1,4 +1,3 @@
-import Module from 'node:module';
 import * as models from '../models/index.js';
 import type Hexo from './index.js';
 

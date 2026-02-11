@@ -1,6 +1,6 @@
 import Promise from 'bluebird';
 import { Pattern } from 'hexo-util';
-import type File from '../box/file.js';
+import type File from '../box/file';
 
 interface StoreFunction {
   (file: File | string): any;
@@ -29,7 +29,7 @@ class Processor {
 
   register(fn: StoreFunction): void;
   register(pattern: patternType, fn: StoreFunction): void;
-  register(pattern: patternType | StoreFunction, fn?: StoreFunction) {
+  register(pattern: patternType | StoreFunction, fn?: StoreFunction): void {
     if (!fn) {
       if (typeof pattern === 'function') {
         fn = pattern;

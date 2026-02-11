@@ -73,7 +73,10 @@ class Injector {
     if (input.includes(`<!-- hexo injector ${flag}`)) return input;
 
     const code = this.cache.apply(`${flag}-${currentType}-code`, () => {
-      const content = currentType === 'default' ? this.getText(flag, 'default') : this.getText(flag, currentType) + this.getText(flag, 'default');
+      const content =
+        currentType === 'default'
+          ? this.getText(flag, 'default')
+          : this.getText(flag, currentType) + this.getText(flag, 'default');
 
       if (!content.length) return '';
       return '<!-- hexo injector ' + flag + ' start -->' + content + '<!-- hexo injector ' + flag + ' end -->';
@@ -82,7 +85,9 @@ class Injector {
     // avoid unnecessary replace() for better performance
     if (!code.length) return input;
 
-    return input.replace(pattern, str => { return isBegin ? str + code : code + str; });
+    return input.replace(pattern, (str) => {
+      return isBegin ? str + code : code + str;
+    });
   }
 
   exec(data: string, locals = { page: {} }): string {

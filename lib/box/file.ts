@@ -3,7 +3,6 @@ import { readFile, readFileSync, stat, statSync, type ReadFileOptions } from 'he
 import type fs from 'fs';
 
 class File {
-
   /**
    * Full path of the file
    */
@@ -29,7 +28,12 @@ class File {
   static TYPE_SKIP: 'skip';
   static TYPE_DELETE: 'delete';
 
-  constructor({ source, path, params, type }: {
+  constructor({
+    source,
+    path,
+    params,
+    type
+  }: {
     source: string;
     path: string;
     params: any;

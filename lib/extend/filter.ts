@@ -1,12 +1,20 @@
 import Promise from 'bluebird';
-import { extend_filter_before_post_render_data } from '../plugins/filter/before_post_render/dataType.js';
-import { FilterOptions, Store, StoreFunction } from '../types.js';
+import { FilterOptions } from '../types';
 
 const typeAlias = {
   pre: 'before_post_render',
   post: 'after_post_render',
   'after_render:html': '_after_html_render'
 };
+
+interface StoreFunction {
+  (data?: any, ...args: any[]): any;
+  priority?: number;
+}
+
+interface Store {
+  [key: string]: StoreFunction[];
+}
 
 /**
  * A filter is used to modify some specified data. Hexo passes data to filters in sequence and the filters then modify the data one after the other.
@@ -26,16 +34,11 @@ class Filter {
     return this.store[type] || [];
   }
 
-  register(type: string, fn: StoreFunction): void;
-  register(type: 'server_middleware', fn: (app: import('connect').Server) => void): void;
-  register(type: 'before_post_render', fn: (data: extend_filter_before_post_render_data) => void): void;
-  register(type: 'before_post_render', fn: (data: extend_filter_before_post_render_data) => Promise<void>): void;
-  register(type: string, fn: StoreFunction, priority: number): void;
   register(fn: StoreFunction): void;
   register(fn: StoreFunction, priority: number): void;
   register(type: string, fn: StoreFunction): void;
   register(type: string, fn: StoreFunction, priority: number): void;
-  register(type: string | StoreFunction, fn?: any, priority?: number): void {
+  register(type: string | StoreFunction, fn?: StoreFunction | number, priority?: number): void {
     if (!priority) {
       if (typeof type === 'function') {
         priority = fn as number;
@@ -53,10 +56,9 @@ class Filter {
     this.store[type as string] = store;
 
     fn.priority = priority;
-    if (Array.isArray(store)) {
-      store.push(fn);
-      store.sort((a, b) => a.priority - b.priority);
-    }
+    store.push(fn);
+
+    store.sort((a, b) => a.priority - b.priority);
   }
 
   unregister(type: string, fn: StoreFunction): void {
@@ -82,8 +84,8 @@ class Filter {
 
     args.unshift(data);
 
-    return Promise.each(filters, filter =>
-      Reflect.apply(Promise.method(filter), ctx, args).then((result: any) => {
+    return Promise.each(filters, (filter) =>
+      Reflect.apply(Promise.method(filter), ctx, args).then((result) => {
         args[0] = result == null ? args[0] : result;
         return args[0];
       })

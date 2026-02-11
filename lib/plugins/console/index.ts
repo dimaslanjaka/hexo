@@ -1,18 +1,9 @@
-import type Hexo from '../../hexo/index.js';
-import { createRequire } from 'node:module';
+import type Hexo from '../../hexo';
 
-const require = createRequire(import.meta.url);
-
-// Normalize CJS + ESM default exports
-const load = <T = any>(path: string): T => {
-  const mod = require(path);
-  return (mod && mod.default) || mod;
-};
-
-function Console(ctx: Hexo) {
+export default function (ctx: Hexo) {
   const { console } = ctx.extend;
 
-  console.register('clean', 'Remove generated files and cache.', load('./clean.js'));
+  console.register('clean', 'Remove generated files and cache.', require('./clean'));
 
   console.register(
     'config',
@@ -27,7 +18,7 @@ function Console(ctx: Hexo) {
         }
       ]
     },
-    load('./config.js')
+    require('./config')
   );
 
   console.register(
@@ -39,7 +30,7 @@ function Console(ctx: Hexo) {
         { name: '-g, --generate', desc: 'Generate before deployment' }
       ]
     },
-    load('./deploy.js')
+    require('./deploy')
   );
 
   console.register(
@@ -54,7 +45,7 @@ function Console(ctx: Hexo) {
         { name: '-c, --concurrency', desc: 'Maximum number of files to be generated in parallel. Default is infinity' }
       ]
     },
-    load('./generate.js')
+    require('./generate')
   );
 
   console.register(
@@ -65,7 +56,7 @@ function Console(ctx: Hexo) {
       usage: '<type>',
       arguments: [{ name: 'type', desc: 'Available types: page, post, route, tag, category' }]
     },
-    load('./list/index.js')
+    require('./list')
   );
 
   console.register(
@@ -76,7 +67,7 @@ function Console(ctx: Hexo) {
       usage: '<type>',
       arguments: [{ name: 'type', desc: 'Migrator type.' }]
     },
-    load('./migrate.js')
+    require('./migrate')
   );
 
   console.register(
@@ -94,7 +85,7 @@ function Console(ctx: Hexo) {
         { name: '-p, --path', desc: 'Post path. Customize the path of the post.' }
       ]
     },
-    load('./new.js')
+    require('./new')
   );
 
   console.register(
@@ -107,7 +98,7 @@ function Console(ctx: Hexo) {
         { name: 'filename', desc: 'Draft filename. "hello-world" for example.' }
       ]
     },
-    load('./publish.js')
+    require('./publish')
   );
 
   console.register(
@@ -126,8 +117,6 @@ function Console(ctx: Hexo) {
         { name: '--pretty', desc: 'Prettify JSON output' }
       ]
     },
-    load('./render.js')
+    require('./render')
   );
 }
-
-export default Console;

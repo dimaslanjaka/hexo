@@ -2,8 +2,7 @@ import yaml from 'js-yaml';
 import { exists, writeFile } from 'hexo-fs';
 import { extname } from 'path';
 import Promise from 'bluebird';
-import type Hexo from '../../hexo/index.js';
-import { StoreFunctionData } from '../../types.js';
+import type Hexo from '../../hexo';
 
 interface ConfigArgs {
   _: string[];
@@ -31,7 +30,7 @@ function configConsole(this: Hexo, args: ConfigArgs): Promise<void> {
   return exists(configPath)
     .then((exist) => {
       if (!exist) return {};
-      return this.render.render({ path: configPath } as StoreFunctionData);
+      return this.render.render({ path: configPath });
     })
     .then((config) => {
       if (!config) config = {};

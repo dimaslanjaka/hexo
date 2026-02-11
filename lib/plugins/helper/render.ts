@@ -1,5 +1,4 @@
-import { StoreFunctionData } from '../../types.js';
-import type Hexo from '../../hexo/index.js';
+import type Hexo from '../../hexo';
 
 export default (ctx: Hexo) =>
   function render(text: string, engine: string, options: object = {}) {
@@ -7,7 +6,7 @@ export default (ctx: Hexo) =>
       {
         text,
         engine
-      } as StoreFunctionData,
+      },
       options
     );
   };

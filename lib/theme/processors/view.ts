@@ -1,17 +1,17 @@
 import { Pattern } from 'hexo-util';
-import type { _File } from '../../box/index.js';
+import type { _File } from '../../box';
 import type Theme from '..';
 
 function process(file: _File): Promise<void> {
   const { path } = file.params;
 
   if (file.type === 'delete') {
-    (file.box as unknown as Theme).removeView(path);
+    (file.box as Theme).removeView(path);
     return;
   }
 
-  return file.read().then((result) => {
-    (file.box as unknown as Theme).setView(path, result);
+  return file.read().then(result => {
+    (file.box as Theme).setView(path, result);
   });
 }
 

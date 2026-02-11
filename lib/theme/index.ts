@@ -1,20 +1,20 @@
-import I18n from 'hexo-i18n';
 import { extname } from 'path';
-import Box from '../box/index.js';
-import { config } from './processors/config.js';
-import { i18n } from './processors/i18n.js';
-import { source } from './processors/source.js';
-import { view } from './processors/view.js';
-import View from './view.js';
-import type Hexo from '../hexo/index.js';
+import Box from '../box';
+import View from './view';
+import I18n from 'hexo-i18n';
+import { config } from './processors/config';
+import { i18n } from './processors/i18n';
+import { source } from './processors/source';
+import { view } from './processors/view';
+import type Hexo from '../hexo';
 
 class Theme extends Box {
   public config: any;
-  public views: any;
+  public views: Record<string, Record<string, View>>;
   public i18n: I18n;
   public View: typeof View;
 
-  constructor(ctx: Hexo, options?: Record<string, any>) {
+  constructor(ctx: Hexo, options?: any) {
     super(ctx, ctx.theme_dir, options);
 
     this.config = {};
@@ -42,11 +42,6 @@ class Theme extends Box {
     _View.prototype._helper = ctx.extend.helper;
   }
 
-  // getView(path: string): {
-  //   [key: string]: any;
-  //   path: string;
-  //   renderSync: (...args: any[]) => any;
-  // }
   getView(path: string): View {
     // Replace backslashes on Windows
     path = path.replace(/\\/g, '/');
@@ -64,13 +59,13 @@ class Theme extends Box {
     return views[Object.keys(views)[0]];
   }
 
-  setView(path: string, data: string | Buffer): void {
+  setView(path: string, data: string): void {
     const ext = extname(path);
     const name = path.substring(0, path.length - ext.length);
     this.views[name] = this.views[name] || {};
     const views = this.views[name];
 
-    views[ext] = new this.View(path, Buffer.isBuffer(data) ? data.toString() : data);
+    views[ext] = new this.View(path, data);
   }
 
   removeView(path: string): void {

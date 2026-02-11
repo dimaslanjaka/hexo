@@ -1,5 +1,5 @@
 import { htmlTag, url_for } from 'hexo-util';
-import type Hexo from '../../hexo/index.js';
+import type Hexo from '../../hexo';
 
 const rUrl =
   /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[.!/\\w]*))?)/;
@@ -12,7 +12,7 @@ const rMetaSingleQuote = /'?([^']+)?'?/;
  * Syntax:
  *   {% img [class names] /path/to/image [width] [height] [title text [alt text]] %}
  */
-const img = (ctx: Hexo) => {
+export default (ctx: Hexo) => {
   return function imgTag(args: string[]) {
     const classes = [];
     let src, width, height, title, alt;
@@ -62,5 +62,3 @@ const img = (ctx: Hexo) => {
     return htmlTag('img', attrs);
   };
 };
-
-export default img;

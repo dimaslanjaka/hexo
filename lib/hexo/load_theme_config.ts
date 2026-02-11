@@ -3,27 +3,26 @@ import tildify from 'tildify';
 import { exists, readdir } from 'hexo-fs';
 import * as picocolors from 'picocolors';
 import { deepMerge } from 'hexo-util';
-import type Hexo from './index.js';
+import type Hexo from './index';
 import type Promise from 'bluebird';
-import { StoreFunctionData } from '../types.js';
 
-const loadThemeConfig = (ctx: Hexo): Promise<void> => {
+export default (ctx: Hexo): Promise<void> => {
   if (!ctx.env.init) return;
   if (!ctx.config.theme) return;
 
   let configPath = join(ctx.base_dir, `_config.${String(ctx.config.theme)}.yml`);
 
   return exists(configPath)
-    .then(exist => {
+    .then((exist) => {
       return exist ? configPath : findConfigPath(configPath);
     })
-    .then(path => {
+    .then((path) => {
       if (!path) return;
 
       configPath = path;
-      return ctx.render.render({ path } as StoreFunctionData);
+      return ctx.render.render({ path });
     })
-    .then(config => {
+    .then((config) => {
       if (!config || typeof config !== 'object') return;
 
       ctx.log.debug('Second Theme Config loaded: %s', picocolors.magenta(tildify(configPath)));
@@ -35,13 +34,11 @@ const loadThemeConfig = (ctx: Hexo): Promise<void> => {
     });
 };
 
-export default loadThemeConfig;
-
 function findConfigPath(path: string): Promise<string> {
   const { dir, name } = parse(path);
 
-  return readdir(dir).then(files => {
-    const item = files.find(item => basename(item, extname(item)) === name);
+  return readdir(dir).then((files) => {
+    const item = files.find((item) => basename(item, extname(item)) === name);
     if (item != null) return join(dir, item);
   });
 }

@@ -3,13 +3,16 @@ import Promise from 'bluebird';
 import { EventEmitter } from 'events';
 import { readFile } from 'hexo-fs';
 import logger from 'hexo-log';
+import { deepMerge, full_url_for } from 'hexo-util';
 import Module from 'module';
 import { dirname, join, sep } from 'path';
 import * as picocolors from 'picocolors';
 import tildify from 'tildify';
 import { runInThisContext } from 'vm';
 import Database from 'warehouse';
-
+import type Schema from 'warehouse/dist/schema';
+import type { AddSchemaTypeOptions } from 'warehouse/dist/types';
+import type Box from '../box';
 import {
   Console,
   Deployer,
@@ -23,25 +26,41 @@ import {
   Renderer,
   Tag
 } from '../extend';
+import BinaryRelationIndex from '../models/binary_relation_index';
+import Theme from '../theme';
+import type { BaseGeneratorReturn, FilterOptions, LocalsType, NodeJSLikeCallback, SiteLocals } from '../types';
+import defaultConfig from './default_config';
+import loadDatabase from './load_database';
+import Locals from './locals';
+import multiConfigPath from './multi_config_path';
+import Post from './post';
+import registerModels from './register_models';
+import Render from './render';
+import Router from './router';
+import Scaffold from './scaffold';
+import Source from './source';
 
-import { deepMerge, full_url_for } from 'hexo-util';
-import type Schema from 'warehouse/dist/schema';
-import type { AddSchemaTypeOptions } from 'warehouse/dist/types';
-import type Box from '../box/index.js';
-import BinaryRelationIndex from '../models/binary_relation_index.js';
-import Theme from '../theme/index.js';
-import type { BaseGeneratorReturn, FilterOptions, LocalsType, NodeJSLikeCallback, SiteLocals } from '../types.js';
-import defaultConfig from './default_config.js';
-import loadDatabase from './load_database.js';
-import Locals from './locals.js';
-import multiConfigPath from './multi_config_path.js';
-import Post from './post.js';
-import registerModels from './register_models.js';
-import Render from './render.js';
-import Router from './router.js';
-import Scaffold from './scaffold.js';
-import Source from './source.js';
+const loadRequire = (p: string) => {
+  if (!p.startsWith('.')) {
+    const mod = require(p);
+    return mod?.default || mod;
+  }
 
+  const candidates = [join(__dirname, p), join(libDir, p), join(process.cwd(), p)];
+
+  for (const candidate of candidates) {
+    try {
+      const mod = require(candidate);
+      return mod?.default || mod;
+    } catch (err) {
+      // try next
+    }
+  }
+
+  // final fallback
+  const mod = require(p);
+  return mod?.default || mod;
+};
 const libDir = dirname(__dirname);
 const dbVersion = 1;
 
@@ -186,8 +205,6 @@ type DefaultConfigType = typeof defaultConfig;
 interface Config extends DefaultConfigType {
   [key: string]: any;
 }
-
-// Node.js internal APIs are now declared in global.d.ts
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 interface Hexo {
@@ -441,52 +458,34 @@ class Hexo extends EventEmitter {
 
   /**
    * Load configuration and plugins.
+   * @returns {Promise}
    * @link https://hexo.io/api#Initialize
    */
   init(): Promise<void> {
     this.log.debug('Hexo version: %s', picocolors.magenta(this.version));
     this.log.debug('Working directory: %s', picocolors.magenta(tildify(this.base_dir)));
 
-    const callModule = (path: string) =>
-      // Wrap dynamic import with Bluebird so we keep using Bluebird helpers
-      Promise.resolve(import(path)).then((mod: any) => {
-        const fn = mod && (mod.default ?? mod);
+    // Load internal plugins
+    loadRequire('../plugins/console/index.js')(this);
+    loadRequire('../plugins/filter/index.js')(this);
+    loadRequire('../plugins/generator/index.js')(this);
+    loadRequire('../plugins/helper/index.js')(this);
+    loadRequire('../plugins/highlight/index.js')(this);
+    loadRequire('../plugins/injector/index.js')(this);
+    loadRequire('../plugins/processor/index.js')(this);
+    loadRequire('../plugins/renderer/index.js')(this);
+    loadRequire('../plugins/tag/index.js')(this);
 
-        if (typeof fn === 'function') return fn(this);
-
-        if (mod && typeof mod.init === 'function') return mod.init(this);
-
-        this.log.warn('Module %s does not export a callable function', path);
-        return undefined;
-      });
-
-    // Load internal plugins sequentially (preserve original init order)
+    // Load config
     return Promise.each(
       [
-        '../plugins/console/index.js',
-        '../plugins/filter/index.js',
-        '../plugins/generator/index.js',
-        '../plugins/helper/index.js',
-        '../plugins/highlight/index.js',
-        '../plugins/injector/index.js',
-        '../plugins/processor/index.js',
-        '../plugins/renderer/index.js',
-        '../plugins/tag/index.js'
+        'update_package', // Update package.json
+        'load_config', // Load config
+        'load_theme_config', // Load alternate theme config
+        'load_plugins' // Load external plugins & scripts
       ],
-      (p) => callModule(p)
+      (name) => loadRequire(`./${name}.js`)(this)
     )
-      .then(() =>
-        // Load config modules in sequence as before
-        Promise.each(
-          [
-            './update_package.js', // Update package.json
-            './load_config.js', // Load config
-            './load_theme_config.js', // Load alternate theme config
-            './load_plugins.js' // Load external plugins & scripts
-          ],
-          (name) => callModule(name)
-        )
-      )
       .then(() => this.execFilter('after_init', null, { context: this }))
       .then(() => {
         // Ready to go!
@@ -794,19 +793,4 @@ Hexo.prototype.core_dir = Hexo.core_dir;
 Hexo.version = '__VERSION__';
 Hexo.prototype.version = Hexo.version;
 
-// Assign the Hexo class to the global scope for backward compatibility
-if (typeof globalThis !== 'undefined') {
-  (globalThis as any).hexo = Hexo;
-}
-if (typeof global !== 'undefined') {
-  (global as any).hexo = Hexo;
-}
-
-// For ESM compatibility
 export default Hexo;
-// For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
-  module.exports = Hexo;
-  // For ESM compatibility
-  module.exports.default = Hexo;
-}

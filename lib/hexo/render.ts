@@ -1,9 +1,10 @@
+import { extname } from 'path';
 import Promise from 'bluebird';
 import { readFile, readFileSync } from 'hexo-fs';
-import { extname } from 'path';
-import type { Renderer } from '../extend/index.js';
-import type { NodeJSLikeCallback, StoreFunction, StoreFunctionData, StoreSyncFunction } from '../types.js';
-import type Hexo from './index.js';
+import type Hexo from './index';
+import type { Renderer } from '../extend';
+import type { StoreFunction, StoreFunctionData, StoreSyncFunction } from '../extend/renderer';
+import { NodeJSLikeCallback } from '../types';
 
 const getExtname = (str: string): string => {
   if (typeof str !== 'string') return '';
@@ -16,7 +17,7 @@ const toString = (result: any, options: StoreFunctionData): string => {
   if (!Object.prototype.hasOwnProperty.call(options, 'toString') || typeof result === 'string') return result;
 
   if (typeof options.toString === 'function') {
-    return (<any>options).toString(result);
+    return options.toString(result);
   } else if (typeof result === 'object') {
     return JSON.stringify(result);
   } else if (result.toString) {
@@ -84,13 +85,7 @@ class Render {
 
     return promise
       .then((text) => {
-        if (Buffer.isBuffer(text)) {
-          // avoid conflict on buffer data
-          data.text = text.toString();
-        } else {
-          data.text = text;
-        }
-
+        data.text = text;
         ext = data.engine || getExtname(data.path);
         if (!ext || !this.isRenderable(ext)) return text;
 
@@ -115,20 +110,20 @@ class Render {
       .asCallback(callback);
   }
 
-  renderSync(data: StoreFunctionData, options: Record<string, any> = {}): any {
+  renderSync(data: StoreFunctionData, options = {}): any {
     if (!data) throw new TypeError('No input file or string!');
 
     const ctx = this.context;
 
     if (data.text == null) {
       if (!data.path) throw new TypeError('No input file or string!');
-      data.text = readFileSync(data.path).toString();
+      data.text = readFileSync(data.path);
     }
 
     if (data.text == null) throw new TypeError('No input file or string!');
 
     const ext = data.engine || getExtname(data.path);
-    let result: string;
+    let result;
 
     if (ext && this.isRenderableSync(ext)) {
       const renderer = this.getRendererSync(ext);
@@ -141,7 +136,7 @@ class Render {
     result = toString(result, data);
 
     if (data.onRenderEnd) {
-      result = data.onRenderEnd(result) as string;
+      result = data.onRenderEnd(result);
     }
 
     return ctx.execFilterSync(`after_render:${output}`, result, {

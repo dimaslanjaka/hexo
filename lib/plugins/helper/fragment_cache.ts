@@ -1,5 +1,5 @@
 import { Cache } from 'hexo-util';
-import type Hexo from '../../hexo/index.js';
+import type Hexo from '../../hexo';
 
 export default (ctx: Hexo) => {
   const cache = new Cache();
@@ -9,7 +9,7 @@ export default (ctx: Hexo) => {
     cache.flush();
   });
 
-  return function fragmentCache(id: string, fn: (...args: any[]) => any) {
+  return function fragmentCache(id: string, fn: () => any) {
     if (this.cache) return cache.apply(id, fn);
 
     const result = fn();

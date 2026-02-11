@@ -1,8 +1,8 @@
 import warehouse from 'warehouse';
-import type Hexo from '../hexo/index.js';
-import { PostTagSchema } from '../types.js';
+import type Hexo from '../hexo';
+import { PostTagSchema } from '../types';
 
-const postTagModel = (ctx: Hexo) => {
+export default (ctx: Hexo) => {
   const PostTag = new warehouse.Schema<PostTagSchema>({
     post_id: { type: warehouse.Schema.Types.CUID, ref: 'Post' },
     tag_id: { type: warehouse.Schema.Types.CUID, ref: 'Tag' }
@@ -25,5 +25,3 @@ const postTagModel = (ctx: Hexo) => {
 
   return PostTag;
 };
-
-export default postTagModel;

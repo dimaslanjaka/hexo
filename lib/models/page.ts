@@ -1,12 +1,12 @@
 import warehouse from 'warehouse';
 import { join } from 'path';
-import Moment from './types/moment.js';
+import Moment from './types/moment';
 import moment from 'moment';
 import { full_url_for } from 'hexo-util';
-import type Hexo from '../hexo/index.js';
-import type { PageSchema } from '../types.js';
+import type Hexo from '../hexo';
+import type { PageSchema } from '../types';
 
-const ModelPage = (ctx: Hexo) => {
+export default (ctx: Hexo) => {
   const Page = new warehouse.Schema<PageSchema>({
     title: { type: String, default: '' },
     date: {
@@ -37,5 +37,3 @@ const ModelPage = (ctx: Hexo) => {
 
   return Page;
 };
-
-export default ModelPage;

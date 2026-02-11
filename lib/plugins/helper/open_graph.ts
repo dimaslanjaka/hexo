@@ -1,26 +1,26 @@
 import { isMoment, isDate, Moment } from 'moment';
 import { encodeURL, prettyUrls, stripHTML, escapeHTML } from 'hexo-util';
 import moize from 'moize';
-import type { LocalsType } from '../../types.js';
+import type { LocalsType } from '../../types';
 
 const localeMap = {
-  'en': 'en_US',
-  'de': 'de_DE',
-  'es': 'es_ES',
-  'fr': 'fr_FR',
-  'hu': 'hu_HU',
-  'id': 'id_ID',
-  'it': 'it_IT',
-  'ja': 'ja_JP',
-  'ko': 'ko_KR',
-  'nl': 'nl_NL',
-  'ru': 'ru_RU',
-  'th': 'th_TH',
-  'tr': 'tr_TR',
-  'vi': 'vi_VN'
+  en: 'en_US',
+  de: 'de_DE',
+  es: 'es_ES',
+  fr: 'fr_FR',
+  hu: 'hu_HU',
+  id: 'id_ID',
+  it: 'it_IT',
+  ja: 'ja_JP',
+  ko: 'ko_KR',
+  nl: 'nl_NL',
+  ru: 'ru_RU',
+  th: 'th_TH',
+  tr: 'tr_TR',
+  vi: 'vi_VN'
 };
 
-const localeToTerritory = moize.shallow(str => {
+const localeToTerritory = moize.shallow((str) => {
   if (str.length === 2 && localeMap[str]) return localeMap[str];
 
   if (str.length === 5) {
@@ -92,8 +92,8 @@ function openGraphHelper(this: LocalsType, options: Options = {}) {
   if (!Array.isArray(images)) images = [images];
 
   if (description) {
-    description = escapeHTML(stripHTML(description).substring(0, 200)
-      .trim() // Remove prefixing/trailing spaces
+    description = escapeHTML(
+      stripHTML(description).substring(0, 200).trim() // Remove prefixing/trailing spaces
     ).replace(/\n/g, ' '); // Replace new lines by spaces
   }
 
@@ -107,7 +107,6 @@ function openGraphHelper(this: LocalsType, options: Options = {}) {
         images.push(img[1]);
       }
     }
-
   }
 
   let result = '';
@@ -134,10 +133,9 @@ function openGraphHelper(this: LocalsType, options: Options = {}) {
     result += og('og:locale', localeToTerritory(language), false);
   }
 
-  images = images.map(path => new URL(path, url || config.url).toString())
-    .filter(url => !url.startsWith('data:'));
+  images = images.map((path) => new URL(path, url || config.url).toString()).filter((url) => !url.startsWith('data:'));
 
-  images.forEach(path => {
+  images.forEach((path) => {
     result += og('og:image', path, false);
   });
 
@@ -160,11 +158,15 @@ function openGraphHelper(this: LocalsType, options: Options = {}) {
   if (keywords) {
     if (typeof keywords === 'string') keywords = [keywords];
 
-    keywords.map(tag => {
-      return tag.name ? tag.name : tag;
-    }).filter(Boolean).sort().forEach(keyword => {
-      result += og('article:tag', keyword);
-    });
+    keywords
+      .map((tag) => {
+        return tag.name ? tag.name : tag;
+      })
+      .filter(Boolean)
+      .sort()
+      .forEach((keyword) => {
+        result += og('article:tag', keyword);
+      });
   }
 
   result += meta('twitter:card', twitterCard);

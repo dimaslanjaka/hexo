@@ -1,26 +1,15 @@
-import type Hexo from '../../hexo/index.js';
-import { createRequire } from 'node:module';
+import type Hexo from '../../hexo';
 
-const require = createRequire(import.meta.url);
-
-// Normalize CJS + ESM default exports
-const load = <T = any>(path: string): T => {
-  const mod = require(path);
-  return (mod && mod.default) || mod;
-};
-
-const filterIndex = (ctx: Hexo) => {
+export default (ctx: Hexo) => {
   const { filter } = ctx.extend;
 
-  load('./after_render/index.js')(ctx);
-  load('./after_post_render/index.js')(ctx);
-  load('./before_post_render/index.js')(ctx);
-  load('./before_exit/index.js')(ctx);
-  load('./before_generate/index.js')(ctx);
-  load('./template_locals/index.js')(ctx);
+  require('./after_render')(ctx);
+  require('./after_post_render')(ctx);
+  require('./before_post_render')(ctx);
+  require('./before_exit')(ctx);
+  require('./before_generate')(ctx);
+  require('./template_locals')(ctx);
 
-  filter.register('new_post_path', load('./new_post_path.js'));
-  filter.register('post_permalink', load('./post_permalink.js'));
+  filter.register('new_post_path', require('./new_post_path'));
+  filter.register('post_permalink', require('./post_permalink'));
 };
-
-export default filterIndex;

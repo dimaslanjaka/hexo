@@ -1,15 +1,15 @@
-import { adjustDateForTimezone, toDate, isExcludedFile, isMatch } from './common.js';
+import { adjustDateForTimezone, toDate, isExcludedFile, isMatch } from './common';
 import Promise from 'bluebird';
 import { parse as yfm } from 'hexo-front-matter';
 import { extname, relative } from 'path';
 import { Pattern } from 'hexo-util';
 import * as picocolors from 'picocolors';
-import type { _File } from '../../box/index.js';
-import type Hexo from '../../hexo/index.js';
+import type { _File } from '../../box';
+import type Hexo from '../../hexo';
 import type { Stats } from 'fs';
-import { PageSchema } from '../../types.js';
+import { PageSchema } from '../../types';
 
-const assetProcessor = (ctx: Hexo) => {
+export default (ctx: Hexo) => {
   return {
     pattern: new Pattern((path) => {
       if (isExcludedFile(path, ctx.config)) return;
@@ -28,8 +28,6 @@ const assetProcessor = (ctx: Hexo) => {
     }
   };
 };
-
-export default assetProcessor;
 
 function processPage(ctx: Hexo, file: _File) {
   const Page = ctx.model('Page');

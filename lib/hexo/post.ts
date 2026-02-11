@@ -7,9 +7,8 @@ import { load } from 'js-yaml';
 import { slugize, escapeRegExp, deepMerge } from 'hexo-util';
 import { copyDir, exists, listDir, mkdirs, readFile, rmdir, unlink, writeFile } from 'hexo-fs';
 import { parse as yfmParse, split as yfmSplit, stringify as yfmStringify } from 'hexo-front-matter';
-import type Hexo from './index.js';
-import type { NodeJSLikeCallback, RenderData } from '../types.js';
-import { isDate } from '../plugins/helper/date.js';
+import type Hexo from './index';
+import type { NodeJSLikeCallback, RenderData } from '../types';
 
 const preservedKeys = ['title', 'slug', 'path', 'layout', 'date', 'content'];
 
@@ -301,7 +300,7 @@ const prepareFrontMatter = (data: any, jsonMode: boolean): Record<string, string
   for (const [key, item] of Object.entries(data)) {
     if (moment.isMoment(item)) {
       data[key] = item.utc().format('YYYY-MM-DD HH:mm:ss');
-    } else if (isDate(item)) {
+    } else if (moment.isDate(item)) {
       data[key] = moment.utc(item).format('YYYY-MM-DD HH:mm:ss');
     } else if (typeof item === 'string') {
       if (

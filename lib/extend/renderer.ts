@@ -1,6 +1,6 @@
-import Promise from 'bluebird';
 import { extname } from 'path';
-import type { Store, StoreFunction, StoreSyncFunction, SyncStore } from '../types.js';
+import Promise from 'bluebird';
+import type { NodeJSLikeCallback } from '../types';
 
 const getExtname = (str: string) => {
   if (typeof str !== 'string') return '';
@@ -9,19 +9,68 @@ const getExtname = (str: string) => {
   return ext.startsWith('.') ? ext.slice(1) : ext;
 };
 
+export interface StoreFunctionData {
+  path?: any;
+  text?: string;
+  engine?: string;
+  toString?: any;
+  onRenderEnd?: (data: string) => any;
+}
+
+export interface StoreSyncFunction {
+  (
+    data: StoreFunctionData,
+    options?: object
+  ): any;
+  output?: string;
+  compile?: (data: StoreFunctionData) => (local: any) => any;
+  disableNunjucks?: boolean;
+  [key: string]: any;
+}
+
+export interface StoreFunction {
+  (
+    data: StoreFunctionData,
+    options?: object
+  ): Promise<any>;
+  output?: string;
+  compile?: (data: StoreFunctionData) => (local: any) => any;
+  disableNunjucks?: boolean;
+  [key: string]: any;
+}
+
+interface StoreFunctionWithCallback {
+  (
+    data: StoreFunctionData,
+    options: object,
+    callback?: NodeJSLikeCallback<any>
+  ): Promise<any>;
+  output?: string;
+  compile?: (data: StoreFunctionData) => (local: any) => any;
+  disableNunjucks?: boolean;
+  [key: string]: any;
+}
+
+interface SyncStore {
+  [key: string]: StoreSyncFunction;
+}
+interface Store {
+  [key: string]: StoreFunction;
+}
+
 /**
  * A renderer is used to render content.
  */
 class Renderer {
-  public store: Store | StoreSyncFunction;
-  public storeSync: SyncStore | StoreFunction;
+  public store: Store;
+  public storeSync: SyncStore;
 
   constructor() {
     this.store = {};
     this.storeSync = {};
   }
 
-  list(sync = false): Store | SyncStore | StoreSyncFunction | StoreFunction {
+  list(sync = false): Store | SyncStore {
     return sync ? this.storeSync : this.store;
   }
 
@@ -44,51 +93,11 @@ class Renderer {
     return renderer ? renderer.output : '';
   }
 
-  /**
-   * register renderer engine
-   * - [hexo-renderer-nunjucks example](https://github.com/hexojs/hexo-renderer-nunjucks/blob/c71a1979535c47c3949ff6bf3a85691641841e12/lib/renderer.js#L55-L56)
-   * - [typescript example](https://github.com/dimaslanjaka/hexo-renderers/blob/feed801e90920bea8a5e7000b275b912e4ef6c43/src/renderer-sass.ts#L37-L38)
-   * @param name input extension name. ex: ejs
-   * @param output output extension name. ex: html
-   * @param fn renderer function
-   */
-  register(name: string, output: string, fn: StoreFunction): void;
-
-  /**
-   * register renderer engine asynchronous
-   * @param name input extension name. ex: ejs
-   * @param output output extension name. ex: html
-   * @param fn renderer asynchronous function
-   * @param sync is synchronous?
-   */
-  register(name: string, output: string, fn: StoreFunction, sync: false): void;
-
-  /**
-   * register renderer engine
-   * @param name input extension name. ex: ejs
-   * @param output output extension name. ex: html
-   * @param fn renderer function
-   * @param sync is synchronous?
-   */
+  register(name: string, output: string, fn: StoreFunctionWithCallback): void;
+  register(name: string, output: string, fn: StoreFunctionWithCallback, sync: false): void;
   register(name: string, output: string, fn: StoreSyncFunction, sync: true): void;
-
-  /**
-   * register renderer engine
-   * @param name input extension name. ex: ejs
-   * @param output output extension name. ex: html
-   * @param fn renderer function
-   * @param sync is synchronous?
-   */
-  register(name: string, output: string, fn: StoreFunction | StoreSyncFunction, sync: boolean): void;
-
-  /**
-   * register renderer engine
-   * @param name input extension name. ex: ejs
-   * @param output output extension name. ex: html
-   * @param fn renderer function
-   * @param sync is synchronous?
-   */
-  register(name: string, output: string, fn: StoreFunction | StoreSyncFunction, sync?: boolean) {
+  register(name: string, output: string, fn: StoreFunctionWithCallback | StoreSyncFunction, sync: boolean): void;
+  register(name: string, output: string, fn: StoreFunctionWithCallback | StoreSyncFunction, sync?: boolean) {
     if (!name) throw new TypeError('name is required');
     if (!output) throw new TypeError('output is required');
     if (typeof fn !== 'function') throw new TypeError('fn must be a function');

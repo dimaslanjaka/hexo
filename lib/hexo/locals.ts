@@ -1,32 +1,26 @@
 import { Cache } from 'hexo-util';
-import { HexoLocalsData, HexoLocalsFunc } from './locals-d.js';
 
 class Locals {
-  public cache: InstanceType<typeof Cache<HexoLocalsData>>;
-  public getters: Record<string, HexoLocalsData | HexoLocalsFunc /* | ((...args: any) => any)*/>;
-  public page: any;
-  public path: string;
+  public cache: InstanceType<typeof Cache>;
+  public getters: Record<string, () => any>;
 
   constructor() {
-    this.cache = new Cache<HexoLocalsData>();
+    this.cache = new Cache();
     this.getters = {};
   }
 
-  get(name: 'posts' | 'pages' | 'categories' | 'data' | 'tags' | string): HexoLocalsData {
+  get(name: string): any {
     if (typeof name !== 'string') throw new TypeError('name must be a string!');
 
     return this.cache.apply(name, () => {
-      // This expression is not callable.
-      // Type 'HexoLocalsData' has no call signatures
-      // solution cast to `any`
-      const getter = this.getters[name] as any;
+      const getter = this.getters[name];
       if (!getter) return;
 
-      return getter() as HexoLocalsData;
+      return getter();
     });
   }
 
-  set(name: string, value: any) {
+  set(name: string, value: any): this {
     if (typeof name !== 'string') throw new TypeError('name must be a string!');
     if (value == null) throw new TypeError('value is required!');
 
@@ -38,7 +32,7 @@ class Locals {
     return this;
   }
 
-  remove(name: string) {
+  remove(name: string): this {
     if (typeof name !== 'string') throw new TypeError('name must be a string!');
 
     this.getters[name] = null;
@@ -47,10 +41,6 @@ class Locals {
     return this;
   }
 
-  /**
-   * invalidate cache
-   * @returns
-   */
   invalidate(): this {
     this.cache.flush();
 

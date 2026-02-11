@@ -1,11 +1,10 @@
-import Promise from 'bluebird';
-import { parse as yfm } from 'hexo-front-matter';
 import { dirname, extname, join } from 'path';
+import { parse as yfm } from 'hexo-front-matter';
+import Promise from 'bluebird';
 import type Theme from '.';
-import type { Helper } from '../extend/index.js';
-import type Render from '../hexo/render.js';
-import type { HexoRenderOptions } from '../hexo/render-d.js';
-import type { NodeJSLikeCallback, StoreFunctionData } from '../types.js';
+import type Render from '../hexo/render';
+import type { NodeJSLikeCallback } from '../types';
+import type { Helper } from '../extend';
 
 const assignIn = (target: any, ...sources: any[]) => {
   const length = sources.length;
@@ -36,10 +35,10 @@ class View {
   public _helper: Helper;
   public _render: Render;
 
-  constructor(path: string, data: string | ReturnType<typeof yfm>) {
+  constructor(path: string, data: string) {
     this.path = path;
     this.source = join(this._theme.base, 'layout', path);
-    this.data = typeof data === 'string' ? yfm(data, {}) : data;
+    this.data = typeof data === 'string' ? yfm(data) : data;
 
     this._precompile();
   }
@@ -101,7 +100,7 @@ class View {
     });
   }
 
-  _bindHelpers(locals: Record<string, any>) {
+  _bindHelpers(locals) {
     const helpers = this._helper.list();
     const keys = Object.keys(helpers);
 
@@ -149,17 +148,17 @@ class View {
     if (renderer && typeof renderer.compile === 'function') {
       const compiled = renderer.compile(data);
 
-      this._compiledSync = (locals: any) => {
+      this._compiledSync = (locals) => {
         const result = compiled(locals);
         return ctx.execFilterSync(...buildFilterArguments(result));
       };
 
-      this._compiled = (locals: any) =>
+      this._compiled = (locals) =>
         Promise.resolve(compiled(locals)).then((result) => ctx.execFilter(...buildFilterArguments(result)));
     } else {
-      this._compiledSync = (locals: Record<string, any>) => render.renderSync(data as StoreFunctionData, locals);
+      this._compiledSync = (locals) => render.renderSync(data, locals);
 
-      this._compiled = (locals: HexoRenderOptions) => render.render(data as StoreFunctionData, locals);
+      this._compiled = (locals) => render.render(data, locals);
     }
   }
 }

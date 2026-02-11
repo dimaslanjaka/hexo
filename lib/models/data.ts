@@ -1,6 +1,6 @@
 import warehouse from 'warehouse';
-import type Hexo from '../hexo/index.js';
-import { DataSchema } from '../types.js';
+import type Hexo from '../hexo';
+import { DataSchema } from '../types';
 
 export default (_ctx: Hexo) => {
   const Data = new warehouse.Schema<DataSchema>({

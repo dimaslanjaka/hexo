@@ -1,6 +1,6 @@
 import { Color, url_for } from 'hexo-util';
 import moize from 'moize';
-import type { LocalsType, TagSchema } from '../../types.js';
+import type { LocalsType, TagSchema } from '../../types';
 import type Query from 'warehouse/dist/query';
 
 interface Options {
@@ -68,7 +68,7 @@ function tagcloudHelper(this: LocalsType, tags?: Query<TagSchema> | Options, opt
 
   const sizes = [];
 
-  tags.sort('length').forEach(tag => {
+  tags.sort('length').forEach((tag) => {
     const { length } = tag;
     if (sizes.includes(length)) return;
 
@@ -77,9 +77,9 @@ function tagcloudHelper(this: LocalsType, tags?: Query<TagSchema> | Options, opt
 
   const length = sizes.length - 1;
 
-  tags.forEach(tag => {
+  tags.forEach((tag) => {
     const ratio = length ? sizes.indexOf(tag.length) / length : 0;
-    const size = min + ((max - min) * ratio);
+    const size = min + (max - min) * ratio;
     let style = `font-size: ${parseFloat(size.toFixed(2))}${unit};`;
     const attr = className ? ` class="${className}-${Math.round(ratio * level)}"` : '';
 

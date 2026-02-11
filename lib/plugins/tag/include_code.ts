@@ -1,6 +1,6 @@
 import { basename, extname, join } from 'path';
 import { htmlTag, url_for } from 'hexo-util';
-import type Hexo from '../../hexo/index.js';
+import type Hexo from '../../hexo';
 
 const rCaptionTitleFile = /(.*)?(?:\s+|^)(\/*\S+)/;
 const rLang = /\s*lang:(\w+)/i;
@@ -14,7 +14,7 @@ const rTo = /\s*to:(\d+)/i;
  *   {% include_code [title] [lang:language] path/to/file %}
  */
 
-const includeCode = (ctx: Hexo) =>
+export default (ctx: Hexo) =>
   function includeCodeTag(args: string[]) {
     let codeDir = ctx.config.code_dir;
     let arg = args.join(' ');
@@ -76,5 +76,3 @@ const includeCode = (ctx: Hexo) =>
     }
     return `<pre><code>${code}</code></pre>`;
   };
-
-export default includeCode;
