@@ -1,9 +1,9 @@
 import warehouse from 'warehouse';
 import { join, posix } from 'path';
-import type Hexo from '../hexo/index.js';
-import type { PostAssetSchema } from '../types.js';
+import type Hexo from '../hexo';
+import type { PostAssetSchema } from '../types';
 
-const postAssetModel = (ctx: Hexo) => {
+export default (ctx: Hexo) => {
   const PostAsset = new warehouse.Schema<PostAssetSchema>({
     _id: { type: String, required: true },
     slug: { type: String, required: true },
@@ -30,5 +30,3 @@ const postAssetModel = (ctx: Hexo) => {
 
   return PostAsset;
 };
-
-export default postAssetModel;

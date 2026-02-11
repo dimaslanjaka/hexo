@@ -1,6 +1,6 @@
 import { htmlTag, url_for } from 'hexo-util';
 import moize from 'moize';
-import type { LocalsType } from '../../types.js';
+import type { LocalsType } from '../../types';
 
 let relative_link = true;
 function jsHelper(this: LocalsType, ...args: any[]) {
@@ -8,7 +8,7 @@ function jsHelper(this: LocalsType, ...args: any[]) {
 
   relative_link = this.config.relative_link;
 
-  args.flat(Infinity).forEach(item => {
+  args.flat(Infinity).forEach((item) => {
     if (typeof item === 'string' || item instanceof String) {
       let path = item;
       if (!path.endsWith('.js')) {

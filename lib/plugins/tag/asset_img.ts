@@ -1,6 +1,6 @@
-import img from './img.js';
+import img from './img';
 import { encodeURL } from 'hexo-util';
-import type Hexo from '../../hexo/index.js';
+import type Hexo from '../../hexo';
 
 /**
  * Asset image tag
@@ -8,7 +8,7 @@ import type Hexo from '../../hexo/index.js';
  * Syntax:
  *   {% asset_img [class names] slug [width] [height] [title text [alt text]]%}
  */
-const assetImg = (ctx: Hexo) => {
+export default (ctx: Hexo) => {
   const PostAsset = ctx.model('PostAsset');
 
   return function assetImgTag(args: string[]) {
@@ -25,5 +25,3 @@ const assetImg = (ctx: Hexo) => {
     }
   };
 };
-
-export default assetImg;

@@ -62,15 +62,15 @@ interface Store {
  * A renderer is used to render content.
  */
 class Renderer {
-  public store: Store | StoreSyncFunction;
-  public storeSync: SyncStore | StoreFunction;
+  public store: Store;
+  public storeSync: SyncStore;
 
   constructor() {
     this.store = {};
     this.storeSync = {};
   }
 
-  list(sync = false): Store | SyncStore | StoreSyncFunction | StoreFunction {
+  list(sync = false): Store | SyncStore {
     return sync ? this.storeSync : this.store;
   }
 

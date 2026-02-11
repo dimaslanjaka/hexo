@@ -1,5 +1,5 @@
 import { url_for } from 'hexo-util';
-import type Hexo from '../../hexo/index.js';
+import type Hexo from '../../hexo';
 
 /**
  * Asset path tag
@@ -7,7 +7,7 @@ import type Hexo from '../../hexo/index.js';
  * Syntax:
  *   {% asset_path slug %}
  */
-const assetPath = (ctx: Hexo) => {
+export default (ctx: Hexo) => {
   const PostAsset = ctx.model('PostAsset');
 
   return function assetPathTag(args: string[]) {
@@ -22,5 +22,3 @@ const assetPath = (ctx: Hexo) => {
     return path;
   };
 };
-
-export default assetPath;

@@ -1,5 +1,5 @@
 import Promise from 'bluebird';
-import type { BaseGeneratorReturn, NodeJSLikeCallback, SiteLocals } from '../types.js';
+import type { BaseGeneratorReturn, NodeJSLikeCallback, SiteLocals } from '../types';
 
 type ReturnType = BaseGeneratorReturn | BaseGeneratorReturn[];
 type GeneratorReturnType = ReturnType | Promise<ReturnType>;
@@ -15,7 +15,7 @@ interface StoreFunction {
 }
 
 interface Store {
-  [key: string]: StoreFunction
+  [key: string]: StoreFunction;
 }
 
 /**
@@ -38,11 +38,12 @@ class Generator {
     return this.store[name];
   }
 
-  register(fn: GeneratorFunction): void
-  register(name: string, fn: GeneratorFunction): void
+  register(fn: GeneratorFunction): void;
+  register(name: string, fn: GeneratorFunction): void;
   register(name: string | GeneratorFunction, fn?: GeneratorFunction): void {
     if (!fn) {
-      if (typeof name === 'function') { // fn
+      if (typeof name === 'function') {
+        // fn
         fn = name;
         name = `generator-${this.id++}`;
       } else {

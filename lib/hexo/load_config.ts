@@ -8,7 +8,7 @@ import { deepMerge } from 'hexo-util';
 import validateConfig from './validate_config';
 import type Hexo from './index';
 
-const loadConfig = async (ctx: Hexo): Promise<void> => {
+export default async (ctx: Hexo): Promise<void> => {
   if (!ctx.env.init) return;
 
   const baseDir = ctx.base_dir;
@@ -64,8 +64,6 @@ const loadConfig = async (ctx: Hexo): Promise<void> => {
   ctx.theme_script_dir = join(ctx.theme_dir, 'scripts') + sep;
   ctx.theme = new Theme(ctx, { ignored });
 };
-
-export default loadConfig;
 
 async function findConfigPath(path: string): Promise<string> {
   const { dir, name } = parse(path);

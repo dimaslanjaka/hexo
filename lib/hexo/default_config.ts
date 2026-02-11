@@ -1,4 +1,4 @@
-const defaultConfig = {
+export default {
   // Site
   title: 'Hexo',
   subtitle: '',
@@ -10,7 +10,7 @@ const defaultConfig = {
   url: 'http://example.com',
   root: '/',
   permalink: ':year/:month/:day/:title/',
-  permalink_defaults: {} as Record<string, any>,
+  permalink_defaults: {} as Record<string, string>,
   pretty_urls: {
     trailing_index: true,
     trailing_html: true
@@ -87,5 +87,3 @@ const defaultConfig = {
   // Category & Tag
   meta_generator: true
 };
-
-export default defaultConfig;

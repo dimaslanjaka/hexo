@@ -1,4 +1,4 @@
-import type Hexo from '../hexo/index.js';
+import type Hexo from '../hexo';
 
 export interface HighlightOptions {
   lang: string | undefined,

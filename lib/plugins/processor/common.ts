@@ -3,7 +3,7 @@ import micromatch from 'micromatch';
 
 const DURATION_MINUTE = 1000 * 60;
 
-function isMatch(path: string, patterns?: string | string[]) {
+function isMatch(path: string, patterns?: string| string[]) {
   if (!patterns) return false;
 
   return micromatch.isMatch(path, patterns);
@@ -24,9 +24,9 @@ function isExcludedFile(path: string, config) {
   return false;
 }
 
-export { isTmpFile };
-export { isHiddenFile };
-export { isExcludedFile };
+export {isTmpFile};
+export {isHiddenFile};
+export {isExcludedFile};
 
 export function toDate(date?: string | number | Date | moment.Moment): Date | undefined | moment.Moment {
   if (!date || moment.isMoment(date)) return date as any;

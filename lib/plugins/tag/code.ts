@@ -1,8 +1,8 @@
 // Based on: https://raw.github.com/imathis/octopress/master/plugins/code_block.rb
 
 import { escapeHTML, htmlTag } from 'hexo-util';
-import type Hexo from '../../hexo/index.js';
-import type { HighlightOptions } from '../../extend/syntax_highlight.js';
+import type Hexo from '../../hexo';
+import type { HighlightOptions } from '../../extend/syntax_highlight';
 
 const rCaptionUrlTitle = /(\S[\S\s]*)\s+(https?:\/\/\S+)\s+(.+)/i;
 const rCaptionUrl = /(\S[\S\s]*)\s+(https?:\/\/\S+)/i;
@@ -115,7 +115,7 @@ function parseArgs(args: string[]): HighlightOptions {
   };
 }
 
-const codeTag = (ctx: Hexo) =>
+export default (ctx: Hexo) =>
   function codeTag(args: string[], content: string) {
     // If neither highlight.js nor prism.js is enabled, return escaped code directly
     if (!ctx.extend.highlight.query(ctx.config.syntax_highlighter)) {
@@ -146,5 +146,3 @@ const codeTag = (ctx: Hexo) =>
 
     return content.replace(/{/g, '&#123;').replace(/}/g, '&#125;');
   };
-
-export default codeTag;

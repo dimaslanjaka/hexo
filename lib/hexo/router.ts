@@ -22,7 +22,7 @@ class RouteStream extends Readable {
   }
 
   // Assume we only accept Buffer, plain object, or string
-  _toBuffer(data) {
+  _toBuffer(data: Buffer | object | string): Buffer | null {
     if (data instanceof Buffer) {
       return data;
     }
@@ -51,30 +51,32 @@ class RouteStream extends Readable {
     if (this._ended) return false;
     this._ended = true;
 
-    data().then(data => {
-      if (data instanceof Stream && (data as Stream.Readable).readable) {
-        data.on('data', d => {
-          this.push(d);
-        });
+    data()
+      .then((data) => {
+        if (data instanceof Stream && (data as Stream.Readable).readable) {
+          data.on('data', (d) => {
+            this.push(d);
+          });
 
-        data.on('end', () => {
+          data.on('end', () => {
+            this.push(null);
+          });
+
+          data.on('error', (err) => {
+            this.emit('error', err);
+          });
+        } else {
+          const bufferData = this._toBuffer(data);
+          if (bufferData) {
+            this.push(bufferData);
+          }
           this.push(null);
-        });
-
-        data.on('error', err => {
-          this.emit('error', err);
-        });
-      } else {
-        const bufferData = this._toBuffer(data);
-        if (bufferData) {
-          this.push(bufferData);
         }
+      })
+      .catch((err) => {
+        this.emit('error', err);
         this.push(null);
-      }
-    }).catch(err => {
-      this.emit('error', err);
-      this.push(null);
-    });
+      });
   }
 }
 
@@ -108,7 +110,7 @@ class Router extends EventEmitter {
 
   list(): string[] {
     const { routes } = this;
-    return Object.keys(routes).filter(key => routes[key]);
+    return Object.keys(routes).filter((key) => routes[key]);
   }
 
   format(path?: string): string {

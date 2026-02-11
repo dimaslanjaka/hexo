@@ -1,10 +1,10 @@
 import warehouse from 'warehouse';
 import { slugize, full_url_for } from 'hexo-util';
 const { hasOwnProperty: hasOwn } = Object.prototype;
-import type Hexo from '../hexo/index.js';
-import type { TagSchema } from '../types.js';
+import type Hexo from '../hexo';
+import type { TagSchema } from '../types';
 
-const tagModel = (ctx: Hexo) => {
+export default (ctx: Hexo) => {
   const Tag = new warehouse.Schema<TagSchema>({
     name: { type: String, required: true }
   });
@@ -71,5 +71,3 @@ const tagModel = (ctx: Hexo) => {
 
   return Tag;
 };
-
-export default tagModel;

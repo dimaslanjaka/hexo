@@ -1,6 +1,6 @@
 import { url_for } from 'hexo-util';
 import moize from 'moize';
-import type { LocalsType } from '../../types.js';
+import type { LocalsType } from '../../types';
 
 const feedFn = (str = '') => {
   if (str) return str.replace(/2$/, '');

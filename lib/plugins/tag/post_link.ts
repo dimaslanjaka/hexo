@@ -1,6 +1,6 @@
 import { url_for, escapeHTML } from 'hexo-util';
-import { postFindOneFactory } from './index.js';
-import type Hexo from '../../hexo/index.js';
+import { postFindOneFactory } from './';
+import type Hexo from '../../hexo';
 
 /**
  * Post link tag
@@ -8,7 +8,7 @@ import type Hexo from '../../hexo/index.js';
  * Syntax:
  *   {% post_link slug | title [title] [escape] %}
  */
-const postLink = (ctx: Hexo) => {
+export default (ctx: Hexo) => {
   return function postLinkTag(args: string[]) {
     let slug = args.shift();
     if (!slug) {
@@ -46,5 +46,3 @@ const postLink = (ctx: Hexo) => {
     return `<a href="${link}" title="${attrTitle}">${title}</a>`;
   };
 };
-
-export default postLink;

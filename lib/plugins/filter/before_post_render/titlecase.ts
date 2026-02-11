@@ -1,20 +1,11 @@
-import type { RenderData } from '../../../types.js';
-import { createRequire } from 'node:module';
+import type { RenderData } from '../../../types';
 
-const require = createRequire(import.meta.url);
+let titlecase;
 
-let titlecase: typeof import('titlecase');
+function titlecaseFilter(data: RenderData): void {
+  if (!(typeof data.titlecase !== 'undefined' ? data.titlecase : this.config.titlecase) || !data.title) return;
 
-function titlecaseFilter(this: any, data: RenderData): void {
-  if (!(typeof data.titlecase !== 'undefined' ? data.titlecase : this.config.titlecase) || !data.title) {
-    return;
-  }
-
-  if (!titlecase) {
-    const mod = require('titlecase');
-    titlecase = (mod && mod.default) || mod;
-  }
-
+  if (!titlecase) titlecase = require('titlecase');
   data.title = titlecase(data.title);
 }
 
