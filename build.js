@@ -99,6 +99,8 @@ function buildTsup() {
           if (this.format === 'cjs') {
             // replace `from '...js'` with `from '...cjs'` for cjs imports & exports
             code = code.replace(/from ['"](.*)\.js['"]/g, "from '$1.cjs'");
+            // replace `require('...js')` with `require('...cjs')`
+            code = code.replace(/require\(['"](.*)\.js['"]\)/g, "require('$1.cjs')");
             return { code };
           } else {
             // for esm, just return the modified code
