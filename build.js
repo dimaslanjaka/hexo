@@ -135,6 +135,8 @@ function buildTsup() {
             code = code.replace(/from ['"](.*)\.js['"]/g, "from '$1.cjs'");
             // replace `require('...js')` with `require('...cjs')`
             code = code.replace(/require\(['"](.*)\.js['"]\)/g, "require('$1.cjs')");
+            // replace `require('...js')` with `require('...cjs')` from esbuild-fix-imports-plugin
+            code = code.replace(/require\(\s?['"](.*)\.js['"]\s?\)/g, "require('$1.cjs')");
             // replace `loadRequire('...js')` with `loadRequire('...cjs')`
             code = code.replace(/loadRequire\(['"](.*)\.js['"]\)/g, "loadRequire('$1.cjs')");
             return { code };
