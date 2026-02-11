@@ -137,8 +137,12 @@ function buildTsup() {
             code = code.replace(/require\(['"](.*)\.js['"]\)/g, "require('$1.cjs')");
             // replace `require('...js')` with `require('...cjs')` from esbuild-fix-imports-plugin
             code = code.replace(/require\(\s?['"](.*)\.js['"]\s?\)/g, "require('$1.cjs')");
+            // replace dynamic require calls 'require(`...js`)' with 'require(`...cjs`)'
+            code = code.replace(/require\(\s?`(.*)\.js`\s?\)/g, 'require(`$1.cjs`)');
             // replace `loadRequire('...js')` with `loadRequire('...cjs')`
             code = code.replace(/loadRequire\(['"](.*)\.js['"]\)/g, "loadRequire('$1.cjs')");
+            // replace dynamic loadRequire calls 'loadRequire(`...js`)' with 'loadRequire(`...cjs`)'
+            code = code.replace(/loadRequire\(\s?`(.*)\.js`\s?\)/g, 'loadRequire(`$1.cjs`)');
             return { code };
           } else {
             // for esm, just return the modified code
