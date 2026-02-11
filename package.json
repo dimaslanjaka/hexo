@@ -911,7 +911,7 @@
     "test-cov": "c8 --reporter=lcovonly npm test -- --no-parallel",
     "prepare": "husky",
     "watch": "npx -y nodemon --watch build.js --watch lib --ext js,ts --exec \"yarn build > build.log 2>&1\"",
-    "watch-and-test": "npx -y nodemon --watch build.js --watch lib --ext js,ts --exec \"yarn build > build.log 2>&1 && yarn workspace hexo-site run build\""
+    "watch-and-test": "npx -y nodemon --delay 5 --watch build.js --watch lib --ext js,ts --exec \"yarn build > build.log 2>&1 && yarn workspace hexo-site exec \\\"hexo generate --verbose --debug\\\"\""
   },
   "files": [
     "dist/",
