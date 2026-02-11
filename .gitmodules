@@ -54,3 +54,7 @@
 	path = packages/hexo-fs
 	url = https://github.com/dimaslanjaka/hexo-fs.git
 	branch = monorepo
+[submodule "packages/hexo-generator-category"]
+	path = packages/hexo-generator-category
+	url = https://github.com/dimaslanjaka/hexo-generator-category
+	branch = monorepo

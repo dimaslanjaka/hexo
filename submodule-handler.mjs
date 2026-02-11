@@ -98,6 +98,12 @@ const config = Object.fromEntries(
       origin: 'https://github.com/dimaslanjaka/hexo-fs.git',
       branch: 'monorepo',
       upstream: 'https://github.com/hexojs/hexo-fs'
+    },
+    'submodule "packages/hexo-generator-category"': {
+      path: 'packages/hexo-generator-category',
+      origin: 'https://github.com/dimaslanjaka/hexo-generator-category.git',
+      branch: 'monorepo',
+      upstream: getUpstreamUrl('packages/hexo-generator-category').replace('dimaslanjaka/', 'hexojs/')
     }
   }).map(([key, value]) => [
     key,
