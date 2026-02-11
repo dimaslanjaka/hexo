@@ -188,11 +188,6 @@
       "require": "./dist/hexo/render-d.cjs",
       "types": "./dist/hexo/render-d.d.ts"
     },
-    "./dist/hexo/require": {
-      "import": "./dist/hexo/require.js",
-      "require": "./dist/hexo/require.cjs",
-      "types": "./dist/hexo/require.d.ts"
-    },
     "./dist/hexo/router": {
       "import": "./dist/hexo/router.js",
       "require": "./dist/hexo/router.cjs",
