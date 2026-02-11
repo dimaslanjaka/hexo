@@ -104,6 +104,12 @@ const config = Object.fromEntries(
       origin: 'https://github.com/dimaslanjaka/hexo-generator-category.git',
       branch: 'monorepo',
       upstream: getUpstreamUrl('packages/hexo-generator-category').replace('dimaslanjaka/', 'hexojs/')
+    },
+    'submodule "packages/hexo-pagination"': {
+      path: 'packages/hexo-pagination',
+      origin: 'https://github.com/dimaslanjaka/hexo-pagination.git',
+      branch: 'monorepo',
+      upstream: getUpstreamUrl('packages/hexo-pagination').replace('dimaslanjaka/', 'hexojs/')
     }
   }).map(([key, value]) => [
     key,

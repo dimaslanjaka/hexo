@@ -58,3 +58,7 @@
 	path = packages/hexo-generator-category
 	url = https://github.com/dimaslanjaka/hexo-generator-category
 	branch = monorepo
+[submodule "packages/hexo-pagination"]
+	path = packages/hexo-pagination
+	url = https://github.com/dimaslanjaka/hexo-pagination.git
+	branch = monorepo
