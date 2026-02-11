@@ -56,6 +56,7 @@ function buildTsup() {
     splitting: true,
     treeshake: true,
     bundle: false,
+    platform: 'node',
     shims: true,
     sourcemap: true,
     removeNodeProtocol: true,
@@ -63,6 +64,9 @@ function buildTsup() {
     // skipNodeModulesBundle: true,
     external: externalDeps,
     format: ['esm', 'cjs'],
+    loader: {
+      '.json': 'json'
+    },
     dts: false,
     outDir: 'dist',
     outExtension({ format }) {
