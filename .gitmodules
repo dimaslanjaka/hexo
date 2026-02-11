@@ -37,7 +37,7 @@
 [submodule "packages/hexo-server"]
 	path = packages/hexo-server
 	url = https://github.com/dimaslanjaka/hexo-server.git
-	branch = private
+	branch = monorepo
 [submodule "packages/hexo-is"]
 	path = packages/hexo-is
 	url = https://github.com/dimaslanjaka/hexo-is
