@@ -1525,6 +1525,53 @@ describe('Post', () => {
     data.content.should.contains('22222');
   });
 
+  it('render() - tags with swig character', async () => {
+    const tagSpy = spy();
+    hexo.extend.tag.register('testTag', (args, content) => {
+      tagSpy(args, content);
+      return '';
+    }, {
+      ends: true
+    });
+    let content = '{% testTag 111 222 %}\n3333\n{% endtestTag %}';
+    await post.render('', {
+      content,
+      engine: 'markdown'
+    });
+    tagSpy.calledOnce.should.be.true;
+    tagSpy.firstCall.args[0].should.eql(['111', '222']);
+    tagSpy.firstCall.args[1].should.eql('3333');
+
+    content = '{% testTag 111% % 222 %}\n333\n{% endtestTag %}';
+    await post.render('', {
+      content,
+      engine: 'markdown'
+    });
+    tagSpy.calledTwice.should.be.true;
+    tagSpy.secondCall.args[0].should.eql(['111%', '%', '222']);
+    tagSpy.secondCall.args[1].should.eql('333');
+
+    content = '{% testTag 111 } 222} %}\n333\n{% endtestTag %}';
+    await post.render('', {
+      content,
+      engine: 'markdown'
+    });
+    tagSpy.calledThrice.should.be.true;
+    tagSpy.thirdCall.args[0].should.eql(['111', '}', '222}']);
+    tagSpy.thirdCall.args[1].should.eql('333');
+
+    content = '{% testTag 111 222 %}\n333% % } %}\n{% endtestTag %}';
+    await post.render('', {
+      content,
+      engine: 'markdown'
+    });
+    tagSpy.callCount.should.eql(4);
+    tagSpy.getCall(3).args[0].should.eql(['111', '222']);
+    tagSpy.getCall(3).args[1].should.eql('333% % } %}');
+
+    hexo.extend.tag.unregister('testTag');
+  });
+
   it('render() - incomplete tags throw error', async () => {
     const content = 'nunjucks should throw {#  } error';
 
@@ -1553,5 +1600,173 @@ describe('Post', () => {
     });
 
     data.content.should.eql('<a href="https://hexo.io/" title="tttitle" target="">foobar</a>');
+  });
+
+  // https://github.com/hexojs/hexo/issues/5433
+  it('render() - nunjucks nesting in comments', async () => {
+    const content = [
+      'foo',
+      '<!--',
+      '{% raw %}',
+      'test',
+      '{% endraw %}',
+      '-->',
+      'bar'
+    ].join('\n');
+
+    const data = await post.render('', {
+      content,
+      engine: 'markdown'
+    });
+
+    data.content.should.eql([
+      '<p>foo</p>',
+      '<!--',
+      '{% raw %}',
+      'test',
+      '{% endraw %}',
+      '-->',
+      '<p>bar</p>',
+      ''
+    ].join('\n'));
+  });
+
+  it('render() - incomplete comments', async () => {
+    const content = [
+      'foo',
+      '<!--',
+      'test',
+      '{% raw %}',
+      'bar',
+      '{% endraw %}'
+    ].join('\n');
+
+    const data = await post.render('', {
+      content,
+      engine: 'markdown'
+    });
+
+    data.content.should.eql([
+      '<p>foo</p>',
+      '<!--',
+      'test',
+      '{% raw %}',
+      'bar',
+      '{% endraw %}'
+    ].join('\n'));
+  });
+
+  // https://github.com/hexojs/hexo/issues/5716
+  it('render() - comments nesting in nunjucks', async () => {
+    const tagSpy = spy();
+    hexo.extend.tag.register('testTag', (args, content) => {
+      tagSpy(args, content);
+      return '';
+    }, {
+      ends: true
+    });
+    let content = [
+      '{% testTag %}',
+      'foo',
+      '<!--',
+      'test',
+      '-->',
+      'bar',
+      '{% endtestTag %}'
+    ].join('\n');
+
+    let data = await post.render('', {
+      content,
+      engine: 'markdown'
+    });
+
+    data.content.should.eql('');
+    tagSpy.calledOnce.should.be.true;
+    tagSpy.firstCall.args[1].should.eql([
+      'foo',
+      '<!--',
+      'test',
+      '-->',
+      'bar'
+    ].join('\n'));
+
+    content = [
+      '{% testTag %}',
+      'foo',
+      '<!-- test -->',
+      'bar',
+      '{% endtestTag %}'
+    ].join('\n');
+
+    data = await post.render('', {
+      content,
+      engine: 'markdown'
+    });
+
+    data.content.should.eql('');
+    tagSpy.calledTwice.should.be.true;
+    tagSpy.secondCall.args[1].should.eql([
+      'foo',
+      '<!-- test -->',
+      'bar'
+    ].join('\n'));
+
+    hexo.extend.tag.unregister('testTag');
+  });
+
+  // https://github.com/hexojs/hexo/issues/5433
+  it('render() - code fence nesting in comments', async () => {
+    const code = 'alert("Hello world")';
+    const content = [
+      'foo',
+      '<!--',
+      '```',
+      code,
+      '```',
+      '-->',
+      'bar'
+    ].join('\n');
+
+    const data = await post.render('', {
+      content,
+      engine: 'markdown'
+    });
+
+    data.content.should.eql([
+      '<p>foo</p>',
+      '<!--',
+      '```',
+      code,
+      '```',
+      '-->',
+      '<p>bar</p>',
+      ''
+    ].join('\n'));
+  });
+
+  // https://github.com/hexojs/hexo/issues/5715
+  it('render() - comment nesting in code fence', async () => {
+    const code = 'alert("Hello world")';
+    const content = [
+      'foo',
+      '```',
+      '<!--',
+      code,
+      '-->',
+      '```',
+      'bar'
+    ].join('\n');
+
+    const data = await post.render('', {
+      content,
+      engine: 'markdown'
+    });
+
+    data.content.should.eql([
+      '<p>foo</p>',
+      '<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--</span><br><span class="line">alert(&quot;Hello world&quot;)</span><br><span class="line">--&gt;</span><br></pre></td></tr></table></figure>',
+      '<p>bar</p>',
+      ''
+    ].join('\n'));
   });
 });

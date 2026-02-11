@@ -13,16 +13,19 @@ import type { NodeJSLikeCallback, RenderData } from '../types';
 const preservedKeys = ['title', 'slug', 'path', 'layout', 'date', 'content'];
 
 const rHexoPostRenderEscape = /<hexoPostRenderCodeBlock>([\s\S]+?)<\/hexoPostRenderCodeBlock>/g;
+const rCommentEscape = /(<!--[\s\S]*?-->)/g;
 const rSwigTag = /(\{\{.+?\}\})|(\{#.+?#\})|(\{%.+?%\})/s;
 
 const rSwigPlaceHolder = /(?:<|&lt;)!--swig\uFFFC(\d+)--(?:>|&gt;)/g;
 const rCodeBlockPlaceHolder = /(?:<|&lt;)!--code\uFFFC(\d+)--(?:>|&gt;)/g;
+const rCommentHolder = /(?:<|&lt;)!--comment\uFFFC(\d+)--(?:>|&gt;)/g;
 
-const STATE_PLAINTEXT = Symbol('plaintext');
-const STATE_SWIG_VAR = Symbol('swig_var');
-const STATE_SWIG_COMMENT = Symbol('swig_comment');
-const STATE_SWIG_TAG = Symbol('swig_tag');
-const STATE_SWIG_FULL_TAG = Symbol('swig_full_tag');
+const STATE_PLAINTEXT = 0;
+const STATE_SWIG_VAR = 1;
+const STATE_SWIG_COMMENT = 2;
+const STATE_SWIG_TAG = 3;
+const STATE_SWIG_FULL_TAG = 4;
+const STATE_PLAINTEXT_COMMENT = 5;
 
 const isNonWhiteSpaceChar = (char: string) => char !== '\r'
   && char !== '\n'
@@ -30,22 +33,6 @@ const isNonWhiteSpaceChar = (char: string) => char !== '\r'
   && char !== '\f'
   && char !== '\v'
   && char !== ' ';
-
-class StringBuilder {
-  private parts: string[];
-
-  constructor() {
-    this.parts = [];
-  }
-
-  append(str: string): void {
-    this.parts.push(str);
-  }
-
-  toString(): string {
-    return this.parts.join('');
-  }
-}
 
 class PostRenderEscape {
   public stored: string[];
@@ -77,6 +64,14 @@ class PostRenderEscape {
     return str.replace(rCodeBlockPlaceHolder, PostRenderEscape.restoreContent(this.stored));
   }
 
+  restoreComments(str: string) {
+    return str.replace(rCommentHolder, PostRenderEscape.restoreContent(this.stored));
+  }
+
+  escapeComments(str: string) {
+    return str.replace(rCommentEscape, (_, content) => PostRenderEscape.escapeContent(this.stored, 'comment', content));
+  }
+
   escapeCodeBlocks(str: string) {
     return str.replace(rHexoPostRenderEscape, (_, content) => PostRenderEscape.escapeContent(this.stored, 'code', content));
   }
@@ -87,13 +82,17 @@ class PostRenderEscape {
    */
   escapeAllSwigTags(str: string) {
     let state = STATE_PLAINTEXT;
-    let buffer = '';
-    const output = new StringBuilder();
+    let buffer_start = -1;
+    let plaintext_comment_start = -1;
+    let plain_text_start = 0;
+    let output = '';
 
     let swig_tag_name_begin = false;
     let swig_tag_name_end = false;
     let swig_tag_name = '';
-    let swig_full_tag_start_buffer = '';
+
+    let swig_full_tag_start_start = -1;
+    let swig_full_tag_start_end = -1;
     // current we just consider one level of string quote
     let swig_string_quote = '';
 
@@ -102,11 +101,24 @@ class PostRenderEscape {
     let idx = 0;
 
     // for backtracking
-    const swig_start_idx = {
-      [STATE_SWIG_VAR]: 0,
-      [STATE_SWIG_COMMENT]: 0,
-      [STATE_SWIG_TAG]: 0,
-      [STATE_SWIG_FULL_TAG]: 0
+    const swig_start_idx = [0, 0, 0, 0, 0];
+
+    const flushPlainText = (end: number) => {
+      if (plain_text_start !== -1 && end > plain_text_start) {
+        output += str.slice(plain_text_start, end);
+      }
+      plain_text_start = -1;
+    };
+
+    const ensurePlainTextStart = (position: number) => {
+      if (plain_text_start === -1) {
+        plain_text_start = position;
+      }
+    };
+
+    const pushAndReset = (value: string) => {
+      output += value;
+      plain_text_start = -1;
     };
 
     while (idx < length) {
@@ -115,29 +127,39 @@ class PostRenderEscape {
         const next_char = str[idx + 1];
 
         if (state === STATE_PLAINTEXT) { // From plain text to swig
+          ensurePlainTextStart(idx);
           if (char === '{') {
             // check if it is a complete tag {{ }}
             if (next_char === '{') {
+              flushPlainText(idx);
               state = STATE_SWIG_VAR;
               idx++;
+              buffer_start = idx + 1;
               swig_start_idx[state] = idx;
             } else if (next_char === '#') {
+              flushPlainText(idx);
               state = STATE_SWIG_COMMENT;
               idx++;
+              buffer_start = idx + 1;
               swig_start_idx[state] = idx;
             } else if (next_char === '%') {
+              flushPlainText(idx);
               state = STATE_SWIG_TAG;
               idx++;
+              buffer_start = idx + 1;
+              swig_full_tag_start_start = idx + 1;
+              swig_full_tag_start_end = idx + 1;
               swig_tag_name = '';
-              swig_full_tag_start_buffer = '';
               swig_tag_name_begin = false; // Mark if it is the first non white space char in the swig tag
               swig_tag_name_end = false;
               swig_start_idx[state] = idx;
-            } else {
-              output.append(char);
             }
-          } else {
-            output.append(char);
+          }
+          if (char === '<' && next_char === '!' && str[idx + 2] === '-' && str[idx + 3] === '-') {
+            flushPlainText(idx);
+            state = STATE_PLAINTEXT_COMMENT;
+            plaintext_comment_start = idx;
+            idx += 3;
           }
         } else if (state === STATE_SWIG_TAG) {
           if (char === '"' || char === '\'') {
@@ -147,29 +169,22 @@ class PostRenderEscape {
               swig_string_quote = '';
             }
           }
-          // {% } or {% %
-          if (((char !== '%' && next_char === '}') || (char === '%' && next_char !== '}')) && swig_string_quote === '') {
-            // From swig back to plain text
-            swig_tag_name = '';
-            state = STATE_PLAINTEXT;
-            output.append(`{%${buffer}${char}`);
-            buffer = '';
-          } else if (char === '%' && next_char === '}' && swig_string_quote === '') { // From swig back to plain text
+          if (char === '%' && next_char === '}' && swig_string_quote === '') { // From swig back to plain text
             idx++;
             if (swig_tag_name !== '' && str.includes(`end${swig_tag_name}`)) {
               state = STATE_SWIG_FULL_TAG;
+              buffer_start = idx + 1;
+              // since we have already move idx to next char of '}', so here is idx -1
+              swig_full_tag_start_end = idx - 1;
               swig_start_idx[state] = idx;
             } else {
               swig_tag_name = '';
               state = STATE_PLAINTEXT;
-              output.append(PostRenderEscape.escapeContent(this.stored, 'swig', `{%${buffer}%}`));
+              // since we have already move idx to next char of '}', so here is idx -1
+              pushAndReset(PostRenderEscape.escapeContent(this.stored, 'swig', `{%${str.slice(buffer_start, idx - 1)}%}`));
             }
 
-            buffer = '';
           } else {
-            buffer = buffer + char;
-            swig_full_tag_start_buffer = swig_full_tag_start_buffer + char;
-
             if (isNonWhiteSpaceChar(char)) {
               if (!swig_tag_name_begin && !swig_tag_name_end) {
                 swig_tag_name_begin = true;
@@ -197,21 +212,17 @@ class PostRenderEscape {
           if (char === '}' && next_char !== '}' && swig_string_quote === '') {
             // From swig back to plain text
             state = STATE_PLAINTEXT;
-            output.append(`{{${buffer}${char}`);
-            buffer = '';
+            pushAndReset(`{{${str.slice(buffer_start, idx)}${char}`);
           } else if (char === '}' && next_char === '}' && swig_string_quote === '') {
+            pushAndReset(PostRenderEscape.escapeContent(this.stored, 'swig', `{{${str.slice(buffer_start, idx)}}}`));
             idx++;
             state = STATE_PLAINTEXT;
-            output.append(PostRenderEscape.escapeContent(this.stored, 'swig', `{{${buffer}}}`));
-            buffer = '';
-          } else {
-            buffer = buffer + char;
           }
         } else if (state === STATE_SWIG_COMMENT) { // From swig back to plain text
           if (char === '#' && next_char === '}') {
             idx++;
             state = STATE_PLAINTEXT;
-            buffer = '';
+            plain_text_start = -1;
           }
         } else if (state === STATE_SWIG_FULL_TAG) {
           if (char === '{' && next_char === '%') {
@@ -234,16 +245,17 @@ class PostRenderEscape {
 
             if (swig_full_tag_found && swig_full_tag_end_buffer.includes(`end${swig_tag_name}`)) {
               state = STATE_PLAINTEXT;
-              output.append(PostRenderEscape.escapeContent(this.stored, 'swig', `{%${swig_full_tag_start_buffer}%}${buffer}{%${swig_full_tag_end_buffer}%}`));
+              pushAndReset(PostRenderEscape.escapeContent(this.stored, 'swig', `{%${str.slice(swig_full_tag_start_start, swig_full_tag_start_end)}%}${str.slice(buffer_start, idx)}{%${swig_full_tag_end_buffer}%}`));
               idx = _idx;
-              swig_full_tag_start_buffer = '';
               swig_full_tag_end_buffer = '';
-              buffer = '';
-            } else {
-              buffer += char;
             }
-          } else {
-            buffer += char;
+          }
+        } else if (state === STATE_PLAINTEXT_COMMENT) {
+          if (char === '-' && next_char === '-' && str[idx + 2] === '>') {
+            state = STATE_PLAINTEXT;
+            const comment = str.slice(plaintext_comment_start, idx + 3);
+            pushAndReset(PostRenderEscape.escapeContent(this.stored, 'comment', comment));
+            idx += 2;
           }
         }
         idx++;
@@ -251,20 +263,28 @@ class PostRenderEscape {
       if (state === STATE_PLAINTEXT) {
         break;
       }
-      // If the swig tag is not closed, then it is a plain text, we need to backtrack
-      idx = swig_start_idx[state];
-      buffer = '';
-      swig_string_quote = '';
-      if (state === STATE_SWIG_FULL_TAG) {
-        output.append(`{%${swig_full_tag_start_buffer}%`);
-      } else {
-        output.append('{');
+      if (state === STATE_PLAINTEXT_COMMENT) {
+        // Unterminated comment, just push the rest as comment
+        const comment = str.slice(plaintext_comment_start, length);
+        pushAndReset(PostRenderEscape.escapeContent(this.stored, 'comment', comment));
+        break;
       }
-      swig_full_tag_start_buffer = '';
+      // If the swig tag is not closed, then it is a plain text, we need to backtrack
+      if (state === STATE_SWIG_FULL_TAG) {
+        pushAndReset(`{%${str.slice(swig_full_tag_start_start, swig_full_tag_start_end)}%`);
+      } else {
+        pushAndReset('{');
+      }
+      idx = swig_start_idx[state];
+      swig_string_quote = '';
       state = STATE_PLAINTEXT;
     }
 
-    return output.toString();
+    if (plain_text_start !== -1 && plain_text_start < length) {
+      output += str.slice(plain_text_start);
+    }
+
+    return output;
   }
 }
 
@@ -513,6 +533,7 @@ class Post {
       // Run "before_post_render" filters
       return ctx.execFilter('before_post_render', data, { context: ctx });
     }).then(() => {
+      // Escape all comments to avoid conflict with Nunjucks and code block
       data.content = cacheObj.escapeCodeBlocks(data.content);
       // Escape all Nunjucks/Swig tags
       let hasSwigTag = true;
@@ -545,7 +566,8 @@ class Post {
         }
       }, options);
     }).then(content => {
-      data.content = cacheObj.restoreCodeBlocks(content);
+      data.content = cacheObj.restoreComments(content);
+      data.content = cacheObj.restoreCodeBlocks(data.content);
 
       // Run "after_post_render" filters
       return ctx.execFilter('after_post_render', data, { context: ctx });
