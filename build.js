@@ -101,6 +101,8 @@ function buildTsup() {
             code = code.replace(/from ['"](.*)\.js['"]/g, "from '$1.cjs'");
             // replace `require('...js')` with `require('...cjs')`
             code = code.replace(/require\(['"](.*)\.js['"]\)/g, "require('$1.cjs')");
+            // replace `loadRequire('...js')` with `loadRequire('...cjs')`
+            code = code.replace(/loadRequire\(['"](.*)\.js['"]\)/g, "loadRequire('$1.cjs')");
             return { code };
           } else {
             // for esm, just return the modified code
