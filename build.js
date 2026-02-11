@@ -44,6 +44,13 @@ function buildTsup() {
     define: {
       __VERSION__: JSON.stringify(packageJson.version)
     },
+    banner(ctx) {
+      if (ctx.format === 'esm') {
+        return {
+          js: `import { createRequire } from 'module'; const require = createRequire(import.meta.url);`
+        };
+      }
+    },
     entry: ['lib/**/*.ts'],
     splitting: true,
     treeshake: true,
