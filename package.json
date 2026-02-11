@@ -915,7 +915,7 @@
     "test2": "mocha --node-option loader=ts-node/esm --node-option experimental-specifier-resolution=node test/scripts/**/*.ts",
     "test-cov": "c8 --reporter=lcovonly npm test -- --no-parallel",
     "prepare": "husky",
-    "watch": "npx -y nodemon --watch lib --ext js,ts --exec \"npm run build\""
+    "watch": "npx -y nodemon --watch build.js --watch lib --ext js,ts --exec \"npm run build > build.log 2>&1\""
   },
   "files": [
     "dist/",
@@ -985,6 +985,7 @@
     "chai": "^4.3.6",
     "cheerio": "1.0.0",
     "decache": "^4.6.1",
+    "esbuild-fix-imports-plugin": "^1.0.23",
     "eslint": "^9.17.0",
     "eslint-config-hexo": "^6.0.0",
     "hexo-renderer-marked": "^6.0.0",
