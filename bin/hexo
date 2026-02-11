@@ -2,4 +2,6 @@
 
 'use strict';
 
-require('hexo-cli')();
+import hexoCli from 'hexo-cli';
+
+hexoCli();
