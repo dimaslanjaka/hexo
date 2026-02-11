@@ -47,7 +47,8 @@ function buildTsup() {
     banner(ctx) {
       if (ctx.format === 'esm') {
         return {
-          js: `import { createRequire } from 'module'; const require = createRequire(import.meta.url);`
+          js: `import { createRequire } from 'module';
+          const require = createRequire(import.meta.url);`
         };
       }
     },
@@ -77,6 +78,32 @@ function buildTsup() {
       writeFilePlugin() // Write files to disk once the processing is done
     ],
     plugins: [
+      {
+        name: 'remove-dirname-import',
+        buildEnd(ctx) {
+          ctx.writtenFiles.forEach((file) => {
+            const fullPath = path.resolve(file.name);
+            if (
+              !fullPath.endsWith('.js') &&
+              !fullPath.endsWith('.ts') &&
+              !fullPath.endsWith('.cts') &&
+              !fullPath.endsWith('.mts')
+            ) {
+              // skip non-ESM/TS files
+              return;
+            }
+            const content = fs.readFileSync(fullPath, 'utf-8');
+            if (content.includes('__dirname')) {
+              log(`Modifying __dirname in ${fullPath}`);
+              let modifiedContent = content.replace(
+                /import\s+.*__dirname.*from\s+['"].*['"];?/g,
+                `import NodePath from 'node:path';\nimport NodeUrl from 'node:url';\nconst __dirname = NodePath.dirname(NodeUrl.fileURLToPath(import.meta.url));`
+              );
+              fs.writeFileSync(fullPath, modifiedContent, 'utf-8');
+            }
+          });
+        }
+      },
       {
         name: 'fix-import-extensions',
         renderChunk(_, chunk) {
