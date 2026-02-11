@@ -3,7 +3,7 @@ import tildify from 'tildify';
 import Theme from '../theme';
 import Source from './source';
 import { exists, readdir } from 'hexo-fs';
-import { magenta } from 'picocolors';
+import * as picocolors from 'picocolors';
 import { deepMerge } from 'hexo-util';
 import validateConfig from './validate_config';
 import type Hexo from './index';
@@ -21,7 +21,7 @@ export = async (ctx: Hexo): Promise<void> => {
   let config = await ctx.render.render({ path });
   if (!config || typeof config !== 'object') return;
 
-  ctx.log.debug('Config loaded: %s', magenta(tildify(configPath)));
+  ctx.log.debug('Config loaded: %s', picocolors.magenta(tildify(configPath)));
 
   ctx.config = deepMerge(ctx.config, config);
   // If root is not exist, create it by config.url

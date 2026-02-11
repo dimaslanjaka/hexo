@@ -3,7 +3,7 @@ import Promise from 'bluebird';
 import { parse as yfm } from 'hexo-front-matter';
 import { extname, relative } from 'path';
 import { Pattern } from 'hexo-util';
-import { magenta } from 'picocolors';
+import * as picocolors from 'picocolors';
 import type { _File } from '../../box';
 import type Hexo from '../../hexo';
 import type { Stats } from 'fs';
@@ -11,7 +11,7 @@ import { PageSchema } from '../../types';
 
 export = (ctx: Hexo) => {
   return {
-    pattern: new Pattern(path => {
+    pattern: new Pattern((path) => {
       if (isExcludedFile(path, ctx.config)) return;
 
       return {
@@ -32,7 +32,7 @@ export = (ctx: Hexo) => {
 function processPage(ctx: Hexo, file: _File) {
   const Page = ctx.model('Page');
   const { path } = file;
-  const doc = Page.findOne({source: path});
+  const doc = Page.findOne({ source: path });
   const { config } = ctx;
   const { timezone } = config;
   const updated_option = config.updated_option;
@@ -49,11 +49,8 @@ function processPage(ctx: Hexo, file: _File) {
     return;
   }
 
-  return Promise.all([
-    file.stat(),
-    file.read()
-  ]).spread((stats: Stats, content: string) => {
-    const data: PageSchema = yfm(content);
+  return Promise.all([file.stat(), file.read()]).spread((stats: Stats, content: string) => {
+    const data = yfm(content) as PageSchema;
     const output = ctx.render.getOutput(path);
 
     data.source = path;
@@ -100,7 +97,7 @@ function processPage(ctx: Hexo, file: _File) {
 
     if (doc) {
       if (file.type !== 'update') {
-        ctx.log.warn(`Trying to "create" ${magenta(file.path)}, but the file already exists!`);
+        ctx.log.warn(`Trying to "create" ${picocolors.magenta(file.path)}, but the file already exists!`);
       }
       return doc.replace(data);
     }

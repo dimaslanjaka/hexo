@@ -1,7 +1,7 @@
 import { exists, createReadStream } from 'hexo-fs';
 import Promise from 'bluebird';
 import { extname } from 'path';
-import { magenta } from 'picocolors';
+import * as picocolors from 'picocolors';
 import type Hexo from '../../hexo';
 import type { AssetSchema, BaseGeneratorReturn } from '../../types';
 import type Document from 'warehouse/dist/document';
@@ -38,7 +38,7 @@ const process = (name: string, ctx: Hexo) => {
         path: source,
         toString: true
       }).catch((err: Error) => {
-        ctx.log.error({err}, 'Asset render failed: %s', magenta(path));
+        ctx.log.error({err}, 'Asset render failed: %s', picocolors.magenta(path));
       });
     } else {
       data.data = () => createReadStream(source);

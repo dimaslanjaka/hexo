@@ -4,7 +4,7 @@ import { parse as yfm } from 'hexo-front-matter';
 import { extname, join, posix, sep } from 'path';
 import { stat, listDir } from 'hexo-fs';
 import { slugize, Pattern, Permalink } from 'hexo-util';
-import { magenta } from 'picocolors';
+import * as picocolors from 'picocolors';
 import type { _File } from '../../box';
 import type Hexo from '../../hexo';
 import type { Stats } from 'fs';
@@ -27,7 +27,7 @@ const preservedKeys = {
 
 export = (ctx: Hexo) => {
   return {
-    pattern: new Pattern(path => {
+    pattern: new Pattern((path) => {
       if (isTmpFile(path)) return;
 
       let result;
@@ -51,7 +51,7 @@ export = (ctx: Hexo) => {
 
       // if post_asset_folder is set, restrict renderable files to default file extension
       if (result.renderable && ctx.config.post_asset_folder) {
-        result.renderable = (extname(ctx.config.new_post_name) === extname(path));
+        result.renderable = extname(ctx.config.new_post_name) === extname(path);
       }
 
       return result;
@@ -70,7 +70,7 @@ export = (ctx: Hexo) => {
 function processPost(ctx: Hexo, file: _File) {
   const Post = ctx.model('Post');
   const { path } = file.params;
-  const doc = Post.findOne({source: file.path});
+  const doc = Post.findOne({ source: file.path });
   const { config } = ctx;
   const { timezone, updated_option, use_slug_as_post_title } = config;
 
@@ -88,107 +88,102 @@ function processPost(ctx: Hexo, file: _File) {
     return;
   }
 
-  return Promise.all([
-    file.stat(),
-    file.read()
-  ]).spread((stats: Stats, content: string) => {
-    const data: PostSchema = yfm(content);
-    const info = parseFilename(config.new_post_name, path);
-    const keys = Object.keys(info);
+  return Promise.all([file.stat(), file.read()])
+    .spread((stats: Stats, content: string) => {
+      const data = yfm(content) as PostSchema;
+      const info = parseFilename(config.new_post_name, path);
+      const keys = Object.keys(info);
 
-    data.source = file.path;
-    data.raw = content;
-    data.slug = info.title;
+      data.source = file.path;
+      data.raw = content;
+      data.slug = info.title;
 
-    if (file.params.published) {
-      if (!Object.prototype.hasOwnProperty.call(data, 'published')) data.published = true;
-    } else {
-      data.published = false;
-    }
-
-    for (let i = 0, len = keys.length; i < len; i++) {
-      const key = keys[i];
-      if (!preservedKeys[key]) data[key] = info[key];
-    }
-
-    // use `slug` as `title` of post when `title` is not specified.
-    // https://github.com/hexojs/hexo/issues/5372
-    if (use_slug_as_post_title && !('title' in data)) {
-      // @ts-expect-error - title is not in data
-      data.title = info.title;
-    }
-
-    if (data.date) {
-      data.date = toDate(data.date) as any;
-    } else if (info && info.year && (info.month || info.i_month) && (info.day || info.i_day)) {
-      data.date = new Date(
-        info.year,
-        parseInt(info.month || info.i_month, 10) - 1,
-        parseInt(info.day || info.i_day, 10)
-      ) as any;
-    }
-
-    if (data.date) {
-      if (timezone) data.date = adjustDateForTimezone(data.date, timezone) as any;
-    } else {
-      data.date = stats.birthtime as any;
-    }
-
-    data.updated = toDate(data.updated) as any;
-
-    if (data.updated) {
-      if (timezone) data.updated = adjustDateForTimezone(data.updated, timezone) as any;
-    } else if (updated_option === 'date') {
-      data.updated = data.date;
-    } else if (updated_option === 'empty') {
-      data.updated = undefined;
-    } else {
-      data.updated = stats.mtime as any;
-    }
-
-    if (data.category && !data.categories) {
-      data.categories = data.category;
-      data.category = undefined;
-    }
-
-    if (data.tag && !data.tags) {
-      data.tags = data.tag;
-      data.tag = undefined;
-    }
-
-    categories = data.categories || [];
-    tags = data.tags || [];
-
-    if (!Array.isArray(categories)) categories = [categories];
-    if (!Array.isArray(tags)) tags = [tags];
-
-    if (data.photo && !data.photos) {
-      data.photos = data.photo;
-      data.photo = undefined;
-    }
-
-    if (data.photos && !Array.isArray(data.photos)) {
-      data.photos = [data.photos];
-    }
-
-    if (data.permalink) {
-      data.__permalink = data.permalink;
-      data.permalink = undefined;
-    }
-
-    if (doc) {
-      if (file.type !== 'update') {
-        ctx.log.warn(`Trying to "create" ${magenta(file.path)}, but the file already exists!`);
+      if (file.params.published) {
+        if (!Object.prototype.hasOwnProperty.call(data, 'published')) data.published = true;
+      } else {
+        data.published = false;
       }
-      return doc.replace(data);
-    }
 
-    return Post.insert(data);
-  }).then((doc: PostSchema) => Promise.all([
-    doc.setCategories(categories),
-    doc.setTags(tags),
-    scanAssetDir(ctx, doc)
-  ]));
+      for (let i = 0, len = keys.length; i < len; i++) {
+        const key = keys[i];
+        if (!preservedKeys[key]) data[key] = info[key];
+      }
+
+      // use `slug` as `title` of post when `title` is not specified.
+      // https://github.com/hexojs/hexo/issues/5372
+      if (use_slug_as_post_title && !('title' in data)) {
+        // @ts-expect-error - title is not in data
+        data.title = info.title;
+      }
+
+      if (data.date) {
+        data.date = toDate(data.date) as any;
+      } else if (info && info.year && (info.month || info.i_month) && (info.day || info.i_day)) {
+        data.date = new Date(
+          info.year,
+          parseInt(info.month || info.i_month, 10) - 1,
+          parseInt(info.day || info.i_day, 10)
+        ) as any;
+      }
+
+      if (data.date) {
+        if (timezone) data.date = adjustDateForTimezone(data.date, timezone) as any;
+      } else {
+        data.date = stats.birthtime as any;
+      }
+
+      data.updated = toDate(data.updated) as any;
+
+      if (data.updated) {
+        if (timezone) data.updated = adjustDateForTimezone(data.updated, timezone) as any;
+      } else if (updated_option === 'date') {
+        data.updated = data.date;
+      } else if (updated_option === 'empty') {
+        data.updated = undefined;
+      } else {
+        data.updated = stats.mtime as any;
+      }
+
+      if (data.category && !data.categories) {
+        data.categories = data.category;
+        data.category = undefined;
+      }
+
+      if (data.tag && !data.tags) {
+        data.tags = data.tag;
+        data.tag = undefined;
+      }
+
+      categories = data.categories || [];
+      tags = data.tags || [];
+
+      if (!Array.isArray(categories)) categories = [categories];
+      if (!Array.isArray(tags)) tags = [tags];
+
+      if (data.photo && !data.photos) {
+        data.photos = data.photo;
+        data.photo = undefined;
+      }
+
+      if (data.photos && !Array.isArray(data.photos)) {
+        data.photos = [data.photos];
+      }
+
+      if (data.permalink) {
+        data.__permalink = data.permalink;
+        data.permalink = undefined;
+      }
+
+      if (doc) {
+        if (file.type !== 'update') {
+          ctx.log.warn(`Trying to "create" ${picocolors.magenta(file.path)}, but the file already exists!`);
+        }
+        return doc.replace(data);
+      }
+
+      return Post.insert(data);
+    })
+    .then((doc: PostSchema) => Promise.all([doc.setCategories(categories), doc.setTags(tags), scanAssetDir(ctx, doc)]));
 }
 
 function parseFilename(config: string, path: string) {
@@ -234,28 +229,32 @@ function scanAssetDir(ctx: Hexo, post: PostSchema) {
   const sourceDirLength = sourceDir.length;
   const PostAsset = ctx.model('PostAsset');
 
-  return stat(assetDir).then(stats => {
-    if (!stats.isDirectory()) return [];
+  return stat(assetDir)
+    .then((stats) => {
+      if (!stats.isDirectory()) return [];
 
-    return listDir(assetDir);
-  }).catch(err => {
-    if (err && err.code === 'ENOENT') return [];
-    throw err;
-  }).filter(item => !isExcludedFile(item, ctx.config)).map(item => {
-    const id = join(assetDir, item).substring(baseDirLength).replace(/\\/g, '/');
-    const renderablePath = id.substring(sourceDirLength + 1);
-    const asset = PostAsset.findById(id);
+      return listDir(assetDir);
+    })
+    .catch((err) => {
+      if (err && err.code === 'ENOENT') return [];
+      throw err;
+    })
+    .filter((item) => !isExcludedFile(item, ctx.config))
+    .map((item) => {
+      const id = join(assetDir, item).substring(baseDirLength).replace(/\\/g, '/');
+      const renderablePath = id.substring(sourceDirLength + 1);
+      const asset = PostAsset.findById(id);
 
-    if (shouldSkipAsset(ctx, post, asset)) return undefined;
+      if (shouldSkipAsset(ctx, post, asset as any)) return undefined;
 
-    return PostAsset.save({
-      _id: id,
-      post: post._id,
-      slug: item,
-      modified: true,
-      renderable: ctx.render.isRenderable(renderablePath) && !isMatch(renderablePath, ctx.config.skip_render)
+      return PostAsset.save({
+        _id: id,
+        post: post._id,
+        slug: item,
+        modified: true,
+        renderable: ctx.render.isRenderable(renderablePath) && !isMatch(renderablePath, ctx.config.skip_render)
+      });
     });
-  });
 }
 
 function shouldSkipAsset(ctx: Hexo, post: PostSchema, asset: Document<PostAssetSchema>) {
@@ -300,7 +299,7 @@ function processAsset(ctx: Hexo, file: _File) {
     // `postAsset.post` is `Post.id`.
     const post = Post.findById(postAsset.post);
     if (post != null && (post.published || ctx._showDrafts())) {
-      return savePostAsset(post);
+      return savePostAsset(post as any);
     }
   }
 
@@ -320,10 +319,10 @@ function processAsset(ctx: Hexo, file: _File) {
        - `Post.findOne(p => p.asset_dir === absoluteAssetDirPath)`  // returned wrong post
        - `Post.findOne({asset_dir: absoluteAssetDirPath})`          // returned null
   */
-  const posts = Post.filter(p => p.asset_dir === absoluteAssetDirPath);
+  const posts = Post.filter((p) => p.asset_dir === absoluteAssetDirPath);
   const post = posts.length === 1 ? posts.data[0] : null;
   if (post != null && (post.published || ctx._showDrafts())) {
-    return savePostAsset(post);
+    return savePostAsset(post as any);
   }
 
   // NOTE: Probably, unreachable.
