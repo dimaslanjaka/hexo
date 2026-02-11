@@ -915,7 +915,8 @@
     "test2": "mocha --node-option loader=ts-node/esm --node-option experimental-specifier-resolution=node test/scripts/**/*.ts",
     "test-cov": "c8 --reporter=lcovonly npm test -- --no-parallel",
     "prepare": "husky",
-    "watch": "npx -y nodemon --watch build.js --watch lib --ext js,ts --exec \"npm run build > build.log 2>&1\""
+    "watch": "npx -y nodemon --watch build.js --watch lib --ext js,ts --exec \"yarn build > build.log 2>&1\"",
+    "watch-and-test": "npx -y nodemon --watch build.js --watch lib --ext js,ts --exec \"yarn build > build.log 2>&1 && yarn workspace hexo-site run build\""
   },
   "files": [
     "dist/",
