@@ -9,9 +9,10 @@ import { spawnAsync } from 'cross-spawn';
 exec('chcp 65001');
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const root = path.resolve(__dirname, 'packages');
+const packageDirectoryPath = path.resolve(__dirname, 'packages');
+const repoRoot = path.resolve(__dirname);
 
-const packages = fs.readdirSync(root);
+const packages = fs.readdirSync(packageDirectoryPath);
 const ignores = [
   '**/.git',
   '**/node_modules/.cache',
@@ -83,6 +84,22 @@ export async function findWorkspaceDeps(rootDir) {
     });
   for (const pkg of await parseWorkspaces()) {
     console.log(`🚀 Scanning for ${pkg.name} symlinked to ${pkg.location}`);
+    // Remove lockfiles in workspace packages (but do not touch the repo root)
+    try {
+      const pkgDir = path.resolve(pkg.location);
+      if (pkgDir !== repoRoot && pkgDir !== process.cwd()) {
+        const yarnLock = path.join(pkgDir, 'yarn.lock');
+        const pkgLock = path.join(pkgDir, 'package-lock.json');
+        [yarnLock, pkgLock].forEach((lockfile) => {
+          if (fs.existsSync(lockfile)) {
+            console.log(`🧹\tRemoving lockfile: ${lockfile}`);
+            deletePathSync(lockfile);
+          }
+        });
+      }
+    } catch (err) {
+      console.error('❌\tFailed to remove workspace lockfiles for', pkg.location, err);
+    }
     const callback = (f) => {
       f = path.toUnix(f);
       if (f.includes('node_modules')) {
@@ -169,7 +186,7 @@ export function deletePathSync(file) {
     // console.log(`🚀 Scanning for node_modules in: ${root}`);
     // await deleteNodeModulesDirs(root, deletePath);
     // console.log('🏁 All node_modules folders deleted.');
-    await findWorkspaceDeps(root);
+    await findWorkspaceDeps(packageDirectoryPath);
   } catch (err) {
     console.error('💥\tError:', err);
   }
