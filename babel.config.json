@@ -1,0 +1,11 @@
+// babel.config.json or .babelrc
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "modules": false // This is key to prevent Babel from converting imports/exports to CJS
+      }
+    ]
+  ]
+}
