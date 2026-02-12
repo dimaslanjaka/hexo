@@ -9,3 +9,8 @@ export { default as Migrator } from './migrator.js';
 export { default as Processor } from './processor.js';
 export { default as Renderer } from './renderer.js';
 export { default as Tag } from './tag.js';
+
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = exports;
+}
