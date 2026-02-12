@@ -17,7 +17,8 @@ async function fixExports(file) {
   if (/\bexport\s+default\b/.test(content) || /module\.exports\s*=/.test(content)) return;
 
   // Find top-level `export =` lines followed by function/class/object and replace only the `export =` with `const <name> =`
-  const exportRegex = /^\s*export\s*=\s*(?=(function|class|\{))/gm;
+  // also match arrow functions starting with '(' or identifier followed by '=>'
+  const exportRegex = /^\s*export\s*=\s*(?=(function|class|\{|\(|[A-Za-z0-9_$]+\s*=>))/gm;
   let match2;
   const transforms = [];
 

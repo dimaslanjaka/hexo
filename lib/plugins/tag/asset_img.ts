@@ -8,7 +8,7 @@ import type Hexo from '../../hexo';
  * Syntax:
  *   {% asset_img [class names] slug [width] [height] [title text [alt text]]%}
  */
-export = (ctx: Hexo) => {
+const asset_img_default = (ctx: Hexo) => {
   const PostAsset = ctx.model('PostAsset');
 
   return function assetImgTag(args: string[]) {
@@ -16,7 +16,7 @@ export = (ctx: Hexo) => {
 
     // Find image URL
     for (let i = 0; i < len; i++) {
-      const asset = PostAsset.findOne({post: this._id, slug: args[i]});
+      const asset = PostAsset.findOne({ post: this._id, slug: args[i] });
       if (asset) {
         // img tag will call url_for so no need to call it here
         args[i] = encodeURL(new URL(asset.path, ctx.config.url).pathname);
@@ -25,3 +25,12 @@ export = (ctx: Hexo) => {
     }
   };
 };
+
+// For ESM compatibility
+export default asset_img_default;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = asset_img_default;
+  // For ESM compatibility
+  module.exports.default = asset_img_default;
+}

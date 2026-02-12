@@ -2,8 +2,7 @@ import { Pattern } from 'hexo-util';
 import { extname } from 'path';
 import type Hexo from '../../hexo';
 import type { _File } from '../../box';
-
-export = (ctx: Hexo) => ({
+const data_default = (ctx: Hexo) => ({
   pattern: new Pattern('_data/*path'),
 
   process: function dataProcessor(file: _File) {
@@ -34,3 +33,12 @@ export = (ctx: Hexo) => ({
     });
   }
 });
+
+// For ESM compatibility
+export default data_default;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = data_default;
+  // For ESM compatibility
+  module.exports.default = data_default;
+}

@@ -5,8 +5,7 @@ import moment from 'moment';
 import { full_url_for } from 'hexo-util';
 import type Hexo from '../hexo';
 import type { PageSchema } from '../types';
-
-export = (ctx: Hexo) => {
+const page_default = (ctx: Hexo) => {
   const Page = new warehouse.Schema<PageSchema>({
     title: {type: String, default: ''},
     date: {
@@ -37,3 +36,12 @@ export = (ctx: Hexo) => {
 
   return Page;
 };
+
+// For ESM compatibility
+export default page_default;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = page_default;
+  // For ESM compatibility
+  module.exports.default = page_default;
+}

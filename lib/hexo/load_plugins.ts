@@ -3,8 +3,7 @@ import { exists, readFile, listDir } from 'hexo-fs';
 import Promise from 'bluebird';
 import * as picocolors from 'picocolors';
 import type Hexo from './index';
-
-export = (ctx: Hexo): Promise<void[][]> => {
+const load_plugins_default = (ctx: Hexo): Promise<void[][]> => {
   if (!ctx.env.init || ctx.env.safe) return;
 
   return loadModules(ctx).then(() => loadScripts(ctx));
@@ -79,4 +78,13 @@ function loadScripts(ctx: Hexo): Promise<void[][]> {
 
 function displayPath(path: string, baseDirLength: number): string {
   return picocolors.magenta(path.substring(baseDirLength));
+}
+
+// For ESM compatibility
+export default load_plugins_default;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = load_plugins_default;
+  // For ESM compatibility
+  module.exports.default = load_plugins_default;
 }

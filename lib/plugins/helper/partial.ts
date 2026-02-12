@@ -6,8 +6,7 @@ interface Options {
   cache?: boolean | string;
   only?: boolean;
 }
-
-export = (ctx: Hexo) => function partial(this: LocalsType, name: string, locals?: any, options: Options = {}) {
+const partial_default = (ctx: Hexo) => function partial(this: LocalsType, name: string, locals?: any, options: Options = {}) {
   if (typeof name !== 'string') throw new TypeError('name must be a string!');
 
   const { cache } = options;
@@ -38,3 +37,12 @@ export = (ctx: Hexo) => function partial(this: LocalsType, name: string, locals?
 
   return view.renderSync(viewLocals);
 };
+
+// For ESM compatibility
+export default partial_default;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = partial_default;
+  // For ESM compatibility
+  module.exports.default = partial_default;
+}

@@ -13,8 +13,7 @@ const rTo = /\s*to:(\d+)/i;
 * Syntax:
 *   {% include_code [title] [lang:language] path/to/file %}
 */
-
-export = (ctx: Hexo) => function includeCodeTag(args: string[]) {
+const include_code_default = (ctx: Hexo) => function includeCodeTag(args: string[]) {
   let codeDir = ctx.config.code_dir;
   let arg = args.join(' ');
 
@@ -75,3 +74,12 @@ export = (ctx: Hexo) => function includeCodeTag(args: string[]) {
   }
   return `<pre><code>${code}</code></pre>`;
 };
+
+// For ESM compatibility
+export default include_code_default;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = include_code_default;
+  // For ESM compatibility
+  module.exports.default = include_code_default;
+}

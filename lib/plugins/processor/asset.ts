@@ -8,8 +8,7 @@ import type { _File } from '../../box';
 import type Hexo from '../../hexo';
 import type { Stats } from 'fs';
 import { PageSchema } from '../../types';
-
-export = (ctx: Hexo) => {
+const asset_default = (ctx: Hexo) => {
   return {
     pattern: new Pattern((path) => {
       if (isExcludedFile(path, ctx.config)) return;
@@ -125,4 +124,13 @@ function processAsset(ctx: Hexo, file: _File) {
     modified: file.type !== 'skip',
     renderable: file.params.renderable
   });
+}
+
+// For ESM compatibility
+export default asset_default;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = asset_default;
+  // For ESM compatibility
+  module.exports.default = asset_default;
 }

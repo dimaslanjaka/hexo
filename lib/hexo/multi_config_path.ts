@@ -3,8 +3,7 @@ import { existsSync, readFileSync, writeFileSync } from 'hexo-fs';
 import yml from 'js-yaml';
 import { deepMerge } from 'hexo-util';
 import type Hexo from './index';
-
-export = (ctx: Hexo) => function multiConfigPath(base: string, configPaths?: string, outputDir?: string): string {
+const multi_config_path_default = (ctx: Hexo) => function multiConfigPath(base: string, configPaths?: string, outputDir?: string): string {
   const { log } = ctx;
   const defaultPath = join(base, '_config.yml');
 
@@ -74,3 +73,12 @@ export = (ctx: Hexo) => function multiConfigPath(base: string, configPaths?: str
   // write file and return path
   return outputPath;
 };
+
+// For ESM compatibility
+export default multi_config_path_default;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = multi_config_path_default;
+  // For ESM compatibility
+  module.exports.default = multi_config_path_default;
+}

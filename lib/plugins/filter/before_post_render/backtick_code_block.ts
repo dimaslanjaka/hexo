@@ -80,8 +80,7 @@ function parseArgs(args: string) {
     _args: args.replace(rAdditionalOptions, '')
   };
 }
-
-export = (ctx: Hexo): (data: RenderData) => void => {
+const backtick_code_block_default = (ctx: Hexo): (data: RenderData) => void => {
   return function backtickCodeBlock(data: RenderData): void {
     const dataContent = data.content;
 
@@ -172,3 +171,12 @@ export = (ctx: Hexo): (data: RenderData) => void => {
     });
   };
 };
+
+// For ESM compatibility
+export default backtick_code_block_default;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = backtick_code_block_default;
+  // For ESM compatibility
+  module.exports.default = backtick_code_block_default;
+}

@@ -3,8 +3,7 @@ import { slugize, full_url_for } from 'hexo-util';
 const { hasOwnProperty: hasOwn } = Object.prototype;
 import type Hexo from '../hexo';
 import type { TagSchema } from '../types';
-
-export = (ctx: Hexo) => {
+const tag_default = (ctx: Hexo) => {
   const Tag = new warehouse.Schema<TagSchema>({
     name: {type: String, required: true}
   });
@@ -71,3 +70,12 @@ export = (ctx: Hexo) => {
 
   return Tag;
 };
+
+// For ESM compatibility
+export default tag_default;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = tag_default;
+  // For ESM compatibility
+  module.exports.default = tag_default;
+}

@@ -24,8 +24,7 @@ const preservedKeys = {
   i_day: true,
   hash: true
 };
-
-export = (ctx: Hexo) => {
+const post_default = (ctx: Hexo) => {
   return {
     pattern: new Pattern((path) => {
       if (isTmpFile(path)) return;
@@ -329,4 +328,13 @@ function processAsset(ctx: Hexo, file: _File) {
   if (postAsset) {
     return postAsset.remove();
   }
+}
+
+// For ESM compatibility
+export default post_default;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = post_default;
+  // For ESM compatibility
+  module.exports.default = post_default;
 }

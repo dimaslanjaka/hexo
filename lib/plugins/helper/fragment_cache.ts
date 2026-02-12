@@ -1,7 +1,6 @@
 import { Cache } from 'hexo-util';
 import type Hexo from '../../hexo';
-
-export = (ctx: Hexo) => {
+const fragment_cache_default = (ctx: Hexo) => {
   const cache = new Cache();
 
   // reset cache for watch mode
@@ -16,3 +15,12 @@ export = (ctx: Hexo) => {
     return result;
   };
 };
+
+// For ESM compatibility
+export default fragment_cache_default;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = fragment_cache_default;
+  // For ESM compatibility
+  module.exports.default = fragment_cache_default;
+}

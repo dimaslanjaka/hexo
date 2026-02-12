@@ -1,6 +1,5 @@
 import type Hexo from '../../hexo';
-
-export = (ctx: Hexo) => {
+const index_default = (ctx: Hexo) => {
   const { helper } = ctx.extend;
 
   const date = require('./date');
@@ -80,3 +79,12 @@ export = (ctx: Hexo) => {
   helper.register('inspect', debug.inspectObject);
   helper.register('log', debug.log);
 };
+
+// For ESM compatibility
+export default index_default;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = index_default;
+  // For ESM compatibility
+  module.exports.default = index_default;
+}
