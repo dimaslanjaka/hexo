@@ -16,85 +16,57 @@ async function fixExports(file) {
   // If the file already contains the compatibility block (module.exports or export default), skip
   if (/\bexport\s+default\b/.test(content) || /module\.exports\s*=/.test(content)) return;
 
-  // Find all `export = ...;` occurrences (identifier, function/class expression, or other expressions)
-  const regex = /export\s*=\s*(?:([A-Za-z0-9_$]+)\s*;|((?:function|class)[\s\S]*?\})\s*;|(.+?)\s*;)/g;
-  let match;
-  let newContent = '';
-  let lastIndex = 0;
+  // Find top-level `export =` lines followed by function/class/object and replace only the `export =` with `const <name> =`
+  const exportRegex = /^\s*export\s*=\s*(?=(function|class|\{))/gm;
+  let match2;
+  const transforms = [];
 
-  while ((match = regex.exec(content)) !== null) {
-    const identifier = match[1];
-    const funcOrClass = match[2];
-    const otherExpr = match[3];
+  while ((match2 = exportRegex.exec(content)) !== null) {
+    const start = match2.index;
+    const afterEq = exportRegex.lastIndex;
 
-    // Determine whether we captured a simple identifier or an expression
-    let isIdentifier = false;
-    let id = null;
-    let expr = null;
-
-    if (identifier) {
-      isIdentifier = true;
-      id = identifier;
-    } else if (funcOrClass) {
-      expr = funcOrClass.trim();
-    } else if (otherExpr) {
-      expr = otherExpr.trim();
-    } else {
-      continue;
-    }
-
-    // For identifier case, skip if already exported
-    if (isIdentifier) {
-      const escapedId = id.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&');
-      const defaultRegex = new RegExp(`\\bexport\\s+default\\s+${escapedId}\\s*;`);
-      const cjsRegex = new RegExp(`module\\.exports\\s*=\\s*${escapedId}`);
-      if (defaultRegex.test(content) || cjsRegex.test(content)) {
-        lastIndex = match.index + match[0].length;
-        continue;
-      }
-
-      // copy content up to the `export =` statement
-      newContent += content.slice(lastIndex, match.index);
-
-      // insert compatibility block (preserve identifier)
-      const block = `// For ESM compatibility\nexport default ${id};\n// For CommonJS compatibility\nif (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {\n  module.exports = ${id};\n  // For ESM compatibility\n  module.exports.default = ${id};\n}\n`;
-
-      newContent += block;
-      changed = true;
-      lastIndex = match.index + match[0].length;
-      continue;
-    }
-
-    // For expression case (anonymous function/class or other expressions), generate a unique const name
+    // determine const name based on filename
     const base = path.basename(file, '.ts').replace(/[^A-Za-z0-9_$]/g, '_');
     let constName = `${base}_default`;
-    let i = 0;
+    let idx = 0;
     while (
+      content.includes(` const ${constName}`) ||
       content.includes(` ${constName} `) ||
-      content.includes(`const ${constName}`) ||
-      newContent.includes(constName)
+      transforms.some((t) => t.constName === constName)
     ) {
-      i += 1;
-      constName = `${base}_default_${i}`;
+      idx += 1;
+      constName = `${base}_default_${idx}`;
     }
 
-    // copy content up to the `export =` statement
-    newContent += content.slice(lastIndex, match.index);
+    // replacement text for the export token (keep original indentation)
+    const lineStart = content.lastIndexOf('\n', start) + 1;
+    const indent = content.slice(lineStart, start).match(/^\s*/)[0];
+    const replacement = `${indent}const ${constName} = `;
 
-    // create a const for the expression and insert compatibility block
-    const expression = expr;
-    const block = `const ${constName} = ${expression};\n// For ESM compatibility\nexport default ${constName};\n// For CommonJS compatibility\nif (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {\n  module.exports = ${constName};\n  // For ESM compatibility\n  module.exports.default = ${constName};\n}\n`;
-
-    newContent += block;
-    changed = true;
-    lastIndex = match.index + match[0].length;
+    transforms.push({ start, afterEq, replacement, constName });
   }
 
-  if (changed) {
-    newContent += content.slice(lastIndex);
-    await writeFile(file, newContent, 'utf8');
-    console.log(`✔ Replaced export = with compatibility block in: ${file}`);
+  if (transforms.length === 0) return;
+
+  // apply transforms (from last to first to keep indexes valid)
+  transforms.sort((a, b) => b.start - a.start);
+  let fixed = content;
+  const appendBlocks = [];
+  for (const t of transforms) {
+    // replace the `export =` (from start up to the next non-space char before the expression) with replacement
+    // find end of the `export =` token region
+    const exportTokenEnd = t.afterEq;
+    fixed = fixed.slice(0, t.start) + t.replacement + fixed.slice(exportTokenEnd);
+    appendBlocks.push(
+      `// For ESM compatibility\nexport default ${t.constName};\n// For CommonJS compatibility\nif (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {\n  module.exports = ${t.constName};\n  // For ESM compatibility\n  module.exports.default = ${t.constName};\n}\n`
+    );
   }
+
+  // Append compatibility blocks at end of file
+  fixed = fixed.replace(/\s+$/g, '') + '\n\n' + appendBlocks.join('\n');
+
+  await writeFile(file, fixed, 'utf8');
+  console.log(`✔ Converted export = expressions to const + compatibility block in: ${file}`);
 }
 
 async function run() {

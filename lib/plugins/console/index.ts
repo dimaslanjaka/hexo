@@ -1,6 +1,5 @@
 import type Hexo from '../../hexo';
-
-export = function(ctx: Hexo) {
+const index_default = function(ctx: Hexo) {
   const { console } = ctx.extend;
 
   console.register('clean', 'Remove generated files and cache.', require('./clean'));
@@ -77,4 +76,13 @@ export = function(ctx: Hexo) {
       {name: '--pretty', desc: 'Prettify JSON output'}
     ]
   }, require('./render'));
+}
+
+// For ESM compatibility
+export default index_default;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = index_default;
+  // For ESM compatibility
+  module.exports.default = index_default;
 }
