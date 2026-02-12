@@ -42,7 +42,7 @@ const externalDeps = [...Object.keys(packageJson.dependencies), ...Object.keys(p
 function buildTsup() {
   const baseConfig = defineConfig({
     define: {
-      __VERSION__: JSON.stringify(packageJson.version)
+      __VERSION__: `'${packageJson.version}'`
     },
     banner(ctx) {
       if (ctx.format === 'esm') {
@@ -52,7 +52,7 @@ function buildTsup() {
         };
       }
     },
-    entry: ['lib/**/*.ts'],
+    entry: ['lib/**/*.ts', 'lib/hexo/index.ts'],
     splitting: true,
     treeshake: true,
     bundle: false,
