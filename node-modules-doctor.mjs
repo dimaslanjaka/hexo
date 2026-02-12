@@ -131,11 +131,14 @@ export async function findWorkspaceDeps(rootDir) {
 /** Sequential deletion queue for deletePath */
 const deleteQueueArr = [];
 let processingQueue = false;
+
 /**
  * A no-operation function.
  * @returns {void}
  */
-const noop = () => {};
+function noop() {
+  // No operation performed
+}
 
 /**
  * Processes the deletion queue sequentially, removing files/directories listed in deleteQueueArr.
