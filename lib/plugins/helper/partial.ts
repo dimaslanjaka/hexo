@@ -1,15 +1,13 @@
 import { dirname, join } from 'path';
-import type Hexo from '../../hexo';
-import type { LocalsType } from '../../types';
+import type Hexo from '../../hexo/index.js';
+import type { LocalsType } from '../../types.js';
 
 interface Options {
   cache?: boolean | string;
   only?: boolean;
 }
-
-export default (ctx: Hexo) =>
-  function partial(this: LocalsType, name: string, locals?: any, options: Options = {}) {
-    if (typeof name !== 'string') throw new TypeError('name must be a string!');
+const partial_default = (ctx: Hexo) => function partial(this: LocalsType, name: string, locals?: any, options: Options = {}) {
+  if (typeof name !== 'string') throw new TypeError('name must be a string!');
 
     const { cache } = options;
     const viewDir = this.view_dir;
@@ -37,5 +35,14 @@ export default (ctx: Hexo) =>
       return this.fragment_cache(cacheId, () => view.renderSync(viewLocals));
     }
 
-    return view.renderSync(viewLocals);
-  };
+  return view.renderSync(viewLocals);
+};
+
+// For ESM compatibility
+export default partial_default;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = partial_default;
+  // For ESM compatibility
+  module.exports.default = partial_default;
+}

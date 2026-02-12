@@ -57,7 +57,16 @@ function mailToHelper(path: string | string[], text?: string, options: Options =
   return htmlTag('a', attrs as Attrs, text);
 }
 
-export default moize(mailToHelper, {
+const default_export_mail_to = moize(mailToHelper, {
   maxSize: 10,
   isDeepEqual: true
 });
+
+// For ESM compatibility
+export default default_export_mail_to;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = default_export_mail_to;
+  // For ESM compatibility
+  module.exports.default = default_export_mail_to;
+}

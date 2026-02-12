@@ -1,9 +1,8 @@
 import warehouse from 'warehouse';
 import { slugize, full_url_for } from 'hexo-util';
-import type Hexo from '../hexo';
-import type { CategorySchema } from '../types';
-
-export default (ctx: Hexo) => {
+import type Hexo from '../hexo/index.js';
+import type { CategorySchema } from '../types.js';
+const category_default = (ctx: Hexo) => {
   const Category = new warehouse.Schema<CategorySchema>({
     name: { type: String, required: true },
     parent: { type: warehouse.Schema.Types.CUID, ref: 'Category' }
@@ -84,3 +83,12 @@ export default (ctx: Hexo) => {
 
   return Category;
 };
+
+// For ESM compatibility
+export default category_default;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = category_default;
+  // For ESM compatibility
+  module.exports.default = category_default;
+}

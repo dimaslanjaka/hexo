@@ -1,15 +1,15 @@
-import { toDate, adjustDateForTimezone, isExcludedFile, isTmpFile, isHiddenFile, isMatch } from './common';
+import { toDate, adjustDateForTimezone, isExcludedFile, isTmpFile, isHiddenFile, isMatch } from './common.js';
 import Promise from 'bluebird';
 import { parse as yfm } from 'hexo-front-matter';
 import { extname, join, posix, sep } from 'path';
 import { stat, listDir } from 'hexo-fs';
 import { slugize, Pattern, Permalink } from 'hexo-util';
 import * as picocolors from 'picocolors';
-import type { _File } from '../../box';
-import type Hexo from '../../hexo';
+import type { _File } from '../../box/index.js';
+import type Hexo from '../../hexo/index.js';
 import type { Stats } from 'fs';
-import { PostAssetSchema, PostSchema } from '../../types';
-import type Document from 'warehouse/dist/document';
+import { PostAssetSchema, PostSchema } from '../../types.js';
+import type Document from 'warehouse/dist/document' with { 'resolution-mode': 'import' };
 
 const postDir = '_posts/';
 const draftDir = '_drafts/';
@@ -24,8 +24,7 @@ const preservedKeys = {
   i_day: true,
   hash: true
 };
-
-export default (ctx: Hexo) => {
+const post_default = (ctx: Hexo) => {
   return {
     pattern: new Pattern((path) => {
       if (isTmpFile(path)) return;
@@ -230,22 +229,22 @@ function scanAssetDir(ctx: Hexo, post: PostSchema) {
   const PostAsset = ctx.model('PostAsset');
 
   return stat(assetDir)
-    .then((stats) => {
+    .then(stats => {
       if (!stats.isDirectory()) return [];
 
       return listDir(assetDir);
     })
-    .catch((err) => {
+    .catch(err => {
       if (err && err.code === 'ENOENT') return [];
       throw err;
     })
-    .filter((item) => !isExcludedFile(item, ctx.config))
-    .map((item) => {
+    .filter(item => !isExcludedFile(item, ctx.config))
+    .map(item => {
       const id = join(assetDir, item).substring(baseDirLength).replace(/\\/g, '/');
       const renderablePath = id.substring(sourceDirLength + 1);
       const asset = PostAsset.findById(id);
 
-      if (shouldSkipAsset(ctx, post, asset)) return undefined;
+      if (shouldSkipAsset(ctx, post, asset as any)) return undefined;
 
       return PostAsset.save({
         _id: id,
@@ -299,7 +298,7 @@ function processAsset(ctx: Hexo, file: _File) {
     // `postAsset.post` is `Post.id`.
     const post = Post.findById(postAsset.post);
     if (post != null && (post.published || ctx._showDrafts())) {
-      return savePostAsset(post);
+      return savePostAsset(post as any);
     }
   }
 
@@ -322,11 +321,20 @@ function processAsset(ctx: Hexo, file: _File) {
   const posts = Post.filter((p) => p.asset_dir === absoluteAssetDirPath);
   const post = posts.length === 1 ? posts.data[0] : null;
   if (post != null && (post.published || ctx._showDrafts())) {
-    return savePostAsset(post);
+    return savePostAsset(post as any);
   }
 
   // NOTE: Probably, unreachable.
   if (postAsset) {
     return postAsset.remove();
   }
+}
+
+// For ESM compatibility
+export default post_default;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = post_default;
+  // For ESM compatibility
+  module.exports.default = post_default;
 }

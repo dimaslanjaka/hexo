@@ -1,5 +1,5 @@
 import * as picocolors from 'picocolors';
-import type Hexo from '../../hexo';
+import type Hexo from '../../hexo/index.js';
 
 interface MigrateArgs {
   _: string[];
@@ -30,4 +30,12 @@ function migrateConsole(this: Hexo, args: MigrateArgs): Promise<any> {
   return Reflect.apply(migrators[type], this, [args]);
 }
 
+// For ESM compatibility
 export default migrateConsole;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = migrateConsole;
+  // For ESM compatibility
+  module.exports.default = migrateConsole;
+}
+

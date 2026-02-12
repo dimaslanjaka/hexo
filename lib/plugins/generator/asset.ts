@@ -2,9 +2,9 @@ import { exists, createReadStream } from 'hexo-fs';
 import Promise from 'bluebird';
 import { extname } from 'path';
 import * as picocolors from 'picocolors';
-import type Hexo from '../../hexo';
-import type { AssetSchema, BaseGeneratorReturn } from '../../types';
-import type Document from 'warehouse/dist/document';
+import type Hexo from '../../hexo/index.js';
+import type { AssetSchema, BaseGeneratorReturn } from '../../types.js';
+import type Document from 'warehouse/dist/document' with { 'resolution-mode': 'import' };
 
 interface AssetData {
   modified: boolean;
@@ -36,15 +36,12 @@ const process = (name: string, ctx: Hexo) => {
 
       path = `${filename}.${ctx.render.getOutput(path)}`;
 
-      data.data = () =>
-        ctx.render
-          .render({
-            path: source,
-            toString: true
-          })
-          .catch((err: Error) => {
-            ctx.log.error({ err }, 'Asset render failed: %s', picocolors.magenta(path));
-          });
+      data.data = () => ctx.render.render({
+        path: source,
+        toString: true
+      }).catch((err: Error) => {
+        ctx.log.error({err}, 'Asset render failed: %s', picocolors.magenta(path));
+      });
     } else {
       data.data = () => createReadStream(source);
     }
@@ -57,4 +54,12 @@ function assetGenerator(this: Hexo): Promise<AssetGenerator[]> {
   return Promise.all([process('Asset', this), process('PostAsset', this)]).then((data) => [].concat(...data));
 }
 
+// For ESM compatibility
 export default assetGenerator;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = assetGenerator;
+  // For ESM compatibility
+  module.exports.default = assetGenerator;
+}
+

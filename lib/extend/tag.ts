@@ -2,7 +2,7 @@ import { stripIndent } from 'hexo-util';
 import * as picocolors from 'picocolors';
 import { Environment } from 'nunjucks';
 import Promise from 'bluebird';
-import type { NodeJSLikeCallback } from '../types';
+import type { NodeJSLikeCallback } from '../types.js';
 
 const rSwigRawFullBlock = /{% *raw *%}/;
 const rCodeTag = /<code[^<>]*>[\s\S]+?<\/code>/g;
@@ -147,16 +147,18 @@ const getContext = (lines: string[], errLine: number, location: string, type: st
 
   message.push(
     // get LINES_OF_CONTEXT lines surrounding `errLine`
-    ...getContextLineNums(1, lines.length, errLine, LINES_OF_CONTEXT).map((lnNum) => {
-      const line = '  ' + lnNum + ' | ' + lines[lnNum - 1];
-      if (lnNum === errLine) {
-        return picocolors.cyan(picocolors.bold(line));
-      }
+    ...getContextLineNums(1, lines.length, errLine, LINES_OF_CONTEXT)
+      .map(lnNum => {
+        const line = '  ' + lnNum + ' | ' + lines[lnNum - 1];
+        if (lnNum === errLine) {
+          return picocolors.cyan(picocolors.bold(line));
+        }
 
-      return picocolors.cyan(line);
-    })
+        return picocolors.cyan(line);
+      })
   );
-  message.push(picocolors.cyan('    =====             Context Dump Ends            ====='));
+  message.push(picocolors.cyan(
+    '    =====             Context Dump Ends            ====='));
 
   return message;
 };
@@ -293,4 +295,12 @@ class Tag {
   }
 }
 
+// For ESM compatibility
 export default Tag;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = Tag;
+  // For ESM compatibility
+  module.exports.default = Tag;
+}
+

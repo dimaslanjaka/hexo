@@ -1,7 +1,7 @@
 import { Color, url_for } from 'hexo-util';
 import moize from 'moize';
-import type { LocalsType, TagSchema } from '../../types';
-import type Query from 'warehouse/dist/query';
+import type { LocalsType, TagSchema } from '../../types.js';
+import type Query from 'warehouse/dist/query' with { 'resolution-mode': 'import' };
 
 interface Options {
   min_font?: number;
@@ -114,4 +114,12 @@ function tagcloudHelperFactory(this: LocalsType, tags?: Query<TagSchema> | Optio
   }).call(this, tags, options);
 }
 
+// For ESM compatibility
 export default tagcloudHelperFactory;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = tagcloudHelperFactory;
+  // For ESM compatibility
+  module.exports.default = tagcloudHelperFactory;
+}
+

@@ -1,6 +1,6 @@
 import { url_for } from 'hexo-util';
-import { postFindOneFactory } from './';
-import type Hexo from '../../hexo';
+import { postFindOneFactory } from './index.js';
+import type Hexo from '../../hexo/index.js';
 
 /**
  * Post path tag
@@ -8,7 +8,7 @@ import type Hexo from '../../hexo';
  * Syntax:
  *   {% post_path slug | title %}
  */
-export default (ctx: Hexo) => {
+const post_path_default = (ctx: Hexo) => {
   return function postPathTag(args: any[]) {
     const slug = args.shift();
     if (!slug) return;
@@ -22,3 +22,12 @@ export default (ctx: Hexo) => {
     return link;
   };
 };
+
+// For ESM compatibility
+export default post_path_default;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = post_path_default;
+  // For ESM compatibility
+  module.exports.default = post_path_default;
+}

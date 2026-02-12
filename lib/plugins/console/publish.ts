@@ -1,6 +1,6 @@
 import tildify from 'tildify';
 import * as picocolors from 'picocolors';
-import type Hexo from '../../hexo';
+import type Hexo from '../../hexo/index.js';
 import type Promise from 'bluebird';
 
 interface PublishArgs {
@@ -16,17 +16,20 @@ function publishConsole(this: Hexo, args: PublishArgs): Promise<void> {
     return this.call('help', { _: ['publish'] });
   }
 
-  return this.post
-    .publish(
-      {
-        slug: args._.pop(),
-        layout: args._.length ? args._[0] : this.config.default_layout
-      },
-      args.r || args.replace
-    )
-    .then((post) => {
-      this.log.info('Published: %s', picocolors.magenta(tildify(post.path)));
-    });
+  return this.post.publish({
+    slug: args._.pop(),
+    layout: args._.length ? args._[0] : this.config.default_layout
+  }, args.r || args.replace).then(post => {
+    this.log.info('Published: %s', picocolors.magenta(tildify(post.path)));
+  });
 }
 
+// For ESM compatibility
 export default publishConsole;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = publishConsole;
+  // For ESM compatibility
+  module.exports.default = publishConsole;
+}
+

@@ -2,12 +2,10 @@ import { isAbsolute, resolve, join, extname } from 'path';
 import { existsSync, readFileSync, writeFileSync } from 'hexo-fs';
 import yml from 'js-yaml';
 import { deepMerge } from 'hexo-util';
-import type Hexo from './index';
-
-export default (ctx: Hexo) =>
-  function multiConfigPath(base: string, configPaths?: string, outputDir?: string): string {
-    const { log } = ctx;
-    const defaultPath = join(base, '_config.yml');
+import type Hexo from './index.js';
+const multi_config_path_default = (ctx: Hexo) => function multiConfigPath(base: string, configPaths?: string, outputDir?: string): string {
+  const { log } = ctx;
+  const defaultPath = join(base, '_config.yml');
 
     if (!configPaths) {
       log.w('No config file entered.');
@@ -58,20 +56,15 @@ export default (ctx: Hexo) =>
       }
     }
 
-    if (count === 0) {
-      log.e('No config files found. Using _config.yml.');
-      return defaultPath;
-    }
+  // write file and return path
+  return outputPath;
+};
 
-    log.i('Config based on', count.toString(), 'files');
-
-    const multiconfigRoot = outputDir || base;
-    const outputPath = join(multiconfigRoot, '_multiconfig.yml');
-
-    log.d(`Writing _multiconfig.yml to ${outputPath}`);
-
-    writeFileSync(outputPath, yml.dump(combinedConfig));
-
-    // write file and return path
-    return outputPath;
-  };
+// For ESM compatibility
+export default multi_config_path_default;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = multi_config_path_default;
+  // For ESM compatibility
+  module.exports.default = multi_config_path_default;
+}

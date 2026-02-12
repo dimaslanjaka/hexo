@@ -1,5 +1,5 @@
 import { htmlTag, url_for } from 'hexo-util';
-import type { LocalsType } from '../../types';
+import type { LocalsType } from '../../types.js';
 
 interface Options {
   base?: string;
@@ -161,4 +161,12 @@ function paginatorHelper(this: LocalsType, options: Options = {}) {
   return tags.join('');
 }
 
+// For ESM compatibility
 export default paginatorHelper;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = paginatorHelper;
+  // For ESM compatibility
+  module.exports.default = paginatorHelper;
+}
+

@@ -1,7 +1,7 @@
 import { isMoment, isDate, Moment } from 'moment';
 import { encodeURL, prettyUrls, stripHTML, escapeHTML } from 'hexo-util';
 import moize from 'moize';
-import type { LocalsType } from '../../types';
+import type { LocalsType } from '../../types.js';
 
 const localeMap = {
   en: 'en_US',
@@ -201,4 +201,12 @@ function openGraphHelper(this: LocalsType, options: Options = {}) {
   return result.trim();
 }
 
+// For ESM compatibility
 export default openGraphHelper;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = openGraphHelper;
+  // For ESM compatibility
+  module.exports.default = openGraphHelper;
+}
+

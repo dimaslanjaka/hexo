@@ -1,7 +1,13 @@
 /// <reference path="./global.d.ts" />
 import Promise from 'bluebird';
+import { sep, join, dirname } from 'path';
+import tildify from 'tildify';
+import Database from 'warehouse';
+import * as picocolors from 'picocolors';
 import { EventEmitter } from 'events';
 import { readFile } from 'hexo-fs';
+import Module from 'module';
+import { runInThisContext } from 'vm';
 import logger from 'hexo-log';
 import { deepMerge, full_url_for } from 'hexo-util';
 import Module from 'module';
@@ -25,20 +31,25 @@ import {
   Processor,
   Renderer,
   Tag
-} from '../extend';
-import BinaryRelationIndex from '../models/binary_relation_index';
-import Theme from '../theme';
-import type { BaseGeneratorReturn, FilterOptions, LocalsType, NodeJSLikeCallback, SiteLocals } from '../types';
-import defaultConfig from './default_config';
-import loadDatabase from './load_database';
-import Locals from './locals';
-import multiConfigPath from './multi_config_path';
-import Post from './post';
-import registerModels from './register_models';
-import Render from './render';
-import Router from './router';
-import Scaffold from './scaffold';
-import Source from './source';
+} from '../extend/index.js';
+
+import Render from './render.js';
+import registerModels from './register_models.js';
+import Post from './post.js';
+import Scaffold from './scaffold.js';
+import Source from './source.js';
+import Router from './router.js';
+import Theme from '../theme/index.js';
+import Locals from './locals.js';
+import defaultConfig from './default_config.js';
+import loadDatabase from './load_database.js';
+import multiConfigPath from './multi_config_path.js';
+import { deepMerge, full_url_for } from 'hexo-util';
+import type Box from '../box/index.js';
+import type { BaseGeneratorReturn, FilterOptions, LocalsType, NodeJSLikeCallback, SiteLocals } from '../types.js';
+import type { AddSchemaTypeOptions } from 'warehouse/dist/types' with { 'resolution-mode': 'import' };
+import type Schema from 'warehouse/dist/schema' with { 'resolution-mode': 'import' };
+import BinaryRelationIndex from '../models/binary_relation_index.js';
 
 const loadRequire = (p: string) => {
   if (!p.startsWith('.')) {
@@ -74,7 +85,7 @@ const castArray = (obj: any) => {
   return Array.isArray(obj) ? obj : [obj];
 };
 
-// eslint-disable-next-line no-use-before-define
+
 const mergeCtxThemeConfig = (ctx: Hexo) => {
   // Merge hexo.config.theme_config into hexo.theme.config before post rendering & generating
   // config.theme_config has "_config.[theme].yml" merged in load_theme_config.js
@@ -83,8 +94,8 @@ const mergeCtxThemeConfig = (ctx: Hexo) => {
   }
 };
 
-// eslint-disable-next-line no-use-before-define
-const createLoadThemeRoute = function (generatorResult: BaseGeneratorReturn, locals: LocalsType, ctx: Hexo) {
+
+const createLoadThemeRoute = function(generatorResult: BaseGeneratorReturn, locals: LocalsType, ctx: Hexo) {
   const { log, theme } = ctx;
   const { path, cache: useCache } = locals;
 
@@ -104,19 +115,19 @@ const createLoadThemeRoute = function (generatorResult: BaseGeneratorReturn, loc
         log.debug(`Rendering HTML ${name}: ${picocolors.magenta(path)}`);
         return view
           .render(locals)
-          .then((result) => ctx.extend.injector.exec(result, locals))
-          .then((result) =>
+          .then(result => ctx.extend.injector.exec(result, locals))
+          .then(result =>
             ctx.execFilter('_after_html_render', result, {
               context: ctx,
               args: [locals]
             })
           )
-          .tap((result) => {
+          .tap(result => {
             if (useCache) {
               routeCache.set(generatorResult, result);
             }
           })
-          .tapCatch((err) => {
+          .tapCatch(err => {
             log.error({ err }, `Render HTML failed: ${picocolors.magenta(path)}`);
           });
       }
@@ -204,6 +215,13 @@ interface Env {
 type DefaultConfigType = typeof defaultConfig;
 interface Config extends DefaultConfigType {
   [key: string]: any;
+}
+
+// Node.js internal APIs
+declare module 'module' {
+  function _nodeModulePaths(path: string): string[];
+  function _resolveFilename(request: string, parent: Module, isMain?: any, options?: any): string;
+  const _extensions: NodeJS.RequireExtensions, _cache: any;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
@@ -343,7 +361,7 @@ class Hexo extends EventEmitter {
       safe: Boolean(args.safe),
       silent: Boolean(args.silent),
       env: process.env.NODE_ENV || 'development',
-      version: '__VERSION__',
+      version: global.__VERSION__,
       cmd: args._ ? args._[0] : '',
       init: false
     };
@@ -466,15 +484,15 @@ class Hexo extends EventEmitter {
     this.log.debug('Working directory: %s', picocolors.magenta(tildify(this.base_dir)));
 
     // Load internal plugins
-    loadRequire('../plugins/console/index.js')(this);
-    loadRequire('../plugins/filter/index.js')(this);
-    loadRequire('../plugins/generator/index.js')(this);
-    loadRequire('../plugins/helper/index.js')(this);
-    loadRequire('../plugins/highlight/index.js')(this);
-    loadRequire('../plugins/injector/index.js')(this);
-    loadRequire('../plugins/processor/index.js')(this);
-    loadRequire('../plugins/renderer/index.js')(this);
-    loadRequire('../plugins/tag/index.js')(this);
+    require('../plugins/console/index.js')(this);
+    require('../plugins/filter/index.js')(this);
+    require('../plugins/generator/index.js')(this);
+    require('../plugins/helper/index.js')(this);
+    require('../plugins/highlight/index.js')(this);
+    require('../plugins/injector/index.js')(this);
+    require('../plugins/processor/index.js')(this);
+    require('../plugins/renderer/index.js')(this);
+    require('../plugins/tag/index.js').default(this);
 
     // Load config
     return Promise.each(
@@ -484,7 +502,7 @@ class Hexo extends EventEmitter {
         'load_theme_config', // Load alternate theme config
         'load_plugins' // Load external plugins & scripts
       ],
-      (name) => loadRequire(`./${name}.js`)(this)
+      name => require(`./${name}`)(this)
     )
       .then(() => this.execFilter('after_init', null, { context: this }))
       .then(() => {
@@ -516,7 +534,7 @@ class Hexo extends EventEmitter {
   }
 
   model(name: string, schema?: Schema | Record<string, AddSchemaTypeOptions>) {
-    return this.database.model(name, schema);
+    return this.database.model(name, schema as any);
   }
 
   resolvePlugin(name: string, basedir: string): string {
@@ -532,7 +550,7 @@ class Hexo extends EventEmitter {
 
   loadPlugin(path: string, callback?: NodeJSLikeCallback<any>): Promise<any> {
     return readFile(path)
-      .then((script) => {
+      .then(script => {
         // Based on: https://github.com/nodejs/node-v0.x-archive/blob/v0.10.33/src/node.js#L516
         const module = new Module(path);
         module.filename = path;
@@ -699,7 +717,7 @@ class Hexo extends EventEmitter {
     Locals.prototype.cache = useCache;
 
     return runningGenerators
-      .map((generatorResult) => {
+      .map(generatorResult => {
         if (typeof generatorResult !== 'object' || generatorResult.path == null) return undefined;
 
         // add Route
@@ -717,7 +735,7 @@ class Hexo extends EventEmitter {
           })
           .thenReturn(path);
       })
-      .then((newRouteList) => {
+      .then(newRouteList => {
         // Remove old routes
         for (let i = 0, len = routeList.length; i < len; i++) {
           const item = routeList[i];
@@ -765,7 +783,7 @@ class Hexo extends EventEmitter {
     if (err) {
       this.log.fatal(
         { err },
-        "Something's wrong. Maybe you can find the solution here: %s",
+        'Something\'s wrong. Maybe you can find the solution here: %s',
         picocolors.underline('https://hexo.io/docs/troubleshooting.html')
       );
     }
@@ -790,7 +808,22 @@ Hexo.prototype.lib_dir = Hexo.lib_dir;
 Hexo.core_dir = dirname(libDir) + sep;
 Hexo.prototype.core_dir = Hexo.core_dir;
 
-Hexo.version = '__VERSION__';
+Hexo.version = global.__VERSION__;
 Hexo.prototype.version = Hexo.version;
 
+// define global variable
+// this useful for plugin written in typescript
+declare global {
+  // eslint-disable-next-line one-var
+  const hexo: Hexo;
+}
+
+// For ESM compatibility
 export default Hexo;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = Hexo;
+  // For ESM compatibility
+  module.exports.default = Hexo;
+}
+

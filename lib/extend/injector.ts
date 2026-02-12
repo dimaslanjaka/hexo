@@ -118,4 +118,12 @@ class Injector {
   }
 }
 
+// For ESM compatibility
 export default Injector;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = Injector;
+  // For ESM compatibility
+  module.exports.default = Injector;
+}
+

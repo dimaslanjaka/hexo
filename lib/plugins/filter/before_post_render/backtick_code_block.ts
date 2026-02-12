@@ -1,6 +1,6 @@
-import type { HighlightOptions } from '../../../extend/syntax_highlight';
-import type Hexo from '../../../hexo';
-import type { RenderData } from '../../../types';
+import type { HighlightOptions } from '../../../extend/syntax_highlight.js';
+import type Hexo from '../../../hexo/index.js';
+import type { RenderData } from '../../../types.js';
 
 const rBacktick =
   /^((?:(?:[^\S\r\n]*>){0,3}|[-*+]|[0-9]+\.)[^\S\r\n]*)(`{3,}|~{3,})[^\S\r\n]*((?:.*?[^`\s])?)[^\S\r\n]*\n((?:[\s\S]*?\n)?)(?:(?:[^\S\r\n]*>){0,3}[^\S\r\n]*)\2[^\S\r\n]?(\n+|$)/gm;
@@ -85,8 +85,7 @@ function parseArgs(args: string) {
     _args: args.replace(rAdditionalOptions, '')
   };
 }
-
-export default (ctx: Hexo): ((data: RenderData) => void) => {
+const backtick_code_block_default = (ctx: Hexo): (data: RenderData) => void => {
   return function backtickCodeBlock(data: RenderData): void {
     const dataContent = data.content;
 
@@ -181,3 +180,12 @@ export default (ctx: Hexo): ((data: RenderData) => void) => {
     });
   };
 };
+
+// For ESM compatibility
+export default backtick_code_block_default;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = backtick_code_block_default;
+  // For ESM compatibility
+  module.exports.default = backtick_code_block_default;
+}

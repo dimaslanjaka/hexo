@@ -1,5 +1,5 @@
 import { htmlTag, url_for } from 'hexo-util';
-import type { LocalsType } from '../../types';
+import type { LocalsType } from '../../types.js';
 
 interface Options {
   id?: string;
@@ -47,4 +47,12 @@ function linkToHelper(this: LocalsType, path: string, text?: string, options: Op
   return htmlTag('a', attrs as Attrs, text);
 }
 
+// For ESM compatibility
 export default linkToHelper;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = linkToHelper;
+  // For ESM compatibility
+  module.exports.default = linkToHelper;
+}
+

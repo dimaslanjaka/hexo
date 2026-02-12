@@ -142,4 +142,12 @@ class Console {
   }
 }
 
+// For ESM compatibility
 export default Console;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = Console;
+  // For ESM compatibility
+  module.exports.default = Console;
+}
+

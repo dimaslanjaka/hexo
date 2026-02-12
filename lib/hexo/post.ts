@@ -7,8 +7,8 @@ import { load } from 'js-yaml';
 import { slugize, escapeRegExp, deepMerge } from 'hexo-util';
 import { copyDir, exists, listDir, mkdirs, readFile, rmdir, unlink, writeFile } from 'hexo-fs';
 import { parse as yfmParse, split as yfmSplit, stringify as yfmStringify } from 'hexo-front-matter';
-import type Hexo from './index';
-import type { NodeJSLikeCallback, RenderData } from '../types';
+import type Hexo from './index.js';
+import type { NodeJSLikeCallback, RenderData } from '../types.js';
 
 const preservedKeys = ['title', 'slug', 'path', 'layout', 'date', 'content'];
 
@@ -545,10 +545,9 @@ class Post {
     const isPost = !data.source || ['html', 'htm'].includes(ctx.render.getOutput(data.source));
 
     if (!isPost) {
-      return promise
-        .then((content) => {
-          data.content = content;
-          ctx.log.debug('Rendering file: %s', picocolors.magenta(source));
+      return promise.then(content => {
+        data.content = content;
+        ctx.log.debug('Rendering file: %s', picocolors.magenta(source));
 
           return ctx.render.render({
             text: data.content,
@@ -593,17 +592,16 @@ class Post {
         const options: { highlight?: boolean } = data.markdown || {};
         if (!config.syntax_highlighter) options.highlight = null;
 
-        ctx.log.debug('Rendering post: %s', picocolors.magenta(source));
-        // Render with markdown or other renderer
-        return ctx.render.render(
-          {
-            text: data.content,
-            path: source,
-            engine: data.engine,
-            toString: true,
-            onRenderEnd(content) {
-              // Replace cache data with real contents
-              data.content = cacheObj.restoreAllSwigTags(content);
+      ctx.log.debug('Rendering post: %s', picocolors.magenta(source));
+      // Render with markdown or other renderer
+      return ctx.render.render({
+        text: data.content,
+        path: source,
+        engine: data.engine,
+        toString: true,
+        onRenderEnd(content) {
+          // Replace cache data with real contents
+          data.content = cacheObj.restoreAllSwigTags(content);
 
               // Return content after replace the placeholders
               if (disableNunjucks || !hasSwigTag) return data.content;
@@ -626,4 +624,12 @@ class Post {
   }
 }
 
+// For ESM compatibility
 export default Post;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = Post;
+  // For ESM compatibility
+  module.exports.default = Post;
+}
+

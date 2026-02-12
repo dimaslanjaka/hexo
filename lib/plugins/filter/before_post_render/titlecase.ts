@@ -1,4 +1,4 @@
-import type { RenderData } from '../../../types';
+import type { RenderData } from '../../../types.js';
 
 let titlecase;
 
@@ -9,4 +9,12 @@ function titlecaseFilter(data: RenderData): void {
   data.title = titlecase(data.title);
 }
 
+// For ESM compatibility
 export default titlecaseFilter;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = titlecaseFilter;
+  // For ESM compatibility
+  module.exports.default = titlecaseFilter;
+}
+

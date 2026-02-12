@@ -2,7 +2,7 @@ import yaml from 'js-yaml';
 import { exists, writeFile } from 'hexo-fs';
 import { extname } from 'path';
 import Promise from 'bluebird';
-import type Hexo from '../../hexo';
+import type Hexo from '../../hexo/index.js';
 
 interface ConfigArgs {
   _: string[];
@@ -89,4 +89,12 @@ function castValue(value: string): any {
   return value;
 }
 
+// For ESM compatibility
 export default configConsole;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = configConsole;
+  // For ESM compatibility
+  module.exports.default = configConsole;
+}
+

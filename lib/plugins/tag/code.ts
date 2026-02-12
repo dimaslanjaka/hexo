@@ -1,8 +1,8 @@
 // Based on: https://raw.github.com/imathis/octopress/master/plugins/code_block.rb
 
 import { escapeHTML, htmlTag } from 'hexo-util';
-import type Hexo from '../../hexo';
-import type { HighlightOptions } from '../../extend/syntax_highlight';
+import type Hexo from '../../hexo/index.js';
+import type { HighlightOptions } from '../../extend/syntax_highlight.js';
 
 const rCaptionUrlTitle = /(\S[\S\s]*)\s+(https?:\/\/\S+)\s+(.+)/i;
 const rCaptionUrl = /(\S[\S\s]*)\s+(https?:\/\/\S+)/i;
@@ -114,13 +114,7 @@ function parseArgs(args: string[]): HighlightOptions {
     wrap
   };
 }
-
-export default (ctx: Hexo) =>
-  function codeTag(args: string[], content: string) {
-    // If neither highlight.js nor prism.js is enabled, return escaped code directly
-    if (!ctx.extend.highlight.query(ctx.config.syntax_highlighter)) {
-      return `<pre><code>${escapeHTML(content)}</code></pre>`;
-    }
+const code_default = (ctx: Hexo) => function codeTag(args: string[], content: string) {
 
     let index: number;
     let enableHighlight = true;
@@ -144,5 +138,21 @@ export default (ctx: Hexo) =>
       args: [content, options]
     });
 
-    return content.replace(/{/g, '&#123;').replace(/}/g, '&#125;');
-  };
+  const options = parseArgs(args);
+  options.lines_length = content.split('\n').length;
+  content = ctx.extend.highlight.exec(ctx.config.syntax_highlighter, {
+    context: ctx,
+    args: [content, options]
+  });
+
+  return content.replace(/{/g, '&#123;').replace(/}/g, '&#125;');
+};
+
+// For ESM compatibility
+export default code_default;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = code_default;
+  // For ESM compatibility
+  module.exports.default = code_default;
+}

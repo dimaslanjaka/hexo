@@ -6,8 +6,8 @@ import * as picocolors from 'picocolors';
 import tildify from 'tildify';
 import { PassThrough, type Readable } from 'stream';
 import { createSha1Hash } from 'hexo-util';
-import type Hexo from '../../hexo';
-import type Router from '../../hexo/router';
+import type Hexo from '../../hexo/index.js';
+import type Router from '../../hexo/router.js';
 
 interface GenerateArgs {
   f?: boolean;
@@ -106,15 +106,11 @@ class Generator {
       return Cache.save({
         _id: cacheId,
         hash
-      })
-        .then(() =>
-          // Write cache data to public folder
-          writeFile(dest, Buffer.concat(buffers))
-        )
-        .then(() => {
-          log.info('Generated: %s', picocolors.magenta(path));
-          return true;
-        });
+      }).then(() => // Write cache data to public folder
+        writeFile(dest, Buffer.concat(buffers))).then(() => {
+        log.info('Generated: %s', picocolors.magenta(path));
+        return true;
+      });
     });
   }
   deleteFile(path: string): Promise<void> {
@@ -122,16 +118,13 @@ class Generator {
     const publicDir = this.context.public_dir;
     const dest = join(publicDir, path);
 
-    return unlink(dest).then(
-      () => {
-        log.info('Deleted: %s', picocolors.magenta(path));
-      },
-      (err) => {
-        // Skip ENOENT errors (file was deleted)
-        if (err && err.code === 'ENOENT') return;
-        throw err;
-      }
-    );
+    return unlink(dest).then(() => {
+      log.info('Deleted: %s', picocolors.magenta(path));
+    }, err => {
+      // Skip ENOENT errors (file was deleted)
+      if (err && err.code === 'ENOENT') return;
+      throw err;
+    });
   }
   wrapDataStream(dataStream: ReturnType<Router['get']>): Readable {
     const { log } = this.context;
@@ -161,17 +154,15 @@ class Generator {
     this.start = process.hrtime();
 
     // Check the public folder
-    return stat(publicDir)
-      .then((stats) => {
-        if (!stats.isDirectory()) {
-          throw new Error(`${picocolors.magenta(tildify(publicDir))} is not a directory`);
-        }
-      })
-      .catch((err) => {
-        // Create public folder if not exists
-        if (err && err.code === 'ENOENT') {
-          return mkdirs(publicDir);
-        }
+    return stat(publicDir).then(stats => {
+      if (!stats.isDirectory()) {
+        throw new Error(`${picocolors.magenta(tildify(publicDir))} is not a directory`);
+      }
+    }).catch(err => {
+      // Create public folder if not exists
+      if (err && err.code === 'ENOENT') {
+        return mkdirs(publicDir);
+      }
 
         throw err;
       })
@@ -193,8 +184,8 @@ class Generator {
         const interval = prettyHrtime(process.hrtime(this.start));
         const count = result.filter(Boolean).length;
 
-        log.info('%d files generated in %s', count.toString(), picocolors.cyan(interval));
-      });
+      log.info('%d files generated in %s', count.toString(), picocolors.cyan(interval));
+    });
   }
   execWatch(): Promise<void> {
     const { route, log } = this.context;
@@ -238,4 +229,12 @@ function generateConsole(this: Hexo, args: GenerateArgs = {}): Promise<any> {
     });
 }
 
+// For ESM compatibility
 export default generateConsole;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = generateConsole;
+  // For ESM compatibility
+  module.exports.default = generateConsole;
+}
+

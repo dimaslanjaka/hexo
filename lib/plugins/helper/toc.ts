@@ -141,4 +141,12 @@ function assignNumbers(nodes) {
   dfs(nodes, 0);
 }
 
+// For ESM compatibility
 export default tocHelper;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = tocHelper;
+  // For ESM compatibility
+  module.exports.default = tocHelper;
+}
+

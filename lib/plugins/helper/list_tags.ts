@@ -1,7 +1,7 @@
 import { url_for, escapeHTML } from 'hexo-util';
 import moize from 'moize';
-import type { LocalsType, TagSchema } from '../../types';
-import type Query from 'warehouse/dist/query';
+import type { LocalsType, TagSchema } from '../../types.js';
+import type Query from 'warehouse/dist/query' with { 'resolution-mode': 'import' };
 
 interface Options {
   style?: string | false;
@@ -121,4 +121,12 @@ function listTagsHelperFactory(tags?: Query<TagSchema> | Options, options?: Opti
   }).call(this, tags, options);
 }
 
+// For ESM compatibility
 export default listTagsHelperFactory;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = listTagsHelperFactory;
+  // For ESM compatibility
+  module.exports.default = listTagsHelperFactory;
+}
+

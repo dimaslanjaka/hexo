@@ -1,7 +1,7 @@
 import tildify from 'tildify';
 import * as picocolors from 'picocolors';
 import { basename } from 'path';
-import Hexo from '../../hexo';
+import Hexo from '../../hexo/index.js';
 import type Promise from 'bluebird';
 
 const reservedKeys = {
@@ -59,9 +59,17 @@ function newConsole(this: Hexo, args: NewArgs): Promise<void> {
     if (!reservedKeys[key]) data[key] = args[key];
   }
 
-  return this.post.create(data, args.r || args.replace).then((post) => {
+  return this.post.create(data, args.r || args.replace).then(post => {
     this.log.info('Created: %s', picocolors.magenta(tildify(post.path)));
   });
 }
 
+// For ESM compatibility
 export default newConsole;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = newConsole;
+  // For ESM compatibility
+  module.exports.default = newConsole;
+}
+

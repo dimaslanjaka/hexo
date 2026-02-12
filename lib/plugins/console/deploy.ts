@@ -1,6 +1,6 @@
 import { exists } from 'hexo-fs';
 import * as picocolors from 'picocolors';
-import type Hexo from '../../hexo';
+import type Hexo from '../../hexo/index.js';
 import type Promise from 'bluebird';
 
 interface DeployArgs {
@@ -48,20 +48,24 @@ function deployConsole(this: Hexo, args: DeployArgs): Promise<any> {
 
       const { type } = item;
 
-      if (!deployers[type]) {
-        this.log.error('Deployer not found: %s', picocolors.magenta(type));
-        return;
-      }
+    if (!deployers[type]) {
+      this.log.error('Deployer not found: %s', picocolors.magenta(type));
+      return;
+    }
 
-      this.log.info('Deploying: %s', picocolors.magenta(type));
+    this.log.info('Deploying: %s', picocolors.magenta(type));
 
-      return (Reflect.apply(deployers[type], this, [{ ...item, ...args }]) as any).then(() => {
-        this.log.info('Deploy done: %s', picocolors.magenta(type));
-      });
-    })
-    .then(() => {
-      this.emit('deployAfter');
+    return (Reflect.apply(deployers[type], this, [{ ...item, ...args }]) as any).then(() => {
+      this.log.info('Deploy done: %s', picocolors.magenta(type));
     });
 }
 
+// For ESM compatibility
 export default deployConsole;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = deployConsole;
+  // For ESM compatibility
+  module.exports.default = deployConsole;
+}
+

@@ -1,5 +1,5 @@
 import archy from 'fast-archy';
-import type Hexo from '../../../hexo';
+import type Hexo from '../../../hexo/index.js';
 
 function listRoute(this: Hexo): void {
   const routes = this.route.list().sort();
@@ -49,4 +49,12 @@ function buildNodes(tree: Record<string, any>) {
   return nodes;
 }
 
+// For ESM compatibility
 export default listRoute;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = listRoute;
+  // For ESM compatibility
+  module.exports.default = listRoute;
+}
+

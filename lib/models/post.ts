@@ -2,10 +2,10 @@ import warehouse from 'warehouse';
 import moment from 'moment';
 import { extname, join, sep } from 'path';
 import Promise from 'bluebird';
-import Moment from './types/moment';
+import Moment from './types/moment.js';
 import { full_url_for, Cache } from 'hexo-util';
-import type Hexo from '../hexo';
-import type { CategorySchema, PostCategorySchema, PostSchema } from '../types';
+import type Hexo from '../hexo/index.js';
+import type { CategorySchema, PostCategorySchema, PostSchema } from '../types.js';
 
 function pickID(data: PostSchema | PostCategorySchema) {
   return data._id;
@@ -16,8 +16,7 @@ function removeEmptyTag(tags: string[]) {
 }
 
 const tagsGetterCache = new Cache();
-
-export default (ctx: Hexo) => {
+const post_default = (ctx: Hexo) => {
   const Post = new warehouse.Schema<PostSchema>({
     id: String,
     title: { type: String, default: '' },
@@ -242,3 +241,12 @@ export default (ctx: Hexo) => {
 
   return Post;
 };
+
+// For ESM compatibility
+export default post_default;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = post_default;
+  // For ESM compatibility
+  module.exports.default = post_default;
+}

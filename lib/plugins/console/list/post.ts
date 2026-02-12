@@ -1,10 +1,10 @@
 import * as picocolors from 'picocolors';
 import table from 'fast-text-table';
-import { stringLength } from './common';
-import type Hexo from '../../../hexo';
-import type { PostSchema } from '../../../types';
-import type Model from 'warehouse/dist/model';
-import type Document from 'warehouse/dist/document';
+import { stringLength } from './common.js';
+import type Hexo from '../../../hexo/index.js';
+import type { PostSchema } from '../../../types.js';
+import type Model from 'warehouse/dist/model' with { 'resolution-mode': 'import' };
+import type Document from 'warehouse/dist/document' with { 'resolution-mode': 'import' };
 
 function mapName(item: any): string {
   return item.name;
@@ -18,11 +18,17 @@ function listPost(this: Hexo): void {
     const tags = post.tags.map(mapName);
     const categories = post.categories.map(mapName);
 
-    return [picocolors.gray(date), post.title, picocolors.magenta(post.source), categories.join(', '), tags.join(', ')];
+    return [
+      picocolors.gray(date),
+      post.title,
+      picocolors.magenta(post.source),
+      categories.join(', '),
+      tags.join(', ')
+    ];
   });
 
   // Table header
-  const header = ['Date', 'Title', 'Path', 'Category', 'Tags'].map((str) => picocolors.underline(str));
+  const header = ['Date', 'Title', 'Path', 'Category', 'Tags'].map(str => picocolors.underline(str));
 
   data.unshift(header);
 
@@ -34,4 +40,12 @@ function listPost(this: Hexo): void {
   if (data.length === 1) console.log('No posts.');
 }
 
+// For ESM compatibility
 export default listPost;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = listPost;
+  // For ESM compatibility
+  module.exports.default = listPost;
+}
+

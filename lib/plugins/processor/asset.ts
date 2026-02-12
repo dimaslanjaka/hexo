@@ -1,15 +1,14 @@
-import { adjustDateForTimezone, toDate, isExcludedFile, isMatch } from './common';
+import { adjustDateForTimezone, toDate, isExcludedFile, isMatch } from './common.js';
 import Promise from 'bluebird';
 import { parse as yfm } from 'hexo-front-matter';
 import { extname, relative } from 'path';
 import { Pattern } from 'hexo-util';
 import * as picocolors from 'picocolors';
-import type { _File } from '../../box';
-import type Hexo from '../../hexo';
+import type { _File } from '../../box/index.js';
+import type Hexo from '../../hexo/index.js';
 import type { Stats } from 'fs';
-import { PageSchema } from '../../types';
-
-export default (ctx: Hexo) => {
+import { PageSchema } from '../../types.js';
+const asset_default = (ctx: Hexo) => {
   return {
     pattern: new Pattern((path) => {
       if (isExcludedFile(path, ctx.config)) return;
@@ -125,4 +124,13 @@ function processAsset(ctx: Hexo, file: _File) {
     modified: file.type !== 'skip',
     renderable: file.params.renderable
   });
+}
+
+// For ESM compatibility
+export default asset_default;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = asset_default;
+  // For ESM compatibility
+  module.exports.default = asset_default;
 }

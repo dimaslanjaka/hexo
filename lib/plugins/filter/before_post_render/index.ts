@@ -1,8 +1,16 @@
-import type Hexo from '../../../hexo';
-
-export default (ctx: Hexo) => {
+import type Hexo from '../../../hexo/index.js';
+const index_default = (ctx: Hexo) => {
   const { filter } = ctx.extend;
 
-  filter.register('before_post_render', require('./backtick_code_block')(ctx));
-  filter.register('before_post_render', require('./titlecase'));
+  filter.register('before_post_render', require('./backtick_code_block.js')(ctx));
+  filter.register('before_post_render', require('./titlecase.js'));
 };
+
+// For ESM compatibility
+export default index_default;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = index_default;
+  // For ESM compatibility
+  module.exports.default = index_default;
+}

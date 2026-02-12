@@ -1,7 +1,7 @@
 // Based on: https://raw.github.com/imathis/octopress/master/plugins/blockquote.rb
 
 import titlecase from 'titlecase';
-import type Hexo from '../../hexo';
+import type Hexo from '../../hexo/index.js';
 
 const rFullCiteWithTitle = /(\S.*)\s+(https?:\/\/\S+)\s+(.+)/i;
 const rFullCite = /(\S.*)\s+(https?:\/\/\S+)/i;
@@ -48,22 +48,29 @@ const parseFooter = (args: string[], ctx: Hexo) => {
 };
 
 /**
- * Blockquote tag
- *
- * Syntax:
- *   {% blockquote [author[, source]] [link] [source_link_title] %}
- *   Quote string
- *   {% endblockquote %}
- */
-
-export default (ctx: Hexo) =>
-  function blockquoteTag(args: string[], content: string) {
-    const footer = parseFooter(args, ctx);
+* Blockquote tag
+*
+* Syntax:
+*   {% blockquote [author[, source]] [link] [source_link_title] %}
+*   Quote string
+*   {% endblockquote %}
+*/
+const blockquote_default = (ctx: Hexo) => function blockquoteTag(args: string[], content: string) {
+  const footer = parseFooter(args, ctx);
 
     let result = '<blockquote>';
     result += ctx.render.renderSync({ text: content, engine: 'markdown' });
     if (footer) result += `<footer>${footer}</footer>`;
     result += '</blockquote>';
 
-    return result;
-  };
+  return result;
+};
+
+// For ESM compatibility
+export default blockquote_default;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = blockquote_default;
+  // For ESM compatibility
+  module.exports.default = blockquote_default;
+}

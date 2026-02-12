@@ -2,9 +2,8 @@ import { join } from 'path';
 import { exists, readFile, listDir } from 'hexo-fs';
 import Promise from 'bluebird';
 import * as picocolors from 'picocolors';
-import type Hexo from './index';
-
-export default (ctx: Hexo): Promise<void[][]> => {
+import type Hexo from './index.js';
+const load_plugins_default = (ctx: Hexo): Promise<void[][]> => {
   if (!ctx.env.init || ctx.env.safe) return;
 
   return loadModules(ctx).then(() => loadScripts(ctx));
@@ -53,14 +52,11 @@ function loadModules(ctx: Hexo): Promise<void[]> {
     })
     .map(([name, path]) => {
       // Load plugins
-      return ctx
-        .loadPlugin(path as string)
-        .then(() => {
-          ctx.log.debug('Plugin loaded: %s', picocolors.magenta(name));
-        })
-        .catch((err) => {
-          ctx.log.error({ err }, 'Plugin load failed: %s', picocolors.magenta(name));
-        });
+      return ctx.loadPlugin(path as string).then(() => {
+        ctx.log.debug('Plugin loaded: %s', picocolors.magenta(name));
+      }).catch(err => {
+        ctx.log.error({err}, 'Plugin load failed: %s', picocolors.magenta(name));
+      });
     });
 }
 
@@ -88,4 +84,13 @@ function loadScripts(ctx: Hexo): Promise<void[][]> {
 
 function displayPath(path: string, baseDirLength: number): string {
   return picocolors.magenta(path.substring(baseDirLength));
+}
+
+// For ESM compatibility
+export default load_plugins_default;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = load_plugins_default;
+  // For ESM compatibility
+  module.exports.default = load_plugins_default;
 }

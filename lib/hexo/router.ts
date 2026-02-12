@@ -179,4 +179,12 @@ class Router extends EventEmitter {
   }
 }
 
+// For ESM compatibility
 export default Router;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = Router;
+  // For ESM compatibility
+  module.exports.default = Router;
+}
+
