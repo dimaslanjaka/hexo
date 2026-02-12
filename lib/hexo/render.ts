@@ -138,4 +138,12 @@ class Render {
   }
 }
 
-export = Render;
+// For ESM compatibility
+export default Render;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = Render;
+  // For ESM compatibility
+  module.exports.default = Render;
+}
+

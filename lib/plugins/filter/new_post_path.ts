@@ -98,4 +98,12 @@ function newPostPathFilter(this: Hexo, data: Partial<PostSchema> = {}, replace?:
   return ensurePath(target);
 }
 
-export = newPostPathFilter;
+// For ESM compatibility
+export default newPostPathFilter;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = newPostPathFilter;
+  // For ESM compatibility
+  module.exports.default = newPostPathFilter;
+}
+

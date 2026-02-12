@@ -24,4 +24,12 @@ function publishConsole(this: Hexo, args: PublishArgs): Promise<void> {
   });
 }
 
-export = publishConsole;
+// For ESM compatibility
+export default publishConsole;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = publishConsole;
+  // For ESM compatibility
+  module.exports.default = publishConsole;
+}
+

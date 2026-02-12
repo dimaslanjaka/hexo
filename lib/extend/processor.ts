@@ -52,4 +52,12 @@ class Processor {
   }
 }
 
-export = Processor;
+// For ESM compatibility
+export default Processor;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = Processor;
+  // For ESM compatibility
+  module.exports.default = Processor;
+}
+

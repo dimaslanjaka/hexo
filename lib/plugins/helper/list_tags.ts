@@ -121,4 +121,12 @@ function listTagsHelperFactory(tags?: Query<TagSchema> | Options, options?: Opti
   }).call(this, tags, options);
 }
 
-export = listTagsHelperFactory;
+// For ESM compatibility
+export default listTagsHelperFactory;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = listTagsHelperFactory;
+  // For ESM compatibility
+  module.exports.default = listTagsHelperFactory;
+}
+

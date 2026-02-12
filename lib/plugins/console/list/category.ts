@@ -25,4 +25,12 @@ function listCategory(this: Hexo): void {
   if (data.length === 1) console.log('No categories.');
 }
 
-export = listCategory;
+// For ESM compatibility
+export default listCategory;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = listCategory;
+  // For ESM compatibility
+  module.exports.default = listCategory;
+}
+

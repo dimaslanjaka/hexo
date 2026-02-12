@@ -34,4 +34,12 @@ function deletePublicDir(ctx: Hexo): Promise<void> {
   });
 }
 
-export = cleanConsole;
+// For ESM compatibility
+export default cleanConsole;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = cleanConsole;
+  // For ESM compatibility
+  module.exports.default = cleanConsole;
+}
+

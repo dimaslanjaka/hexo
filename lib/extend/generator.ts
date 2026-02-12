@@ -55,4 +55,12 @@ class Generator {
   }
 }
 
-export = Generator;
+// For ESM compatibility
+export default Generator;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = Generator;
+  // For ESM compatibility
+  module.exports.default = Generator;
+}
+

@@ -5,4 +5,12 @@ function faviconTagHelper(this: LocalsType, path: string) {
   return `<link rel="shortcut icon" href="${url_for.call(this, path)}">`;
 }
 
-export = faviconTagHelper;
+// For ESM compatibility
+export default faviconTagHelper;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = faviconTagHelper;
+  // For ESM compatibility
+  module.exports.default = faviconTagHelper;
+}
+

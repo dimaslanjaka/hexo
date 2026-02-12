@@ -81,4 +81,12 @@ class Scaffold {
   }
 }
 
-export = Scaffold;
+// For ESM compatibility
+export default Scaffold;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = Scaffold;
+  // For ESM compatibility
+  module.exports.default = Scaffold;
+}
+

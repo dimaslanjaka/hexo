@@ -44,4 +44,12 @@ function linkToHelper(this: LocalsType, path: string, text?: string, options: Op
   return htmlTag('a', attrs as Attrs, text);
 }
 
-export = linkToHelper;
+// For ESM compatibility
+export default linkToHelper;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = linkToHelper;
+  // For ESM compatibility
+  module.exports.default = linkToHelper;
+}
+

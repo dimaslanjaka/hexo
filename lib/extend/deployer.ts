@@ -51,4 +51,12 @@ class Deployer {
   }
 }
 
-export = Deployer;
+// For ESM compatibility
+export default Deployer;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = Deployer;
+  // For ESM compatibility
+  module.exports.default = Deployer;
+}
+

@@ -65,4 +65,12 @@ njkRenderer.compile = (data: StoreFunctionData): (locals: any) => string => {
   return locals => njkCompile(data).render(locals);
 };
 
-export = njkRenderer;
+// For ESM compatibility
+export default njkRenderer;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = njkRenderer;
+  // For ESM compatibility
+  module.exports.default = njkRenderer;
+}
+

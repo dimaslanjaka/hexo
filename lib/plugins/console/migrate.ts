@@ -30,4 +30,12 @@ function migrateConsole(this: Hexo, args: MigrateArgs): Promise<any> {
   return Reflect.apply(migrators[type], this, [args]);
 }
 
-export = migrateConsole;
+// For ESM compatibility
+export default migrateConsole;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = migrateConsole;
+  // For ESM compatibility
+  module.exports.default = migrateConsole;
+}
+

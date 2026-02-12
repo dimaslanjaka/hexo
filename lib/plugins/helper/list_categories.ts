@@ -123,4 +123,12 @@ function listCategoriesHelper(this: LocalsType, categories?: Query<CategorySchem
   return flatList(0);
 }
 
-export = listCategoriesHelper;
+// For ESM compatibility
+export default listCategoriesHelper;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = listCategoriesHelper;
+  // For ESM compatibility
+  module.exports.default = listCategoriesHelper;
+}
+

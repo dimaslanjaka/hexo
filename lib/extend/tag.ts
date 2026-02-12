@@ -286,4 +286,12 @@ class Tag {
   }
 }
 
-export = Tag;
+// For ESM compatibility
+export default Tag;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = Tag;
+  // For ESM compatibility
+  module.exports.default = Tag;
+}
+

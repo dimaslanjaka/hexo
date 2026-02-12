@@ -125,4 +125,12 @@ function listArchivesHelper(this: LocalsType, options: Options = {}) {
   return result;
 }
 
-export = listArchivesHelper;
+// For ESM compatibility
+export default listArchivesHelper;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = listArchivesHelper;
+  // For ESM compatibility
+  module.exports.default = listArchivesHelper;
+}
+

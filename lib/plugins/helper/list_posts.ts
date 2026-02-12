@@ -67,4 +67,12 @@ function listPostsHelper(this: LocalsType, posts?: Query<PostSchema> | Options, 
   return result;
 }
 
-export = listPostsHelper;
+// For ESM compatibility
+export default listPostsHelper;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = listPostsHelper;
+  // For ESM compatibility
+  module.exports.default = listPostsHelper;
+}
+

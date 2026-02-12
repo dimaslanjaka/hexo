@@ -63,4 +63,12 @@ File.TYPE_UPDATE = 'update';
 File.TYPE_SKIP = 'skip';
 File.TYPE_DELETE = 'delete';
 
-export = File;
+// For ESM compatibility
+export default File;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = File;
+  // For ESM compatibility
+  module.exports.default = File;
+}
+

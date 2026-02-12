@@ -28,4 +28,12 @@ function listConsole(this: Hexo, args: ListArgs): Promise<void> {
   return this.load().then(() => Reflect.apply(store[alias[type]], this, [args]));
 }
 
-export = listConsole;
+// For ESM compatibility
+export default listConsole;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = listConsole;
+  // For ESM compatibility
+  module.exports.default = listConsole;
+}
+

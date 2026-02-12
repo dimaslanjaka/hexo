@@ -32,4 +32,12 @@ function pageGenerator(locals: SiteLocals): PageGenerator[] {
   });
 }
 
-export = pageGenerator;
+// For ESM compatibility
+export default pageGenerator;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = pageGenerator;
+  // For ESM compatibility
+  module.exports.default = pageGenerator;
+}
+

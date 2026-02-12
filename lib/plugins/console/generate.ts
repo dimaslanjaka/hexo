@@ -220,4 +220,12 @@ function generateConsole(this: Hexo, args: GenerateArgs = {}): Promise<any> {
   });
 }
 
-export = generateConsole;
+// For ESM compatibility
+export default generateConsole;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = generateConsole;
+  // For ESM compatibility
+  module.exports.default = generateConsole;
+}
+

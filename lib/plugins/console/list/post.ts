@@ -40,4 +40,12 @@ function listPost(this: Hexo): void {
   if (data.length === 1) console.log('No posts.');
 }
 
-export = listPost;
+// For ESM compatibility
+export default listPost;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = listPost;
+  // For ESM compatibility
+  module.exports.default = listPost;
+}
+

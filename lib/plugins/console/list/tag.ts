@@ -25,4 +25,12 @@ function listTag(this: Hexo): void {
   if (data.length === 1) console.log('No tags.');
 }
 
-export = listTag;
+// For ESM compatibility
+export default listTag;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = listTag;
+  // For ESM compatibility
+  module.exports.default = listTag;
+}
+

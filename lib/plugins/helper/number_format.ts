@@ -50,4 +50,12 @@ function numberFormatHelper(num: number, options: Options = {}) {
   return before + (after ? separator + after : '');
 }
 
-export = numberFormatHelper;
+// For ESM compatibility
+export default numberFormatHelper;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = numberFormatHelper;
+  // For ESM compatibility
+  module.exports.default = numberFormatHelper;
+}
+

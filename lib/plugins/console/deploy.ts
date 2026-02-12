@@ -61,4 +61,12 @@ function deployConsole(this: Hexo, args: DeployArgs): Promise<any> {
   });
 }
 
-export = deployConsole;
+// For ESM compatibility
+export default deployConsole;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = deployConsole;
+  // For ESM compatibility
+  module.exports.default = deployConsole;
+}
+

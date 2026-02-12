@@ -199,4 +199,12 @@ function openGraphHelper(this: LocalsType, options: Options = {}) {
   return result.trim();
 }
 
-export = openGraphHelper;
+// For ESM compatibility
+export default openGraphHelper;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = openGraphHelper;
+  // For ESM compatibility
+  module.exports.default = openGraphHelper;
+}
+

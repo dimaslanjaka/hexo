@@ -83,4 +83,12 @@ class Helper {
   }
 }
 
-export = Helper;
+// For ESM compatibility
+export default Helper;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = Helper;
+  // For ESM compatibility
+  module.exports.default = Helper;
+}
+

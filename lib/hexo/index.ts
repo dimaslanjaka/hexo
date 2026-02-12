@@ -787,4 +787,12 @@ declare global {
   const hexo: Hexo;
 }
 
-export = Hexo;
+// For ESM compatibility
+export default Hexo;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = Hexo;
+  // For ESM compatibility
+  module.exports.default = Hexo;
+}
+

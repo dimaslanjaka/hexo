@@ -55,4 +55,12 @@ function assetGenerator(this: Hexo): Promise<AssetGenerator[]> {
   ]).then(data => [].concat(...data));
 }
 
-export = assetGenerator;
+// For ESM compatibility
+export default assetGenerator;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = assetGenerator;
+  // For ESM compatibility
+  module.exports.default = assetGenerator;
+}
+

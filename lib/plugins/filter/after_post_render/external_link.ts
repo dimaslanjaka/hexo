@@ -32,4 +32,12 @@ function externalLinkFilter(this: Hexo, data: RenderData): void {
   });
 }
 
-export = externalLinkFilter;
+// For ESM compatibility
+export default externalLinkFilter;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = externalLinkFilter;
+  // For ESM compatibility
+  module.exports.default = externalLinkFilter;
+}
+

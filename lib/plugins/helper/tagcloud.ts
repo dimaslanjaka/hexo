@@ -114,4 +114,12 @@ function tagcloudHelperFactory(this: LocalsType, tags?: Query<TagSchema> | Optio
   }).call(this, tags, options);
 }
 
-export = tagcloudHelperFactory;
+// For ESM compatibility
+export default tagcloudHelperFactory;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = tagcloudHelperFactory;
+  // For ESM compatibility
+  module.exports.default = tagcloudHelperFactory;
+}
+

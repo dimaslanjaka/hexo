@@ -49,4 +49,12 @@ function renderConsole(this: Hexo, args: RenderArgs): Promise<void> {
   });
 }
 
-export = renderConsole;
+// For ESM compatibility
+export default renderConsole;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = renderConsole;
+  // For ESM compatibility
+  module.exports.default = renderConsole;
+}
+

@@ -38,4 +38,12 @@ function postGenerator(locals: SiteLocals): PostGenerator[] {
   });
 }
 
-export = postGenerator;
+// For ESM compatibility
+export default postGenerator;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = postGenerator;
+  // For ESM compatibility
+  module.exports.default = postGenerator;
+}
+

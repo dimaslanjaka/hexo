@@ -19,4 +19,12 @@ function yamlHelper(data: StoreFunctionData): any {
   return yaml.load(escape(data.text), { schema });
 }
 
-export = yamlHelper;
+// For ESM compatibility
+export default yamlHelper;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = yamlHelper;
+  // For ESM compatibility
+  module.exports.default = yamlHelper;
+}
+

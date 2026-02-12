@@ -64,4 +64,12 @@ function newConsole(this: Hexo, args: NewArgs): Promise<void> {
   });
 }
 
-export = newConsole;
+// For ESM compatibility
+export default newConsole;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = newConsole;
+  // For ESM compatibility
+  module.exports.default = newConsole;
+}
+

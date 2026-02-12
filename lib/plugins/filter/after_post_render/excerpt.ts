@@ -20,4 +20,12 @@ function excerptFilter(data: RenderData): void {
   }
 }
 
-export = excerptFilter;
+// For ESM compatibility
+export default excerptFilter;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = excerptFilter;
+  // For ESM compatibility
+  module.exports.default = excerptFilter;
+}
+

@@ -47,4 +47,12 @@ function externalLinkFilter(this: Hexo, data: string): string {
   return result;
 }
 
-export = externalLinkFilter;
+// For ESM compatibility
+export default externalLinkFilter;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = externalLinkFilter;
+  // For ESM compatibility
+  module.exports.default = externalLinkFilter;
+}
+

@@ -54,4 +54,12 @@ function linkTag(args: string[]) {
   return htmlTag('a', attrs, text.join(' '));
 }
 
-export = linkTag;
+// For ESM compatibility
+export default linkTag;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = linkTag;
+  // For ESM compatibility
+  module.exports.default = linkTag;
+}
+
