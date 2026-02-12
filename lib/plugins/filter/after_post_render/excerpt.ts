@@ -1,4 +1,4 @@
-import type { RenderData } from '../../../types';
+import type { RenderData } from '../../../types.js';
 
 const rExcerpt = /<!-- ?more ?-->/i;
 
@@ -23,7 +23,7 @@ function excerptFilter(data: RenderData): void {
 // For ESM compatibility
 export default excerptFilter;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = excerptFilter;
   // For ESM compatibility
   module.exports.default = excerptFilter;

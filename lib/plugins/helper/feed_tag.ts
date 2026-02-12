@@ -1,6 +1,6 @@
 import { url_for } from 'hexo-util';
 import moize from 'moize';
-import type { LocalsType } from '../../types';
+import type { LocalsType } from '../../types.js';
 
 const feedFn = (str = '') => {
   if (str) return str.replace(/2$/, '');
@@ -55,7 +55,7 @@ function feedTagHelper(this: LocalsType, path?: string, options: Options = {}) {
 // For ESM compatibility
 export default feedTagHelper;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = feedTagHelper;
   // For ESM compatibility
   module.exports.default = feedTagHelper;

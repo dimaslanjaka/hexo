@@ -7,8 +7,8 @@ import { load } from 'js-yaml';
 import { slugize, escapeRegExp, deepMerge} from 'hexo-util';
 import { copyDir, exists, listDir, mkdirs, readFile, rmdir, unlink, writeFile } from 'hexo-fs';
 import { parse as yfmParse, split as yfmSplit, stringify as yfmStringify } from 'hexo-front-matter';
-import type Hexo from './index';
-import type { NodeJSLikeCallback, RenderData } from '../types';
+import type Hexo from './index.js';
+import type { NodeJSLikeCallback, RenderData } from '../types.js';
 
 const preservedKeys = ['title', 'slug', 'path', 'layout', 'date', 'content'];
 
@@ -578,7 +578,7 @@ class Post {
 // For ESM compatibility
 export default Post;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = Post;
   // For ESM compatibility
   module.exports.default = Post;

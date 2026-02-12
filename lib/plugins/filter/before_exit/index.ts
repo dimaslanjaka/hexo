@@ -1,8 +1,8 @@
-import type Hexo from '../../../hexo/index';
+import type Hexo from '../../../hexo/index.js';
 const index_default = (ctx: Hexo) => {
   const { filter } = ctx.extend;
 
-  filter.register('before_exit', require('./save_database'));
+  filter.register('before_exit', require('./save_database.js'));
 };
 
 // For ESM compatibility

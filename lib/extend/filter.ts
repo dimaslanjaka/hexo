@@ -1,5 +1,5 @@
 import Promise from 'bluebird';
-import { FilterOptions } from '../types';
+import { FilterOptions } from '../types.js';
 
 const typeAlias = {
   pre: 'before_post_render',
@@ -112,7 +112,7 @@ class Filter {
 // For ESM compatibility
 export default Filter;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = Filter;
   // For ESM compatibility
   module.exports.default = Filter;

@@ -1,4 +1,4 @@
-import type { StoreFunctionData } from '../../extend/renderer';
+import type { StoreFunctionData } from '../../extend/renderer.js';
 
 function jsonRenderer(data: StoreFunctionData): any {
   return JSON.parse(data.text);
@@ -7,7 +7,7 @@ function jsonRenderer(data: StoreFunctionData): any {
 // For ESM compatibility
 export default jsonRenderer;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = jsonRenderer;
   // For ESM compatibility
   module.exports.default = jsonRenderer;

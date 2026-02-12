@@ -1,7 +1,7 @@
 import { Pattern } from 'hexo-util';
 import { extname } from 'path';
-import type Hexo from '../../hexo/index';
-import type { _File } from '../../box/index';
+import type Hexo from '../../hexo/index.js';
+import type { _File } from '../../box/index.js';
 const data_default = (ctx: Hexo) => ({
   pattern: new Pattern('_data/*path'),
 

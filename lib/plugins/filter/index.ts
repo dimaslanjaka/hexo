@@ -1,16 +1,16 @@
-import type Hexo from '../../hexo/index';
+import type Hexo from '../../hexo/index.js';
 const index_default = (ctx: Hexo) => {
   const { filter } = ctx.extend;
 
-  require('./after_render/index')(ctx);
-  require('./after_post_render/index')(ctx);
-  require('./before_post_render/index')(ctx);
-  require('./before_exit/index')(ctx);
-  require('./before_generate/index')(ctx);
-  require('./template_locals/index')(ctx);
+  require('./after_render/index.js')(ctx);
+  require('./after_post_render/index.js')(ctx);
+  require('./before_post_render/index.js')(ctx);
+  require('./before_exit/index.js')(ctx);
+  require('./before_generate/index.js')(ctx);
+  require('./template_locals/index.js')(ctx);
 
-  filter.register('new_post_path', require('./new_post_path'));
-  filter.register('post_permalink', require('./post_permalink'));
+  filter.register('new_post_path', require('./new_post_path.js'));
+  filter.register('post_permalink', require('./post_permalink.js'));
 };
 
 // For ESM compatibility

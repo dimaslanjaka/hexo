@@ -1,7 +1,7 @@
 import warehouse from 'warehouse';
 import { slugize, full_url_for } from 'hexo-util';
-import type Hexo from '../hexo/index';
-import type { CategorySchema } from '../types';
+import type Hexo from '../hexo/index.js';
+import type { CategorySchema } from '../types.js';
 const category_default = (ctx: Hexo) => {
   const Category = new warehouse.Schema<CategorySchema>({
     name: {type: String, required: true},

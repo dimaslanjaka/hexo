@@ -21,25 +21,25 @@ import {
   Processor,
   Renderer,
   Tag
-} from '../extend/index';
+} from '../extend/index.js';
 
-import Render from './render';
-import registerModels from './register_models';
-import Post from './post';
-import Scaffold from './scaffold';
-import Source from './source';
-import Router from './router';
-import Theme from '../theme/index';
-import Locals from './locals';
-import defaultConfig from './default_config';
-import loadDatabase from './load_database';
-import multiConfigPath from './multi_config_path';
+import Render from './render.js';
+import registerModels from './register_models.js';
+import Post from './post.js';
+import Scaffold from './scaffold.js';
+import Source from './source.js';
+import Router from './router.js';
+import Theme from '../theme/index.js';
+import Locals from './locals.js';
+import defaultConfig from './default_config.js';
+import loadDatabase from './load_database.js';
+import multiConfigPath from './multi_config_path.js';
 import { deepMerge, full_url_for } from 'hexo-util';
-import type Box from '../box/index';
-import type { BaseGeneratorReturn, FilterOptions, LocalsType, NodeJSLikeCallback, SiteLocals } from '../types';
+import type Box from '../box/index.js';
+import type { BaseGeneratorReturn, FilterOptions, LocalsType, NodeJSLikeCallback, SiteLocals } from '../types.js';
 import type { AddSchemaTypeOptions } from 'warehouse/dist/types';
 import type Schema from 'warehouse/dist/schema';
-import BinaryRelationIndex from '../models/binary_relation_index';
+import BinaryRelationIndex from '../models/binary_relation_index.js';
 
 const libDir = dirname(__dirname);
 const dbVersion = 1;
@@ -455,15 +455,15 @@ class Hexo extends EventEmitter {
     this.log.debug('Working directory: %s', picocolors.magenta(tildify(this.base_dir)));
 
     // Load internal plugins
-    require('../plugins/console/index')(this);
-    require('../plugins/filter/index')(this);
-    require('../plugins/generator/index')(this);
-    require('../plugins/helper/index')(this);
-    require('../plugins/highlight/index')(this);
-    require('../plugins/injector/index')(this);
-    require('../plugins/processor/index')(this);
-    require('../plugins/renderer/index')(this);
-    require('../plugins/tag/index').default(this);
+    require('../plugins/console/index.js')(this);
+    require('../plugins/filter/index.js')(this);
+    require('../plugins/generator/index.js')(this);
+    require('../plugins/helper/index.js')(this);
+    require('../plugins/highlight/index.js')(this);
+    require('../plugins/injector/index.js')(this);
+    require('../plugins/processor/index.js')(this);
+    require('../plugins/renderer/index.js')(this);
+    require('../plugins/tag/index.js').default(this);
 
     // Load config
     return Promise.each(

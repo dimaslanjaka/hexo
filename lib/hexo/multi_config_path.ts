@@ -2,7 +2,7 @@ import { isAbsolute, resolve, join, extname } from 'path';
 import { existsSync, readFileSync, writeFileSync } from 'hexo-fs';
 import yml from 'js-yaml';
 import { deepMerge } from 'hexo-util';
-import type Hexo from './index';
+import type Hexo from './index.js';
 const multi_config_path_default = (ctx: Hexo) => function multiConfigPath(base: string, configPaths?: string, outputDir?: string): string {
   const { log } = ctx;
   const defaultPath = join(base, '_config.yml');
@@ -77,7 +77,7 @@ const multi_config_path_default = (ctx: Hexo) => function multiConfigPath(base: 
 // For ESM compatibility
 export default multi_config_path_default;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = multi_config_path_default;
   // For ESM compatibility
   module.exports.default = multi_config_path_default;

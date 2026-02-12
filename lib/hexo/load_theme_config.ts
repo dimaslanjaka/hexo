@@ -3,7 +3,7 @@ import tildify from 'tildify';
 import { exists, readdir } from 'hexo-fs';
 import * as picocolors from 'picocolors';
 import { deepMerge } from 'hexo-util';
-import type Hexo from './index';
+import type Hexo from './index.js';
 import type Promise from 'bluebird';
 const load_theme_config_default = (ctx: Hexo): Promise<void> => {
   if (!ctx.env.init) return;
@@ -43,7 +43,7 @@ function findConfigPath(path: string): Promise<string> {
 // For ESM compatibility
 export default load_theme_config_default;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = load_theme_config_default;
   // For ESM compatibility
   module.exports.default = load_theme_config_default;

@@ -1,5 +1,5 @@
 import Promise from 'bluebird';
-import type Hexo from '../../../hexo/index';
+import type Hexo from '../../../hexo/index.js';
 import type Model from 'warehouse/dist/model';
 
 function renderPostFilter(this: Hexo): Promise<[any[], any[]]> {

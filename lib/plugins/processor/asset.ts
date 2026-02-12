@@ -1,13 +1,13 @@
-import { adjustDateForTimezone, toDate, isExcludedFile, isMatch } from './common';
+import { adjustDateForTimezone, toDate, isExcludedFile, isMatch } from './common.js';
 import Promise from 'bluebird';
 import { parse as yfm } from 'hexo-front-matter';
 import { extname, relative } from 'path';
 import { Pattern } from 'hexo-util';
 import * as picocolors from 'picocolors';
-import type { _File } from '../../box/index';
-import type Hexo from '../../hexo/index';
+import type { _File } from '../../box/index.js';
+import type Hexo from '../../hexo/index.js';
 import type { Stats } from 'fs';
-import { PageSchema } from '../../types';
+import { PageSchema } from '../../types.js';
 const asset_default = (ctx: Hexo) => {
   return {
     pattern: new Pattern(path => {

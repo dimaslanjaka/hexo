@@ -1,6 +1,6 @@
 import { url_for, escapeHTML } from 'hexo-util';
 import moize from 'moize';
-import type { LocalsType, TagSchema } from '../../types';
+import type { LocalsType, TagSchema } from '../../types.js';
 import type Query from 'warehouse/dist/query';
 
 interface Options {
@@ -124,7 +124,7 @@ function listTagsHelperFactory(tags?: Query<TagSchema> | Options, options?: Opti
 // For ESM compatibility
 export default listTagsHelperFactory;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = listTagsHelperFactory;
   // For ESM compatibility
   module.exports.default = listTagsHelperFactory;

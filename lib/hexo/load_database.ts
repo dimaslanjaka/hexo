@@ -1,6 +1,6 @@
 import { exists, unlink } from 'hexo-fs';
 import Promise from 'bluebird';
-import type Hexo from './index';
+import type Hexo from './index.js';
 const load_database_default = (ctx: Hexo): Promise<void> => {
   if (ctx._dbLoaded) return Promise.resolve();
 
@@ -24,7 +24,7 @@ const load_database_default = (ctx: Hexo): Promise<void> => {
 // For ESM compatibility
 export default load_database_default;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = load_database_default;
   // For ESM compatibility
   module.exports.default = load_database_default;

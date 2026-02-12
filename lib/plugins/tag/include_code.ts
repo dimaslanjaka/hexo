@@ -1,6 +1,6 @@
 import { basename, extname, join } from 'path';
 import { htmlTag, url_for } from 'hexo-util';
-import type Hexo from '../../hexo/index';
+import type Hexo from '../../hexo/index.js';
 
 const rCaptionTitleFile = /(.*)?(?:\s+|^)(\/*\S+)/;
 const rLang = /\s*lang:(\w+)/i;

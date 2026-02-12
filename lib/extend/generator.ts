@@ -1,5 +1,5 @@
 import Promise from 'bluebird';
-import type { BaseGeneratorReturn, NodeJSLikeCallback, SiteLocals } from '../types';
+import type { BaseGeneratorReturn, NodeJSLikeCallback, SiteLocals } from '../types.js';
 
 type ReturnType = BaseGeneratorReturn | BaseGeneratorReturn[];
 type GeneratorReturnType = ReturnType | Promise<ReturnType>;
@@ -58,7 +58,7 @@ class Generator {
 // For ESM compatibility
 export default Generator;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = Generator;
   // For ESM compatibility
   module.exports.default = Generator;

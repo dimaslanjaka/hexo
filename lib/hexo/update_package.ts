@@ -1,6 +1,6 @@
 import { join } from 'path';
 import { writeFile, exists, readFile } from 'hexo-fs';
-import type Hexo from './index';
+import type Hexo from './index.js';
 import type Promise from 'bluebird';
 const update_package_default = (ctx: Hexo): Promise<void> => {
   const pkgPath = join(ctx.base_dir, 'package.json');
@@ -35,7 +35,7 @@ function readPkg(path: string): Promise<any> {
 // For ESM compatibility
 export default update_package_default;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = update_package_default;
   // For ESM compatibility
   module.exports.default = update_package_default;

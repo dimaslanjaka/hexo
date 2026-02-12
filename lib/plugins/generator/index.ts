@@ -1,10 +1,10 @@
-import type Hexo from '../../hexo/index';
+import type Hexo from '../../hexo/index.js';
 const index_default = (ctx: Hexo) => {
   const { generator } = ctx.extend;
 
-  generator.register('asset', require('./asset'));
-  generator.register('page', require('./page'));
-  generator.register('post', require('./post'));
+  generator.register('asset', require('./asset.js'));
+  generator.register('page', require('./page.js'));
+  generator.register('post', require('./post.js'));
 };
 
 // For ESM compatibility

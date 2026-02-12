@@ -1,10 +1,10 @@
 import warehouse from 'warehouse';
 import { join } from 'path';
-import Moment from './types/moment';
+import Moment from './types/moment.js';
 import moment from 'moment';
 import { full_url_for } from 'hexo-util';
-import type Hexo from '../hexo/index';
-import type { PageSchema } from '../types';
+import type Hexo from '../hexo/index.js';
+import type { PageSchema } from '../types.js';
 const page_default = (ctx: Hexo) => {
   const Page = new warehouse.Schema<PageSchema>({
     title: {type: String, default: ''},

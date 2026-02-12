@@ -1,5 +1,5 @@
 import { url_for } from 'hexo-util';
-import type { LocalsType, PostSchema } from '../../types';
+import type { LocalsType, PostSchema } from '../../types.js';
 import type Query from 'warehouse/dist/query';
 
 interface Options {
@@ -70,7 +70,7 @@ function listPostsHelper(this: LocalsType, posts?: Query<PostSchema> | Options, 
 // For ESM compatibility
 export default listPostsHelper;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = listPostsHelper;
   // For ESM compatibility
   module.exports.default = listPostsHelper;

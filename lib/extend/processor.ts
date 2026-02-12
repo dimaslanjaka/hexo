@@ -1,6 +1,6 @@
 import Promise from 'bluebird';
 import { Pattern } from 'hexo-util';
-import type File from '../box/file';
+import type File from '../box/file.js';
 
 interface StoreFunction {
   (file: File | string): any;
@@ -55,7 +55,7 @@ class Processor {
 // For ESM compatibility
 export default Processor;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = Processor;
   // For ESM compatibility
   module.exports.default = Processor;

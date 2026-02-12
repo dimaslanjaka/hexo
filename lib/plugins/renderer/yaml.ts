@@ -1,7 +1,7 @@
 import yaml from 'js-yaml';
 import { escape } from 'hexo-front-matter';
 import logger from 'hexo-log';
-import type { StoreFunctionData } from '../../extend/renderer';
+import type { StoreFunctionData } from '../../extend/renderer.js';
 
 let schema: yaml.Schema;
 // FIXME: workaround for https://github.com/hexojs/hexo/issues/4917
@@ -22,7 +22,7 @@ function yamlHelper(data: StoreFunctionData): any {
 // For ESM compatibility
 export default yamlHelper;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = yamlHelper;
   // For ESM compatibility
   module.exports.default = yamlHelper;

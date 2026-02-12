@@ -1,9 +1,9 @@
-import type Hexo from '../../../hexo/index';
+import type Hexo from '../../../hexo/index.js';
 const index_default = (ctx: Hexo) => {
   const { filter } = ctx.extend;
 
-  filter.register('after_post_render', require('./external_link'));
-  filter.register('after_post_render', require('./excerpt'));
+  filter.register('after_post_render', require('./external_link.js'));
+  filter.register('after_post_render', require('./excerpt.js'));
 };
 
 // For ESM compatibility

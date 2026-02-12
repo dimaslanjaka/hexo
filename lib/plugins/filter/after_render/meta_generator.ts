@@ -1,4 +1,4 @@
-import type Hexo from '../../../hexo/index';
+import type Hexo from '../../../hexo/index.js';
 
 let NEED_INJECT = true;
 let HAS_CHECKED = false;

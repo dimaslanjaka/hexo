@@ -1,4 +1,4 @@
-import type { BaseGeneratorReturn, PageSchema, SiteLocals } from '../../types';
+import type { BaseGeneratorReturn, PageSchema, SiteLocals } from '../../types.js';
 import type Document from 'warehouse/dist/document';
 
 type SimplePageGenerator = Omit<BaseGeneratorReturn, 'layout'> & { data: string };
@@ -35,7 +35,7 @@ function pageGenerator(locals: SiteLocals): PageGenerator[] {
 // For ESM compatibility
 export default pageGenerator;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = pageGenerator;
   // For ESM compatibility
   module.exports.default = pageGenerator;

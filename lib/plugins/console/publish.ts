@@ -1,6 +1,6 @@
 import tildify from 'tildify';
 import * as picocolors from 'picocolors';
-import type Hexo from '../../hexo/index';
+import type Hexo from '../../hexo/index.js';
 import type Promise from 'bluebird';
 
 interface PublishArgs {

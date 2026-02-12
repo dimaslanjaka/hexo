@@ -2,7 +2,7 @@ import { stripIndent } from 'hexo-util';
 import * as picocolors from 'picocolors';
 import { Environment } from 'nunjucks';
 import Promise from 'bluebird';
-import type { NodeJSLikeCallback } from '../types';
+import type { NodeJSLikeCallback } from '../types.js';
 
 const rSwigRawFullBlock = /{% *raw *%}/;
 const rCodeTag = /<code[^<>]*>[\s\S]+?<\/code>/g;
@@ -289,7 +289,7 @@ class Tag {
 // For ESM compatibility
 export default Tag;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = Tag;
   // For ESM compatibility
   module.exports.default = Tag;

@@ -1,5 +1,5 @@
 import { url_for, escapeHTML } from 'hexo-util';
-import type Hexo from '../../hexo/index';
+import type Hexo from '../../hexo/index.js';
 
 /**
  * Asset link tag

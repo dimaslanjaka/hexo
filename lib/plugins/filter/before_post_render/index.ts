@@ -1,9 +1,9 @@
-import type Hexo from '../../../hexo/index';
+import type Hexo from '../../../hexo/index.js';
 const index_default = (ctx: Hexo) => {
   const { filter } = ctx.extend;
 
-  filter.register('before_post_render', require('./backtick_code_block')(ctx));
-  filter.register('before_post_render', require('./titlecase'));
+  filter.register('before_post_render', require('./backtick_code_block.js')(ctx));
+  filter.register('before_post_render', require('./titlecase.js'));
 };
 
 // For ESM compatibility
