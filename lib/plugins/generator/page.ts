@@ -1,5 +1,5 @@
 import type { BaseGeneratorReturn, PageSchema, SiteLocals } from '../../types.js';
-import type Document from 'warehouse/dist/document';
+import type Document from 'warehouse/dist/document' with { 'resolution-mode': 'import' };
 
 type SimplePageGenerator = Omit<BaseGeneratorReturn, 'layout'> & { data: string };
 interface NormalPageGenerator extends BaseGeneratorReturn {

@@ -1,6 +1,6 @@
 import Promise from 'bluebird';
 import type Hexo from '../../../hexo/index.js';
-import type Model from 'warehouse/dist/model';
+import type Model from 'warehouse/dist/model' with { 'resolution-mode': 'import' };
 
 function renderPostFilter(this: Hexo): Promise<[any[], any[]]> {
   const renderPosts = (model: Model<any>) => {

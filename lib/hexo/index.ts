@@ -37,8 +37,8 @@ import multiConfigPath from './multi_config_path.js';
 import { deepMerge, full_url_for } from 'hexo-util';
 import type Box from '../box/index.js';
 import type { BaseGeneratorReturn, FilterOptions, LocalsType, NodeJSLikeCallback, SiteLocals } from '../types.js';
-import type { AddSchemaTypeOptions } from 'warehouse/dist/types';
-import type Schema from 'warehouse/dist/schema';
+import type { AddSchemaTypeOptions } from 'warehouse/dist/types' with { 'resolution-mode': 'import' };
+import type Schema from 'warehouse/dist/schema' with { 'resolution-mode': 'import' };
 import BinaryRelationIndex from '../models/binary_relation_index.js';
 
 const libDir = dirname(__dirname);

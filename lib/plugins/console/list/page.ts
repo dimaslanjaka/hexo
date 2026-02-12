@@ -3,8 +3,8 @@ import table from 'fast-text-table';
 import { stringLength } from './common.js';
 import type Hexo from '../../../hexo/index.js';
 import type { PageSchema } from '../../../types.js';
-import type Model from 'warehouse/dist/model';
-import type Document from 'warehouse/dist/document';
+import type Model from 'warehouse/dist/model' with { 'resolution-mode': 'import' };
+import type Document from 'warehouse/dist/document' with { 'resolution-mode': 'import' };
 
 function listPage(this: Hexo): void {
   const Page: Model<PageSchema> = this.model('Page');

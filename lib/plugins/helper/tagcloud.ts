@@ -1,7 +1,7 @@
 import { Color, url_for } from 'hexo-util';
 import moize from 'moize';
 import type { LocalsType, TagSchema } from '../../types.js';
-import type Query from 'warehouse/dist/query';
+import type Query from 'warehouse/dist/query' with { 'resolution-mode': 'import' };
 
 interface Options {
   min_font?: number;

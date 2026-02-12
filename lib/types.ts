@@ -1,7 +1,7 @@
 import moment from 'moment';
 import type default_config from './hexo/default_config.js';
 import type i18n from 'hexo-i18n';
-import type Query from 'warehouse/dist/query';
+import type Query from 'warehouse/dist/query' with { 'resolution-mode': 'import' };
 import type css from './plugins/helper/css.js';
 import type { date, date_xml, time, full_date, relative_date, time_tag, moment as _moment } from './plugins/helper/date.js';
 import type { inspectObject, log } from './plugins/helper/debug.js';

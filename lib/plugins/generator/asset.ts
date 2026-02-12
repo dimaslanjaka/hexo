@@ -4,7 +4,7 @@ import { extname } from 'path';
 import * as picocolors from 'picocolors';
 import type Hexo from '../../hexo/index.js';
 import type { AssetSchema, BaseGeneratorReturn } from '../../types.js';
-import type Document from 'warehouse/dist/document';
+import type Document from 'warehouse/dist/document' with { 'resolution-mode': 'import' };
 
 interface AssetData {
   modified: boolean;

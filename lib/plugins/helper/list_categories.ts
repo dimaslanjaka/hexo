@@ -1,7 +1,7 @@
 import { url_for } from 'hexo-util';
 import type { CategorySchema, LocalsType } from '../../types.js';
-import type Query from 'warehouse/dist/query';
-import type Document from 'warehouse/dist/document';
+import type Query from 'warehouse/dist/query' with { 'resolution-mode': 'import' };
+import type Document from 'warehouse/dist/document' with { 'resolution-mode': 'import' };
 
 interface Options {
   style?: string | false;

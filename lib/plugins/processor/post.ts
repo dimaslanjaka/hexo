@@ -9,7 +9,7 @@ import type { _File } from '../../box/index.js';
 import type Hexo from '../../hexo/index.js';
 import type { Stats } from 'fs';
 import { PostAssetSchema, PostSchema } from '../../types.js';
-import type Document from 'warehouse/dist/document';
+import type Document from 'warehouse/dist/document' with { 'resolution-mode': 'import' };
 
 const postDir = '_posts/';
 const draftDir = '_drafts/';
