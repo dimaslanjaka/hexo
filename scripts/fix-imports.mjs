@@ -37,6 +37,17 @@ async function computeReplacement(file, spec) {
 
 async function fixImportsInFile(file) {
   let content = await readFile(file, 'utf8');
+  const originalContent = content;
+  // Append resolution-mode clause to `import type` warehouse imports (including
+  // `warehouse/dist/...`) if missing, preserving any trailing semicolon/whitespace.
+  // Use a negative lookahead so already-patched imports are not matched
+  // (prevents double-appending).
+  content = content.replace(
+    /(import\s+type\s+[\s\S]*?from\s+(['"])(warehouse(?:\/dist\/[A-Za-z0-9_\/-]*)?)\2)(?!\s*with\s*\{)(\s*;?)/g,
+    (m, imp, quote, spec, trailing) => {
+      return `${imp} with { "resolution-mode": "import" }${trailing || ''}`;
+    }
+  );
   let replacements = new Map();
 
   // Patterns to find relative module specifiers used in imports/exports/requires
@@ -55,7 +66,7 @@ async function fixImportsInFile(file) {
     }
   }
 
-  if (replacements.size === 0) return;
+  if (replacements.size === 0 && content === originalContent) return;
 
   // apply all replacements (replace quoted occurrences)
   for (const [oldSpec, newSpec] of replacements.entries()) {
