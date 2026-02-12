@@ -89,4 +89,13 @@ function toMoment(value) {
   return moment(value);
 }
 
-export = SchemaTypeMoment;
+const default_export_moment = SchemaTypeMoment;
+
+// For ESM compatibility
+export default default_export_moment;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = default_export_moment;
+  // For ESM compatibility
+  module.exports.default = default_export_moment;
+}

@@ -1,78 +1,50 @@
 import fs from 'fs';
 import * as glob from 'glob';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 const { readFile, writeFile } = fs.promises;
 const globP = glob.glob;
-const __dirname = path.dirname(new URL(import.meta.url).pathname);
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const srcDir = path.join(__dirname, '../lib');
 console.log(`Source directory: ${srcDir}`);
 
 async function fixExports(file) {
   let content = await readFile(file, 'utf8');
-  let changed = false;
+  const sanitizedFileBase = (() => {
+    const base = path.basename(file, path.extname(file));
+    if (base === 'index') return path.basename(path.dirname(file));
+    return base;
+  })()
+    .replace(/[^a-zA-Z0-9_$]/g, '_')
+    .replace(/_+/g, '_')
+    .replace(/^_+|_+$/g, '');
+  const replacement = (id) =>
+    `// For ESM compatibility\nexport default ${id};\n// For CommonJS compatibility\nif (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {\n  module.exports = ${id};\n  // For ESM compatibility\n  module.exports.default = ${id};\n}\n`;
 
-  // If file already contains an `export default`, skip it
-  // If the file already contains the compatibility block (module.exports or export default), skip
-  if (/\bexport\s+default\b/.test(content) || /module\.exports\s*=/.test(content)) return;
+  // If file already contains a top-level `export default` or `module.exports =`, skip it.
+  // Use line-anchored checks to avoid matching occurrences inside comments.
+  if (/^\s*export\s+default\b/m.test(content) || /^\s*module\.exports\s*=/m.test(content)) return;
 
-  // Find top-level `export =` lines followed by function/class/object and replace only the `export =` with `const <name> =`
-  // also match arrow functions starting with '(' or identifier followed by '=>'
-  const exportRegex = /^\s*export\s*=\s*(?=(function|class|\{|\(|[A-Za-z0-9_$]+\s*=>))/gm;
-  let match2;
-  const transforms = [];
-
-  while ((match2 = exportRegex.exec(content)) !== null) {
-    const start = match2.index;
-    const afterEq = exportRegex.lastIndex;
-
-    // determine const name based on filename
-    const base = path.basename(file, '.ts').replace(/[^A-Za-z0-9_$]/g, '_');
-    let constName = `${base}_default`;
-    let idx = 0;
-    while (
-      content.includes(` const ${constName}`) ||
-      content.includes(` ${constName} `) ||
-      transforms.some((t) => t.constName === constName)
-    ) {
-      idx += 1;
-      constName = `${base}_default_${idx}`;
-    }
-
-    // replacement text for the export token (keep original indentation)
-    const lineStart = content.lastIndexOf('\n', start) + 1;
-    const indent = content.slice(lineStart, start).match(/^\s*/)[0];
-    const replacement = `${indent}const ${constName} = `;
-
-    transforms.push({ start, afterEq, replacement, constName });
+  // If the file contains `export =`, replace it with const declaration and add compatibility exports
+  // use non-global regex for test (global regex is stateful)
+  if (/\bexport\s*=\s*/m.test(content)) {
+    const id = 'default_export_' + sanitizedFileBase;
+    // use global replace to change all occurrences
+    content = content.replace(/\bexport\s*=\s*/g, `const ${id} = `);
+    content += '\n' + replacement(id);
+    await writeFile(file, content, 'utf8');
+    console.log(`Fixed exports in ${file}`);
   }
-
-  if (transforms.length === 0) return;
-
-  // apply transforms (from last to first to keep indexes valid)
-  transforms.sort((a, b) => b.start - a.start);
-  let fixed = content;
-  const appendBlocks = [];
-  for (const t of transforms) {
-    // replace the `export =` (from start up to the next non-space char before the expression) with replacement
-    // find end of the `export =` token region
-    const exportTokenEnd = t.afterEq;
-    fixed = fixed.slice(0, t.start) + t.replacement + fixed.slice(exportTokenEnd);
-    appendBlocks.push(
-      `// For ESM compatibility\nexport default ${t.constName};\n// For CommonJS compatibility\nif (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {\n  module.exports = ${t.constName};\n  // For ESM compatibility\n  module.exports.default = ${t.constName};\n}\n`
-    );
-  }
-
-  // Append compatibility blocks at end of file
-  fixed = fixed.replace(/\s+$/g, '') + '\n\n' + appendBlocks.join('\n');
-
-  await writeFile(file, fixed, 'utf8');
-  console.log(`✔ Converted export = expressions to const + compatibility block in: ${file}`);
 }
 
 async function run() {
   const pattern = path.join(srcDir, '**', '*.ts').replace(/\\/g, '/');
   const files = await globP(pattern, { nodir: true });
+  console.log(
+    `is moment.ts found in ${srcDir}?`,
+    files.some((f) => f.endsWith('moment.ts'))
+  );
 
   for (const file of files) {
     await fixExports(file);

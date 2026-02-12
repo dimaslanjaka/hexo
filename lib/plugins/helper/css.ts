@@ -29,10 +29,19 @@ function cssHelper(this: LocalsType, ...args: any[]) {
   return result;
 }
 
-export = moize(cssHelper, {
+const default_export_css = moize(cssHelper, {
   maxSize: 10,
   isDeepEqual: true,
   updateCacheForKey() {
     return relative_link;
   }
 });
+
+// For ESM compatibility
+export default default_export_css;
+// For CommonJS compatibility
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = default_export_css;
+  // For ESM compatibility
+  module.exports.default = default_export_css;
+}
