@@ -1,8 +1,7 @@
 import warehouse from 'warehouse';
 import type Hexo from '../hexo';
 import { PostCategorySchema } from '../types';
-
-export = (ctx: Hexo) => {
+const post_category_default = (ctx: Hexo) => {
   const PostCategory = new warehouse.Schema<PostCategorySchema>({
     post_id: {type: warehouse.Schema.Types.CUID, ref: 'Post'},
     category_id: {type: warehouse.Schema.Types.CUID, ref: 'Category'}
@@ -25,3 +24,12 @@ export = (ctx: Hexo) => {
 
   return PostCategory;
 };
+
+// For ESM compatibility
+export default post_category_default;
+// For CommonJS compatibility
+if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+  module.exports = post_category_default;
+  // For ESM compatibility
+  module.exports.default = post_category_default;
+}
