@@ -13,27 +13,26 @@ function escapeRegExp(str) {
 }
 
 async function computeReplacement(file, spec) {
-  // handle exact current/parent directory specifiers
-  if (spec === '.' || spec === './') return './index';
-  if (spec === '..' || spec === '../') return '../index';
+  // handle exact current/parent directory specifiers and always add .js
+  if (spec === '.' || spec === './') return './index.js';
+  if (spec === '..' || spec === '../') return '../index.js';
 
-  // don't touch imports that already point to index
-  if (/\/index(\.[^/]+)?$/.test(spec)) return null;
-
-  // if spec has an extension, skip
+  // if spec already has an extension, skip
   if (path.extname(spec)) return null;
 
+  const hasTrailingSlash = /\/$/.test(spec);
   const trimmed = spec.replace(/\/$/, '');
   const resolved = path.resolve(path.dirname(file), trimmed);
 
   try {
     const s = await stat(resolved);
-    if (s.isDirectory()) return (trimmed.endsWith('/') ? trimmed.slice(0, -1) : trimmed) + '/index';
+    if (s.isDirectory()) return trimmed + '/index.js';
   } catch (err) {
-    // target doesn't exist — skip
+    // target doesn't exist — continue and append .js below
   }
 
-  return null;
+  // default: append .js to the specifier
+  return trimmed + '.js';
 }
 
 async function fixImportsInFile(file) {
