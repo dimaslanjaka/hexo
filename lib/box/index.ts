@@ -5,7 +5,7 @@ import { Pattern, createSha1Hash } from 'hexo-util';
 import { createReadStream, readdir, stat, watch } from 'hexo-fs';
 import * as picocolors from 'picocolors';
 import { EventEmitter } from 'events';
-import { isMatch, makeRe } from 'micromatch';
+import * as micromatch from 'micromatch';
 import type Hexo from '../hexo';
 import type { NodeJSLikeCallback } from '../types';
 import type fs from 'fs';
@@ -291,7 +291,7 @@ function toRegExp(ctx: Hexo, arg: string): RegExp | null {
     ctx.log.warn('A value of "ignore:" section in "_config.yml" is not invalid (not a string)');
     return null;
   }
-  const result = makeRe(arg);
+  const result = micromatch.makeRe(arg);
   if (!result) {
     ctx.log.warn('A value of "ignore:" section in "_config.yml" can not be converted to RegExp:' + arg);
     return null;
@@ -300,7 +300,7 @@ function toRegExp(ctx: Hexo, arg: string): RegExp | null {
 }
 
 function isIgnoreMatch(path: string, ignore: string | string[]): boolean {
-  return path && ignore && ignore.length && isMatch(path, ignore);
+  return path && ignore && ignore.length && micromatch.isMatch(path, ignore);
 }
 
 function readDirWalker(
