@@ -6,7 +6,7 @@ import * as picocolors from 'picocolors';
 import tildify from 'tildify';
 import { PassThrough, type Readable } from 'stream';
 import { createSha1Hash } from 'hexo-util';
-import type Hexo from '../../hexo';
+import type Hexo from '../../hexo/index';
 import type Router from '../../hexo/router';
 
 interface GenerateArgs {
@@ -223,7 +223,7 @@ function generateConsole(this: Hexo, args: GenerateArgs = {}): Promise<any> {
 // For ESM compatibility
 export default generateConsole;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = generateConsole;
   // For ESM compatibility
   module.exports.default = generateConsole;

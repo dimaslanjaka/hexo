@@ -4,7 +4,7 @@ import post from './post';
 import route from './route';
 import tag from './tag';
 import category from './category';
-import type Hexo from '../../../hexo';
+import type Hexo from '../../../hexo/index';
 import type Promise from 'bluebird';
 
 interface ListArgs {
@@ -31,7 +31,7 @@ function listConsole(this: Hexo, args: ListArgs): Promise<void> {
 // For ESM compatibility
 export default listConsole;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = listConsole;
   // For ESM compatibility
   module.exports.default = listConsole;

@@ -6,7 +6,7 @@ import { createReadStream, readdir, stat, watch } from 'hexo-fs';
 import * as picocolors from 'picocolors';
 import { EventEmitter } from 'events';
 import * as micromatch from 'micromatch';
-import type Hexo from '../hexo';
+import type Hexo from '../hexo/index';
 import type { NodeJSLikeCallback } from '../types';
 import type fs from 'fs';
 
@@ -65,7 +65,7 @@ class Box extends EventEmitter {
       targets = targets.concat(ctx.config.ignore);
     }
     this.ignore = targets;
-    this.options.ignored = targets.map((s) => toRegExp(ctx, s)).filter((x) => x);
+    this.options.ignored = targets.map(s => toRegExp(ctx, s)).filter(x => x);
   }
 
   _createFileClass() {
@@ -120,8 +120,8 @@ class Box extends EventEmitter {
     const results: string[] = [];
     return readDirWalker(ctx, base, results, this.ignore, prefix)
       .return(results)
-      .map((path) => this._checkFileStatus(path))
-      .map((file) => this._processFile(file.type, file.path).return(file.path));
+      .map(path => this._checkFileStatus(path))
+      .map(file => this._processFile(file.type, file.path).return(file.path));
   }
 
   _checkFileStatus(path: string): { type: string; path: string } {
@@ -132,7 +132,7 @@ class Box extends EventEmitter {
       escapeBackslash(src.substring(ctx.base_dir.length)),
       () => getHash(src),
       () => stat(src)
-    ).then((result) => ({
+    ).then(result => ({
       type: result.type,
       path
     }));
@@ -142,21 +142,21 @@ class Box extends EventEmitter {
     const { base, Cache, context: ctx } = this;
 
     return stat(base)
-      .then((stats) => {
+      .then(stats => {
         if (!stats.isDirectory()) return;
 
         // Check existing files in cache
         const relativeBase = escapeBackslash(base.substring(ctx.base_dir.length));
-        const cacheFiles: string[] = Cache.filter((item) => item._id.startsWith(relativeBase)).map((item) =>
+        const cacheFiles: string[] = Cache.filter(item => item._id.startsWith(relativeBase)).map(item =>
           item._id.substring(relativeBase.length)
         );
 
         // Handle deleted files
         return this._readDir(base)
-          .then((files) => cacheFiles.filter((path) => !files.includes(path)))
-          .map((path) => this._processFile(File.TYPE_DELETE, path));
+          .then(files => cacheFiles.filter(path => !files.includes(path)))
+          .map(path => this._processFile(File.TYPE_DELETE, path));
       })
-      .catch((err) => {
+      .catch(err => {
         if (err && err.code !== 'ENOENT') throw err;
       })
       .asCallback(callback);
@@ -195,7 +195,7 @@ class Box extends EventEmitter {
       },
       0
     )
-      .then((count) => {
+      .then(count => {
         if (count) {
           ctx.log.debug('Processed: %s', picocolors.magenta(path));
         }
@@ -205,7 +205,7 @@ class Box extends EventEmitter {
           path
         });
       })
-      .catch((err) => {
+      .catch(err => {
         ctx.log.error({ err }, 'Process failed: %s', picocolors.magenta(path));
       })
       .finally(() => {
@@ -227,22 +227,22 @@ class Box extends EventEmitter {
 
     return this.process()
       .then(() => watch(base, this.options))
-      .then((watcher) => {
+      .then(watcher => {
         this.watcher = watcher;
 
-        watcher.on('add', (path) => {
+        watcher.on('add', path => {
           this._processFile(File.TYPE_CREATE, getPath(path));
         });
 
-        watcher.on('change', (path) => {
+        watcher.on('change', path => {
           this._processFile(File.TYPE_UPDATE, getPath(path));
         });
 
-        watcher.on('unlink', (path) => {
+        watcher.on('unlink', path => {
           this._processFile(File.TYPE_DELETE, getPath(path));
         });
 
-        watcher.on('addDir', (path) => {
+        watcher.on('addDir', path => {
           let prefix = getPath(path);
           if (prefix) prefix += '/';
 
@@ -278,7 +278,7 @@ function getHash(path: string): BlueBirdPromise<string> {
     src.once('end', resolve);
   });
 
-  src.on('data', (chunk) => {
+  src.on('data', chunk => {
     hasher.update(chunk);
   });
 
@@ -313,14 +313,14 @@ function readDirWalker(
   if (isIgnoreMatch(base, ignore)) return BlueBirdPromise.resolve();
 
   return BlueBirdPromise.map(
-    readdir(base).catch((err) => {
+    readdir(base).catch(err => {
       ctx.log.error({ err }, 'Failed to read directory: %s', base);
       if (err && err.code === 'ENOENT') return [];
       throw err;
     }),
     async (path: string) => {
       const fullPath = join(base, path);
-      const stats: fs.Stats | null = await stat(fullPath).catch((err) => {
+      const stats: fs.Stats | null = await stat(fullPath).catch(err => {
         ctx.log.error({ err }, 'Failed to stat file: %s', fullPath);
         if (err && err.code === 'ENOENT') return null;
         throw err;

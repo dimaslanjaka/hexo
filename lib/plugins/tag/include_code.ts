@@ -1,6 +1,6 @@
 import { basename, extname, join } from 'path';
 import { htmlTag, url_for } from 'hexo-util';
-import type Hexo from '../../hexo';
+import type Hexo from '../../hexo/index';
 
 const rCaptionTitleFile = /(.*)?(?:\s+|^)(\/*\S+)/;
 const rLang = /\s*lang:(\w+)/i;
@@ -78,7 +78,7 @@ const include_code_default = (ctx: Hexo) => function includeCodeTag(args: string
 // For ESM compatibility
 export default include_code_default;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = include_code_default;
   // For ESM compatibility
   module.exports.default = include_code_default;

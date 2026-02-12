@@ -21,7 +21,7 @@ import {
   Processor,
   Renderer,
   Tag
-} from '../extend';
+} from '../extend/index';
 
 import Render from './render';
 import registerModels from './register_models';
@@ -29,13 +29,13 @@ import Post from './post';
 import Scaffold from './scaffold';
 import Source from './source';
 import Router from './router';
-import Theme from '../theme';
+import Theme from '../theme/index';
 import Locals from './locals';
 import defaultConfig from './default_config';
 import loadDatabase from './load_database';
 import multiConfigPath from './multi_config_path';
 import { deepMerge, full_url_for } from 'hexo-util';
-import type Box from '../box';
+import type Box from '../box/index';
 import type { BaseGeneratorReturn, FilterOptions, LocalsType, NodeJSLikeCallback, SiteLocals } from '../types';
 import type { AddSchemaTypeOptions } from 'warehouse/dist/types';
 import type Schema from 'warehouse/dist/schema';
@@ -54,7 +54,7 @@ const castArray = (obj: any) => {
   return Array.isArray(obj) ? obj : [obj];
 };
 
-// eslint-disable-next-line no-use-before-define
+
 const mergeCtxThemeConfig = (ctx: Hexo) => {
   // Merge hexo.config.theme_config into hexo.theme.config before post rendering & generating
   // config.theme_config has "_config.[theme].yml" merged in load_theme_config.js
@@ -63,8 +63,8 @@ const mergeCtxThemeConfig = (ctx: Hexo) => {
   }
 };
 
-// eslint-disable-next-line no-use-before-define
-const createLoadThemeRoute = function (generatorResult: BaseGeneratorReturn, locals: LocalsType, ctx: Hexo) {
+
+const createLoadThemeRoute = function(generatorResult: BaseGeneratorReturn, locals: LocalsType, ctx: Hexo) {
   const { log, theme } = ctx;
   const { path, cache: useCache } = locals;
 
@@ -84,19 +84,19 @@ const createLoadThemeRoute = function (generatorResult: BaseGeneratorReturn, loc
         log.debug(`Rendering HTML ${name}: ${picocolors.magenta(path)}`);
         return view
           .render(locals)
-          .then((result) => ctx.extend.injector.exec(result, locals))
-          .then((result) =>
+          .then(result => ctx.extend.injector.exec(result, locals))
+          .then(result =>
             ctx.execFilter('_after_html_render', result, {
               context: ctx,
               args: [locals]
             })
           )
-          .tap((result) => {
+          .tap(result => {
             if (useCache) {
               routeCache.set(generatorResult, result);
             }
           })
-          .tapCatch((err) => {
+          .tapCatch(err => {
             log.error({ err }, `Render HTML failed: ${picocolors.magenta(path)}`);
           });
       }
@@ -108,7 +108,7 @@ const createLoadThemeRoute = function (generatorResult: BaseGeneratorReturn, loc
 
 function debounce(func: () => void, wait: number): () => void {
   let timeout: NodeJS.Timeout;
-  return function () {
+  return function() {
     clearTimeout(timeout);
     timeout = setTimeout(() => {
       func.apply(this);
@@ -117,6 +117,7 @@ function debounce(func: () => void, wait: number): () => void {
 }
 
 interface Args {
+
   /**
    * Enable debug mode. Display debug messages in the terminal and save debug.log in the root directory.
    */
@@ -195,6 +196,7 @@ declare module 'module' {
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 interface Hexo {
+
   /**
    * Emitted before deployment begins.
    * @param event
@@ -424,18 +426,18 @@ class Hexo extends EventEmitter {
 
     locals.set('categories', () => {
       // Ignore categories with zero posts
-      return db.model('Category').filter((category) => category.length);
+      return db.model('Category').filter(category => category.length);
     });
 
     locals.set('tags', () => {
       // Ignore tags with zero posts
-      return db.model('Tag').filter((tag) => tag.length);
+      return db.model('Tag').filter(tag => tag.length);
     });
 
     locals.set('data', () => {
       const obj = {};
 
-      db.model('Data').forEach((data) => {
+      db.model('Data').forEach(data => {
         obj[data._id] = data.data;
       });
 
@@ -453,15 +455,15 @@ class Hexo extends EventEmitter {
     this.log.debug('Working directory: %s', picocolors.magenta(tildify(this.base_dir)));
 
     // Load internal plugins
-    require('../plugins/console')(this);
-    require('../plugins/filter')(this);
-    require('../plugins/generator')(this);
-    require('../plugins/helper')(this);
-    require('../plugins/highlight')(this);
-    require('../plugins/injector')(this);
-    require('../plugins/processor')(this);
-    require('../plugins/renderer')(this);
-    require('../plugins/tag').default(this);
+    require('../plugins/console/index')(this);
+    require('../plugins/filter/index')(this);
+    require('../plugins/generator/index')(this);
+    require('../plugins/helper/index')(this);
+    require('../plugins/highlight/index')(this);
+    require('../plugins/injector/index')(this);
+    require('../plugins/processor/index')(this);
+    require('../plugins/renderer/index')(this);
+    require('../plugins/tag/index').default(this);
 
     // Load config
     return Promise.each(
@@ -471,7 +473,7 @@ class Hexo extends EventEmitter {
         'load_theme_config', // Load alternate theme config
         'load_plugins' // Load external plugins & scripts
       ],
-      (name) => require(`./${name}`)(this)
+      name => require(`./${name}`)(this)
     )
       .then(() => this.execFilter('after_init', null, { context: this }))
       .then(() => {
@@ -519,7 +521,7 @@ class Hexo extends EventEmitter {
 
   loadPlugin(path: string, callback?: NodeJSLikeCallback<any>): Promise<any> {
     return readFile(path)
-      .then((script) => {
+      .then(script => {
         // Based on: https://github.com/nodejs/node-v0.x-archive/blob/v0.10.33/src/node.js#L516
         const module = new Module(path);
         module.filename = path;
@@ -669,7 +671,7 @@ class Hexo extends EventEmitter {
     const { log } = this;
 
     // Run generators
-    return Promise.map(Object.keys(generators), (key) => {
+    return Promise.map(Object.keys(generators), key => {
       const generator = generators[key];
 
       log.debug('Generator: %s', picocolors.magenta(key));
@@ -686,7 +688,7 @@ class Hexo extends EventEmitter {
     Locals.prototype.cache = useCache;
 
     return runningGenerators
-      .map((generatorResult) => {
+      .map(generatorResult => {
         if (typeof generatorResult !== 'object' || generatorResult.path == null) return undefined;
 
         // add Route
@@ -704,7 +706,7 @@ class Hexo extends EventEmitter {
           })
           .thenReturn(path);
       })
-      .then((newRouteList) => {
+      .then(newRouteList => {
         // Remove old routes
         for (let i = 0, len = routeList.length; i < len; i++) {
           const item = routeList[i];
@@ -752,7 +754,7 @@ class Hexo extends EventEmitter {
     if (err) {
       this.log.fatal(
         { err },
-        "Something's wrong. Maybe you can find the solution here: %s",
+        'Something\'s wrong. Maybe you can find the solution here: %s',
         picocolors.underline('https://hexo.io/docs/troubleshooting.html')
       );
     }
@@ -790,7 +792,7 @@ declare global {
 // For ESM compatibility
 export default Hexo;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = Hexo;
   // For ESM compatibility
   module.exports.default = Hexo;

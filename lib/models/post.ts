@@ -4,7 +4,7 @@ import { extname, join, sep } from 'path';
 import Promise from 'bluebird';
 import Moment from './types/moment';
 import { full_url_for, Cache } from 'hexo-util';
-import type Hexo from '../hexo';
+import type Hexo from '../hexo/index';
 import type { CategorySchema, PostCategorySchema, PostSchema } from '../types';
 
 function pickID(data: PostSchema | PostCategorySchema) {
@@ -226,7 +226,7 @@ const post_default = (ctx: Hexo) => {
 // For ESM compatibility
 export default post_default;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = post_default;
   // For ESM compatibility
   module.exports.default = post_default;

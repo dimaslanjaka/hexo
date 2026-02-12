@@ -1,5 +1,5 @@
 import { full_url_for, htmlTag } from 'hexo-util';
-import type Hexo from '../../hexo';
+import type Hexo from '../../hexo/index';
 
 /**
  * Full url for tag
@@ -20,7 +20,7 @@ const full_url_for_default = (ctx: Hexo) => {
 // For ESM compatibility
 export default full_url_for_default;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = full_url_for_default;
   // For ESM compatibility
   module.exports.default = full_url_for_default;

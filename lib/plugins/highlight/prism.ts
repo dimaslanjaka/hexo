@@ -1,5 +1,5 @@
 import type { HighlightOptions } from '../../extend/syntax_highlight';
-import type Hexo from '../../hexo';
+import type Hexo from '../../hexo/index';
 
 // Lazy require prismjs
 let prismHighlight: typeof import('hexo-util').prismHighlight;

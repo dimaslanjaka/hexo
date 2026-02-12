@@ -1,6 +1,6 @@
 import { exists } from 'hexo-fs';
 import * as picocolors from 'picocolors';
-import type Hexo from '../../hexo';
+import type Hexo from '../../hexo/index';
 import type Promise from 'bluebird';
 
 interface DeployArgs {
@@ -64,7 +64,7 @@ function deployConsole(this: Hexo, args: DeployArgs): Promise<any> {
 // For ESM compatibility
 export default deployConsole;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = deployConsole;
   // For ESM compatibility
   module.exports.default = deployConsole;

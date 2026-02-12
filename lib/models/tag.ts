@@ -1,7 +1,7 @@
 import warehouse from 'warehouse';
 import { slugize, full_url_for } from 'hexo-util';
 const { hasOwnProperty: hasOwn } = Object.prototype;
-import type Hexo from '../hexo';
+import type Hexo from '../hexo/index';
 import type { TagSchema } from '../types';
 const tag_default = (ctx: Hexo) => {
   const Tag = new warehouse.Schema<TagSchema>({
@@ -74,7 +74,7 @@ const tag_default = (ctx: Hexo) => {
 // For ESM compatibility
 export default tag_default;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = tag_default;
   // For ESM compatibility
   module.exports.default = tag_default;

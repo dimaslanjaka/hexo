@@ -1,6 +1,6 @@
 import warehouse from 'warehouse';
 import Promise from 'bluebird';
-import type Hexo from '../hexo';
+import type Hexo from '../hexo/index';
 import type fs from 'fs';
 import type Document from 'warehouse/dist/document';
 import type { CacheSchema } from '../types';
@@ -73,7 +73,7 @@ const cache_default = (_ctx: Hexo) => {
 // For ESM compatibility
 export default cache_default;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = cache_default;
   // For ESM compatibility
   module.exports.default = cache_default;

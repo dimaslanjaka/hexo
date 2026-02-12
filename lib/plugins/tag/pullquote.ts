@@ -1,4 +1,4 @@
-import type Hexo from '../../hexo';
+import type Hexo from '../../hexo/index';
 
 /**
 * Pullquote tag
@@ -19,7 +19,7 @@ const pullquote_default = (ctx: Hexo) => function pullquoteTag(args: string[], c
 // For ESM compatibility
 export default pullquote_default;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = pullquote_default;
   // For ESM compatibility
   module.exports.default = pullquote_default;

@@ -1,5 +1,5 @@
 import { Pattern } from 'hexo-util';
-import type Hexo from '../../../hexo';
+import type Hexo from '../../../hexo/index';
 import type { LocalsType } from '../../../types';
 
 function i18nLocalsFilter(this: Hexo, locals: LocalsType): void {
@@ -36,7 +36,7 @@ function i18nLocalsFilter(this: Hexo, locals: LocalsType): void {
 // For ESM compatibility
 export default i18nLocalsFilter;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = i18nLocalsFilter;
   // For ESM compatibility
   module.exports.default = i18nLocalsFilter;

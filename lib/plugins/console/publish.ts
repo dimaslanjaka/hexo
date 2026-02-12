@@ -1,6 +1,6 @@
 import tildify from 'tildify';
 import * as picocolors from 'picocolors';
-import type Hexo from '../../hexo';
+import type Hexo from '../../hexo/index';
 import type Promise from 'bluebird';
 
 interface PublishArgs {
@@ -27,7 +27,7 @@ function publishConsole(this: Hexo, args: PublishArgs): Promise<void> {
 // For ESM compatibility
 export default publishConsole;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = publishConsole;
   // For ESM compatibility
   module.exports.default = publishConsole;

@@ -1,5 +1,5 @@
 import type { HighlightOptions } from '../../extend/syntax_highlight';
-import type Hexo from '../../hexo';
+import type Hexo from '../../hexo/index';
 
 // Lazy require highlight.js
 let highlight: typeof import('hexo-util').highlight;

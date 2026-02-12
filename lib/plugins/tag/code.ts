@@ -1,7 +1,7 @@
 // Based on: https://raw.github.com/imathis/octopress/master/plugins/code_block.rb
 
 import { escapeHTML, htmlTag } from 'hexo-util';
-import type Hexo from '../../hexo';
+import type Hexo from '../../hexo/index';
 import type { HighlightOptions } from '../../extend/syntax_highlight';
 
 const rCaptionUrlTitle = /(\S[\S\s]*)\s+(https?:\/\/\S+)\s+(.+)/i;
@@ -148,7 +148,7 @@ const code_default = (ctx: Hexo) => function codeTag(args: string[], content: st
 // For ESM compatibility
 export default code_default;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = code_default;
   // For ESM compatibility
   module.exports.default = code_default;

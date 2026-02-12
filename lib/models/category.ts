@@ -1,6 +1,6 @@
 import warehouse from 'warehouse';
 import { slugize, full_url_for } from 'hexo-util';
-import type Hexo from '../hexo';
+import type Hexo from '../hexo/index';
 import type { CategorySchema } from '../types';
 const category_default = (ctx: Hexo) => {
   const Category = new warehouse.Schema<CategorySchema>({
@@ -84,7 +84,7 @@ const category_default = (ctx: Hexo) => {
 // For ESM compatibility
 export default category_default;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = category_default;
   // For ESM compatibility
   module.exports.default = category_default;

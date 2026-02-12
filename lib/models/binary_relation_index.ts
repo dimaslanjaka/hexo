@@ -1,4 +1,4 @@
-import type Hexo from '../hexo';
+import type Hexo from '../hexo/index';
 
 type BinaryRelationType<K extends PropertyKey, V extends PropertyKey> = {
   [key in K]: PropertyKey;

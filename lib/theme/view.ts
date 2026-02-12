@@ -4,7 +4,7 @@ import Promise from 'bluebird';
 import type Theme from '.';
 import type Render from '../hexo/render';
 import type { NodeJSLikeCallback } from '../types';
-import type { Helper } from '../extend';
+import type { Helper } from '../extend/index';
 
 const assignIn = (target: any, ...sources: any[]) => {
   const length = sources.length;
@@ -164,7 +164,7 @@ class View {
 // For ESM compatibility
 export default View;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = View;
   // For ESM compatibility
   module.exports.default = View;

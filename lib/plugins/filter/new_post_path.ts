@@ -3,7 +3,7 @@ import moment from 'moment';
 import Promise from 'bluebird';
 import { createSha1Hash, Permalink } from 'hexo-util';
 import { ensurePath } from 'hexo-fs';
-import type Hexo from '../../hexo';
+import type Hexo from '../../hexo/index';
 import type { PostSchema } from '../../types';
 
 let permalink: Permalink;
@@ -101,7 +101,7 @@ function newPostPathFilter(this: Hexo, data: Partial<PostSchema> = {}, replace?:
 // For ESM compatibility
 export default newPostPathFilter;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = newPostPathFilter;
   // For ESM compatibility
   module.exports.default = newPostPathFilter;

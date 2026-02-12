@@ -1,7 +1,7 @@
 // Based on: https://raw.github.com/imathis/octopress/master/plugins/blockquote.rb
 
 import titlecase from 'titlecase';
-import type Hexo from '../../hexo';
+import type Hexo from '../../hexo/index';
 
 const rFullCiteWithTitle = /(\S.*)\s+(https?:\/\/\S+)\s+(.+)/i;
 const rFullCite = /(\S.*)\s+(https?:\/\/\S+)/i;
@@ -69,7 +69,7 @@ const blockquote_default = (ctx: Hexo) => function blockquoteTag(args: string[],
 // For ESM compatibility
 export default blockquote_default;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = blockquote_default;
   // For ESM compatibility
   module.exports.default = blockquote_default;

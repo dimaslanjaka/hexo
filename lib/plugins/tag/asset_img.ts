@@ -1,6 +1,6 @@
 import img from './img';
 import { encodeURL } from 'hexo-util';
-import type Hexo from '../../hexo';
+import type Hexo from '../../hexo/index';
 
 /**
  * Asset image tag
@@ -29,7 +29,7 @@ const asset_img_default = (ctx: Hexo) => {
 // For ESM compatibility
 export default asset_img_default;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = asset_img_default;
   // For ESM compatibility
   module.exports.default = asset_img_default;

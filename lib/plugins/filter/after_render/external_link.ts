@@ -1,5 +1,5 @@
 import { isExternalLink } from 'hexo-util';
-import type Hexo from '../../../hexo';
+import type Hexo from '../../../hexo/index';
 
 let EXTERNAL_LINK_SITE_ENABLED = true;
 const rATag = /<a(?:\s+?|\s+?[^<>]+?\s+?)href=["']((?:https?:|\/\/)[^<>"']+)["'][^<>]*>/gi;
@@ -50,7 +50,7 @@ function externalLinkFilter(this: Hexo, data: string): string {
 // For ESM compatibility
 export default externalLinkFilter;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = externalLinkFilter;
   // For ESM compatibility
   module.exports.default = externalLinkFilter;

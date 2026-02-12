@@ -3,7 +3,7 @@ import tildify from 'tildify';
 import prettyHrtime from 'pretty-hrtime';
 import { writeFile } from 'hexo-fs';
 import * as picocolors from 'picocolors';
-import type Hexo from '../../hexo';
+import type Hexo from '../../hexo/index';
 import type Promise from 'bluebird';
 
 interface RenderArgs {
@@ -52,7 +52,7 @@ function renderConsole(this: Hexo, args: RenderArgs): Promise<void> {
 // For ESM compatibility
 export default renderConsole;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = renderConsole;
   // For ESM compatibility
   module.exports.default = renderConsole;

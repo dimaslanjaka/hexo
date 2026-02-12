@@ -1,5 +1,5 @@
 import { htmlTag, url_for } from 'hexo-util';
-import type Hexo from '../../hexo';
+import type Hexo from '../../hexo/index';
 
 const rUrl = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[.!/\\w]*))?)/;
 const rMetaDoubleQuote = /"?([^"]+)?"?/;
@@ -66,7 +66,7 @@ const img_default = (ctx: Hexo) => {
 // For ESM compatibility
 export default img_default;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = img_default;
   // For ESM compatibility
   module.exports.default = img_default;

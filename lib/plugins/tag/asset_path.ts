@@ -1,5 +1,5 @@
 import { url_for } from 'hexo-util';
-import type Hexo from '../../hexo';
+import type Hexo from '../../hexo/index';
 
 /**
  * Asset path tag
@@ -26,7 +26,7 @@ const asset_path_default = (ctx: Hexo) => {
 // For ESM compatibility
 export default asset_path_default;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = asset_path_default;
   // For ESM compatibility
   module.exports.default = asset_path_default;

@@ -1,4 +1,4 @@
-import Box from '../box';
+import Box from '../box/index';
 import type Hexo from './index';
 
 class Source extends Box {
@@ -12,7 +12,7 @@ class Source extends Box {
 // For ESM compatibility
 export default Source;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = Source;
   // For ESM compatibility
   module.exports.default = Source;

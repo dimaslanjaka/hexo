@@ -1,5 +1,5 @@
 import { dirname, join } from 'path';
-import type Hexo from '../../hexo';
+import type Hexo from '../../hexo/index';
 import type { LocalsType } from '../../types';
 
 interface Options {
@@ -41,7 +41,7 @@ const partial_default = (ctx: Hexo) => function partial(this: LocalsType, name: 
 // For ESM compatibility
 export default partial_default;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = partial_default;
   // For ESM compatibility
   module.exports.default = partial_default;

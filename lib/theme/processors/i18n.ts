@@ -1,7 +1,7 @@
 import { Pattern } from 'hexo-util';
 import { extname } from 'path';
-import type { _File } from '../../box';
-import type Theme from '..';
+import type { _File } from '../../box/index';
+import type Theme from '../index';
 
 function process(file: _File) {
   const { path } = file.params;

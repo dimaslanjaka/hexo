@@ -1,4 +1,4 @@
-import type Hexo from '../../hexo';
+import type Hexo from '../../hexo/index';
 const index_default = function(ctx: Hexo) {
   const { console } = ctx.extend;
 
@@ -35,7 +35,7 @@ const index_default = function(ctx: Hexo) {
     arguments: [
       {name: 'type', desc: 'Available types: page, post, route, tag, category'}
     ]
-  }, require('./list'));
+  }, require('./list/index'));
 
   console.register('migrate', 'Migrate your site from other system to Hexo.', {
     init: true,
@@ -76,12 +76,12 @@ const index_default = function(ctx: Hexo) {
       {name: '--pretty', desc: 'Prettify JSON output'}
     ]
   }, require('./render'));
-}
+};
 
 // For ESM compatibility
 export default index_default;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = index_default;
   // For ESM compatibility
   module.exports.default = index_default;

@@ -1,7 +1,7 @@
 import Promise from 'bluebird';
 import abbrev from 'abbrev';
 import type { NodeJSLikeCallback } from '../types';
-import type Hexo from '../hexo';
+import type Hexo from '../hexo/index';
 
 type Option = Partial<{
   usage: string;
@@ -119,7 +119,7 @@ class Console {
 // For ESM compatibility
 export default Console;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = Console;
   // For ESM compatibility
   module.exports.default = Console;

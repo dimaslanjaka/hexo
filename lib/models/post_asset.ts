@@ -1,6 +1,6 @@
 import warehouse from 'warehouse';
 import { join, posix } from 'path';
-import type Hexo from '../hexo';
+import type Hexo from '../hexo/index';
 import type { PostAssetSchema } from '../types';
 const post_asset_default = (ctx: Hexo) => {
   const PostAsset = new warehouse.Schema<PostAssetSchema>({
@@ -33,7 +33,7 @@ const post_asset_default = (ctx: Hexo) => {
 // For ESM compatibility
 export default post_asset_default;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = post_asset_default;
   // For ESM compatibility
   module.exports.default = post_asset_default;

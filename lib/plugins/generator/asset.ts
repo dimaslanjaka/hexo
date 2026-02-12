@@ -2,7 +2,7 @@ import { exists, createReadStream } from 'hexo-fs';
 import Promise from 'bluebird';
 import { extname } from 'path';
 import * as picocolors from 'picocolors';
-import type Hexo from '../../hexo';
+import type Hexo from '../../hexo/index';
 import type { AssetSchema, BaseGeneratorReturn } from '../../types';
 import type Document from 'warehouse/dist/document';
 
@@ -58,7 +58,7 @@ function assetGenerator(this: Hexo): Promise<AssetGenerator[]> {
 // For ESM compatibility
 export default assetGenerator;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = assetGenerator;
   // For ESM compatibility
   module.exports.default = assetGenerator;

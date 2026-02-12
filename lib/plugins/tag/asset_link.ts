@@ -1,5 +1,5 @@
 import { url_for, escapeHTML } from 'hexo-util';
-import type Hexo from '../../hexo';
+import type Hexo from '../../hexo/index';
 
 /**
  * Asset link tag
@@ -37,7 +37,7 @@ const asset_link_default = (ctx: Hexo) => {
 // For ESM compatibility
 export default asset_link_default;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = asset_link_default;
   // For ESM compatibility
   module.exports.default = asset_link_default;

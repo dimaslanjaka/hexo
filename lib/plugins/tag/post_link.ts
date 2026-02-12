@@ -1,6 +1,6 @@
 import { url_for, escapeHTML } from 'hexo-util';
-import { postFindOneFactory } from './';
-import type Hexo from '../../hexo';
+import { postFindOneFactory } from './index';
+import type Hexo from '../../hexo/index';
 
 /**
  * Post link tag
@@ -50,7 +50,7 @@ const post_link_default = (ctx: Hexo) => {
 // For ESM compatibility
 export default post_link_default;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = post_link_default;
   // For ESM compatibility
   module.exports.default = post_link_default;

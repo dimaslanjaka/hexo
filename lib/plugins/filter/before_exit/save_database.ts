@@ -1,4 +1,4 @@
-import type Hexo from '../../../hexo';
+import type Hexo from '../../../hexo/index';
 
 function saveDatabaseFilter(this: Hexo): Promise<void> {
   if (!this.env.init || !this._dbLoaded) return;
@@ -11,7 +11,7 @@ function saveDatabaseFilter(this: Hexo): Promise<void> {
 // For ESM compatibility
 export default saveDatabaseFilter;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = saveDatabaseFilter;
   // For ESM compatibility
   module.exports.default = saveDatabaseFilter;

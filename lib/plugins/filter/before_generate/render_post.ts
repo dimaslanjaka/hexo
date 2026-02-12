@@ -1,5 +1,5 @@
 import Promise from 'bluebird';
-import type Hexo from '../../../hexo';
+import type Hexo from '../../../hexo/index';
 import type Model from 'warehouse/dist/model';
 
 function renderPostFilter(this: Hexo): Promise<[any[], any[]]> {
@@ -22,7 +22,7 @@ function renderPostFilter(this: Hexo): Promise<[any[], any[]]> {
 // For ESM compatibility
 export default renderPostFilter;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = renderPostFilter;
   // For ESM compatibility
   module.exports.default = renderPostFilter;

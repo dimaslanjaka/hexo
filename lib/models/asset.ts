@@ -1,6 +1,6 @@
 import warehouse from 'warehouse';
 import { join } from 'path';
-import type Hexo from '../hexo';
+import type Hexo from '../hexo/index';
 import type { AssetSchema } from '../types';
 const asset_default = (ctx: Hexo) => {
   const Asset = new warehouse.Schema<AssetSchema>({
@@ -20,7 +20,7 @@ const asset_default = (ctx: Hexo) => {
 // For ESM compatibility
 export default asset_default;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = asset_default;
   // For ESM compatibility
   module.exports.default = asset_default;

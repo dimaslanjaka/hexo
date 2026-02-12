@@ -1,7 +1,7 @@
 import * as picocolors from 'picocolors';
 import table from 'fast-text-table';
 import { stringLength } from './common';
-import type Hexo from '../../../hexo';
+import type Hexo from '../../../hexo/index';
 import type { PostSchema } from '../../../types';
 import type Model from 'warehouse/dist/model';
 import type Document from 'warehouse/dist/document';
@@ -43,7 +43,7 @@ function listPost(this: Hexo): void {
 // For ESM compatibility
 export default listPost;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = listPost;
   // For ESM compatibility
   module.exports.default = listPost;

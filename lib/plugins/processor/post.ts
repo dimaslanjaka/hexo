@@ -5,8 +5,8 @@ import { extname, join, posix, sep } from 'path';
 import { stat, listDir } from 'hexo-fs';
 import { slugize, Pattern, Permalink } from 'hexo-util';
 import * as picocolors from 'picocolors';
-import type { _File } from '../../box';
-import type Hexo from '../../hexo';
+import type { _File } from '../../box/index';
+import type Hexo from '../../hexo/index';
 import type { Stats } from 'fs';
 import { PostAssetSchema, PostSchema } from '../../types';
 import type Document from 'warehouse/dist/document';
@@ -26,7 +26,7 @@ const preservedKeys = {
 };
 const post_default = (ctx: Hexo) => {
   return {
-    pattern: new Pattern((path) => {
+    pattern: new Pattern(path => {
       if (isTmpFile(path)) return;
 
       let result;
@@ -229,17 +229,17 @@ function scanAssetDir(ctx: Hexo, post: PostSchema) {
   const PostAsset = ctx.model('PostAsset');
 
   return stat(assetDir)
-    .then((stats) => {
+    .then(stats => {
       if (!stats.isDirectory()) return [];
 
       return listDir(assetDir);
     })
-    .catch((err) => {
+    .catch(err => {
       if (err && err.code === 'ENOENT') return [];
       throw err;
     })
-    .filter((item) => !isExcludedFile(item, ctx.config))
-    .map((item) => {
+    .filter(item => !isExcludedFile(item, ctx.config))
+    .map(item => {
       const id = join(assetDir, item).substring(baseDirLength).replace(/\\/g, '/');
       const renderablePath = id.substring(sourceDirLength + 1);
       const asset = PostAsset.findById(id);
@@ -318,7 +318,7 @@ function processAsset(ctx: Hexo, file: _File) {
        - `Post.findOne(p => p.asset_dir === absoluteAssetDirPath)`  // returned wrong post
        - `Post.findOne({asset_dir: absoluteAssetDirPath})`          // returned null
   */
-  const posts = Post.filter((p) => p.asset_dir === absoluteAssetDirPath);
+  const posts = Post.filter(p => p.asset_dir === absoluteAssetDirPath);
   const post = posts.length === 1 ? posts.data[0] : null;
   if (post != null && (post.published || ctx._showDrafts())) {
     return savePostAsset(post as any);
@@ -333,7 +333,7 @@ function processAsset(ctx: Hexo, file: _File) {
 // For ESM compatibility
 export default post_default;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = post_default;
   // For ESM compatibility
   module.exports.default = post_default;

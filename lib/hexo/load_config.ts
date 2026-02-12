@@ -1,6 +1,6 @@
 import { sep, resolve, join, parse, basename, extname } from 'path';
 import tildify from 'tildify';
-import Theme from '../theme';
+import Theme from '../theme/index';
 import Source from './source';
 import { exists, readdir } from 'hexo-fs';
 import * as picocolors from 'picocolors';

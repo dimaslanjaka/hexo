@@ -1,4 +1,4 @@
-import type Hexo from '../../../hexo';
+import type Hexo from '../../../hexo/index';
 
 let NEED_INJECT = true;
 let HAS_CHECKED = false;
@@ -24,7 +24,7 @@ function hexoMetaGeneratorInject(this: Hexo, data: string): string {
 // For ESM compatibility
 export default hexoMetaGeneratorInject;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = hexoMetaGeneratorInject;
   // For ESM compatibility
   module.exports.default = hexoMetaGeneratorInject;
