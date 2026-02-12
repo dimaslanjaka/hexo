@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "target": "es2020",
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "outDir": "dist/cjs",
+    "declaration": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "types": ["node", "mocha"]
+  },
+  "include": ["lib/**/*.ts"],
+  "exclude": ["node_modules"]
+}
