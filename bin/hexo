@@ -7,5 +7,6 @@ if (typeof require == 'undefined') {
     (lib.default || lib)();
   });
 } else {
-  require('hexo-cli')();
+  const lib = require('hexo-cli');
+  (lib.default || lib)();
 }
