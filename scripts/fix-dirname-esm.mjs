@@ -1,5 +1,8 @@
 import fs from 'fs-extra';
 import path from 'upath';
+import url from 'url';
+
+const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
 async function exists(p) {
   try {
@@ -65,7 +68,7 @@ async function processFile(file) {
 
 async function run() {
   const cwd = process.cwd();
-  const target = path.join(cwd, 'dist', 'esm');
+  const target = path.join(__dirname, '..', 'dist', 'esm');
 
   if (!(await exists(target))) {
     console.error(`Target directory not found: ${target}`);
