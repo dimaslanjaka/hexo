@@ -13,7 +13,7 @@
     "build-esm": "tsc -p tsconfig.esm.json",
     "build-exports": "node scripts/build_exports.mjs",
     "build-rollup": "npm run build-to-tmp && rollup -c -m",
-    "build-tsc": "tsc -b --outDir dist --declaration --noEmit false",
+    "build-tsc": "tsc -p tsconfig.json --outDir dist --declaration --noEmit false",
     "build-tsup": "node build.mjs",
     "build-to-tmp": "tsc --outDir tmp/dist",
     "clean": "npx -y rimraf build-debug.log dist build.log",
