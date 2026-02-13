@@ -1,0 +1,34 @@
+title: Hexo
+subtitle: 'A fast, simple & powerful blog framework powered by Node.js.'
+description: 'Hexo is a fast, simple & powerful blog framework powered by Node.js.'
+author: Hexo
+language: en
+timezone: UTC
+
+url: https://hexo.io
+root: /
+permalink: news/:year/:month/:day/:title/
+archive_dir: news
+code_dir: downloads/code
+new_post_name: :year-:month-:day-:title.md # File name of new posts
+post_asset_folder: true
+per_page: 0
+pretty_urls:
+  trailing_index: false
+  trailing_html: false
+
+theme: landscape
+
+highlight:
+  enable: true
+  line_number: false
+
+disqus_shortname: hexojs
+google_analytics: UA-48498357-3
+fb_admins: 100000247608790
+algolia:
+  app_id: 7HZ261W96L
+  api_key: cb702f6ec26558e81b1f650f2e793b28
+  index_name: hexo
+twitter: hexojs
+github: hexojs/hexo
