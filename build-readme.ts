@@ -55,7 +55,8 @@ export async function createReadMe() {
       overrides: '',
       yarn_prod: '',
       yarn_dev: '',
-      commits: {}
+      commits: {},
+      versions: {}
     };
 
     const resolutions = {};
@@ -84,6 +85,18 @@ export async function createReadMe() {
       );
       const cspl = commitURL.toString().split('/');
       source_vars.commits[workspace.name] = `[${cspl[cspl.length - 1]}](${commitURL})`;
+      // read package version from workspace package.json
+      try {
+        const pkgPath = path.join(workspace.location, 'package.json');
+        if (fs.existsSync(pkgPath)) {
+          const pkg = fs.readJSONSync(pkgPath) as { version?: string };
+          source_vars.versions[workspace.name] = pkg.version || '';
+        } else {
+          source_vars.versions[workspace.name] = '';
+        }
+      } catch (e) {
+        source_vars.versions[workspace.name] = '';
+      }
       switch (workspace.name) {
         case 'hexo':
           source_vars.commits[workspace.name] +=
