@@ -7,7 +7,7 @@
   "types": "./dist/esm/hexo/index.d.ts",
   "bin": "./bin/hexo",
   "scripts": {
-    "build": "npm run build-cjs && npm run build-esm && npm run build-tsc && npm run build-exports",
+    "build": "npm run build-cjs && npm run build-esm && npm run build-tsc && npm run build-exports && node scripts/replace-version.mjs",
     "build-cjs": "tsc -p tsconfig.cjs.json",
     "build-dts": "tsc --emitDeclarationOnly --declaration --outDir dist",
     "build-esm": "tsc -p tsconfig.esm.json && node scripts/fix-dirname-esm.mjs",

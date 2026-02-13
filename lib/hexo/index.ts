@@ -54,7 +54,6 @@ const castArray = (obj: any) => {
   return Array.isArray(obj) ? obj : [obj];
 };
 
-
 const mergeCtxThemeConfig = (ctx: Hexo) => {
   // Merge hexo.config.theme_config into hexo.theme.config before post rendering & generating
   // config.theme_config has "_config.[theme].yml" merged in load_theme_config.js
@@ -62,7 +61,6 @@ const mergeCtxThemeConfig = (ctx: Hexo) => {
     ctx.theme.config = deepMerge(ctx.theme.config, ctx.config.theme_config);
   }
 };
-
 
 const createLoadThemeRoute = function(generatorResult: BaseGeneratorReturn, locals: LocalsType, ctx: Hexo) {
   const { log, theme } = ctx;
@@ -332,7 +330,7 @@ class Hexo extends EventEmitter {
       safe: Boolean(args.safe),
       silent: Boolean(args.silent),
       env: process.env.NODE_ENV || 'development',
-      version: global.__VERSION__,
+      version: '__HEXO_VERSION__',
       cmd: args._ ? args._[0] : '',
       init: false
     };
@@ -779,7 +777,7 @@ Hexo.prototype.lib_dir = Hexo.lib_dir;
 Hexo.core_dir = dirname(libDir) + sep;
 Hexo.prototype.core_dir = Hexo.core_dir;
 
-Hexo.version = global.__VERSION__;
+Hexo.version = '__HEXO_VERSION__';
 Hexo.prototype.version = Hexo.version;
 
 // define global variable
@@ -797,4 +795,3 @@ if (typeof module !== 'undefined' && typeof module.exports === 'object' && modul
   // For ESM compatibility
   module.exports.default = Hexo;
 }
-
