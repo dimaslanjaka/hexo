@@ -7,37 +7,46 @@ const __dirname = path.dirname(__filename);
 const packageJsonPath = path.join(__dirname, '../package.json');
 const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
 
+/** @type {Record<string, string | {import: string, require: string, types: string}>} */
 const defaultExports = {
   '.': {
-    import: './dist/hexo/index.js',
-    require: './dist/hexo/index.cjs',
-    types: './dist/hexo/index.d.ts'
+    import: './dist/esm/hexo/index.js',
+    require: './dist/cjs/hexo/index.cjs',
+    types: './dist/esm/hexo/index.d.ts'
   },
   './package.json': './package.json'
 };
 
 const libDir = path.join(__dirname, '../lib');
 
+/**
+ * Add export entry for a file
+ * @param {string} relPath
+ */
 function addExport(relPath) {
   const normalized = relPath.split(path.sep).join('/');
   const key = `./dist/${normalized.replace(/\.(ts|js)$/, '')}`;
-  const imp = `./dist/${normalized.replace(/\.ts$/, '.js')}`;
-  const req = `./dist/${normalized.replace(/\.(ts|js)$/, '.cjs')}`;
-  const types = `./dist/${normalized.replace(/\.(ts|js)$/, '.d.ts')}`;
+  const imp = `./dist/esm/${normalized.replace(/\.ts$/, '.js')}`;
+  const req = `./dist/cjs/${normalized.replace(/\.(ts|js)$/, '.cjs')}`;
+  const types = `./dist/esm/${normalized.replace(/\.(ts|js)$/, '.d.ts')}`;
 
   defaultExports[key] = {
     import: imp,
     require: req,
-    types
+    types: types
   };
 }
 
+/**
+ * Add export entry for a directory
+ * @param {string} relDir
+ */
 function addDirExport(relDir) {
   const normalized = relDir.split(path.sep).join('/');
   const key = `./dist/${normalized}`;
-  const imp = `./dist/${normalized}/index.js`;
-  const req = `./dist/${normalized}/index.cjs`;
-  const types = `./dist/${normalized}/index.d.ts`;
+  const imp = `./dist/esm/${normalized}/index.js`;
+  const req = `./dist/cjs/${normalized}/index.cjs`;
+  const types = `./dist/esm/${normalized}/index.d.ts`;
 
   defaultExports[key] = {
     import: imp,
@@ -46,6 +55,11 @@ function addDirExport(relDir) {
   };
 }
 
+/**
+ * Process a file or directory entry
+ * @param {string} rel
+ * @returns
+ */
 function processEntry(rel) {
   const full = path.join(libDir, rel);
   const stat = fs.statSync(full);
@@ -87,7 +101,7 @@ const sortedExports = Object.keys(defaultExports)
   .reduce((obj, key) => {
     obj[key] = defaultExports[key];
     return obj;
-  }, {});
+  }, /** @type {Record<string, string | {import: string, require: string, types: string}>} */ ({}));
 
 packageJson.exports = sortedExports;
 
