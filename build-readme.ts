@@ -7,6 +7,8 @@ import { writefile } from 'sbg-utility';
 import fs from 'fs-extra';
 import path from 'upath';
 
+const ROOT_WORKSPACE_DIR = __dirname;
+
 async function parseWorkspaces() {
   const o = await croSpawn.async('yarn', ['workspaces', 'list', '--no-private', '--json'], {
     cwd: process.cwd()
@@ -16,7 +18,7 @@ async function parseWorkspaces() {
     .filter((str) => str.length > 4)
     .map((str_1) => {
       const parse: { location: string; name: string } = JSON.parse(str_1.trim());
-      parse.location = path.join(__dirname, parse.location);
+      parse.location = path.join(ROOT_WORKSPACE_DIR, parse.location);
       return parse;
     })
     .filter((o_1) => fs.existsSync(o_1.location));
@@ -27,7 +29,7 @@ async function parseWorkspaces() {
  */
 const _isCI = process.env.GITHUB_ACTION && process.env.GITHUB_ACTIONS;
 const argv = minimist(process.argv.slice(2));
-const gh = new git(__dirname, 'monorepo-v7');
+const gh = new git(ROOT_WORKSPACE_DIR, 'monorepo-v7');
 
 export async function createReadMe() {
   const workspaces = await parseWorkspaces();
@@ -35,17 +37,17 @@ export async function createReadMe() {
     // set username and email on CI
     if (_isCI) {
       await croSpawn.async('git', ['config', '--global', 'user.name', 'dimaslanjaka'], {
-        cwd: __dirname,
+        cwd: ROOT_WORKSPACE_DIR,
         stdio: 'inherit'
       });
       await croSpawn.async('git', ['config', '--global', 'user.email', 'dimaslanjaka@gmail.com'], {
-        cwd: __dirname,
+        cwd: ROOT_WORKSPACE_DIR,
         stdio: 'inherit'
       });
     }
 
-    const readme = path.join(__dirname, 'releases/readme.md');
-    const source_readme = nunjucks.compile(fs.readFileSync(path.join(__dirname, 'build-readme.md'), 'utf-8'));
+    const readme = path.join(ROOT_WORKSPACE_DIR, 'releases/readme.md');
+    const source_readme = nunjucks.compile(fs.readFileSync(path.join(ROOT_WORKSPACE_DIR, 'build-readme.md'), 'utf-8'));
     const source_vars = {
       npm_prod: '',
       npm_dev: '',
@@ -61,12 +63,12 @@ export async function createReadMe() {
     const resolutions = {};
     for (let i = 0; i < workspaces.length; i++) {
       const workspace = workspaces[i];
-      const tarball = path.join(__dirname, 'releases', workspace.name + '.tgz');
+      const tarball = path.join(ROOT_WORKSPACE_DIR, 'releases', workspace.name + '.tgz');
       if (!fs.existsSync(tarball)) {
         console.log(tarball, picocolors.red('not found'));
         continue;
       }
-      const relativeTarball = path.toUnix(tarball.replace(__dirname, '')).replace(/^\//, '');
+      const relativeTarball = path.toUnix(tarball.replace(ROOT_WORKSPACE_DIR, '')).replace(/^\//, '');
       const checkIgnore = (await croSpawn.async('git', 'status --porcelain --ignored'.split(' '))).output
         .split(/\r?\n/)
         .map((str) => str.trim())
@@ -114,7 +116,7 @@ export async function createReadMe() {
         parseInt(
           (
             await croSpawn.async('git', args, {
-              cwd: __dirname,
+              cwd: ROOT_WORKSPACE_DIR,
               shell: true
             })
           ).output.trim()
@@ -128,9 +130,9 @@ export async function createReadMe() {
         isChanged ? picocolors.green('true') : picocolors.gray('false')
       );
       /*if (isChanged) {
-        await croSpawn.async('git', ['add', relativeTarball], { cwd: __dirname, stdio: 'inherit' });
+        await croSpawn.async('git', ['add', relativeTarball], { cwd: ROOT_WORKSPACE_DIR, stdio: 'inherit' });
         await croSpawn.async('git', ['commit', '-m', 'chore: update from ' + commitURL.pathname.replace(/^\/+/, '')], {
-          cwd: __dirname,
+          cwd: ROOT_WORKSPACE_DIR,
           stdio: 'inherit'
         });
       }*/
@@ -173,7 +175,7 @@ export async function createReadMe() {
     // replace <production>
     render = render.replace(/<production>/gm, await gh.latestCommit('releases'));
 
-    // await croSpawn.async('git', ['rev-list', '--parents', '-n', '1', await gh.latestCommit()], { cwd: __dirname }).stdout.trim().split(/\s/);
+    // await croSpawn.async('git', ['rev-list', '--parents', '-n', '1', await gh.latestCommit()], { cwd: ROOT_WORKSPACE_DIR }).stdout.trim().split(/\s/);
 
     writefile(readme, render);
     //await gh.add('releases/readme.md');
