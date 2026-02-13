@@ -1,4 +1,3 @@
-/// <reference path="./global.d.ts" />
 import Promise from 'bluebird';
 import { sep, join, dirname } from 'path';
 import tildify from 'tildify';
