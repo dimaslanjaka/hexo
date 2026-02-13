@@ -50,7 +50,7 @@
     "minimist": "^1.2.8",
     "nunjucks": "^3.2.4",
     "picocolors": "^1.1.1",
-    "sbg-utility": "^2.0.8",
+    "sbg-utility": "^2.0.11",
     "upath": "^2.0.1"
   },
   "devDependencies": {
