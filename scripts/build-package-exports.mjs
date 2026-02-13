@@ -11,7 +11,7 @@ const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
 const defaultExports = {
   '.': {
     import: './dist/esm/hexo/index.js',
-    require: './dist/cjs/hexo/index.cjs',
+    require: './dist/cjs/hexo/index.js',
     types: './dist/esm/hexo/index.d.ts'
   },
   './package.json': './package.json'
@@ -27,7 +27,7 @@ function addExport(relPath) {
   const normalized = relPath.split(path.sep).join('/');
   const key = `./dist/${normalized.replace(/\.(ts|js)$/, '')}`;
   const imp = `./dist/esm/${normalized.replace(/\.ts$/, '.js')}`;
-  const req = `./dist/cjs/${normalized.replace(/\.(ts|js)$/, '.cjs')}`;
+  const req = `./dist/cjs/${normalized.replace(/\.(ts|js)$/, '.js')}`;
   const types = `./dist/esm/${normalized.replace(/\.(ts|js)$/, '.d.ts')}`;
 
   defaultExports[key] = {
@@ -45,7 +45,7 @@ function addDirExport(relDir) {
   const normalized = relDir.split(path.sep).join('/');
   const key = `./dist/${normalized}`;
   const imp = `./dist/esm/${normalized}/index.js`;
-  const req = `./dist/cjs/${normalized}/index.cjs`;
+  const req = `./dist/cjs/${normalized}/index.js`;
   const types = `./dist/esm/${normalized}/index.d.ts`;
 
   defaultExports[key] = {
