@@ -641,6 +641,11 @@
       "require": "./dist/cjs/plugins/helper/index.js",
       "types": "./dist/esm/plugins/helper/index.d.ts"
     },
+    "./dist/plugins/helper/MyHelper": {
+      "import": "./dist/esm/plugins/helper/MyHelper.js",
+      "require": "./dist/cjs/plugins/helper/MyHelper.js",
+      "types": "./dist/esm/plugins/helper/MyHelper.d.ts"
+    },
     "./dist/plugins/helper/css": {
       "import": "./dist/esm/plugins/helper/css.js",
       "require": "./dist/cjs/plugins/helper/css.js",
@@ -825,6 +830,16 @@
       "import": "./dist/esm/plugins/injector/index.js",
       "require": "./dist/cjs/plugins/injector/index.js",
       "types": "./dist/esm/plugins/injector/index.d.ts"
+    },
+    "./dist/plugins/model/MyDocument": {
+      "import": "./dist/esm/plugins/model/MyDocument.js",
+      "require": "./dist/cjs/plugins/model/MyDocument.js",
+      "types": "./dist/esm/plugins/model/MyDocument.d.ts"
+    },
+    "./dist/plugins/model/MyQuery": {
+      "import": "./dist/esm/plugins/model/MyQuery.js",
+      "require": "./dist/cjs/plugins/model/MyQuery.js",
+      "types": "./dist/esm/plugins/model/MyQuery.d.ts"
     },
     "./dist/plugins/processor": {
       "import": "./dist/esm/plugins/processor/index.js",
