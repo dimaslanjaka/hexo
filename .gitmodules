@@ -62,3 +62,7 @@
 	path = packages/hexo-pagination
 	url = https://github.com/dimaslanjaka/hexo-pagination.git
 	branch = monorepo
+[submodule "packages/hexo-adsense"]
+	path = packages/hexo-adsense
+	url = https://github.com/dimaslanjaka/hexo-adsense.git
+	branch = master
