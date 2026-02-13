@@ -1,2 +1,6 @@
 /scaffolds
 .env
+hexo-cjs/public
+hexo-esm/public
+hexo-cjs/db.json
+hexo-esm/db.json
