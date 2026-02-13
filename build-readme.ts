@@ -7,22 +7,20 @@ import { writefile } from 'sbg-utility';
 import fs from 'fs-extra';
 import path from 'upath';
 
-const parseWorkspaces = () =>
-  croSpawn
-    .async('yarn', ['workspaces', 'list', '--no-private', '--json'], {
-      cwd: process.cwd()
+async function parseWorkspaces() {
+  const o = await croSpawn.async('yarn', ['workspaces', 'list', '--no-private', '--json'], {
+    cwd: process.cwd()
+  });
+  return o.stdout
+    .split(/\r?\n/gm)
+    .filter((str) => str.length > 4)
+    .map((str_1) => {
+      const parse: { location: string; name: string } = JSON.parse(str_1.trim());
+      parse.location = path.join(__dirname, parse.location);
+      return parse;
     })
-    .then((o) =>
-      o.stdout
-        .split(/\r?\n/gm)
-        .filter((str) => str.length > 4)
-        .map((str) => {
-          const parse: { location: string; name: string } = JSON.parse(str.trim());
-          parse.location = path.join(__dirname, parse.location);
-          return parse;
-        })
-        .filter((o) => fs.existsSync(o.location))
-    );
+    .filter((o_1) => fs.existsSync(o_1.location));
+}
 
 /**
  * is current device is Github Actions
