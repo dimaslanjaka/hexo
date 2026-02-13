@@ -10,7 +10,7 @@
     "build": "npm run build-cjs && npm run build-esm && npm run build-tsc && npm run build-exports",
     "build-cjs": "tsc -p tsconfig.cjs.json",
     "build-dts": "tsc --emitDeclarationOnly --declaration --outDir dist",
-    "build-esm": "tsc -p tsconfig.esm.json",
+    "build-esm": "tsc -p tsconfig.esm.json && node scripts/fix-dirname-esm.mjs",
     "build-exports": "node scripts/build-package-exports.mjs",
     "build-rollup": "npm run build-to-tmp && rollup -c -m",
     "build-tsc": "tsc -p tsconfig.json --outDir dist --declaration --noEmit false",
