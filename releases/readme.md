@@ -4,7 +4,7 @@ because of HexoJS doesnt accept my PR, i bundled my improved version of hexo.
 
 | package name | version | commit | coverage |
 | :--- | :--- | :--- | :--- | 
-| hexo | 8.1.1 | [e11378b6](https://github.com/dimaslanjaka/hexo/commit/e11378b6) |   [![Coverage Status](https://coveralls.io/repos/github/dimaslanjaka/hexo/badge.svg)](https://coveralls.io/github/dimaslanjaka/hexo) | 
+| hexo | 8.1.1 | [1db370ff](https://github.com/dimaslanjaka/hexo/commit/1db370ff) |   [![Coverage Status](https://coveralls.io/repos/github/dimaslanjaka/hexo/badge.svg)](https://coveralls.io/github/dimaslanjaka/hexo) | 
 | hexo-asset-link | 2.3.1 | [43240fc](https://github.com/dimaslanjaka/hexo-asset-link/commit/43240fc) |   [![Coverage Status](https://coveralls.io/repos/github/dimaslanjaka/hexo-asset-link/badge.svg)](https://coveralls.io/github/dimaslanjaka/hexo-asset-link) | 
 | hexo-cli | 4.3.2 | [bd8ecb2](https://github.com/dimaslanjaka/hexo-cli/commit/bd8ecb2) |   [![Coverage Status](https://coveralls.io/repos/github/dimaslanjaka/hexo-cli/badge.svg)](https://coveralls.io/github/dimaslanjaka/hexo-cli) | 
 | hexo-front-matter | 4.2.1 | [04c79bf](https://github.com/dimaslanjaka/hexo-front-matter/commit/04c79bf) |   [![Coverage Status](https://coveralls.io/repos/github/dimaslanjaka/hexo-front-matter/badge.svg)](https://coveralls.io/github/dimaslanjaka/hexo-front-matter) | 
