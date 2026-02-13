@@ -21,3 +21,4 @@ releases/hexo-renderers.tgz
 releases/git-embed.tgz
 .env
 .cache/
+bin/coveralls.exe
