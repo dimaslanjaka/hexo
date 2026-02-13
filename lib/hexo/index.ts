@@ -1,4 +1,3 @@
-/// <reference path="./global.d.ts" />
 import Promise from 'bluebird';
 import { sep, join, dirname } from 'path';
 import tildify from 'tildify';
@@ -9,16 +8,7 @@ import { readFile } from 'hexo-fs';
 import Module from 'module';
 import { runInThisContext } from 'vm';
 import logger from 'hexo-log';
-import { deepMerge, full_url_for } from 'hexo-util';
-import Module from 'module';
-import { dirname, join, sep } from 'path';
-import * as picocolors from 'picocolors';
-import tildify from 'tildify';
-import { runInThisContext } from 'vm';
-import Database from 'warehouse';
-import type Schema from 'warehouse/dist/schema';
-import type { AddSchemaTypeOptions } from 'warehouse/dist/types';
-import type Box from '../box';
+
 import {
   Console,
   Deployer,
@@ -51,27 +41,6 @@ import type { AddSchemaTypeOptions } from 'warehouse/dist/types' with { 'resolut
 import type Schema from 'warehouse/dist/schema' with { 'resolution-mode': 'import' };
 import BinaryRelationIndex from '../models/binary_relation_index.js';
 
-const loadRequire = (p: string) => {
-  if (!p.startsWith('.')) {
-    const mod = require(p);
-    return mod?.default || mod;
-  }
-
-  const candidates = [join(__dirname, p), join(libDir, p), join(process.cwd(), p)];
-
-  for (const candidate of candidates) {
-    try {
-      const mod = require(candidate);
-      return mod?.default || mod;
-    } catch (err) {
-      // try next
-    }
-  }
-
-  // final fallback
-  const mod = require(p);
-  return mod?.default || mod;
-};
 const libDir = dirname(__dirname);
 const dbVersion = 1;
 
@@ -139,7 +108,7 @@ const createLoadThemeRoute = function(generatorResult: BaseGeneratorReturn, loca
 
 function debounce(func: () => void, wait: number): () => void {
   let timeout: NodeJS.Timeout;
-  return function () {
+  return function() {
     clearTimeout(timeout);
     timeout = setTimeout(() => {
       func.apply(this);
@@ -148,6 +117,7 @@ function debounce(func: () => void, wait: number): () => void {
 }
 
 interface Args {
+
   /**
    * Enable debug mode. Display debug messages in the terminal and save debug.log in the root directory.
    */
@@ -226,6 +196,7 @@ declare module 'module' {
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 interface Hexo {
+
   /**
    * Emitted before deployment begins.
    * @param event
@@ -455,18 +426,18 @@ class Hexo extends EventEmitter {
 
     locals.set('categories', () => {
       // Ignore categories with zero posts
-      return db.model('Category').filter((category) => category.length);
+      return db.model('Category').filter(category => category.length);
     });
 
     locals.set('tags', () => {
       // Ignore tags with zero posts
-      return db.model('Tag').filter((tag) => tag.length);
+      return db.model('Tag').filter(tag => tag.length);
     });
 
     locals.set('data', () => {
       const obj = {};
 
-      db.model('Data').forEach((data) => {
+      db.model('Data').forEach(data => {
         obj[data._id] = data.data;
       });
 
@@ -700,7 +671,7 @@ class Hexo extends EventEmitter {
     const { log } = this;
 
     // Run generators
-    return Promise.map(Object.keys(generators), (key) => {
+    return Promise.map(Object.keys(generators), key => {
       const generator = generators[key];
 
       log.debug('Generator: %s', picocolors.magenta(key));
