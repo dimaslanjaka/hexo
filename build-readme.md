@@ -2,9 +2,9 @@
 
 because of HexoJS doesnt accept my PR, i bundled my improved version of hexo.
 
-| package name | version | commit |
-| :--- | :--- | :--- | {% for name, item in commits %}
-| {{ name }} | {{ versions[name] | default('') }} | {{ item }} | {% endfor %}
+| package name | version | commit | coverage |
+| :--- | :--- | :--- | :--- | {% for name, item in commits %}
+| {{ name }} | {{ versions[name] | default('') }} | {{ item }} | {{ coveralls[name] | default('') | safe }} | {% endfor %}
 
 ## Installation by CLI
 

@@ -56,6 +56,7 @@ export async function createReadMe() {
       yarn_prod: '',
       yarn_dev: '',
       commits: {},
+      coveralls: {},
       versions: {}
     };
 
@@ -85,6 +86,17 @@ export async function createReadMe() {
       );
       const cspl = commitURL.toString().split('/');
       source_vars.commits[workspace.name] = `[${cspl[cspl.length - 1]}](${commitURL})`;
+      // add coveralls badge for this workspace (if hosted on GitHub)
+      try {
+        const remoteRaw = (await workspaceGit.getremote()).push.url || '';
+        const remoteNoGit = remoteRaw.replace(/\.git$/, '');
+        const repoSlug = remoteNoGit.replace(/.*github\.com[:\//]/, '');
+        source_vars.coveralls[workspace.name] = repoSlug
+          ? `  [![Coverage Status](https://coveralls.io/repos/github/${repoSlug}/badge.svg)](https://coveralls.io/github/${repoSlug})`
+          : '';
+      } catch (e) {
+        source_vars.coveralls[workspace.name] = '';
+      }
       // read package version from workspace package.json
       try {
         const pkgPath = path.join(workspace.location, 'package.json');
@@ -97,15 +109,7 @@ export async function createReadMe() {
       } catch (e) {
         source_vars.versions[workspace.name] = '';
       }
-      switch (workspace.name) {
-        case 'hexo':
-          source_vars.commits[workspace.name] +=
-            '  [![Coverage Status](https://coveralls.io/repos/github/dimaslanjaka/hexo/badge.svg)](https://coveralls.io/github/dimaslanjaka/hexo)';
-          break;
-
-        default:
-          break;
-      }
+      // previously had a hexo-only badge; now we add per-workspace badges above
 
       const args = ['status', '--porcelain', '--', relativeTarball, '|', 'wc', '-l'];
       const isChanged =

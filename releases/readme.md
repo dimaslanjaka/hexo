@@ -2,19 +2,19 @@
 
 because of HexoJS doesnt accept my PR, i bundled my improved version of hexo.
 
-| package name | version | commit |
-| :--- | :--- | :--- | 
-| hexo | 8.1.1 | [e11378b6](https://github.com/dimaslanjaka/hexo/commit/e11378b6)  [![Coverage Status](https://coveralls.io/repos/github/dimaslanjaka/hexo/badge.svg)](https://coveralls.io/github/dimaslanjaka/hexo) | 
-| hexo-asset-link | 2.3.1 | [43240fc](https://github.com/dimaslanjaka/hexo-asset-link/commit/43240fc) | 
-| hexo-cli | 4.3.2 | [bd8ecb2](https://github.com/dimaslanjaka/hexo-cli/commit/bd8ecb2) | 
-| hexo-front-matter | 4.2.1 | [04c79bf](https://github.com/dimaslanjaka/hexo-front-matter/commit/04c79bf) | 
-| hexo-fs | 5.0.1 | [fce6065](https://github.com/dimaslanjaka/hexo-fs/commit/fce6065) | 
-| hexo-generator-category | 2.0.0 | [e6cfa8e](https://github.com/dimaslanjaka/hexo-generator-category/commit/e6cfa8e) | 
-| hexo-is | 2.0.3 | [52cbd2e](https://github.com/dimaslanjaka/hexo-is/commit/52cbd2e) | 
-| hexo-log | 4.1.0 | [5bd8907](https://github.com/dimaslanjaka/hexo-log/commit/5bd8907) | 
-| hexo-server | 3.0.0 | [b66f070](https://github.com/dimaslanjaka/hexo-server/commit/b66f070) | 
-| hexo-util | 4.0.0 | [0b71e01](https://github.com/dimaslanjaka/hexo-util/commit/0b71e01) | 
-| warehouse | 6.0.0 | [f9538bc](https://github.com/dimaslanjaka/warehouse/commit/f9538bc) | 
+| package name | version | commit | coverage |
+| :--- | :--- | :--- | :--- | 
+| hexo | 8.1.1 | [e11378b6](https://github.com/dimaslanjaka/hexo/commit/e11378b6) |   [![Coverage Status](https://coveralls.io/repos/github/dimaslanjaka/hexo/badge.svg)](https://coveralls.io/github/dimaslanjaka/hexo) | 
+| hexo-asset-link | 2.3.1 | [43240fc](https://github.com/dimaslanjaka/hexo-asset-link/commit/43240fc) |   [![Coverage Status](https://coveralls.io/repos/github/dimaslanjaka/hexo-asset-link/badge.svg)](https://coveralls.io/github/dimaslanjaka/hexo-asset-link) | 
+| hexo-cli | 4.3.2 | [bd8ecb2](https://github.com/dimaslanjaka/hexo-cli/commit/bd8ecb2) |   [![Coverage Status](https://coveralls.io/repos/github/dimaslanjaka/hexo-cli/badge.svg)](https://coveralls.io/github/dimaslanjaka/hexo-cli) | 
+| hexo-front-matter | 4.2.1 | [04c79bf](https://github.com/dimaslanjaka/hexo-front-matter/commit/04c79bf) |   [![Coverage Status](https://coveralls.io/repos/github/dimaslanjaka/hexo-front-matter/badge.svg)](https://coveralls.io/github/dimaslanjaka/hexo-front-matter) | 
+| hexo-fs | 5.0.1 | [fce6065](https://github.com/dimaslanjaka/hexo-fs/commit/fce6065) |   [![Coverage Status](https://coveralls.io/repos/github/dimaslanjaka/hexo-fs/badge.svg)](https://coveralls.io/github/dimaslanjaka/hexo-fs) | 
+| hexo-generator-category | 2.0.0 | [e6cfa8e](https://github.com/dimaslanjaka/hexo-generator-category/commit/e6cfa8e) |   [![Coverage Status](https://coveralls.io/repos/github/dimaslanjaka/hexo-generator-category/badge.svg)](https://coveralls.io/github/dimaslanjaka/hexo-generator-category) | 
+| hexo-is | 2.0.3 | [52cbd2e](https://github.com/dimaslanjaka/hexo-is/commit/52cbd2e) |   [![Coverage Status](https://coveralls.io/repos/github/dimaslanjaka/hexo-is/badge.svg)](https://coveralls.io/github/dimaslanjaka/hexo-is) | 
+| hexo-log | 4.1.0 | [5bd8907](https://github.com/dimaslanjaka/hexo-log/commit/5bd8907) |   [![Coverage Status](https://coveralls.io/repos/github/dimaslanjaka/hexo-log/badge.svg)](https://coveralls.io/github/dimaslanjaka/hexo-log) | 
+| hexo-server | 3.0.0 | [b66f070](https://github.com/dimaslanjaka/hexo-server/commit/b66f070) |   [![Coverage Status](https://coveralls.io/repos/github/dimaslanjaka/hexo-server/badge.svg)](https://coveralls.io/github/dimaslanjaka/hexo-server) | 
+| hexo-util | 4.0.0 | [0b71e01](https://github.com/dimaslanjaka/hexo-util/commit/0b71e01) |   [![Coverage Status](https://coveralls.io/repos/github/dimaslanjaka/hexo-util/badge.svg)](https://coveralls.io/github/dimaslanjaka/hexo-util) | 
+| warehouse | 6.0.0 | [f9538bc](https://github.com/dimaslanjaka/warehouse/commit/f9538bc) |   [![Coverage Status](https://coveralls.io/repos/github/dimaslanjaka/warehouse/badge.svg)](https://coveralls.io/github/dimaslanjaka/warehouse) | 
 
 ## Installation by CLI
 
