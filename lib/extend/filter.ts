@@ -84,8 +84,8 @@ class Filter {
 
     args.unshift(data);
 
-    return Promise.each(filters, (filter) =>
-      Reflect.apply(Promise.method(filter), ctx, args).then((result) => {
+    return Promise.each(filters, filter =>
+      Reflect.apply(Promise.method(filter), ctx, args).then(result => {
         args[0] = result == null ? args[0] : result;
         return args[0];
       })
@@ -119,4 +119,3 @@ if (typeof module !== 'undefined' && typeof module.exports === 'object' && modul
   // For ESM compatibility
   module.exports.default = Filter;
 }
-
