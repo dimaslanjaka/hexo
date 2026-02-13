@@ -4,6 +4,7 @@ import minimist from 'minimist';
 import { dirname, join } from 'path';
 import pc from 'picocolors';
 import { createReadMe } from './build-readme';
+import Bluebird from 'bluebird';
 
 const argv = minimist(process.argv.slice(2));
 
@@ -88,31 +89,33 @@ async function buildPack(workspaces: Awaited<typeof parseWorkspaces>) {
       );
   };
 
-  return new Promise((res: (...args: any[]) => void) => {
+  const buildOrder = [
     // no need any workspaces
-    runBuild('hexo-log')
-      // no need any workspaces
-      .then(() => runBuild('hexo-front-matter'))
-      // no need any workspaces
-      .then(() => runBuild('hexo-util'))
-      // need hexo-log
-      .then(() => runBuild('warehouse'))
-      // need hexo-util
-      .then(() => runBuild('hexo-asset-link'))
-      // need hexo-util
-      .then(() => runBuild('hexo-server'))
-      // need hexo-util, hexo-log
-      .then(() => runBuild('hexo-cli'))
-      // need hexo-cli, hexo-util, hexo-log, warehouse, hexo-front-matter
-      .then(() => runBuild('hexo'))
-      // need hexo
-      //.then(() => runBuild('git-embed'))
-      // need hexo, git-embed
-      //.then(() => runBuild('hexo-shortcodes'))
-      // need hexo
-      // .then(() => runBuild('hexo-renderers'))
-      .then(res);
-  }).then(() => workspaces);
+    'hexo-log',
+    'hexo-fs',
+    'hexo-front-matter',
+    'hexo-util',
+    // need hexo-log
+    'warehouse',
+    // need hexo-util
+    'hexo-asset-link',
+    // need hexo-util
+    'hexo-server',
+    // need hexo-util, hexo-log
+    'hexo-cli',
+    // need hexo-cli, hexo-util, hexo-log, warehouse, hexo-front-matter
+    'hexo',
+    // need hexo
+    'hexo-is',
+    'hexo-generator-category'
+    // 'git-embed',
+    // need hexo, git-embed
+    // 'hexo-shortcodes',
+    // need hexo
+    // 'hexo-renderers'
+  ];
+
+  return Bluebird.each(buildOrder, (name: string) => runBuild(name)).then(() => workspaces);
 }
 
 parseWorkspaces.then(buildPack).then(createReadMe);

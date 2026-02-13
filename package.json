@@ -24,7 +24,8 @@
     "monorepo"
   ],
   "scripts": {
-    "build": "nrs \"build:**\" && node -r ts-node/register build.ts",
+    "build": "node -r ts-node/register build.ts",
+    "build-all": "nrs \"build:**\" && node -r ts-node/register build.ts",
     "build-commit": "nrs \"build:**\" && node -r ts-node/register build.ts --commit",
     "build:fm": "yarn workspace hexo-front-matter run build",
     "build:log": "yarn workspace hexo-log run build",
