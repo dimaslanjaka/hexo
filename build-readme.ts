@@ -88,11 +88,11 @@ export async function createReadMe() {
       try {
         const remoteRaw = (await workspaceGit.getremote()).push.url || '';
         const remoteNoGit = remoteRaw.replace(/\.git$/, '');
-        const repoSlug = remoteNoGit.replace(/.*github\.com[:\//]/, '');
+        const repoSlug = remoteNoGit.replace(new RegExp('.*github\\.com[:/]'), '');
         source_vars.coveralls[workspace.name] = repoSlug
           ? `  [![Coverage Status](https://coveralls.io/repos/github/${repoSlug}/badge.svg)](https://coveralls.io/github/${repoSlug})`
           : '';
-      } catch (e) {
+      } catch (_e) {
         source_vars.coveralls[workspace.name] = '';
       }
       // read package version from workspace package.json
@@ -104,7 +104,7 @@ export async function createReadMe() {
         } else {
           source_vars.versions[workspace.name] = '';
         }
-      } catch (e) {
+      } catch (_e) {
         source_vars.versions[workspace.name] = '';
       }
       // previously had a hexo-only badge; now we add per-workspace badges above
