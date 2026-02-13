@@ -38,7 +38,7 @@ function listCategoriesHelper(this: LocalsType, categories?: Query<CategorySchem
     ? options.children_indicator
     : false;
 
-  const prepareQuery = (parent) => {
+  const prepareQuery = (parent: any) => {
     const query: { parent?: any } = {};
 
     if (parent) {
@@ -54,7 +54,7 @@ function listCategoriesHelper(this: LocalsType, categories?: Query<CategorySchem
     let result = '';
 
     prepareQuery(parent).forEach((cat: Document<CategorySchema> & CategorySchema) => {
-      let child;
+      let child: string;
       if (!depth || level + 1 < depth) {
         child = hierarchicalList(level + 1, cat._id);
       }
@@ -133,4 +133,3 @@ if (typeof module !== 'undefined' && typeof module.exports === 'object' && modul
   // For ESM compatibility
   module.exports.default = listCategoriesHelper;
 }
-
