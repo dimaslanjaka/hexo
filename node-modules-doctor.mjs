@@ -20,6 +20,14 @@ const ignores = [
   '**/node_modules/.yarn',
   '**/node_modules/.yarn-cache'
 ];
+const shortPath = (p) => {
+  try {
+    const rel = path.relative(process.cwd(), p) || '.';
+    return path.toUnix(rel);
+  } catch {
+    return p;
+  }
+};
 
 /**
  * Recursively finds and optionally processes all node_modules directories in the given root directory.
@@ -83,7 +91,7 @@ export async function findWorkspaceDeps(rootDir) {
         .on('error', (err) => reject(err));
     });
   for (const pkg of await parseWorkspaces()) {
-    console.log(`🚀 Scanning for ${pkg.name} symlinked to ${pkg.location}`);
+    console.log(`🚀 Scanning for ${pkg.name} symlinked to ${shortPath(pkg.location)}`);
     // Remove lockfiles in workspace packages (but do not touch the repo root)
     try {
       const pkgDir = path.resolve(pkg.location);
@@ -92,13 +100,13 @@ export async function findWorkspaceDeps(rootDir) {
         const pkgLock = path.join(pkgDir, 'package-lock.json');
         [yarnLock, pkgLock].forEach((lockfile) => {
           if (fs.existsSync(lockfile)) {
-            console.log(`🧹\tRemoving lockfile: ${lockfile}`);
+            console.log(`🧹\tRemoving lockfile: ${shortPath(lockfile)}`);
             deletePathSync(lockfile);
           }
         });
       }
     } catch (err) {
-      console.error('❌\tFailed to remove workspace lockfiles for', pkg.location, err);
+      console.error('❌\tFailed to remove workspace lockfiles for', shortPath(pkg.location), err);
     }
     const callback = (f) => {
       f = path.toUnix(f);
@@ -111,15 +119,15 @@ export async function findWorkspaceDeps(rootDir) {
         }
         // console.log(`🔗 Dependency found: ${f}${isSymlink ? ' (symlink)' : ''}`);
         if (!isSymlink) {
-          console.warn(`⚠️\t${f} is not symlinked to ${pkg.location}`);
+          console.warn(`⚠️\t${shortPath(f)} is not symlinked to ${shortPath(pkg.location)}`);
           // remove the non-symlinked node_modules directory
           deletePathSync(f);
           // replace it with a symlink
           try {
             fs.ensureSymlinkSync(pkg.location, f, 'junction');
-            console.log(`✅\tCreated symlink for ${pkg.name} at ${f}`);
+            console.log(`✅\tCreated symlink for ${pkg.name} at ${shortPath(f)}`);
           } catch (err) {
-            console.error(`❌\tFailed to create symlink for ${pkg.name} at ${f}:`, err);
+            console.error(`❌\tFailed to create symlink for ${pkg.name} at ${shortPath(f)}:`, err);
           }
         }
       }
@@ -150,13 +158,13 @@ async function processDeleteQueue() {
   while (deleteQueueArr.length > 0) {
     const file = deleteQueueArr.shift();
     if (!file || !fs.existsSync(file)) {
-      console.warn(`⚠️\t${file} does not exist or is not a valid path.`);
+      console.warn(`⚠️\t${shortPath(file)} does not exist or is not a valid path.`);
       continue;
     }
     if (fs.existsSync(file)) {
-      console.log(`🗑️\t${file}`);
+      console.log(`🗑️\t${shortPath(file)}`);
       await fs.remove(file).catch(noop);
-      console.log(`✅\t${file}`);
+      console.log(`✅\t${shortPath(file)}`);
     }
   }
   processingQueue = false;
@@ -174,13 +182,13 @@ export function deletePath(file) {
 
 export function deletePathSync(file) {
   if (!file || !fs.existsSync(file)) {
-    console.warn(`⚠️\t${file} does not exist or is not a valid path.`);
+    console.warn(`⚠️\t${shortPath(file)} does not exist or is not a valid path.`);
     return;
   }
   if (fs.existsSync(file)) {
-    console.log(`🗑️\t${file}`);
+    console.log(`🗑️\t${shortPath(file)}`);
     fs.removeSync(file);
-    console.log(`✅\t${file}`);
+    console.log(`✅\t${shortPath(file)}`);
   }
 }
 
