@@ -81,7 +81,7 @@
   "engines": {
     "node": ">=14"
   },
-  "packageManager": "yarn@4.9.2",
+  "packageManager": "yarn@4.5.0",
   "resolutions": {
     "@types/node": "^20",
     "binary-collections": "https://github.com/dimaslanjaka/bin/raw/9d2f7ebf4c37cf1d58487951c9e2ad3a20b917c1/releases/bin.tgz",
@@ -98,7 +98,21 @@
     "warehouse": "workspace:^"
   },
   "workspaces": [
-    "packages/*",
+    "packages/hexo",
+    "packages/hexo-adsense",
+    "packages/hexo-asset-link",
+    "packages/hexo-cli",
+    "packages/hexo-front-matter",
+    "packages/hexo-fs",
+    "packages/hexo-generator-category",
+    "packages/hexo-is",
+    "packages/hexo-log",
+    "packages/hexo-pagination",
+    "packages/hexo-renderers",
+    "packages/hexo-server",
+    "packages/hexo-theme-landscape",
+    "packages/hexo-util",
+    "packages/warehouse",
     "test/hexo-theme-test"
   ]
 }
