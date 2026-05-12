@@ -12,23 +12,22 @@ const argv = yargs(hideBin(process.argv))
   .help(false)
   .parseSync() as { _: (string | number)[]; c?: boolean; clean?: boolean };
 
-const parseWorkspaces = croSpawn
-  .async('yarn', ['workspaces', 'list', '--no-private', '--json'], {
+async function parseWorkspaces() {
+  const o = await croSpawn.async('yarn', ['workspaces', 'list', '--no-private', '--json'], {
     cwd: process.cwd()
-  })
-  .then((o) =>
-    o.stdout
-      .split(/\r?\n/gm)
-      .filter((str) => str.length > 4)
-      .map((str) => {
-        const parse: { location: string; name: string } = JSON.parse(str.trim());
-        parse.location = join(__dirname, parse.location);
-        return parse;
-      })
-      .filter((o) => existsSync(o.location))
-  );
+  });
+  return o.stdout
+    .split(/\r?\n/gm)
+    .filter((str) => str.length > 4)
+    .map((str_1) => {
+      const parse: { location: string; name: string } = JSON.parse(str_1.trim());
+      parse.location = join(__dirname, parse.location);
+      return parse;
+    })
+    .filter((o_1) => existsSync(o_1.location));
+}
 
-async function buildPack(workspaces: Awaited<typeof parseWorkspaces>) {
+async function buildPack(workspaces: Awaited<ReturnType<typeof parseWorkspaces>>) {
   if (workspaces.length === 0) return console.log('workspaces empty');
 
   // 🔥 optimize lookup (avoid repeated filter)
@@ -141,4 +140,4 @@ async function buildPack(workspaces: Awaited<typeof parseWorkspaces>) {
   return Bluebird.each(buildSequence, (name) => runBuild(name)).then(() => workspaces);
 }
 
-parseWorkspaces.then(buildPack).then(createReadMe);
+parseWorkspaces().then(buildPack).then(createReadMe);
