@@ -53,8 +53,8 @@ on:
         default: false
         type: boolean
 
-  schedule:
-    - cron: '0 0 * * *' # Runs daily at midnight UTC
+  # schedule:
+  #   - cron: '0 0 * * *' # Runs daily at midnight UTC
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
