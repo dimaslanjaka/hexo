@@ -32,7 +32,7 @@ jobs:
     name: Build Windows Node 18.x
     uses: ./.github/workflows/workspace-builder.yml
     secrets:
-      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN || secrets.GITHUB_TOKEN }}
     with:
       os: windows-latest
       node-version: 18.x
@@ -41,7 +41,7 @@ jobs:
     name: Test Windows Node 18.x
     uses: ./.github/workflows/workspace-tester.yml
     secrets:
-      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN || secrets.GITHUB_TOKEN }}
     with:
       os: windows-latest
       node-version: 18.x
@@ -55,16 +55,14 @@ jobs:
     env:
       NODE_OPTIONS: '--max_old_space_size=8192' #8192 4096 --expose-gc
       YARN_ENABLE_IMMUTABLE_INSTALLS: false
-      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN || secrets.GITHUB_TOKEN }}
       node_version: 18.x
     steps:
       - run: git config --global core.autocrlf false
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          # submodules: recursive
-          token: '${{ secrets.ACCESS_TOKEN }}'
-          ref: 'monorepo-v8'
+          token: '${{ secrets.ACCESS_TOKEN || secrets.GITHUB_TOKEN }}'
       - name: update submodules
         run: |
           echo "init submodules"
