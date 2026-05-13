@@ -40,7 +40,7 @@ jobs:
           fetch-depth: 0 # Let's get all the branches
           submodules: recursive
           token: '${{ secrets.ACCESS_TOKEN }}'
-          ref: 'monorepo-v7'
+          ref: 'monorepo-v8'
       - name: update submodules
         run: |
           echo "init submodules"
