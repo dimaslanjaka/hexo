@@ -59,10 +59,10 @@ jobs:
       node_version: 18.x
     steps:
       - run: git config --global core.autocrlf false
-      - name: Checkout repository and submodules
+      - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          submodules: recursive
+          # submodules: recursive
           token: '${{ secrets.ACCESS_TOKEN }}'
           ref: 'monorepo-v8'
       - name: update submodules
