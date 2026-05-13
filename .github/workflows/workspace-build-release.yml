@@ -57,6 +57,7 @@ jobs:
       YARN_ENABLE_IMMUTABLE_INSTALLS: false
       ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN || secrets.GITHUB_TOKEN }}
       node_version: 18.x
+      PUPPETEER_SKIP_DOWNLOAD: 'true'
     steps:
       - run: git config --global core.autocrlf false
       - name: Checkout repository
