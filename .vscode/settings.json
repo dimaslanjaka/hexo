@@ -39,7 +39,7 @@
   },
   "git.autoRepositoryDetection": "openEditors",
   "git.autofetch": false,
-  "git.autorefresh": false,
+  "git.autorefresh": true,
   "git.autoStash": true,
   "git.branchSortOrder": "committerdate",
   "git.defaultBranchName": "master",
@@ -57,5 +57,7 @@
   "git.repositoryScanMaxDepth": 6,
   "git.supportCancellation": true,
   "git.verboseCommit": false,
-  "eslint.useFlatConfig": true
+  "eslint.useFlatConfig": true,
+  "git.allowNoVerifyCommit": true,
+  "git.confirmNoVerifyCommit": true
 }
