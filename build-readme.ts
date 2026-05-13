@@ -29,7 +29,7 @@ async function parseWorkspaces() {
  */
 const _isCI = process.env.GITHUB_ACTION && process.env.GITHUB_ACTIONS;
 const argv = minimist(process.argv.slice(2));
-const gh = new git(ROOT_WORKSPACE_DIR, 'monorepo-v7');
+const gh = new git(ROOT_WORKSPACE_DIR, 'monorepo-v8');
 
 export async function createReadMe() {
   const workspaces = await parseWorkspaces();
@@ -55,12 +55,12 @@ export async function createReadMe() {
       overrides: '',
       yarn_prod: '',
       yarn_dev: '',
-      commits: {},
-      coveralls: {},
-      versions: {}
+      commits: {} as Record<string, any>,
+      coveralls: {} as Record<string, any>,
+      versions: {} as Record<string, any>
     };
 
-    const resolutions = {};
+    const resolutions = {} as Record<string, string>;
     for (let i = 0; i < workspaces.length; i++) {
       const workspace = workspaces[i];
       const tarball = path.join(ROOT_WORKSPACE_DIR, 'releases', workspace.name + '.tgz');
@@ -140,7 +140,7 @@ export async function createReadMe() {
       // create installation
       const tarballRawURL = (await gh.getGithubRepoUrl(relativeTarball)).rawURL;
       const tarballProdURL = tarballRawURL.replace(
-        'monorepo-v7',
+        'monorepo-v8',
         /*<production>*/ await gh.latestCommit(relativeTarball)
       );
       source_vars.npm_prod += `npm i ${workspace.name}@${tarballProdURL}\n`;
