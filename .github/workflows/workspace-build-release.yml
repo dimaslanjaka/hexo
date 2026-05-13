@@ -2,7 +2,7 @@ name: Workspace Build Release
 
 on:
   push:
-    branches: ['monorepo-v7', 'v7-yarn-v3']
+    branches: ['monorepo-v8', 'v7-yarn-v3']
     paths-ignore:
       - '**/*.tgz'
       - '**/*.gz'
@@ -10,7 +10,7 @@ on:
       - '**garbage-collector**'
       - '**codeql**'
   pull_request:
-    branches: ['monorepo-v7', 'v7-yarn-v3']
+    branches: ['monorepo-v8', 'v7-yarn-v3']
     types:
       - closed
     paths-ignore:
@@ -64,7 +64,7 @@ jobs:
         with:
           submodules: recursive
           token: '${{ secrets.ACCESS_TOKEN }}'
-          ref: 'monorepo-v7'
+          ref: 'monorepo-v8'
       - name: update submodules
         run: |
           echo "init submodules"
