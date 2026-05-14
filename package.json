@@ -115,11 +115,6 @@
   "engines": {
     "node": ">=20.19.0"
   },
-  "workspaces": [
-    "packages/*",
-    "test/hexo-cjs",
-    "test/hexo-esm"
-  ],
   "exports": {
     ".": {
       "import": "./dist/esm/hexo/index.js",
