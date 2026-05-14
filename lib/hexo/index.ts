@@ -5,7 +5,7 @@ import Database from 'warehouse';
 import * as picocolors from 'picocolors';
 import { EventEmitter } from 'events';
 import { readFile } from 'hexo-fs';
-import Module from 'module';
+import Module, { createRequire } from 'module';
 import { runInThisContext } from 'vm';
 import logger from 'hexo-log';
 
@@ -518,29 +518,18 @@ class Hexo extends EventEmitter {
   }
 
   loadPlugin(path: string, callback?: NodeJSLikeCallback<any>): Promise<any> {
-    return readFile(path)
-      .then(script => {
-        // Based on: https://github.com/nodejs/node-v0.x-archive/blob/v0.10.33/src/node.js#L516
-        const module = new Module(path);
-        module.filename = path;
-        module.paths = Module._nodeModulePaths(path);
+    return readFile(path).then(script => {
+      const req = createRequire(path);
 
-        function req(path: string) {
-          return module.require(path);
-        }
+      const module = new Module(path);
+      module.filename = path;
 
-        req.resolve = (request: string) => Module._resolveFilename(request, module);
+      script = `(async function(exports, require, module, __filename, __dirname, hexo){${script}\n});`;
 
-        req.main = require.main;
-        req.extensions = Module._extensions;
-        req.cache = Module._cache;
+      const fn = runInThisContext(script, path);
 
-        script = `(async function(exports, require, module, __filename, __dirname, hexo){${script}\n});`;
-
-        const fn = runInThisContext(script, path);
-
-        return fn(module.exports, req, module, path, dirname(path), this);
-      })
+      return fn(module.exports, req, module, path, dirname(path), this);
+    })
       .asCallback(callback);
   }
 
@@ -783,8 +772,7 @@ Hexo.prototype.version = Hexo.version;
 // define global variable
 // this useful for plugin written in typescript
 declare global {
-  // eslint-disable-next-line one-var
-  const hexo: Hexo;
+  var hexo: Hexo;
 }
 
 // For ESM compatibility

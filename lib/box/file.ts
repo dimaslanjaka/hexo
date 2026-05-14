@@ -3,6 +3,7 @@ import { readFile, readFileSync, stat, statSync, type ReadFileOptions } from 'he
 import type fs from 'fs';
 
 class File {
+
   /**
    * Full path of the file
    */
@@ -21,7 +22,6 @@ class File {
   /**
    * File type. The value can be create, update, skip, delete.
    */
-  // eslint-disable-next-line no-use-before-define
   public type: typeof File.TYPE_CREATE | typeof File.TYPE_UPDATE | typeof File.TYPE_SKIP | typeof File.TYPE_DELETE;
   static TYPE_CREATE: 'create';
   static TYPE_UPDATE: 'update';
@@ -70,7 +70,7 @@ File.TYPE_DELETE = 'delete';
 // For ESM compatibility
 export default File;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = File;
   // For ESM compatibility
   module.exports.default = File;

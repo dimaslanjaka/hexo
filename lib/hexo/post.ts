@@ -13,7 +13,6 @@ import type { NodeJSLikeCallback, RenderData } from '../types.js';
 const preservedKeys = ['title', 'slug', 'path', 'layout', 'date', 'content'];
 
 const rHexoPostRenderEscape = /<hexoPostRenderCodeBlock>([\s\S]+?)<\/hexoPostRenderCodeBlock>/g;
-const rCommentEscape = /(<!--[\s\S]*?-->)/g;
 const rSwigTag = /(\{\{.+?\}\})|(\{#.+?#\})|(\{%.+?%\})/s;
 
 const rSwigPlaceHolder = /(?:<|&lt;)!--swig\uFFFC(\d+)--(?:>|&gt;)/g;
@@ -26,6 +25,7 @@ const STATE_SWIG_COMMENT = 2;
 const STATE_SWIG_TAG = 3;
 const STATE_SWIG_FULL_TAG = 4;
 const STATE_PLAINTEXT_COMMENT = 5;
+const STATE_INLINE_CODE = 6;
 
 const isNonWhiteSpaceChar = (char: string) =>
   char !== '\r' && char !== '\n' && char !== '\t' && char !== '\f' && char !== '\v' && char !== ' ';
@@ -64,24 +64,17 @@ class PostRenderEscape {
     return str.replace(rCommentHolder, PostRenderEscape.restoreContent(this.stored));
   }
 
-  escapeComments(str: string) {
-    return str.replace(rCommentEscape, (_, content) => PostRenderEscape.escapeContent(this.stored, 'comment', content));
-  }
-
   escapeCodeBlocks(str: string) {
     return str.replace(rHexoPostRenderEscape, (_, content) =>
       PostRenderEscape.escapeContent(this.stored, 'code', content)
     );
   }
 
-  /**
-   * @param {string} str
-   * @returns string
-   */
   escapeAllSwigTags(str: string) {
     let state = STATE_PLAINTEXT;
     let buffer_start = -1;
     let plaintext_comment_start = -1;
+    let inline_code_backtick_count = 0;
     let plain_text_start = 0;
     let output = '';
 
@@ -99,7 +92,7 @@ class PostRenderEscape {
     let idx = 0;
 
     // for backtracking
-    const swig_start_idx = [0, 0, 0, 0, 0];
+    const swig_start_idx = [0, 0, 0, 0, 0, 0, 0];
 
     const flushPlainText = (end: number) => {
       if (plain_text_start !== -1 && end > plain_text_start) {
@@ -122,12 +115,25 @@ class PostRenderEscape {
     while (idx < length) {
       while (idx < length) {
         const char = str[idx];
+        const prev_char = idx > 0 ? str[idx - 1] : '';
         const next_char = str[idx + 1];
 
-        if (state === STATE_PLAINTEXT) {
-          // From plain text to swig
+        if (state === STATE_PLAINTEXT) { // From plain text to swig or inline code
           ensurePlainTextStart(idx);
-          if (char === '{') {
+          // Check for inline code block (backticks)
+          if (char === '`' && prev_char !== '\\') {
+            // Count consecutive backticks
+            let backtick_count = 1;
+            while (str[idx + backtick_count] === '`') {
+              backtick_count++;
+            }
+
+            flushPlainText(idx);
+            state = STATE_INLINE_CODE;
+            inline_code_backtick_count = backtick_count;
+            swig_start_idx[state] = idx;
+            idx += backtick_count - 1; // Skip the counted backticks
+          } else if (char === '{') {
             // check if it is a complete tag {{ }}
             if (next_char === '{') {
               flushPlainText(idx);
@@ -153,15 +159,51 @@ class PostRenderEscape {
               swig_tag_name_end = false;
               swig_start_idx[state] = idx;
             }
-          }
-          if (char === '<' && next_char === '!' && str[idx + 2] === '-' && str[idx + 3] === '-') {
+          } else if (char === '<' && next_char === '!' && str[idx + 2] === '-' && str[idx + 3] === '-') {
             flushPlainText(idx);
             state = STATE_PLAINTEXT_COMMENT;
             plaintext_comment_start = idx;
             idx += 3;
           }
+        } else if (state === STATE_INLINE_CODE) {
+          const inline_code_start = swig_start_idx[state];
+          // Check for newline - inline code cannot span multiple lines
+          if ((char === '\n' && next_char === '\n')
+            || (char === '\r' && next_char === '\n' && str[idx + 2] === '\r' && str[idx + 3] === '\n')
+            || (char === '\r' && next_char === '\n' && str[idx + 2] === '\n')
+            || (char === '\n' && next_char === '\r' && str[idx + 2] === '\n')
+          ) {
+            // Backtrack: treat the opening backticks as plain text and retry from after them
+            pushAndReset(str.slice(inline_code_start, inline_code_start + inline_code_backtick_count));
+            // Reset idx to position right after the opening backticks
+            idx = inline_code_start + inline_code_backtick_count - 1;
+            state = STATE_PLAINTEXT;
+          } else if (char === '{' && next_char === '%' && str.slice(idx).match(/^\{% *raw *%\}/)) {
+            // we may have raw tag in inline code
+            const raw_tag_end_match = str.slice(idx).match(/\{% *endraw *%\}/);
+            if (raw_tag_end_match) {
+              pushAndReset(str.slice(inline_code_start, idx));
+              // escape the raw tag content
+              pushAndReset(PostRenderEscape.escapeContent(this.stored, 'swig', str.slice(idx, idx + raw_tag_end_match.index! + raw_tag_end_match[0].length)));
+              idx = idx + raw_tag_end_match.index! + raw_tag_end_match[0].length - 1;
+              swig_start_idx[state] = idx + 1;
+            }
+          } else if (char === '`') {
+            // Count consecutive backticks
+            let backtick_count = 1;
+            while (str[idx + backtick_count] === '`') {
+              backtick_count++;
+            }
+
+            // If the count matches, we found the closing backticks
+            if (backtick_count === inline_code_backtick_count) {
+              pushAndReset(str.slice(inline_code_start, idx + backtick_count));
+              idx += backtick_count - 1; // Skip the counted backticks
+              state = STATE_PLAINTEXT;
+            }
+          }
         } else if (state === STATE_SWIG_TAG) {
-          if (char === '"' || char === "'") {
+          if (char === '"' || char === '\'') {
             if (swig_string_quote === '') {
               swig_string_quote = char;
             } else if (swig_string_quote === char) {
@@ -202,7 +244,7 @@ class PostRenderEscape {
             }
           }
         } else if (state === STATE_SWIG_VAR) {
-          if (char === '"' || char === "'") {
+          if (char === '"' || char === '\'') {
             if (swig_string_quote === '') {
               swig_string_quote = char;
             } else if (swig_string_quote === char) {
@@ -277,6 +319,14 @@ class PostRenderEscape {
         pushAndReset(PostRenderEscape.escapeContent(this.stored, 'comment', comment));
         break;
       }
+      if (state === STATE_INLINE_CODE) {
+        const inline_code_start = swig_start_idx[state];
+        pushAndReset(str.slice(inline_code_start, inline_code_start + inline_code_backtick_count));
+        // Reset idx to position right after the opening backticks
+        idx = inline_code_start + inline_code_backtick_count;
+        state = STATE_PLAINTEXT;
+        continue;
+      }
       // If the swig tag is not closed, then it is a plain text, we need to backtrack
       if (state === STATE_SWIG_FULL_TAG) {
         pushAndReset(`{%${str.slice(swig_full_tag_start_start, swig_full_tag_start_end)}%`);
@@ -304,18 +354,17 @@ const prepareFrontMatter = (data: any, jsonMode: boolean): Record<string, string
       data[key] = moment.utc(item).format('YYYY-MM-DD HH:mm:ss');
     } else if (typeof item === 'string') {
       if (
-        jsonMode ||
-        item.includes(':') ||
-        item.startsWith('#') ||
-        item.startsWith('!!') ||
-        item.includes('{') ||
-        item.includes('}') ||
-        item.includes('[') ||
-        item.includes(']') ||
-        item.includes("'") ||
-        item.includes('"')
-      )
-        data[key] = `"${item.replace(/"/g, '\\"')}"`;
+        jsonMode
+        || item.includes(':')
+        || item.startsWith('#')
+        || item.startsWith('!!')
+        || item.includes('{')
+        || item.includes('}')
+        || item.includes('[')
+        || item.includes(']')
+        || item.includes('\'')
+        || item.includes('"')
+      ) { data[key] = `"${item.replace(/"/g, '\\"')}"`; }
     }
   }
 
@@ -333,7 +382,7 @@ const createAssetFolder = (path: string, assetFolder: boolean) => {
 
   if (basename(target) === 'index') return Promise.resolve();
 
-  return exists(target).then((exist) => {
+  return exists(target).then(exist => {
     if (!exist) return mkdirs(target);
   });
 };
@@ -405,7 +454,7 @@ class Post {
   _getScaffold(layout: string) {
     const ctx = this.context;
 
-    return ctx.scaffold.get(layout).then((result) => {
+    return ctx.scaffold.get(layout).then(result => {
       if (result != null) return result;
       return ctx.scaffold.get('normal');
     });
@@ -416,14 +465,14 @@ class Post {
     let splitted: ReturnType<typeof yfmSplit>;
 
     return this._getScaffold(data.layout)
-      .then((scaffold) => {
+      .then(scaffold => {
         splitted = yfmSplit(scaffold);
         const jsonMode = splitted.separator.startsWith(';');
         const frontMatter = prepareFrontMatter({ ...data }, jsonMode);
 
         return tag.render(splitted.data, frontMatter);
       })
-      .then((frontMatter) => {
+      .then(frontMatter => {
         const { separator } = splitted;
         const jsonMode = separator.startsWith(';');
 
@@ -484,15 +533,15 @@ class Post {
 
     // Find the draft
     return listDir(draftDir)
-      .then((list) => {
-        const item = list.find((item) => regex.test(item));
+      .then(list => {
+        const item = list.find(item => regex.test(item));
         if (!item) throw new Error(`Draft "${slug}" does not exist.`);
 
         // Read the content
         src = join(draftDir, item);
         return readFile(src);
       })
-      .then((content) => {
+      .then(content => {
         // Create post
         Object.assign(data, yfmParse(content));
         data.content = data._content;
@@ -500,7 +549,7 @@ class Post {
 
         return this.create(data, replace as boolean);
       })
-      .then((post) => {
+      .then(post => {
         result.path = post.path;
         result.content = post.content;
         return unlink(src);
@@ -513,7 +562,7 @@ class Post {
         const assetSrc = removeExtname(src);
         const assetDest = removeExtname(result.path);
 
-        return exists(assetSrc).then((exist) => {
+        return exists(assetSrc).then(exist => {
           if (!exist) return;
 
           return copyDir(assetSrc, assetDest).then(() => rmdir(assetSrc));
@@ -549,14 +598,14 @@ class Post {
         data.content = content;
         ctx.log.debug('Rendering file: %s', picocolors.magenta(source));
 
-          return ctx.render.render({
-            text: data.content,
-            path: source,
-            engine: data.engine,
-            toString: true
-          });
-        })
-        .then((content) => {
+        return ctx.render.render({
+          text: data.content,
+          path: source,
+          engine: data.engine,
+          toString: true
+        });
+      })
+        .then(content => {
           data.content = content;
           return data;
         })
@@ -572,7 +621,7 @@ class Post {
     const cacheObj = new PostRenderEscape();
 
     return promise
-      .then((content) => {
+      .then(content => {
         data.content = content;
         // Run "before_post_render" filters
         return ctx.execFilter('before_post_render', data, { context: ctx });
@@ -592,28 +641,28 @@ class Post {
         const options: { highlight?: boolean } = data.markdown || {};
         if (!config.syntax_highlighter) options.highlight = null;
 
-      ctx.log.debug('Rendering post: %s', picocolors.magenta(source));
-      // Render with markdown or other renderer
-      return ctx.render.render({
-        text: data.content,
-        path: source,
-        engine: data.engine,
-        toString: true,
-        onRenderEnd(content) {
+        ctx.log.debug('Rendering post: %s', picocolors.magenta(source));
+        // Render with markdown or other renderer
+        return ctx.render.render({
+          text: data.content,
+          path: source,
+          engine: data.engine,
+          toString: true,
+          onRenderEnd(content) {
           // Replace cache data with real contents
-          data.content = cacheObj.restoreAllSwigTags(content);
+            data.content = cacheObj.restoreAllSwigTags(content);
 
-              // Return content after replace the placeholders
-              if (disableNunjucks || !hasSwigTag) return data.content;
+            // Return content after replace the placeholders
+            if (disableNunjucks || !hasSwigTag) return data.content;
 
-              // Render with Nunjucks if there are Swig tags
-              return tag.render(data.content, data);
-            }
-          },
-          options
+            // Render with Nunjucks if there are Swig tags
+            return tag.render(data.content, data);
+          }
+        },
+        options
         );
       })
-      .then((content) => {
+      .then(content => {
         data.content = cacheObj.restoreComments(content);
         data.content = cacheObj.restoreCodeBlocks(data.content);
 

@@ -1,6 +1,6 @@
 
 const config = require('eslint-config-hexo/ts');
-const testConfig = require('eslint-config-hexo/test');
+const testConfig = require('eslint-config-hexo/ts-test');
 
 module.exports = [
   // Configurations applied globally
@@ -10,7 +10,6 @@ module.exports = [
       '@typescript-eslint/explicit-function-return-type': 'off',
       'no-unused-vars': 'off',
       '@typescript-eslint/no-explicit-any': 0,
-      '@typescript-eslint/no-var-requires': 0,
       '@typescript-eslint/no-require-imports': 0,
       '@typescript-eslint/no-unused-expressions': 0,
       '@typescript-eslint/ban-ts-comment': 0,
@@ -38,15 +37,15 @@ module.exports = [
     }
   },
   // Configurations applied only to test files
-  {
-    files: [
-      'test/**/*.ts'
-    ],
-    languageOptions: {
-      ...testConfig.languageOptions
-    },
+  ...testConfig.map(config => ({
+    ...config,
+    files: ['test/**/*.ts'],
     rules: {
-      ...testConfig.rules,
+      ...config.rules,
+      '@typescript-eslint/no-explicit-any': 0,
+      '@typescript-eslint/no-require-imports': 0,
+      'n/no-missing-require': 0,
+      'n/no-missing-import': 0,
       '@typescript-eslint/ban-ts-comment': 0,
       '@typescript-eslint/no-unused-expressions': 0,
       '@typescript-eslint/no-unused-vars': [
@@ -57,5 +56,5 @@ module.exports = [
         }
       ]
     }
-  }
+  }))
 ];
