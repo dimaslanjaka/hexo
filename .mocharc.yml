@@ -3,3 +3,6 @@ reporter: spec
 ui: bdd
 full-trace: true
 exit: true
+extension: [ts]
+require: [ts-node/esm]
+spec: test/scripts/**/*.ts
