@@ -13,7 +13,7 @@
     "build-esm": "tsc -p tsconfig.esm.json && node scripts/fix-dirname-esm.mjs",
     "build-exports": "node scripts/build-package-exports.mjs",
     "build-rollup": "npm run build-to-tmp && rollup -c -m",
-    "build-tsc": "tsc -p tsconfig.json --outDir dist --declaration --noEmit false",
+    "build-tsc": "tsc -p tsconfig.build.json --outDir dist --declaration --noEmit false",
     "build-to-tmp": "tsc --outDir tmp/dist",
     "clean": "npx -y rimraf build-debug.log dist build.log",
     "eslint": "eslint lib test",
@@ -161,6 +161,11 @@
       "require": "./dist/cjs/extend/filter.js",
       "types": "./dist/esm/extend/filter.d.ts"
     },
+    "./dist/extend/filter-d": {
+      "import": "./dist/esm/extend/filter-d.js",
+      "require": "./dist/cjs/extend/filter-d.js",
+      "types": "./dist/esm/extend/filter-d.d.ts"
+    },
     "./dist/extend/generator": {
       "import": "./dist/esm/extend/generator.js",
       "require": "./dist/cjs/extend/generator.js",
@@ -196,6 +201,11 @@
       "require": "./dist/cjs/extend/renderer.js",
       "types": "./dist/esm/extend/renderer.d.ts"
     },
+    "./dist/extend/renderer-d": {
+      "import": "./dist/esm/extend/renderer-d.js",
+      "require": "./dist/cjs/extend/renderer-d.js",
+      "types": "./dist/esm/extend/renderer-d.d.ts"
+    },
     "./dist/extend/syntax_highlight": {
       "import": "./dist/esm/extend/syntax_highlight.js",
       "require": "./dist/cjs/extend/syntax_highlight.js",
@@ -215,6 +225,11 @@
       "import": "./dist/esm/hexo/index.js",
       "require": "./dist/cjs/hexo/index.js",
       "types": "./dist/esm/hexo/index.d.ts"
+    },
+    "./dist/hexo/config-d": {
+      "import": "./dist/esm/hexo/config-d.js",
+      "require": "./dist/cjs/hexo/config-d.js",
+      "types": "./dist/esm/hexo/config-d.d.ts"
     },
     "./dist/hexo/default_config": {
       "import": "./dist/esm/hexo/default_config.js",
@@ -275,6 +290,11 @@
       "import": "./dist/esm/hexo/multi_config_path.js",
       "require": "./dist/cjs/hexo/multi_config_path.js",
       "types": "./dist/esm/hexo/multi_config_path.d.ts"
+    },
+    "./dist/hexo/package.json": {
+      "import": "./dist/esm/hexo/package.json",
+      "require": "./dist/cjs/hexo/package.json",
+      "types": "./dist/esm/hexo/package.json"
     },
     "./dist/hexo/post": {
       "import": "./dist/esm/hexo/post.js",
@@ -870,6 +890,11 @@
       "import": "./dist/esm/plugins/processor/post.js",
       "require": "./dist/cjs/plugins/processor/post.js",
       "types": "./dist/esm/plugins/processor/post.d.ts"
+    },
+    "./dist/plugins/processor/source_id_index": {
+      "import": "./dist/esm/plugins/processor/source_id_index.js",
+      "require": "./dist/cjs/plugins/processor/source_id_index.js",
+      "types": "./dist/esm/plugins/processor/source_id_index.d.ts"
     },
     "./dist/plugins/renderer": {
       "import": "./dist/esm/plugins/renderer/index.js",
