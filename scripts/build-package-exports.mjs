@@ -66,7 +66,8 @@ function processEntry(rel) {
   const isDir = stat.isDirectory();
 
   if (isDir) {
-    console.log(`Processing directory: lib/${rel} (contains ${fs.readdirSync(full).length} items)`);
+    const normalizedRel = rel.split(path.sep).join('/');
+    console.log(`Processing directory: lib/${normalizedRel} (contains ${fs.readdirSync(full).length} items)`);
   }
 
   if (isDir) {
