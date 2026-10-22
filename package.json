@@ -83,7 +83,6 @@
     "@types/nunjucks": "^3.2.2",
     "@types/pretty-hrtime": "^1.0.3",
     "@types/sinon": "^17.0.3",
-    "0x": "^6.0.0",
     "binary-collections": "^2.0.10",
     "c8": "^9.0.0",
     "chai": "^4.3.6",
