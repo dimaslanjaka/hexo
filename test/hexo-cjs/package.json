@@ -12,14 +12,19 @@
     "version": "8.1.1"
   },
   "dependencies": {
-    "hexo": "file:../..",
+    "hexo": "file:../../package.tgz",
+    "hexo-cli": "file:../../../hexo-cli/package.tgz",
+    "hexo-fs": "file:../../../hexo-fs/package.tgz",
     "hexo-generator-archive": "^2.0.0",
     "hexo-generator-feed": "^4.0.0",
     "hexo-generator-index": "^4.0.0",
     "hexo-generator-sitemap": "^3.0.1",
+    "hexo-log": "file:../../../hexo-log/package.tgz",
     "hexo-renderer-marked": "^7.0.0",
     "hexo-renderer-stylus": "^3.0.1",
-    "hexo-server": "*",
-    "hexo-theme-butterfly": "*"
+    "hexo-server": "file:../../../hexo-server/package.tgz",
+    "hexo-theme-butterfly": "*",
+    "hexo-util": "file:../../../hexo-util/package.tgz",
+    "warehouse": "file:../../../warehouse/package.tgz"
   }
 }
