@@ -1,5 +1,5 @@
 import Document from 'warehouse/dist/document';
-import type { Schema } from 'warehouse';
+import Schema from 'warehouse/dist/schema';
 
 export default class MyDocument<T = any> extends (Document as any) {
   _model: any;

@@ -26,7 +26,7 @@ const preservedKeys = {
   hash: true
 };
 
-export = (ctx: Hexo) => {
+export default (ctx: Hexo) => {
   const postSourceIndex = new SourceIdIndex(ctx.model('Post'));
 
   return {

@@ -10,7 +10,7 @@ import type { Stats } from 'fs';
 import { PageSchema } from '../../types';
 import SourceIdIndex from './source_id_index';
 
-export = (ctx: Hexo) => {
+export default (ctx: Hexo) => {
   const pageSourceIndex = new SourceIdIndex(ctx.model('Page'));
 
   return {

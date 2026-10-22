@@ -425,7 +425,7 @@ interface PostData {
 }
 
 class Post {
-  public context: import('../hexo');
+  public context: Hexo;
   public config: any;
   public tag: any;
   public separator: any;

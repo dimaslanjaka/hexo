@@ -38,8 +38,8 @@ import multiConfigPath from './multi_config_path.js';
 import { deepMerge, full_url_for } from 'hexo-util';
 import type Box from '../box/index.js';
 import type { BaseGeneratorReturn, FilterOptions, LocalsType, NodeJSLikeCallback, SiteLocals } from '../types.js';
-import type { AddSchemaTypeOptions } from 'warehouse/dist/types' with { 'resolution-mode': 'import' };
-import type Schema from 'warehouse/dist/schema' with { 'resolution-mode': 'import' };
+import type { AddSchemaTypeOptions } from 'warehouse/dist/types';
+import type Schema from 'warehouse/dist/schema';
 import BinaryRelationIndex from '../models/binary_relation_index.js';
 
 const libDir = dirname(__dirname);
@@ -77,7 +77,7 @@ const createLoadThemeRoute = function(generatorResult: BaseGeneratorReturn, loca
 
       if (view) {
         log.debug(`Rendering HTML ${name}: ${magenta(path)}`);
-        return view.render(locals)
+        return view.render(locals, () => {})
           .then(result => ctx.extend.injector.exec(result, locals))
           .then(result => ctx.execFilter('_after_html_render', result, {
             context: ctx,
@@ -750,7 +750,7 @@ declare global {
 // For ESM compatibility
 export default Hexo;
 // For CommonJS compatibility
-if (typeof module != 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
+if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
   module.exports = Hexo;
   // For ESM compatibility
   module.exports.default = Hexo;

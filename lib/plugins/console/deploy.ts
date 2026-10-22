@@ -46,23 +46,20 @@ function deployConsole(this: Hexo, args: DeployArgs): Promise<any> {
 
     const { type } = item;
 
-      if (!deployers[type]) {
-        this.log.error('Deployer not found: %s', picocolors.magenta(type));
-        return;
-      }
+    if (!deployers[type]) {
+      this.log.error('Deployer not found: %s', picocolors.magenta(type));
+      return;
+    }
 
-      this.log.info('Deploying: %s', picocolors.magenta(type));
+    this.log.info('Deploying: %s', picocolors.magenta(type));
 
-      return (Reflect.apply(deployers[type], this, [{ ...item, ...args }]) as any).then(() => {
-        this.log.info('Deploy done: %s', picocolors.magenta(type));
-      });
-    })
+    return (Reflect.apply(deployers[type], this, [{ ...item, ...args }]) as any).then(() => {
+      this.log.info('Deploy done: %s', picocolors.magenta(type));
+    });
+  })
     .then(() => {
       this.emit('deployAfter');
     });
-  }).then(() => {
-    this.emit('deployAfter');
-  });
 }
 
 export default deployConsole;

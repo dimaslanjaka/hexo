@@ -2,7 +2,7 @@ import assert from 'assert';
 import moment from 'moment-timezone';
 import type Hexo from './index';
 
-export = (ctx: Hexo): void => {
+export default (ctx: Hexo): void => {
   const { config, log } = ctx;
 
   log.info('Validating config');
