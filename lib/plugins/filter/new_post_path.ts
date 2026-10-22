@@ -79,10 +79,17 @@ function newPostPathFilter(this: Hexo, data: Partial<PostSchema> = {}, replace?:
           if (!reservedKeys[key]) filenameData[key] = data[key];
         }
 
+        let defaults = {};
+        if (typeof permalinkDefaults === 'object') {
+          defaults = permalinkDefaults;
+        } else if (typeof permalinkDefaults === 'string') {
+          defaults = { lang: permalinkDefaults };
+        }
+
         target = join(
           postDir,
           permalink.stringify({
-            ...permalinkDefaults,
+            ...defaults,
             ...filenameData
           })
         );

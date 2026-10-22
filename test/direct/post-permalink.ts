@@ -12,7 +12,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const hexo = new Hexo(path.resolve(__dirname, '../fixtures'));
 const postPermalink: (...args: PostPermalinkFilterParams) => PostPermalinkFilterReturn = postPermalinkFilter.bind(hexo);
 const permalinkPatterns = [':filepath.html'];
-const permalinkDefaults = [{}, { lang: 'en' }];
+const permalinkDefaults = [{} as Record<string, string>, { lang: 'en' }];
 
 (async () => {
   await hexo.init();
