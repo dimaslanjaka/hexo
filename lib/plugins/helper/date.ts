@@ -61,7 +61,8 @@ function timeTagHelper(this: LocalsType, date?: string | number | Date | moment.
 }
 
 function getLanguage(ctx: LocalsType) {
-  return ctx.page.lang || ctx.page.language || ctx.config.language;
+  const lang = ctx.page.lang || ctx.page.language || ctx.config.language;
+  return Array.isArray(lang) ? lang[0] : lang;
 }
 
 /**
