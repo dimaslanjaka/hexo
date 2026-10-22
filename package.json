@@ -81,6 +81,7 @@
     "@types/mocha": "^10.0.9",
     "@types/node": "^20.17.6",
     "@types/nunjucks": "^3.2.2",
+    "@types/pretty-hrtime": "^1.0.3",
     "@types/sinon": "^17.0.3",
     "0x": "^6.0.0",
     "binary-collections": "^2.0.10",
