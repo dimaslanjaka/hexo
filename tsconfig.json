@@ -1,19 +1,29 @@
 {
-  "extends": "./tsconfig.base.json",
+  "ts-node": {
+    "experimentalResolver": true
+  },
   "compilerOptions": {
-    "module": "preserve",
-    "target": "es2020",
+    "module": "es2022",
     "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true,
+    "target": "es2020",
     "sourceMap": true,
     "outDir": "dist",
     "rootDir": ".",
     "declaration": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "types": ["node", "mocha"]
+    "strict": false,
+    "noImplicitAny": false,
+    "types": [
+      "node",
+      "mocha"
+    ]
   },
-  "include": ["lib/**/*.ts", "test/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "lib/**/*.ts",
+    "test/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
