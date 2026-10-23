@@ -3,7 +3,7 @@ import Promise from 'bluebird';
 import { parse as yfm } from 'hexo-front-matter';
 import { extname, relative } from 'path';
 import { Pattern } from 'hexo-util';
-import { magenta } from 'picocolors';
+import * as picocolors from 'picocolors';
 import type { _File } from '../../box';
 import type Hexo from '../../hexo';
 import type { Stats } from 'fs';
@@ -106,7 +106,7 @@ function processPage(ctx: Hexo, file: _File, sourceIndex: SourceIdIndex<PageSche
 
     if (doc) {
       if (file.type !== 'update') {
-        ctx.log.warn(`Trying to "create" ${magenta(file.path)}, but the file already exists!`);
+        ctx.log.warn(`Trying to "create" ${picocolors.magenta(file.path)}, but the file already exists!`);
       }
       return doc.replace(data);
     }

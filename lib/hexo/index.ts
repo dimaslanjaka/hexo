@@ -2,7 +2,7 @@ import Promise from 'bluebird';
 import { sep, join, dirname } from 'path';
 import tildify from 'tildify';
 import Database from 'warehouse';
-import { magenta, underline } from 'picocolors';
+import * as picocolors from 'picocolors';
 import { EventEmitter } from 'events';
 import { readFile } from 'hexo-fs';
 import Module, { createRequire } from 'module';
@@ -76,7 +76,7 @@ const createLoadThemeRoute = function(generatorResult: BaseGeneratorReturn, loca
       const view = theme.getView(name);
 
       if (view) {
-        log.debug(`Rendering HTML ${name}: ${magenta(path)}`);
+        log.debug(`Rendering HTML ${name}: ${picocolors.magenta(path)}`);
         return view.render(locals, () => {})
           .then(result => ctx.extend.injector.exec(result, locals))
           .then(result => ctx.execFilter('_after_html_render', result, {
@@ -88,12 +88,12 @@ const createLoadThemeRoute = function(generatorResult: BaseGeneratorReturn, loca
               routeCache.set(generatorResult, result);
             }
           }).tapCatch(err => {
-            log.error({ err }, `Render HTML failed: ${magenta(path)}`);
+            log.error({ err }, `Render HTML failed: ${picocolors.magenta(path)}`);
           });
       }
     }
 
-    log.warn(`No layout: ${magenta(path)}`);
+    log.warn(`No layout: ${picocolors.magenta(path)}`);
   };
 };
 
@@ -436,8 +436,8 @@ class Hexo extends EventEmitter {
    * @link https://hexo.io/api#Initialize
    */
   init(): Promise<void> {
-    this.log.debug('Hexo version: %s', magenta(this.version));
-    this.log.debug('Working directory: %s', magenta(tildify(this.base_dir)));
+    this.log.debug('Hexo version: %s', picocolors.magenta(this.version));
+    this.log.debug('Working directory: %s', picocolors.magenta(tildify(this.base_dir)));
 
     // Load internal plugins
     require('../plugins/console.js')(this);
@@ -639,7 +639,7 @@ class Hexo extends EventEmitter {
     return Promise.map(Object.keys(generators), key => {
       const generator = generators[key];
 
-      log.debug('Generator: %s', magenta(key));
+      log.debug('Generator: %s', picocolors.magenta(key));
       return Reflect.apply(generator, this, [siteLocals]);
     }).reduce((result, data) => {
       return data ? result.concat(data) : result;
@@ -714,7 +714,7 @@ class Hexo extends EventEmitter {
       this.log.fatal(
         { err },
         'Something\'s wrong. Maybe you can find the solution here: %s',
-        underline('https://hexo.io/docs/troubleshooting.html')
+        picocolors.underline('https://hexo.io/docs/troubleshooting.html')
       );
     }
 

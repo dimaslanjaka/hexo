@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from 'hexo-fs';
-import micromatch from 'micromatch';
+import * as micromatch from 'micromatch';
 import { dirname, join, normalize, relative } from 'path';
 
 /**
