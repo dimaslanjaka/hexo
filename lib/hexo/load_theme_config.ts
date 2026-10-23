@@ -3,9 +3,9 @@ import tildify from 'tildify';
 import { exists, readdir } from 'hexo-fs';
 import * as picocolors from 'picocolors';
 import { deepMerge } from 'hexo-util';
-import type Hexo from './index';
+import type Hexo from './index.js';
 import type Promise from 'bluebird';
-import { StoreFunctionData } from '../extend/renderer-d';
+import { StoreFunctionData } from '../extend/renderer-d.js';
 
 const loadThemeConfig = (ctx: Hexo): Promise<void> => {
   if (!ctx.env.init) return;

@@ -1,6 +1,6 @@
-import type Query from 'warehouse/dist/query';
-import type { LocalsType, PostSchema } from '../../types';
-import { toMomentLocale } from './date';
+import type Query from 'warehouse/dist/query' with { 'resolution-mode': 'import' };
+import type { LocalsType, PostSchema } from '../../types.js';
+import { toMomentLocale } from './date.js';
 import { url_for, Cache } from 'hexo-util';
 
 interface Options {
@@ -34,8 +34,8 @@ function listArchivesHelper(this: LocalsType, options: Options = {}) {
   const showCount = Object.prototype.hasOwnProperty.call(options, 'show_count') ? options.show_count : true;
   const className = options.class || 'archive';
   const order = options.order || -1;
-  const compareFunc =
-    type === 'monthly'
+  const compareFunc
+    = type === 'monthly'
       ? (yearA, monthA, yearB, monthB) => yearA === yearB && monthA === monthB
       : (yearA, _monthA, yearB, _monthB) => yearA === yearB;
 
@@ -53,7 +53,7 @@ function listArchivesHelper(this: LocalsType, options: Options = {}) {
   const data: Data[] = [];
   let length = 0;
 
-  posts.forEach((post) => {
+  posts.forEach(post => {
     // Clone the date object to avoid pollution
     let date = post.date.clone();
 
@@ -77,7 +77,7 @@ function listArchivesHelper(this: LocalsType, options: Options = {}) {
     }
   });
 
-  const link = (item) => {
+  const link = item => {
     let url = `${archiveDir}/${item.year}/`;
 
     if (type === 'monthly') {

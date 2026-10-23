@@ -1,7 +1,6 @@
 import yaml from 'js-yaml';
 import { escape } from 'hexo-front-matter';
 import logger from 'hexo-log';
-import type { StoreFunctionData } from '../../extend/renderer';
 
 let schema: yaml.Schema;
 // FIXME: workaround for https://github.com/hexojs/hexo/issues/4917

@@ -1,8 +1,8 @@
 // Based on: https://raw.github.com/imathis/octopress/master/plugins/blockquote.rb
 
 import titlecase from 'titlecase';
-import type Hexo from '../../hexo';
-import { StoreFunctionData } from '../../extend/renderer-d';
+import type Hexo from '../../hexo/index.js';
+import { StoreFunctionData } from '../../extend/renderer-d.js';
 
 const rFullCiteWithTitle = /(\S.*)\s+(https?:\/\/\S+)\s+(.+)/i;
 const rFullCite = /(\S.*)\s+(https?:\/\/\S+)/i;

@@ -1,10 +1,10 @@
 import * as picocolors from 'picocolors';
 import table from 'fast-text-table';
-import { stringLength } from './common';
-import type Hexo from '../../../hexo';
-import type { PostSchema } from '../../../types';
-import type Model from 'warehouse/dist/model';
-import type Document from 'warehouse/dist/document';
+import { stringLength } from './common.js';
+import type Hexo from '../../../hexo/index.js';
+import type { PostSchema } from '../../../types.js';
+import type Model from 'warehouse/dist/model' with { 'resolution-mode': 'import' };
+import type Document from 'warehouse/dist/document' with { 'resolution-mode': 'import' };
 
 function mapName(item: any): string {
   return item.name;
@@ -22,7 +22,7 @@ function listPost(this: Hexo): void {
   });
 
   // Table header
-  const header = ['Date', 'Title', 'Path', 'Category', 'Tags'].map((str) => picocolors.underline(str));
+  const header = ['Date', 'Title', 'Path', 'Category', 'Tags'].map(str => picocolors.underline(str));
 
   data.unshift(header);
 

@@ -1,7 +1,7 @@
 import { url_for } from 'hexo-util';
-import type { CategorySchema, LocalsType } from '../../types';
-import type Query from 'warehouse/dist/query';
-import type Document from 'warehouse/dist/document';
+import type { CategorySchema, LocalsType } from '../../types.js';
+import type Query from 'warehouse/dist/query' with { 'resolution-mode': 'import' };
+import type Document from 'warehouse/dist/document' with { 'resolution-mode': 'import' };
 
 interface Options {
   style?: string | false;
@@ -40,7 +40,7 @@ function listCategoriesHelper(this: LocalsType, categories?: Query<CategorySchem
     ? options.children_indicator
     : false;
 
-  const prepareQuery = (parent) => {
+  const prepareQuery = parent => {
     const query: { parent?: any } = {};
 
     if (parent) {

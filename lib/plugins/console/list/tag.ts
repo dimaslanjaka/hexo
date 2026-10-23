@@ -1,10 +1,10 @@
 import * as picocolors from 'picocolors';
 import table from 'fast-text-table';
-import { stringLength } from './common';
-import type Hexo from '../../../hexo';
-import type { TagSchema } from '../../../types';
-import type Model from 'warehouse/dist/model';
-import type Document from 'warehouse/dist/document';
+import { stringLength } from './common.js';
+import type Hexo from '../../../hexo/index.js';
+import type { TagSchema } from '../../../types.js';
+import type Model from 'warehouse/dist/model' with { 'resolution-mode': 'import' };
+import type Document from 'warehouse/dist/document' with { 'resolution-mode': 'import' };
 
 function listTag(this: Hexo): void {
   const Tag: Model<TagSchema> = this.model('Tag');
@@ -16,7 +16,7 @@ function listTag(this: Hexo): void {
   ]);
 
   // Table header
-  const header = ['Name', 'Posts', 'Path'].map((str) => picocolors.underline(str));
+  const header = ['Name', 'Posts', 'Path'].map(str => picocolors.underline(str));
 
   data.unshift(header);
 

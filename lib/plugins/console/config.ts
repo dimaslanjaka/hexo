@@ -2,8 +2,8 @@ import yaml from 'js-yaml';
 import { exists, writeFile } from 'hexo-fs';
 import { extname } from 'path';
 import Promise from 'bluebird';
-import type Hexo from '../../hexo';
-import { StoreFunctionData } from '../../extend/renderer-d';
+import type Hexo from '../../hexo/index.js';
+import { StoreFunctionData } from '../../extend/renderer-d.js';
 
 interface ConfigArgs {
   _: string[];

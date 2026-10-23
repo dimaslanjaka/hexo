@@ -1,6 +1,6 @@
 import { exists, unlink } from 'hexo-fs';
 import Promise from 'bluebird';
-import type Hexo from './index';
+import type Hexo from './index.js';
 
 export default (ctx: Hexo): Promise<void> => {
   if (ctx._dbLoaded) return Promise.resolve();
@@ -10,7 +10,7 @@ export default (ctx: Hexo): Promise<void> => {
   const { log } = ctx;
 
   return exists(path)
-    .then((exist) => {
+    .then(exist => {
       if (!exist) return;
 
       log.debug('Loading database.');

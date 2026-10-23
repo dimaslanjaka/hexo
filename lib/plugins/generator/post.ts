@@ -1,5 +1,5 @@
-import type { BaseGeneratorReturn, PostSchema, SiteLocals } from '../../types';
-import type Document from 'warehouse/dist/document';
+import type { BaseGeneratorReturn, PostSchema, SiteLocals } from '../../types.js';
+import type Document from 'warehouse/dist/document' with { 'resolution-mode': 'import' };
 
 type SimplePostGenerator = Omit<BaseGeneratorReturn, 'layout'> & { data: string };
 interface NormalPostGenerator extends BaseGeneratorReturn {

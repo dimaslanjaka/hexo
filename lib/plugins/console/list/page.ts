@@ -1,10 +1,10 @@
 import * as picocolors from 'picocolors';
 import table from 'fast-text-table';
-import { stringLength } from './common';
-import type Hexo from '../../../hexo';
-import type { PageSchema } from '../../../types';
-import type Model from 'warehouse/dist/model';
-import type Document from 'warehouse/dist/document';
+import { stringLength } from './common.js';
+import type Hexo from '../../../hexo/index.js';
+import type { PageSchema } from '../../../types.js';
+import type Model from 'warehouse/dist/model' with { 'resolution-mode': 'import' };
+import type Document from 'warehouse/dist/document' with { 'resolution-mode': 'import' };
 
 function listPage(this: Hexo): void {
   const Page: Model<PageSchema> = this.model('Page');
@@ -15,7 +15,7 @@ function listPage(this: Hexo): void {
   });
 
   // Table header
-  const header = ['Date', 'Title', 'Path'].map((str) => picocolors.underline(str));
+  const header = ['Date', 'Title', 'Path'].map(str => picocolors.underline(str));
 
   data.unshift(header);
 

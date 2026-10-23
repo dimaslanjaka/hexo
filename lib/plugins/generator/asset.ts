@@ -2,9 +2,9 @@ import { exists, createReadStream } from 'hexo-fs';
 import Promise from 'bluebird';
 import { extname } from 'path';
 import * as picocolors from 'picocolors';
-import type Hexo from '../../hexo';
-import type { AssetSchema, BaseGeneratorReturn } from '../../types';
-import type Document from 'warehouse/dist/document';
+import type Hexo from '../../hexo/index.js';
+import type { AssetSchema, BaseGeneratorReturn } from '../../types.js';
+import type Document from 'warehouse/dist/document' with { 'resolution-mode': 'import' };
 
 interface AssetData {
   modified: boolean;
@@ -20,7 +20,7 @@ interface AssetGenerator extends BaseGeneratorReturn {
 
 const process = (name: string, ctx: Hexo) => {
   return Promise.filter(ctx.model(name).toArray(), (asset: Document<AssetSchema>) =>
-    exists(asset.source).tap((exist) => {
+    exists(asset.source).tap(exist => {
       if (!exist) return asset.remove();
     })
   ).map((asset: Document<AssetSchema>) => {
@@ -54,7 +54,7 @@ const process = (name: string, ctx: Hexo) => {
 };
 
 function assetGenerator(this: Hexo): Promise<AssetGenerator[]> {
-  return Promise.all([process('Asset', this), process('PostAsset', this)]).then((data) => [].concat(...data));
+  return Promise.all([process('Asset', this), process('PostAsset', this)]).then(data => [].concat(...data));
 }
 
 export default assetGenerator;

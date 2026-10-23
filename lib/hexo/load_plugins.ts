@@ -2,7 +2,7 @@ import { join } from 'path';
 import { exists, readFile, listDir } from 'hexo-fs';
 import Promise from 'bluebird';
 import * as picocolors from 'picocolors';
-import type Hexo from './index';
+import type Hexo from './index.js';
 
 export default (ctx: Hexo): Promise<void[][]> => {
   if (!ctx.env.init || ctx.env.safe) return;
@@ -15,11 +15,11 @@ function loadModuleList(ctx: Hexo, basedir: string): Promise<Record<string, stri
 
   // Make sure package.json exists
   return exists(packagePath)
-    .then((exist) => {
+    .then(exist => {
       if (!exist) return [];
 
       // Read package.json and find dependencies
-      return readFile(packagePath).then((content) => {
+      return readFile(packagePath).then(content => {
         const json = JSON.parse(content);
         const deps = Object.keys(json.dependencies || {});
         const devDeps = Object.keys(json.devDependencies || {});
@@ -42,12 +42,12 @@ function loadModuleList(ctx: Hexo, basedir: string): Promise<Record<string, stri
       return exists(path);
     })
     .then((modules: string[]) => {
-      return Object.fromEntries(modules.map((name) => [name, ctx.resolvePlugin(name, basedir)]));
+      return Object.fromEntries(modules.map(name => [name, ctx.resolvePlugin(name, basedir)]));
     });
 }
 
 function loadModules(ctx: Hexo): Promise<void[]> {
-  return Promise.map([ctx.base_dir, ctx.theme_dir], (basedir) => loadModuleList(ctx, basedir))
+  return Promise.map([ctx.base_dir, ctx.theme_dir], basedir => loadModuleList(ctx, basedir))
     .then(([hexoModuleList, themeModuleList]) => {
       return Object.entries(Object.assign(themeModuleList, hexoModuleList));
     })
@@ -58,7 +58,7 @@ function loadModules(ctx: Hexo): Promise<void[]> {
         .then(() => {
           ctx.log.debug('Plugin loaded: %s', picocolors.magenta(name));
         })
-        .catch((err) => {
+        .catch(err => {
           ctx.log.error({ err }, 'Plugin load failed: %s', picocolors.magenta(name));
         });
     });
@@ -67,11 +67,11 @@ function loadModules(ctx: Hexo): Promise<void[]> {
 function loadScripts(ctx: Hexo): Promise<void[][]> {
   const baseDirLength = ctx.base_dir.length;
 
-  return Promise.filter([ctx.theme_script_dir, ctx.script_dir], (scriptDir) => {
+  return Promise.filter([ctx.theme_script_dir, ctx.script_dir], scriptDir => {
     // Ignore the directory if it does not exist
     return scriptDir ? exists(scriptDir) : false;
-  }).map((scriptDir) =>
-    listDir(scriptDir).map((name) => {
+  }).map(scriptDir =>
+    listDir(scriptDir).map(name => {
       const path = join(scriptDir, name);
 
       return ctx
@@ -79,7 +79,7 @@ function loadScripts(ctx: Hexo): Promise<void[][]> {
         .then(() => {
           ctx.log.debug('Script loaded: %s', displayPath(path, baseDirLength));
         })
-        .catch((err) => {
+        .catch(err => {
           ctx.log.error({ err }, 'Script load failed: %s', displayPath(path, baseDirLength));
         });
     })

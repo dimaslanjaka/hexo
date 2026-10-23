@@ -1,15 +1,15 @@
 import warehouse from 'warehouse';
 import { slugize, full_url_for } from 'hexo-util';
 const { hasOwnProperty: hasOwn } = Object.prototype;
-import type Hexo from '../hexo';
-import type { TagSchema } from '../types';
+import type Hexo from '../hexo/index.js';
+import type { TagSchema } from '../types.js';
 
 export default (ctx: Hexo) => {
   const Tag = new warehouse.Schema<TagSchema>({
     name: { type: String, required: true }
   });
 
-  Tag.virtual('slug').get(function () {
+  Tag.virtual('slug').get(function() {
     const map = ctx.config.tag_map || {};
     let name = this.name;
     if (!name) return;
@@ -21,28 +21,28 @@ export default (ctx: Hexo) => {
     return slugize(name, { transform: ctx.config.filename_case });
   });
 
-  Tag.virtual('path').get(function () {
+  Tag.virtual('path').get(function() {
     let tagDir = ctx.config.tag_dir;
     if (!tagDir.endsWith('/')) tagDir += '/';
 
     return `${tagDir + this.slug}/`;
   });
 
-  Tag.virtual('permalink').get(function () {
+  Tag.virtual('permalink').get(function() {
     return full_url_for.call(ctx, this.path);
   });
 
-  Tag.virtual('posts').get(function () {
+  Tag.virtual('posts').get(function() {
     const ReadOnlyPostTag = ctx._binaryRelationIndex.post_tag;
 
-    const ids = ReadOnlyPostTag.find({ tag_id: this._id }).map((item) => item.post_id);
+    const ids = ReadOnlyPostTag.find({ tag_id: this._id }).map(item => item.post_id);
 
     return ctx.locals.get('posts').find({
       _id: { $in: ids }
     });
   });
 
-  Tag.virtual('length').get(function () {
+  Tag.virtual('length').get(function() {
     // Note: this.posts.length is also working
     // But it's slow because `find` has to iterate over all posts
     const ReadOnlyPostTag = ctx._binaryRelationIndex.post_tag;

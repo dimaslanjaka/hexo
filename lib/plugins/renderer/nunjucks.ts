@@ -1,7 +1,7 @@
 import nunjucks, { Environment } from 'nunjucks';
 import { readFileSync } from 'hexo-fs';
 import { dirname } from 'path';
-import type { StoreFunctionData } from '../../extend/renderer';
+import type { StoreFunctionData } from '../../extend/renderer.js';
 
 interface CacheableEnvironment extends Environment {
   invalidateCache(): void;

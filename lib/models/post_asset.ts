@@ -1,7 +1,7 @@
 import warehouse from 'warehouse';
 import { join, posix } from 'path';
-import type Hexo from '../hexo';
-import type { PostAssetSchema } from '../types';
+import type Hexo from '../hexo/index.js';
+import type { PostAssetSchema } from '../types.js';
 
 export default (ctx: Hexo) => {
   const PostAsset = new warehouse.Schema<PostAssetSchema>({
@@ -12,7 +12,7 @@ export default (ctx: Hexo) => {
     renderable: { type: Boolean, default: true }
   });
 
-  PostAsset.virtual('path').get(function () {
+  PostAsset.virtual('path').get(function() {
     const Post = ctx.model('Post');
     const post = Post.findById(this.post);
     if (!post) return;
@@ -24,7 +24,7 @@ export default (ctx: Hexo) => {
     return posix.join(post.path.replace(/\.html?$/, ''), this.slug);
   });
 
-  PostAsset.virtual('source').get(function () {
+  PostAsset.virtual('source').get(function() {
     return join(ctx.base_dir, this._id);
   });
 

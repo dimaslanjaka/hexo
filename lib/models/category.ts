@@ -1,7 +1,7 @@
 import warehouse from 'warehouse';
 import { slugize, full_url_for } from 'hexo-util';
-import type Hexo from '../hexo';
-import type { CategorySchema } from '../types';
+import type Hexo from '../hexo/index.js';
+import type { CategorySchema } from '../types.js';
 
 export default (ctx: Hexo) => {
   const Category = new warehouse.Schema<CategorySchema>({
@@ -9,7 +9,7 @@ export default (ctx: Hexo) => {
     parent: { type: warehouse.Schema.Types.CUID, ref: 'Category' }
   });
 
-  Category.virtual('slug').get(function () {
+  Category.virtual('slug').get(function() {
     let name = this.name;
 
     if (!name) return;
@@ -29,7 +29,7 @@ export default (ctx: Hexo) => {
     return str;
   });
 
-  Category.virtual('path').get(function () {
+  Category.virtual('path').get(function() {
     let catDir = ctx.config.category_dir;
     if (catDir === '/') catDir = '';
     if (!catDir.endsWith('/')) catDir += '/';
@@ -37,21 +37,21 @@ export default (ctx: Hexo) => {
     return `${catDir + this.slug}/`;
   });
 
-  Category.virtual('permalink').get(function () {
+  Category.virtual('permalink').get(function() {
     return full_url_for.call(ctx, this.path);
   });
 
-  Category.virtual('posts').get(function () {
+  Category.virtual('posts').get(function() {
     const ReadOnlyPostCategory = ctx._binaryRelationIndex.post_category;
 
-    const ids = ReadOnlyPostCategory.find({ category_id: this._id }).map((item) => item.post_id);
+    const ids = ReadOnlyPostCategory.find({ category_id: this._id }).map(item => item.post_id);
 
     return ctx.locals.get('posts').find({
       _id: { $in: ids }
     });
   });
 
-  Category.virtual('length').get(function () {
+  Category.virtual('length').get(function() {
     const ReadOnlyPostCategory = ctx._binaryRelationIndex.post_category;
 
     return ReadOnlyPostCategory.find({ category_id: this._id }).length;

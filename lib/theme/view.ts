@@ -2,11 +2,10 @@ import { dirname, extname, join } from 'path';
 import { parse as yfm } from 'hexo-front-matter';
 import Promise from 'bluebird';
 import type Theme from '.';
-import type { Helper } from '../extend';
-import type Render from '../hexo/render';
-import type { NodeJSLikeCallback } from '../types';
-import { HexoRenderOptions } from '../hexo/render-d';
-import { StoreFunctionData } from '../extend/renderer-d';
+import type { Helper } from '../extend/index.js';
+import type Render from '../hexo/render.js';
+import { HexoRenderOptions } from '../hexo/render-d.js';
+import { StoreFunctionData } from '../extend/renderer-d.js';
 
 const assignIn = (target: any, ...sources: any[]) => {
   const length = sources.length;
@@ -93,8 +92,9 @@ class View {
   }
 
   _buildLocals(locals) {
-    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-    const { layout, _content, ...data } = this.data;
+    const { ...data } = this.data;
+    delete data.layout;
+    delete data._content;
     return assignIn({}, locals, data, {
       filename: this.source
     });

@@ -1,9 +1,9 @@
-import type Hexo from '../../hexo';
+import type Hexo from '../../hexo/index.js';
 
 export default (ctx: Hexo) => {
   const { helper } = ctx.extend;
 
-  const date = require('./date');
+  const date = require('./date.js');
 
   helper.register('date', date.date);
   helper.register('date_xml', date.date_xml);
@@ -13,9 +13,9 @@ export default (ctx: Hexo) => {
   helper.register('time_tag', date.time_tag);
   helper.register('moment', date.moment);
 
-  helper.register('search_form', require('./search_form'));
+  helper.register('search_form', require('./search_form.js'));
 
-  const { strip_html, trim, titlecase, word_wrap, truncate, escape_html } = require('./format');
+  const { strip_html, trim, titlecase, word_wrap, truncate, escape_html } = require('./format.js');
 
   helper.register('strip_html', strip_html);
   helper.register('trim', trim);
@@ -24,11 +24,11 @@ export default (ctx: Hexo) => {
   helper.register('truncate', truncate);
   helper.register('escape_html', escape_html);
 
-  helper.register('fragment_cache', require('./fragment_cache')(ctx));
+  helper.register('fragment_cache', require('./fragment_cache.js')(ctx));
 
-  helper.register('gravatar', require('./gravatar'));
+  helper.register('gravatar', require('./gravatar.js'));
 
-  const is = require('./is');
+  const is = require('./is.js');
   helper.register('is_current', is.current);
   helper.register('is_home', is.home);
   helper.register('is_home_first_page', is.home_first_page);
@@ -40,43 +40,43 @@ export default (ctx: Hexo) => {
   helper.register('is_category', is.category);
   helper.register('is_tag', is.tag);
 
-  helper.register('list_archives', require('./list_archives'));
-  helper.register('list_categories', require('./list_categories'));
-  helper.register('list_tags', require('./list_tags'));
-  helper.register('list_posts', require('./list_posts'));
+  helper.register('list_archives', require('./list_archives.js'));
+  helper.register('list_categories', require('./list_categories.js'));
+  helper.register('list_tags', require('./list_tags.js'));
+  helper.register('list_posts', require('./list_posts.js'));
 
-  helper.register('meta_generator', require('./meta_generator'));
+  helper.register('meta_generator', require('./meta_generator.js'));
 
-  helper.register('open_graph', require('./open_graph'));
+  helper.register('open_graph', require('./open_graph.js'));
 
-  helper.register('number_format', require('./number_format'));
+  helper.register('number_format', require('./number_format.js'));
 
-  helper.register('paginator', require('./paginator'));
+  helper.register('paginator', require('./paginator.js'));
 
-  helper.register('partial', require('./partial')(ctx));
+  helper.register('partial', require('./partial.js')(ctx));
 
-  helper.register('markdown', require('./markdown'));
-  helper.register('render', require('./render')(ctx));
+  helper.register('markdown', require('./markdown.js'));
+  helper.register('render', require('./render.js')(ctx));
 
-  helper.register('css', require('./css'));
-  helper.register('js', require('./js'));
-  helper.register('link_to', require('./link_to'));
-  helper.register('mail_to', require('./mail_to'));
-  helper.register('image_tag', require('./image_tag'));
-  helper.register('favicon_tag', require('./favicon_tag'));
-  helper.register('feed_tag', require('./feed_tag'));
+  helper.register('css', require('./css.js'));
+  helper.register('js', require('./js.js'));
+  helper.register('link_to', require('./link_to.js'));
+  helper.register('mail_to', require('./mail_to.js'));
+  helper.register('image_tag', require('./image_tag.js'));
+  helper.register('favicon_tag', require('./favicon_tag.js'));
+  helper.register('feed_tag', require('./feed_tag.js'));
 
-  const tagcloud = require('./tagcloud');
+  const tagcloud = require('./tagcloud.js');
   helper.register('tagcloud', tagcloud);
   helper.register('tag_cloud', tagcloud);
 
-  helper.register('toc', require('./toc'));
+  helper.register('toc', require('./toc.js'));
 
-  helper.register('relative_url', require('./relative_url'));
-  helper.register('url_for', require('./url_for'));
-  helper.register('full_url_for', require('./full_url_for'));
+  helper.register('relative_url', require('./relative_url.js'));
+  helper.register('url_for', require('./url_for.js'));
+  helper.register('full_url_for', require('./full_url_for.js'));
 
-  const debug = require('./debug');
+  const debug = require('./debug.js');
   helper.register('inspect', debug.inspectObject);
   helper.register('log', debug.log);
 };

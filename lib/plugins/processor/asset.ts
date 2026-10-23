@@ -1,14 +1,14 @@
-import { adjustDateForTimezone, toDate, isExcludedFile, isMatch } from './common';
+import { adjustDateForTimezone, toDate, isExcludedFile, isMatch } from './common.js';
 import Promise from 'bluebird';
 import { parse as yfm } from 'hexo-front-matter';
 import { extname, relative } from 'path';
 import { Pattern } from 'hexo-util';
 import * as picocolors from 'picocolors';
-import type { _File } from '../../box';
-import type Hexo from '../../hexo';
+import type { _File } from '../../box/index.js';
+import type Hexo from '../../hexo/index.js';
 import type { Stats } from 'fs';
-import { PageSchema } from '../../types';
-import SourceIdIndex from './source_id_index';
+import { PageSchema } from '../../types.js';
+import SourceIdIndex from './source_id_index.js';
 
 export default (ctx: Hexo) => {
   const pageSourceIndex = new SourceIdIndex(ctx.model('Page'));

@@ -1,9 +1,9 @@
-import type { HighlightOptions } from '../../../extend/syntax_highlight';
-import type Hexo from '../../../hexo';
-import type { RenderData } from '../../../types';
+import type { HighlightOptions } from '../../../extend/syntax_highlight.js';
+import type Hexo from '../../../hexo/index.js';
+import type { RenderData } from '../../../types.js';
 
-const rBacktick =
-  /^((?:(?:[^\S\r\n]*>){0,3}|[-*+]|[0-9]+\.)[^\S\r\n]*)(`{3,}|~{3,})[^\S\r\n]*((?:.*?[^`\s])?)[^\S\r\n]*\n((?:[\s\S]*?\n)?)(?:(?:[^\S\r\n]*>){0,3}[^\S\r\n]*)\2[^\S\r\n]?(\n+|$)/gm;
+const rBacktick
+  = /^((?:(?:[^\S\r\n]*>){0,3}|[-*+]|[0-9]+\.)[^\S\r\n]*)(`{3,}|~{3,})[^\S\r\n]*((?:.*?[^`\s])?)[^\S\r\n]*\n((?:[\s\S]*?\n)?)(?:(?:[^\S\r\n]*>){0,3}[^\S\r\n]*)\2[^\S\r\n]?(\n+|$)/gm;
 const rAllOptions = /([^\s]+)\s+(.+?)\s+(https?:\/\/\S+|\/\S+)\s*(.+)?/;
 const rLangCaption = /([^\s]+)\s*(.+)?/;
 const rCommentEscape = /(<!--[\s\S]*?-->)/g;
@@ -91,10 +91,9 @@ export default (ctx: Hexo): ((data: RenderData) => void) => {
     const dataContent = data.content;
 
     if (
-      (!dataContent.includes('```') && !dataContent.includes('~~~')) ||
-      !ctx.extend.highlight.query(ctx.config.syntax_highlighter)
-    )
-      return;
+      (!dataContent.includes('```') && !dataContent.includes('~~~'))
+      || !ctx.extend.highlight.query(ctx.config.syntax_highlighter)
+    ) { return; }
     // get all comment starts and ends
     const commentStarts = [];
     const commentEnds = [];
@@ -115,9 +114,9 @@ export default (ctx: Hexo): ((data: RenderData) => void) => {
         commentIndex++;
       }
       if (
-        commentIndex < commentStarts.length &&
-        commentStarts[commentIndex] < codeBlockStart &&
-        commentEnds[commentIndex] > codeBlockEnd
+        commentIndex < commentStarts.length
+        && commentStarts[commentIndex] < codeBlockStart
+        && commentEnds[commentIndex] > codeBlockEnd
       ) {
         // the code block is nested in a comment, return escaped content directly
         return escapeSwigTag($0);

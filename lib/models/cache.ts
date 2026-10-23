@@ -1,9 +1,9 @@
 import warehouse from 'warehouse';
 import Promise from 'bluebird';
-import type Hexo from '../hexo';
+import type Hexo from '../hexo/index.js';
 import type fs from 'fs';
-import type Document from 'warehouse/dist/document';
-import type { CacheSchema } from '../types';
+import type Document from 'warehouse/dist/document' with { 'resolution-mode': 'import' };
+import type { CacheSchema } from '../types.js';
 
 export default (_ctx: Hexo) => {
   const Cache = new warehouse.Schema<CacheSchema>({
@@ -14,7 +14,7 @@ export default (_ctx: Hexo) => {
 
   Cache.static(
     'compareFile',
-    function (
+    function(
       id: string,
       hashFn: (id: string) => Promise<string>,
       statFn: (id: string) => Promise<fs.Stats>
@@ -41,7 +41,7 @@ export default (_ctx: Hexo) => {
 
       // Get file stats
       return statFn(id)
-        .then<any>((stats) => {
+        .then<any>(stats => {
           mtime = stats.mtime.getTime();
 
           // Skip the file if the modified time is unchanged

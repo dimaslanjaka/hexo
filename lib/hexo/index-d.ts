@@ -11,7 +11,7 @@ import {
   Processor,
   Renderer,
   Tag
-} from '../extend';
+} from '../extend/index.js';
 
 export type DefaultConfigType = typeof defaultConfig;
 export interface Config extends DefaultConfigType {

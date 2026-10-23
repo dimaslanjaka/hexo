@@ -1,8 +1,8 @@
-import type Hexo from '../../../hexo';
+import type Hexo from '../../../hexo/index.js';
 
 export default (ctx: Hexo) => {
   const { filter } = ctx.extend;
 
-  filter.register('after_post_render', require('./external_link'));
-  filter.register('after_post_render', require('./excerpt'));
+  filter.register('after_post_render', require('./external_link.js'));
+  filter.register('after_post_render', require('./excerpt.js'));
 };

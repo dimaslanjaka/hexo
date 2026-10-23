@@ -1,5 +1,5 @@
-import type Document from 'warehouse/dist/document';
-import type Model from 'warehouse/dist/model';
+import type Document from 'warehouse/dist/document' with { 'resolution-mode': 'import' };
+import type Model from 'warehouse/dist/model' with { 'resolution-mode': 'import' };
 
 interface SourceSchema {
   _id?: string;

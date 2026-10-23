@@ -1,5 +1,5 @@
-import { StoreFunctionData } from '../../extend/renderer-d';
-import type Hexo from '../../hexo';
+import { StoreFunctionData } from '../../extend/renderer-d.js';
+import type Hexo from '../../hexo/index.js';
 
 export default (ctx: Hexo) =>
   function render(text: string, engine: string, options: Record<string, any> = {}) {

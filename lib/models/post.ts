@@ -2,17 +2,17 @@ import warehouse from 'warehouse';
 import moment from 'moment';
 import { extname, join, sep } from 'path';
 import Promise from 'bluebird';
-import Moment from './types/moment';
+import Moment from './types/moment.js';
 import { full_url_for, Cache } from 'hexo-util';
-import type Hexo from '../hexo';
-import type { CategorySchema, PostCategorySchema, PostSchema } from '../types';
+import type Hexo from '../hexo/index.js';
+import type { CategorySchema, PostCategorySchema, PostSchema } from '../types.js';
 
 function pickID(data: PostSchema | PostCategorySchema) {
   return data._id;
 }
 
 function removeEmptyTag(tags: string[]) {
-  return tags.filter((tag) => tag != null && tag !== '').map((tag) => `${tag}`);
+  return tags.filter(tag => tag != null && tag !== '').map(tag => `${tag}`);
 }
 
 const tagsGetterCache = new Cache();
@@ -41,41 +41,41 @@ export default (ctx: Hexo) => {
     more: { type: String }
   });
 
-  Post.virtual('path').get(function () {
+  Post.virtual('path').get(function() {
     const path = ctx.execFilterSync('post_permalink', this, { context: ctx });
     return typeof path === 'string' ? path : '';
   });
 
-  Post.virtual('permalink').get(function () {
+  Post.virtual('permalink').get(function() {
     return full_url_for.call(ctx, this.path);
   });
 
-  Post.virtual('full_source').get(function () {
+  Post.virtual('full_source').get(function() {
     return join(ctx.source_dir, this.source || '');
   });
 
-  Post.virtual('asset_dir').get(function () {
+  Post.virtual('asset_dir').get(function() {
     const src = this.full_source;
     return src.substring(0, src.length - extname(src).length) + sep;
   });
 
-  Post.virtual('tags').get(function () {
+  Post.virtual('tags').get(function() {
     return tagsGetterCache.apply(this._id, () => {
       const ReadOnlyPostTag = ctx._binaryRelationIndex.post_tag;
       const Tag = ctx.model('Tag');
 
-      const ids = ReadOnlyPostTag.find({ post_id: this._id }).map((item) => item.tag_id);
+      const ids = ReadOnlyPostTag.find({ post_id: this._id }).map(item => item.tag_id);
 
       return Tag.find({ _id: { $in: ids } });
     });
   });
 
-  Post.method('notPublished', function () {
+  Post.method('notPublished', function() {
     // The same condition as ctx._bindLocals
     return (!ctx.config.future && this.date.valueOf() > Date.now()) || (!ctx._showDrafts() && this.published === false);
   });
 
-  Post.method('setTags', function (tags: string[]) {
+  Post.method('setTags', function(tags: string[]) {
     if (this.notPublished()) {
       // Ignore tags of draft posts
       // If the post is unpublished then the tag needs to be removed, thus the function cannot be returned early here
@@ -90,13 +90,13 @@ export default (ctx: Hexo) => {
     const id = this._id;
     const existed = ReadOnlyPostTag.find({ post_id: id }).map(pickID);
 
-    return Promise.map(tags, (tag) => {
+    return Promise.map(tags, tag => {
       // Find the tag by name
       const data = Tag.findOne({ name: tag }, { lean: true });
       if (data) return data;
 
       // Insert the tag if not exist
-      return Tag.insert({ name: tag }).catch((err) => {
+      return Tag.insert({ name: tag }).catch(err => {
         // Try to find the tag again. Throw the error if not found
         const data = Tag.findOne({ name: tag }, { lean: true });
 
@@ -104,7 +104,7 @@ export default (ctx: Hexo) => {
         throw err;
       });
     })
-      .map((tag) => {
+      .map(tag => {
         // Find the reference
         const ref = ReadOnlyPostTag.findOne({ post_id: id, tag_id: tag._id });
         if (ref) return ref;
@@ -115,33 +115,33 @@ export default (ctx: Hexo) => {
           tag_id: tag._id
         });
       })
-      .then((tags) => {
+      .then(tags => {
         // Remove old tags
-        const deleted = existed.filter((item) => !tags.map(pickID).includes(item));
+        const deleted = existed.filter(item => !tags.map(pickID).includes(item));
         return deleted;
       })
-      .map((tag) => PostTag.removeById(tag));
+      .map(tag => PostTag.removeById(tag));
   });
 
-  Post.virtual('categories').get(function () {
+  Post.virtual('categories').get(function() {
     const ReadOnlyPostCategory = ctx._binaryRelationIndex.post_category;
     const Category = ctx.model('Category');
 
-    const ids = ReadOnlyPostCategory.find({ post_id: this._id }).map((item) => item.category_id);
+    const ids = ReadOnlyPostCategory.find({ post_id: this._id }).map(item => item.category_id);
 
     return Category.find({ _id: { $in: ids } });
   });
 
-  Post.method('setCategories', function (cats: (string | string[])[]) {
+  Post.method('setCategories', function(cats: (string | string[])[]) {
     if (this.notPublished()) {
       cats = [];
     }
     // Remove empty categories, preserving hierarchies
     cats = cats
-      .filter((cat) => {
+      .filter(cat => {
         return Array.isArray(cat) || (cat != null && cat !== '');
       })
-      .map((cat) => {
+      .map(cat => {
         return Array.isArray(cat) ? removeEmptyTag(cat) : `${cat}`;
       });
 
@@ -180,7 +180,7 @@ export default (ctx: Hexo) => {
         if (i) obj.parent = parentIds[i - 1];
 
         return Category.insert(obj)
-          .catch((err) => {
+          .catch(err => {
             // Try to find the category again. Throw the error if not found
             const data: CategorySchema = Category.findOne(
               {
@@ -203,7 +203,7 @@ export default (ctx: Hexo) => {
 
     return (hasHierarchy ? Promise.each(cats, addHierarchy) : Promise.resolve(addHierarchy(cats as string[])))
       .then(() => allIds)
-      .map((catId) => {
+      .map(catId => {
         // Find the reference
         const ref: PostCategorySchema = ReadOnlyPostCategory.findOne({ post_id: id, category_id: catId });
         if (ref) return ref;
@@ -217,9 +217,9 @@ export default (ctx: Hexo) => {
       .then(
         (
           postCats: PostCategorySchema[] // Remove old categories
-        ) => existed.filter((item) => !postCats.map(pickID).includes(item))
+        ) => existed.filter(item => !postCats.map(pickID).includes(item))
       )
-      .map((cat) => PostCategory.removeById(cat));
+      .map(cat => PostCategory.removeById(cat));
   });
 
   // Remove PostTag references

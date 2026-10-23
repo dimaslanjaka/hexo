@@ -1,6 +1,6 @@
 import { url_for } from 'hexo-util';
-import type { LocalsType, PostSchema } from '../../types';
-import type Query from 'warehouse/dist/query';
+import type { LocalsType, PostSchema } from '../../types.js';
+import type Query from 'warehouse/dist/query' with { 'resolution-mode': 'import' };
 
 interface Options {
   style?: string | false;
@@ -39,7 +39,7 @@ function listPostsHelper(this: LocalsType, posts?: Query<PostSchema> | Options, 
   if (style === 'list') {
     result += `<ul class="${className}-list">`;
 
-    posts.forEach((post) => {
+    posts.forEach(post => {
       const title = post.title || post.slug;
 
       result += `<li class="${className}-list-item">`;
