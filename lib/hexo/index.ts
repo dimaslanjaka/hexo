@@ -471,8 +471,8 @@ class Hexo extends EventEmitter {
    * @link https://hexo.io/api#Execute-Commands
    */
   call(name: string, callback?: NodeJSLikeCallback<any>): Promise<any>;
-  call(name: string, args: object, callback?: NodeJSLikeCallback<any>): Promise<any>;
-  call(name: string, args?: object | NodeJSLikeCallback<any>, callback?: NodeJSLikeCallback<any>): Promise<any> {
+  call(name: string, args: Record<string, any>, callback?: NodeJSLikeCallback<any>): Promise<any>;
+  call(name: string, args?: Record<string, any> | NodeJSLikeCallback<any>, callback?: NodeJSLikeCallback<any>): Promise<any> {
     if (!callback && typeof args === 'function') {
       callback = args as NodeJSLikeCallback<any>;
       args = {};

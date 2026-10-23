@@ -20,7 +20,7 @@ export interface StoreFunctionData {
 export interface StoreSyncFunction {
   (
     data: StoreFunctionData,
-    options?: object
+    options?: Record<string, any>
   ): any;
   output?: string;
   compile?: (data: StoreFunctionData) => (local: any) => any;
@@ -31,7 +31,7 @@ export interface StoreSyncFunction {
 export interface StoreFunction {
   (
     data: StoreFunctionData,
-    options?: object
+    options?: Record<string, any>
   ): Promise<any>;
   output?: string;
   compile?: (data: StoreFunctionData) => (local: any) => any;
@@ -42,7 +42,7 @@ export interface StoreFunction {
 interface StoreFunctionWithCallback {
   (
     data: StoreFunctionData,
-    options: object,
+    options: Record<string, any>,
     callback?: NodeJSLikeCallback<any>
   ): Promise<any>;
   output?: string;

@@ -2,7 +2,7 @@ import { StoreFunctionData } from '../../extend/renderer-d';
 import type Hexo from '../../hexo';
 
 export default (ctx: Hexo) =>
-  function render(text: string, engine: string, options: object = {}) {
+  function render(text: string, engine: string, options: Record<string, any> = {}) {
     return ctx.render.renderSync(
       {
         text,

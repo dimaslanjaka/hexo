@@ -44,7 +44,7 @@ function configConsole(this: Hexo, args: ConfigArgs): Promise<void> {
     });
 }
 
-function getProperty(obj: object, key: string): any {
+function getProperty(obj: Record<string, any>, key: string): any {
   const split = key.split('.');
   let result = obj[split[0]];
 
@@ -55,7 +55,7 @@ function getProperty(obj: object, key: string): any {
   return result;
 }
 
-function setProperty(obj: object, key: string, value: any): void {
+function setProperty(obj: Record<string, any>, key: string, value: any): void {
   const split = key.split('.');
   let cursor = obj;
   const lastKey = split.pop();
