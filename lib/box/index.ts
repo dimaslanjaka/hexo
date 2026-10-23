@@ -3,7 +3,7 @@ import BlueBirdPromise from 'bluebird';
 import File from './file';
 import { Pattern, createSha1Hash } from 'hexo-util';
 import { createReadStream, readdir, stat, watch } from 'hexo-fs';
-import { magenta } from 'picocolors';
+import * as picocolors from 'picocolors';
 import { EventEmitter } from 'events';
 import * as micromatch from 'micromatch';
 import type Hexo from '../hexo';
@@ -182,7 +182,7 @@ class Box extends EventEmitter {
         .thenReturn(count + 1);
     }, 0).then(count => {
       if (count) {
-        ctx.log.debug('Processed: %s', magenta(path));
+        ctx.log.debug('Processed: %s', picocolors.magenta(path));
       }
 
       this.emit('processAfter', {
@@ -190,7 +190,7 @@ class Box extends EventEmitter {
         path
       });
     }).catch(err => {
-      ctx.log.error({ err }, 'Process failed: %s', magenta(path));
+      ctx.log.error({ err }, 'Process failed: %s', picocolors.magenta(path));
     }).finally(() => {
       this._processingFiles[path] = false;
     }).thenReturn(path);
