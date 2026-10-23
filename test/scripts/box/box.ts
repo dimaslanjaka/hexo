@@ -11,7 +11,7 @@ const should = chai.should();
 describe('Box', () => {
   const baseDir = join(__dirname, 'box_tmp');
 
-  const newBox = (path?, config?) => {
+  const newBox = (path: string | undefined = undefined, config: Record<string, any> = {}) => {
     const hexo = new Hexo(baseDir, { silent: true });
     hexo.config = Object.assign(hexo.config, config);
     const base = path ? join(baseDir, path) : baseDir;
