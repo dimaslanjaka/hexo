@@ -1,6 +1,6 @@
-import type Query from 'warehouse/dist/query' with { 'resolution-mode': 'import' };
-import type { LocalsType, PostSchema } from '../../types.js';
-import { toMomentLocale } from './date.js';
+import type Query from 'warehouse/dist/query';
+import type { LocalsType, PostSchema } from '../../types';
+import { toMomentLocale } from './date';
 import { url_for, Cache } from 'hexo-util';
 
 interface Options {
@@ -34,10 +34,9 @@ function listArchivesHelper(this: LocalsType, options: Options = {}) {
   const showCount = Object.prototype.hasOwnProperty.call(options, 'show_count') ? options.show_count : true;
   const className = options.class || 'archive';
   const order = options.order || -1;
-  const compareFunc
-    = type === 'monthly'
-      ? (yearA, monthA, yearB, monthB) => yearA === yearB && monthA === monthB
-      : (yearA, _monthA, yearB, _monthB) => yearA === yearB;
+  const compareFunc = type === 'monthly'
+    ? (yearA, monthA, yearB, monthB) => yearA === yearB && monthA === monthB
+    : (yearA, _monthA, yearB, _monthB) => yearA === yearB;
 
   let result = '';
 
@@ -45,9 +44,7 @@ function listArchivesHelper(this: LocalsType, options: Options = {}) {
     format = type === 'monthly' ? 'MMMM YYYY' : 'YYYY';
   }
 
-  const posts = config.relative_link
-    ? (postsCache.apply(`date-${order}`, () => this.site.posts.sort('date', order)) as Query<PostSchema>)
-    : this.site.posts.sort('date', order);
+  const posts = config.relative_link ? postsCache.apply(`date-${order}`, () => this.site.posts.sort('date', order)) as Query<PostSchema> : this.site.posts.sort('date', order);
   if (!posts.length) return result;
 
   const data: Data[] = [];
@@ -128,4 +125,4 @@ function listArchivesHelper(this: LocalsType, options: Options = {}) {
   return result;
 }
 
-export default listArchivesHelper;
+export = listArchivesHelper;

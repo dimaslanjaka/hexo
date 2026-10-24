@@ -2,9 +2,9 @@ import { isAbsolute, resolve, join, extname } from 'path';
 import { existsSync, readFileSync, writeFileSync } from 'hexo-fs';
 import yml from 'js-yaml';
 import { deepMerge } from 'hexo-util';
-import type Hexo from './index.js';
+import type Hexo from './index';
 
-const multiConfigPath = (ctx: Hexo) => function multiConfigPath(base: string, configPaths?: string, outputDir?: string): string {
+export = (ctx: Hexo) => function multiConfigPath(base: string, configPaths?: string, outputDir?: string): string {
   const { log } = ctx;
   const defaultPath = join(base, '_config.yml');
 
@@ -43,7 +43,7 @@ const multiConfigPath = (ctx: Hexo) => function multiConfigPath(base: string, co
     }
 
     // files read synchronously to ensure proper overwrite order
-    const file = readFileSync(configPath).toString();
+    const file = readFileSync(configPath);
     const ext = extname(paths[i]).toLowerCase();
 
     if (ext === '.yml') {
@@ -74,5 +74,3 @@ const multiConfigPath = (ctx: Hexo) => function multiConfigPath(base: string, co
   // write file and return path
   return outputPath;
 };
-
-export default multiConfigPath;

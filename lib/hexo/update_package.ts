@@ -1,9 +1,9 @@
 import { join } from 'path';
 import { writeFile, exists, readFile } from 'hexo-fs';
-import type Hexo from './index.js';
+import type Hexo from './index';
 import type Promise from 'bluebird';
 
-export default (ctx: Hexo): Promise<void> => {
+export = (ctx: Hexo): Promise<void> => {
   const pkgPath = join(ctx.base_dir, 'package.json');
 
   return readPkg(pkgPath).then(pkg => {

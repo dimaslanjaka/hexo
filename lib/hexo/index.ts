@@ -22,25 +22,25 @@ import {
   Processor,
   Renderer,
   Tag
-} from '../extend/index.js';
+} from '../extend';
 
-import Render from './render.js';
-import registerModels from './register_models.js';
-import Post from './post.js';
-import Scaffold from './scaffold.js';
-import Source from './source.js';
-import Router from './router.js';
-import Theme from '../theme/index.js';
-import Locals from './locals.js';
-import defaultConfig from './default_config.js';
-import loadDatabase from './load_database.js';
-import multiConfigPath from './multi_config_path.js';
+import Render from './render';
+import registerModels from './register_models';
+import Post from './post';
+import Scaffold from './scaffold';
+import Source from './source';
+import Router from './router';
+import Theme from '../theme';
+import Locals from './locals';
+import defaultConfig from './default_config';
+import loadDatabase from './load_database';
+import multiConfigPath from './multi_config_path';
 import { deepMerge, full_url_for } from 'hexo-util';
-import type Box from '../box/index.js';
-import type { BaseGeneratorReturn, FilterOptions, LocalsType, NodeJSLikeCallback, SiteLocals } from '../types.js';
-import type { AddSchemaTypeOptions } from 'warehouse/dist/types' with { 'resolution-mode': 'import' };
-import type Schema from 'warehouse/dist/schema' with { 'resolution-mode': 'import' };
-import BinaryRelationIndex from '../models/binary_relation_index.js';
+import type Box from '../box';
+import type { BaseGeneratorReturn, FilterOptions, LocalsType, NodeJSLikeCallback, SiteLocals } from '../types';
+import type { AddSchemaTypeOptions } from 'warehouse/dist/types';
+import type Schema from 'warehouse/dist/schema';
+import BinaryRelationIndex from '../models/binary_relation_index';
 
 const libDir = dirname(__dirname);
 const dbVersion = 1;
@@ -77,7 +77,7 @@ const createLoadThemeRoute = function(generatorResult: BaseGeneratorReturn, loca
 
       if (view) {
         log.debug(`Rendering HTML ${name}: ${picocolors.magenta(path)}`);
-        return view.render(locals, () => {})
+        return view.render(locals)
           .then(result => ctx.extend.injector.exec(result, locals))
           .then(result => ctx.execFilter('_after_html_render', result, {
             context: ctx,
@@ -440,20 +440,15 @@ class Hexo extends EventEmitter {
     this.log.debug('Working directory: %s', picocolors.magenta(tildify(this.base_dir)));
 
     // Load internal plugins
-    const loadPlugin = (name: string) => {
-      const plugin = require(`../plugins/${name}.js`);
-      (typeof plugin === 'function' ? plugin : plugin.default)(this);
-    };
-
-    loadPlugin('console');
-    loadPlugin('filter');
-    loadPlugin('generator');
-    loadPlugin('helper');
-    loadPlugin('highlight');
-    loadPlugin('injector');
-    loadPlugin('processor');
-    loadPlugin('renderer');
-    loadPlugin('tag');
+    require('../plugins/console')(this);
+    require('../plugins/filter')(this);
+    require('../plugins/generator')(this);
+    require('../plugins/helper')(this);
+    require('../plugins/highlight')(this);
+    require('../plugins/injector')(this);
+    require('../plugins/processor')(this);
+    require('../plugins/renderer')(this);
+    require('../plugins/tag').default(this);
 
     // Load config
     return Promise.each([
@@ -476,8 +471,8 @@ class Hexo extends EventEmitter {
    * @link https://hexo.io/api#Execute-Commands
    */
   call(name: string, callback?: NodeJSLikeCallback<any>): Promise<any>;
-  call(name: string, args: Record<string, any>, callback?: NodeJSLikeCallback<any>): Promise<any>;
-  call(name: string, args?: Record<string, any> | NodeJSLikeCallback<any>, callback?: NodeJSLikeCallback<any>): Promise<any> {
+  call(name: string, args: object, callback?: NodeJSLikeCallback<any>): Promise<any>;
+  call(name: string, args?: object | NodeJSLikeCallback<any>, callback?: NodeJSLikeCallback<any>): Promise<any> {
     if (!callback && typeof args === 'function') {
       callback = args as NodeJSLikeCallback<any>;
       args = {};
@@ -752,12 +747,4 @@ declare global {
   const hexo: Hexo;
 }
 
-// For ESM compatibility
-export default Hexo;
-// For CommonJS compatibility
-if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
-  module.exports = Hexo;
-  // For ESM compatibility
-  module.exports.default = Hexo;
-}
-
+export = Hexo;

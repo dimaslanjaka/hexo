@@ -1,10 +1,10 @@
-import type Hexo from '../../hexo/index.js';
+import type Hexo from '../../hexo';
 
-export default (ctx: Hexo) => {
+export = (ctx: Hexo) => {
   const { processor } = ctx.extend;
 
   function register(name: string) {
-    const obj = require(`./${name}.js`)(ctx);
+    const obj = require(`./${name}`)(ctx);
     processor.register(obj.pattern, obj.process);
   }
 

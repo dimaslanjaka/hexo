@@ -2,7 +2,7 @@ import { stripIndent } from 'hexo-util';
 import * as picocolors from 'picocolors';
 import { Environment } from 'nunjucks';
 import Promise from 'bluebird';
-import type { NodeJSLikeCallback } from '../types.js';
+import type { NodeJSLikeCallback } from '../types';
 
 const rSwigRawFullBlock = /{% *raw *%}/;
 const rCodeTag = /<code[^<>]*>[\s\S]+?<\/code>/g;
@@ -12,7 +12,7 @@ interface TagFunction {
   (args: any[], content: string, callback?: NodeJSLikeCallback<any>): string | PromiseLike<string>;
 }
 interface AsyncTagFunction {
-  (args: any[], content: string): PromiseLike<string> | Promise<string>;
+  (args: any[], content: string): Promise<string>;
 }
 
 class NunjucksTag {
@@ -184,13 +184,13 @@ const formatNunjucksError = (err: Error, input: string, source = ''): Error => {
   if (isNaN(errLine)) return err;
 
   // trim useless info from Nunjucks Error
-  const splited = err.message.split('\n');
+  const splitted = err.message.split('\n');
 
   const e = new NunjucksError();
   e.name = 'Nunjucks Error';
   e.line = errLine;
-  e.location = splited[0];
-  e.type = splited[1].trim();
+  e.location = splitted[0];
+  e.type = splitted[1].trim();
   e.message = getContext(input.split(/\r?\n/), errLine, e.location, e.type).join('\n');
   return e;
 };
@@ -205,7 +205,7 @@ type RegisterOptions = {
  */
 class Tag {
   public env: Environment;
-  public source: any;
+  public source: string;
 
   constructor() {
     this.env = new Environment(null, {
@@ -286,4 +286,4 @@ class Tag {
   }
 }
 
-export default Tag;
+export = Tag;

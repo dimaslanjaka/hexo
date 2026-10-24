@@ -1,13 +1,13 @@
 import Promise from 'bluebird';
-import type { NodeJSLikeCallback } from '../types.js';
-import type Hexo from '../hexo/index.js';
+import type { NodeJSLikeCallback } from '../types';
+import type Hexo from '../hexo';
 
 interface StoreFunction {
   (this: Hexo, args: any): Promise<any>;
 }
 
 interface Store {
-  [key: string]: StoreFunction;
+  [key: string]: StoreFunction
 }
 
 /**
@@ -42,4 +42,4 @@ class Migrator {
   }
 }
 
-export default Migrator;
+export = Migrator;

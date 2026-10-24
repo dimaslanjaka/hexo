@@ -1,7 +1,7 @@
 import tildify from 'tildify';
 import * as picocolors from 'picocolors';
 import { basename } from 'path';
-import Hexo from '../../hexo/index.js';
+import Hexo from '../../hexo';
 import type Promise from 'bluebird';
 
 const reservedKeys = {
@@ -22,14 +22,14 @@ const reservedKeys = {
 };
 
 interface NewArgs {
-  _?: string[];
-  p?: string;
-  path?: string;
-  s?: string;
-  slug?: string;
-  r?: boolean;
-  replace?: boolean;
-  [key: string]: any;
+  _?: string[]
+  p?: string
+  path?: string
+  s?: string
+  slug?: string
+  r?: boolean
+  replace?: boolean
+  [key: string]: any
 }
 
 function newConsole(this: Hexo, args: NewArgs): Promise<void> {
@@ -64,4 +64,4 @@ function newConsole(this: Hexo, args: NewArgs): Promise<void> {
   });
 }
 
-export default newConsole;
+export = newConsole;

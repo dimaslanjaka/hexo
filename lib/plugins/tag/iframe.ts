@@ -1,11 +1,11 @@
 import { htmlTag } from 'hexo-util';
 
 /**
- * Iframe tag
- *
- * Syntax:
- *   {% iframe url [width] [height] %}
- */
+* Iframe tag
+*
+* Syntax:
+*   {% iframe url [width] [height] %}
+*/
 
 function iframeTag(args: string[]) {
   const src = args[0];
@@ -24,4 +24,4 @@ function iframeTag(args: string[]) {
   return htmlTag('iframe', attrs, '');
 }
 
-export default iframeTag;
+export = iframeTag;

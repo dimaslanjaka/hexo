@@ -50,4 +50,4 @@ function numberFormatHelper(num: number, options: Options = {}) {
   return before + (after ? separator + after : '');
 }
 
-export default numberFormatHelper;
+export = numberFormatHelper;

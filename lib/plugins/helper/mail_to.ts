@@ -28,13 +28,10 @@ function mailToHelper(path: string | string[], text?: string, options: Options =
   if (Array.isArray(path)) path = path.join(',');
   if (!text) text = path;
 
-  const attrs = Object.assign(
-    {
-      href: `mailto:${path}`,
-      title: text
-    },
-    options
-  );
+  const attrs = Object.assign({
+    href: `mailto:${path}`,
+    title: text
+  }, options);
 
   if (attrs.class && Array.isArray(attrs.class)) {
     attrs.class = attrs.class.join(' ');
@@ -42,7 +39,7 @@ function mailToHelper(path: string | string[], text?: string, options: Options =
 
   const data = {};
 
-  ['subject', 'cc', 'bcc', 'body'].forEach((i) => {
+  ['subject', 'cc', 'bcc', 'body'].forEach(i => {
     const item = attrs[i];
 
     if (item) {
@@ -57,7 +54,7 @@ function mailToHelper(path: string | string[], text?: string, options: Options =
   return htmlTag('a', attrs as Attrs, text);
 }
 
-export default moize(mailToHelper, {
+export = moize(mailToHelper, {
   maxSize: 10,
   isDeepEqual: true
 });

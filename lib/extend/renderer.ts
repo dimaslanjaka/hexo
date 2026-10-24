@@ -1,6 +1,6 @@
 import { extname } from 'path';
 import Promise from 'bluebird';
-import type { NodeJSLikeCallback } from '../types.js';
+import type { NodeJSLikeCallback } from '../types';
 
 const getExtname = (str: string) => {
   if (typeof str !== 'string') return '';
@@ -20,7 +20,7 @@ export interface StoreFunctionData {
 export interface StoreSyncFunction {
   (
     data: StoreFunctionData,
-    options?: Record<string, any>
+    options?: object
   ): any;
   output?: string;
   compile?: (data: StoreFunctionData) => (local: any) => any;
@@ -31,7 +31,7 @@ export interface StoreSyncFunction {
 export interface StoreFunction {
   (
     data: StoreFunctionData,
-    options?: Record<string, any>
+    options?: object
   ): Promise<any>;
   output?: string;
   compile?: (data: StoreFunctionData) => (local: any) => any;
@@ -42,7 +42,7 @@ export interface StoreFunction {
 interface StoreFunctionWithCallback {
   (
     data: StoreFunctionData,
-    options: Record<string, any>,
+    options: object,
     callback?: NodeJSLikeCallback<any>
   ): Promise<any>;
   output?: string;

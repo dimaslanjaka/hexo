@@ -1,7 +1,7 @@
 import { url_for } from 'hexo-util';
-import type { CategorySchema, LocalsType } from '../../types.js';
-import type Query from 'warehouse/dist/query' with { 'resolution-mode': 'import' };
-import type Document from 'warehouse/dist/document' with { 'resolution-mode': 'import' };
+import type { CategorySchema, LocalsType } from '../../types';
+import type Query from 'warehouse/dist/query';
+import type Document from 'warehouse/dist/document';
 
 interface Options {
   style?: string | false;
@@ -36,9 +36,7 @@ function listCategoriesHelper(this: LocalsType, categories?: Query<CategorySchem
   const order = options.order || 1;
   const collator = orderby === 'name' && options.locale ? new Intl.Collator(options.locale) : undefined;
   const showCurrent = options.show_current || false;
-  const childrenIndicator = Object.prototype.hasOwnProperty.call(options, 'children_indicator')
-    ? options.children_indicator
-    : false;
+  const childrenIndicator = Object.prototype.hasOwnProperty.call(options, 'children_indicator') ? options.children_indicator : false;
 
   const prepareQuery = parent => {
     const query: { parent?: any } = {};
@@ -46,7 +44,7 @@ function listCategoriesHelper(this: LocalsType, categories?: Query<CategorySchem
     if (parent) {
       query.parent = parent;
     } else {
-      query.parent = { $exists: false };
+      query.parent = {$exists: false};
     }
 
     const result = (categories as Query<CategorySchema>).find(query);
@@ -134,4 +132,4 @@ function listCategoriesHelper(this: LocalsType, categories?: Query<CategorySchem
   return flatList(0);
 }
 
-export default listCategoriesHelper;
+export = listCategoriesHelper;

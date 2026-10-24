@@ -2,12 +2,11 @@ import yaml from 'js-yaml';
 import { exists, writeFile } from 'hexo-fs';
 import { extname } from 'path';
 import Promise from 'bluebird';
-import type Hexo from '../../hexo/index.js';
-import { StoreFunctionData } from '../../extend/renderer-d.js';
+import type Hexo from '../../hexo';
 
 interface ConfigArgs {
-  _: string[];
-  [key: string]: any;
+  _: string[]
+  [key: string]: any
 }
 
 function configConsole(this: Hexo, args: ConfigArgs): Promise<void> {
@@ -28,23 +27,21 @@ function configConsole(this: Hexo, args: ConfigArgs): Promise<void> {
   const configPath = this.config_path;
   const ext = extname(configPath);
 
-  return exists(configPath)
-    .then(exist => {
-      if (!exist) return {};
-      return this.render.render({ path: configPath } as StoreFunctionData);
-    })
-    .then(config => {
-      if (!config) config = {};
+  return exists(configPath).then(exist => {
+    if (!exist) return {};
+    return this.render.render({path: configPath});
+  }).then(config => {
+    if (!config) config = {};
 
-      setProperty(config, key, castValue(value));
+    setProperty(config, key, castValue(value));
 
-      const result = ext === '.json' ? JSON.stringify(config) : yaml.dump(config);
+    const result = ext === '.json' ? JSON.stringify(config) : yaml.dump(config);
 
-      return writeFile(configPath, result);
-    });
+    return writeFile(configPath, result);
+  });
 }
 
-function getProperty(obj: Record<string, any>, key: string): any {
+function getProperty(obj: object, key: string): any {
   const split = key.split('.');
   let result = obj[split[0]];
 
@@ -55,7 +52,7 @@ function getProperty(obj: Record<string, any>, key: string): any {
   return result;
 }
 
-function setProperty(obj: Record<string, any>, key: string, value: any): void {
+function setProperty(obj: object, key: string, value: any): void {
   const split = key.split('.');
   let cursor = obj;
   const lastKey = split.pop();
@@ -90,4 +87,4 @@ function castValue(value: string): any {
   return value;
 }
 
-export default configConsole;
+export = configConsole;

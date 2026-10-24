@@ -1,15 +1,15 @@
 import * as picocolors from 'picocolors';
-import type Hexo from '../../hexo/index.js';
+import type Hexo from '../../hexo';
 
 interface MigrateArgs {
-  _: string[];
-  [key: string]: any;
+  _: string[]
+  [key: string]: any
 }
 
 function migrateConsole(this: Hexo, args: MigrateArgs): Promise<any> {
   // Display help message if user didn't input any arguments
   if (!args._.length) {
-    return this.call('help', { _: ['migrate'] });
+    return this.call('help', {_: ['migrate']});
   }
 
   const type = args._.shift();
@@ -30,4 +30,4 @@ function migrateConsole(this: Hexo, args: MigrateArgs): Promise<any> {
   return Reflect.apply(migrators[type], this, [args]);
 }
 
-export default migrateConsole;
+export = migrateConsole;

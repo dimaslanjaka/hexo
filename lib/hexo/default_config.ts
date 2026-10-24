@@ -1,4 +1,4 @@
-export default {
+export = {
   // Site
   title: 'Hexo',
   subtitle: '',
@@ -10,7 +10,7 @@ export default {
   url: 'http://example.com',
   root: '/',
   permalink: ':year/:month/:day/:title/',
-  permalink_defaults: {} as Record<string, string> | string,
+  permalink_defaults: {} as Record<string, string>,
   pretty_urls: {
     trailing_index: true,
     trailing_html: true

@@ -1,3 +1,5 @@
+/* eslint-disable n/no-process-exit */
+/* eslint-disable no-useless-escape */
 import fs from 'fs';
 import path from 'path';
 import { glob } from 'glob';
@@ -91,7 +93,7 @@ async function run() {
   console.log(`Done. Updated ${count} file(s).`);
 }
 
-run().catch((err) => {
+run().catch(err => {
   console.error(err);
   process.exit(2);
 });

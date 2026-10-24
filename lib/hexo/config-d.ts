@@ -1,4 +1,4 @@
-import defaultConfig from './default_config.js';
+import defaultConfig from './default_config';
 
 type DefaultConfigType = typeof defaultConfig;
 export interface Config extends DefaultConfigType {

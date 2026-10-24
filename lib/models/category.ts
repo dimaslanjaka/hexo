@@ -1,12 +1,12 @@
 import warehouse from 'warehouse';
 import { slugize, full_url_for } from 'hexo-util';
-import type Hexo from '../hexo/index.js';
-import type { CategorySchema } from '../types.js';
+import type Hexo from '../hexo';
+import type { CategorySchema } from '../types';
 
-export default (ctx: Hexo) => {
+export = (ctx: Hexo) => {
   const Category = new warehouse.Schema<CategorySchema>({
-    name: { type: String, required: true },
-    parent: { type: warehouse.Schema.Types.CUID, ref: 'Category' }
+    name: {type: String, required: true},
+    parent: { type: warehouse.Schema.Types.CUID, ref: 'Category'}
   });
 
   Category.virtual('slug').get(function() {
@@ -24,7 +24,7 @@ export default (ctx: Hexo) => {
     const map = ctx.config.category_map || {};
 
     name = map[name] || name;
-    str += slugize(name, { transform: ctx.config.filename_case });
+    str += slugize(name, {transform: ctx.config.filename_case});
 
     return str;
   });
@@ -44,17 +44,17 @@ export default (ctx: Hexo) => {
   Category.virtual('posts').get(function() {
     const ReadOnlyPostCategory = ctx._binaryRelationIndex.post_category;
 
-    const ids = ReadOnlyPostCategory.find({ category_id: this._id }).map(item => item.post_id);
+    const ids = ReadOnlyPostCategory.find({category_id: this._id}).map(item => item.post_id);
 
     return ctx.locals.get('posts').find({
-      _id: { $in: ids }
+      _id: {$in: ids}
     });
   });
 
   Category.virtual('length').get(function() {
     const ReadOnlyPostCategory = ctx._binaryRelationIndex.post_category;
 
-    return ReadOnlyPostCategory.find({ category_id: this._id }).length;
+    return ReadOnlyPostCategory.find({category_id: this._id}).length;
   });
 
   // Check whether a category exists
@@ -63,13 +63,10 @@ export default (ctx: Hexo) => {
     if (!name) return;
 
     const Category = ctx.model('Category');
-    const cat = Category.findOne(
-      {
-        name,
-        parent: parent || { $exists: false }
-      },
-      { lean: true }
-    );
+    const cat = Category.findOne({
+      name,
+      parent: parent || {$exists: false}
+    }, {lean: true});
 
     if (cat) {
       throw new Error(`Category \`${name}\` has already existed!`);
@@ -79,7 +76,7 @@ export default (ctx: Hexo) => {
   // Remove PostCategory references
   Category.pre('remove', (data: CategorySchema) => {
     const PostCategory = ctx.model('PostCategory');
-    return PostCategory.remove({ category_id: data._id });
+    return PostCategory.remove({category_id: data._id});
   });
 
   return Category;

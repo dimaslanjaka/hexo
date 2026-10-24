@@ -1,5 +1,5 @@
 import { isExternalLink } from 'hexo-util';
-import type Hexo from '../../../hexo/index.js';
+import type Hexo from '../../../hexo';
 
 let EXTERNAL_LINK_SITE_ENABLED = true;
 const rATag = /<a\s[^<>]*?href=["']((?:https?:|\/\/)[^<>"']+)["'][^<>]*>/gi;
@@ -47,4 +47,4 @@ function externalLinkFilter(this: Hexo, data: string): string {
   return result;
 }
 
-export default externalLinkFilter;
+export = externalLinkFilter;

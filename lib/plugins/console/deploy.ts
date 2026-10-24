@@ -1,6 +1,6 @@
 import { exists } from 'hexo-fs';
 import * as picocolors from 'picocolors';
-import type Hexo from '../../hexo/index.js';
+import type Hexo from '../../hexo';
 import type Promise from 'bluebird';
 
 interface DeployArgs {
@@ -56,10 +56,9 @@ function deployConsole(this: Hexo, args: DeployArgs): Promise<any> {
     return (Reflect.apply(deployers[type], this, [{ ...item, ...args }]) as any).then(() => {
       this.log.info('Deploy done: %s', picocolors.magenta(type));
     });
-  })
-    .then(() => {
-      this.emit('deployAfter');
-    });
+  }).then(() => {
+    this.emit('deployAfter');
+  });
 }
 
-export default deployConsole;
+export = deployConsole;

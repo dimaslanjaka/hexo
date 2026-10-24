@@ -1,7 +1,7 @@
 import { url_for, escapeHTML } from 'hexo-util';
 import moize from 'moize';
-import type { LocalsType, TagSchema } from '../../types.js';
-import type Query from 'warehouse/dist/query' with { 'resolution-mode': 'import' };
+import type { LocalsType, TagSchema } from '../../types';
+import type Query from 'warehouse/dist/query';
 
 interface Options {
   style?: string | false;
@@ -121,4 +121,4 @@ function listTagsHelperFactory(tags?: Query<TagSchema> | Options, options?: Opti
   }).call(this, tags, options);
 }
 
-export default listTagsHelperFactory;
+export = listTagsHelperFactory;

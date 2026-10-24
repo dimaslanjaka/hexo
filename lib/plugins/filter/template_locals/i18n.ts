@@ -1,7 +1,8 @@
 import { Pattern } from 'hexo-util';
-import { HexoLocalsData } from '../../../hexo/locals-d.js';
+import type Hexo from '../../../hexo';
+import type { LocalsType } from '../../../types';
 
-function i18nLocalsFilter(locals: HexoLocalsData) {
+function i18nLocalsFilter(this: Hexo, locals: LocalsType): void {
   const { i18n } = this.theme;
   const { config } = this;
   const i18nDir = config.i18n_dir;
@@ -12,9 +13,7 @@ function i18nLocalsFilter(locals: HexoLocalsData) {
 
   if (!lang) {
     const pattern = new Pattern(`${i18nDir}/*path`);
-    // fix hexo-util/dist/pattern.d.ts is not object
-    // fix(TS2322): Type 'unknown' is not assignable to type 'string'.
-    const data = pattern.match(locals.path) as Record<string, any>;
+    const data = pattern.match(locals.path);
 
     if (data && 'lang' in data && i18nLanguages.includes(data.lang)) {
       lang = data.lang;
@@ -34,4 +33,4 @@ function i18nLocalsFilter(locals: HexoLocalsData) {
   locals._p = i18n._p(languages);
 }
 
-export default i18nLocalsFilter;
+export = i18nLocalsFilter;

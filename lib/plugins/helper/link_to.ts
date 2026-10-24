@@ -1,5 +1,5 @@
 import { htmlTag, url_for } from 'hexo-util';
-import type { LocalsType } from '../../types.js';
+import type { LocalsType } from '../../types';
 
 interface Options {
   id?: string;
@@ -22,17 +22,14 @@ interface Attrs {
 }
 
 function linkToHelper(this: LocalsType, path: string, text?: string, options: Options | boolean = {}) {
-  if (typeof options === 'boolean') options = { external: options };
+  if (typeof options === 'boolean') options = {external: options};
 
   if (!text) text = path.replace(/^https?:\/\/|\/$/g, '');
 
-  const attrs = Object.assign(
-    {
-      href: url_for.call(this, path) as string,
-      title: text
-    },
-    options
-  );
+  const attrs = Object.assign({
+    href: url_for.call(this, path) as string,
+    title: text
+  }, options);
 
   if (attrs.external) {
     attrs.target = '_blank';
@@ -47,4 +44,4 @@ function linkToHelper(this: LocalsType, path: string, text?: string, options: Op
   return htmlTag('a', attrs as Attrs, text);
 }
 
-export default linkToHelper;
+export = linkToHelper;

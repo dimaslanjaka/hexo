@@ -1,8 +1,8 @@
-import type Hexo from '../../hexo/index.js';
+import type Hexo from '../../hexo';
 
 module.exports = (ctx: Hexo) => {
   const { highlight } = ctx.extend;
 
-  highlight.register('highlight.js', require('./highlight.js'));
-  highlight.register('prismjs', require('./prism.js'));
+  highlight.register('highlight.js', require('./highlight'));
+  highlight.register('prismjs', require('./prism'));
 };

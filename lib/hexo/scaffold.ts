@@ -1,7 +1,7 @@
 import { extname, join } from 'path';
 import { exists, listDir, readFile, unlink, writeFile } from 'hexo-fs';
-import type Hexo from './index.js';
-import type { NodeJSLikeCallback } from '../types.js';
+import type Hexo from './index';
+import type { NodeJSLikeCallback } from '../types';
 import type Promise from 'bluebird';
 
 class Scaffold {
@@ -81,4 +81,4 @@ class Scaffold {
   }
 }
 
-export default Scaffold;
+export = Scaffold;

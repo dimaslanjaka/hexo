@@ -1,6 +1,6 @@
 import { isExternalLink } from 'hexo-util';
-import type Hexo from '../../../hexo/index.js';
-import type { RenderData } from '../../../types.js';
+import type Hexo from '../../../hexo';
+import type { RenderData } from '../../../types';
 
 let EXTERNAL_LINK_POST_ENABLED = true;
 const rATag = /<a\s[^<>]*?href=["']((?:https?:|\/\/)[^<>"']+)["'][^<>]*>/gi;
@@ -32,4 +32,4 @@ function externalLinkFilter(this: Hexo, data: RenderData): void {
   });
 }
 
-export default externalLinkFilter;
+export = externalLinkFilter;

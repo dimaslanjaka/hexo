@@ -1,7 +1,7 @@
 import nunjucks, { Environment } from 'nunjucks';
 import { readFileSync } from 'hexo-fs';
 import { dirname } from 'path';
-import type { StoreFunctionData } from '../../extend/renderer.js';
+import type { StoreFunctionData } from '../../extend/renderer';
 
 interface CacheableEnvironment extends Environment {
   invalidateCache(): void;
@@ -12,7 +12,7 @@ interface CompiledTemplate {
   template: nunjucks.Template;
 }
 
-function toArray(value: any) {
+function toArray(value) {
   if (Array.isArray(value)) {
     // Return if given value is an Array
     return value;
@@ -46,7 +46,7 @@ const nunjucksCfg = {
   lstripBlocks: false
 };
 
-const nunjucksAddFilter = (env: nunjucks.Environment) => {
+const nunjucksAddFilter = (env: Environment): void => {
   env.addFilter('toarray', toArray);
   env.addFilter('safedump', safeJsonStringify);
 };
@@ -88,4 +88,4 @@ njkRenderer.compile = (data: StoreFunctionData): (locals: any) => string => {
   };
 };
 
-export default njkRenderer;
+export = njkRenderer;

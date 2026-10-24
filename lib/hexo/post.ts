@@ -7,8 +7,8 @@ import { load } from 'js-yaml';
 import { slugize, deepMerge} from 'hexo-util';
 import { copyDir, exists, listDir, mkdirs, readFile, rmdir, unlink, writeFile } from 'hexo-fs';
 import { parse as yfmParse, split as yfmSplit, stringify as yfmStringify } from 'hexo-front-matter';
-import type Hexo from './index.js';
-import type { NodeJSLikeCallback, RenderData } from '../types.js';
+import type Hexo from './index';
+import type { NodeJSLikeCallback, RenderData } from '../types';
 
 const preservedKeys = ['title', 'slug', 'path', 'layout', 'date', 'content'];
 
@@ -426,9 +426,6 @@ interface PostData {
 
 class Post {
   public context: Hexo;
-  public config: any;
-  public tag: any;
-  public separator: any;
 
   constructor(context: Hexo) {
     this.context = context;
@@ -549,7 +546,7 @@ class Post {
       return readFile(src);
     }).then(content => {
       // Create post
-      Object.assign(data, yfmParse(String(content)));
+      Object.assign(data, yfmParse(content));
       data.content = data._content;
       data._content = undefined;
 
@@ -666,4 +663,4 @@ class Post {
   }
 }
 
-export default Post;
+export = Post;

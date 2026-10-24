@@ -37,6 +37,8 @@ function unwrapModuleExport(result) {
 }
 
 function install() {
+  if (Module.prototype.require.__hexoResolveTsInstalled) return;
+
   const previousResolveFilename = Module._resolveFilename;
 
   Module._resolveFilename = function(request, parent, isMain, options) {
@@ -51,9 +53,12 @@ function install() {
 
   const originalRequire = Module.prototype.require;
 
-  Module.prototype.require = function(request) {
+  const requireWithResolvedTs = function(request) {
     return unwrapModuleExport(originalRequire.call(this, request));
   };
+
+  requireWithResolvedTs.__hexoResolveTsInstalled = true;
+  Module.prototype.require = requireWithResolvedTs;
 }
 
 module.exports = { install };

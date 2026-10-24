@@ -1,14 +1,14 @@
 import moment from 'moment-timezone';
 const { isMoment } = moment;
 import moize from 'moize';
-import type { LocalsType } from '../../types.js';
+import type { LocalsType } from '../../types';
 
 const isDate = (value: moment.MomentInput | moment.Moment): boolean =>
   typeof value === 'object' && value instanceof Date && !isNaN(value.getTime());
 
 function getMoment(date: moment.MomentInput | moment.Moment, lang: string, timezone: string): moment.Moment {
   if (date == null) date = moment();
-  if (!isMoment(date)) date = moment(isDate(date) ? (date as Date) : new Date(date as string | number));
+  if (!isMoment(date)) date = moment(isDate(date) ? <Date>date : new Date(<string | number>date));
   lang = _toMomentLocale(lang);
 
   if (lang) date = date.locale(lang);
@@ -61,8 +61,7 @@ function timeTagHelper(this: LocalsType, date?: string | number | Date | moment.
 }
 
 function getLanguage(ctx: LocalsType) {
-  const lang = ctx.page.lang || ctx.page.language || ctx.config.language;
-  return Array.isArray(lang) ? lang[0] : lang;
+  return ctx.page.lang || ctx.page.language || ctx.config.language;
 }
 
 /**

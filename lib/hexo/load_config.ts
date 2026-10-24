@@ -1,14 +1,14 @@
 import { sep, resolve, join, parse, basename, extname } from 'path';
 import tildify from 'tildify';
-import Theme from '../theme/index.js';
-import Source from './source.js';
+import Theme from '../theme';
+import Source from './source';
 import { exists, readdir } from 'hexo-fs';
 import * as picocolors from 'picocolors';
 import { deepMerge } from 'hexo-util';
-import validateConfig from './validate_config.js';
-import type Hexo from './index.js';
+import validateConfig from './validate_config';
+import type Hexo from './index';
 
-export default async (ctx: Hexo): Promise<void> => {
+export = async (ctx: Hexo): Promise<void> => {
   if (!ctx.env.init) return;
 
   const baseDir = ctx.base_dir;

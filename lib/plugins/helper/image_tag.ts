@@ -1,5 +1,5 @@
 import { htmlTag, url_for } from 'hexo-util';
-import type { LocalsType } from '../../types.js';
+import type { LocalsType } from '../../types';
 
 interface Options {
   src?: string;
@@ -14,12 +14,9 @@ interface Attrs {
 }
 
 function imageTagHelper(this: LocalsType, path: string, options: Options = {}) {
-  const attrs = Object.assign(
-    {
-      src: url_for.call(this, path) as string
-    },
-    options
-  );
+  const attrs = Object.assign({
+    src: url_for.call(this, path) as string
+  }, options);
 
   if (attrs.class && Array.isArray(attrs.class)) {
     attrs.class = attrs.class.join(' ');
@@ -28,4 +25,4 @@ function imageTagHelper(this: LocalsType, path: string, options: Options = {}) {
   return htmlTag('img', attrs as Attrs);
 }
 
-export default imageTagHelper;
+export = imageTagHelper;

@@ -1,4 +1,4 @@
-import defaultConfig from './default_config.js';
+import defaultConfig from './default_config';
 import {
   Console,
   Deployer,
@@ -11,7 +11,7 @@ import {
   Processor,
   Renderer,
   Tag
-} from '../extend/index.js';
+} from '../extend/index';
 
 export type DefaultConfigType = typeof defaultConfig;
 export interface Config extends DefaultConfigType {

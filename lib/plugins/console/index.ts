@@ -1,9 +1,9 @@
-import type Hexo from '../../hexo/index.js';
+import type Hexo from '../../hexo';
 
-function Console(ctx: Hexo) {
+export = function(ctx: Hexo) {
   const { console } = ctx.extend;
 
-  console.register('clean', 'Remove generated files and cache.', require('./clean.js'));
+  console.register('clean', 'Remove generated files and cache.', require('./clean'));
 
   console.register('config', 'Get or set configurations.', {
     usage: '[name] [value]',
@@ -11,14 +11,14 @@ function Console(ctx: Hexo) {
       {name: 'name', desc: 'Setting name. Leave it blank if you want to show all configurations.'},
       {name: 'value', desc: 'New value of a setting. Leave it blank if you just want to show a single configuration.'}
     ]
-  }, require('./config.js'));
+  }, require('./config'));
 
   console.register('deploy', 'Deploy your website.', {
     options: [
       {name: '--setup', desc: 'Setup without deployment'},
       {name: '-g, --generate', desc: 'Generate before deployment'}
     ]
-  }, require('./deploy.js'));
+  }, require('./deploy'));
 
   console.register('generate', 'Generate static files.', {
     options: [
@@ -28,7 +28,7 @@ function Console(ctx: Hexo) {
       {name: '-b, --bail', desc: 'Raise an error if any unhandled exception is thrown during generation'},
       {name: '-c, --concurrency', desc: 'Maximum number of files to be generated in parallel. Default is infinity'}
     ]
-  }, require('./generate.js'));
+  }, require('./generate'));
 
   console.register('list', 'List the information of the site', {
     desc: 'List the information of the site.',
@@ -36,7 +36,7 @@ function Console(ctx: Hexo) {
     arguments: [
       {name: 'type', desc: 'Available types: page, post, route, tag, category'}
     ]
-  }, require('./list/index.js'));
+  }, require('./list'));
 
   console.register('migrate', 'Migrate your site from other system to Hexo.', {
     init: true,
@@ -44,7 +44,7 @@ function Console(ctx: Hexo) {
     arguments: [
       {name: 'type', desc: 'Migrator type.'}
     ]
-  }, require('./migrate.js'));
+  }, require('./migrate'));
 
   console.register('new', 'Create a new post.', {
     usage: '[layout] <title>',
@@ -57,7 +57,7 @@ function Console(ctx: Hexo) {
       {name: '-s, --slug', desc: 'Post slug. Customize the URL of the post.'},
       {name: '-p, --path', desc: 'Post path. Customize the path of the post.'}
     ]
-  }, require('./new.js'));
+  }, require('./new'));
 
   console.register('publish', 'Moves a draft post from _drafts to _posts folder.', {
     usage: '[layout] <filename>',
@@ -65,7 +65,7 @@ function Console(ctx: Hexo) {
       {name: 'layout', desc: 'Post layout. Use post, page, draft or whatever you want.'},
       {name: 'filename', desc: 'Draft filename relative to _drafts. The extension may be omitted when unambiguous.'}
     ]
-  }, require('./publish.js'));
+  }, require('./publish'));
 
   console.register('render', 'Render files with renderer plugins.', {
     init: true,
@@ -76,14 +76,5 @@ function Console(ctx: Hexo) {
       {name: '--engine', desc: 'Specify render engine'},
       {name: '--pretty', desc: 'Prettify JSON output'}
     ]
-  }, require('./render.js'));
-}
-
-// For ESM compatibility
-export default Console;
-// For CommonJS compatibility
-if (typeof module !== 'undefined' && typeof module.exports === 'object' && module.exports !== null) {
-  module.exports = Console;
-  // For ESM compatibility
-  module.exports.default = Console;
+  }, require('./render'));
 }

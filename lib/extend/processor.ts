@@ -1,6 +1,6 @@
 import Promise from 'bluebird';
 import { Pattern } from 'hexo-util';
-import type File from '../box/file.js';
+import type File from '../box/file';
 
 interface StoreFunction {
   (file: File | string): any;
@@ -52,4 +52,4 @@ class Processor {
   }
 }
 
-export default Processor;
+export = Processor;

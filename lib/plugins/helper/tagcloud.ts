@@ -1,7 +1,7 @@
 import { Color, url_for } from 'hexo-util';
 import moize from 'moize';
-import type { LocalsType, TagSchema } from '../../types.js';
-import type Query from 'warehouse/dist/query' with { 'resolution-mode': 'import' };
+import type { LocalsType, TagSchema } from '../../types';
+import type Query from 'warehouse/dist/query';
 
 interface Options {
   min_font?: number;
@@ -114,4 +114,4 @@ function tagcloudHelperFactory(this: LocalsType, tags?: Query<TagSchema> | Optio
   }).call(this, tags, options);
 }
 
-export default tagcloudHelperFactory;
+export = tagcloudHelperFactory;

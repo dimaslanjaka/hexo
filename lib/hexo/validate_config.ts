@@ -1,8 +1,8 @@
 import assert from 'assert';
 import moment from 'moment-timezone';
-import type Hexo from './index.js';
+import type Hexo from './index';
 
-export default (ctx: Hexo): void => {
+export = (ctx: Hexo): void => {
   const { config, log } = ctx;
 
   log.info('Validating config');

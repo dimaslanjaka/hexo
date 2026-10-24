@@ -1,5 +1,5 @@
 import moize from 'moize';
-import type { LocalsType } from '../../types.js';
+import type { LocalsType } from '../../types';
 
 interface Options {
   class?: string;
@@ -15,4 +15,4 @@ function searchFormHelper(this: LocalsType, options: Options = {}) {
   return `<form action="//google.com/search" method="get" accept-charset="UTF-8" class="${className}"><input type="search" name="q" class="${className}-input"${text ? ` placeholder="${text}"` : ''}>${button ? `<button type="submit" class="${className}-submit">${typeof button === 'string' ? button : text}</button>` : ''}<input type="hidden" name="sitesearch" value="${config.url}"></form>`;
 }
 
-export default moize.deep(searchFormHelper);
+export = moize.deep(searchFormHelper);

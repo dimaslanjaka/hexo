@@ -1,21 +1,21 @@
 import Promise from 'bluebird';
 import abbrev from 'abbrev';
-import type { NodeJSLikeCallback } from '../types.js';
-import type Hexo from '../hexo/index.js';
+import type { NodeJSLikeCallback } from '../types';
+import type Hexo from '../hexo';
 
 type Option = Partial<{
   usage: string;
   desc: string;
   init: boolean;
   arguments: {
-    name: string;
-    desc: string;
-  }[];
+      name: string;
+      desc: string;
+    }[];
   options: {
     name: string;
     desc: string;
   }[];
-}>;
+}>
 
 interface Args {
   _: string[];
@@ -29,10 +29,10 @@ interface StoreFunction {
 }
 
 interface Store {
-  [key: string]: StoreFunction;
+  [key: string]: StoreFunction
 }
 interface Alias {
-  [abbreviation: string]: string;
+  [abbreviation: string]: string
 }
 
 /**
@@ -68,63 +68,37 @@ class Console {
    * @param {Option} options - The description of each option of a console command
    * @param {AnyFn} fn - The console plugin to be registered
    */
-  register(name: string, fn: AnyFn): void;
-  register(name: string, desc: string, fn: AnyFn): void;
-  register(name: string, options: Option, fn: AnyFn): void;
-  register(name: string, desc: string, options: Option, fn: AnyFn): void;
+  register(name: string, fn: AnyFn): void
+  register(name: string, desc: string, fn: AnyFn): void
+  register(name: string, options: Option, fn: AnyFn): void
+  register(name: string, desc: string, options: Option, fn: AnyFn): void
   register(name: string, desc: string | Option | AnyFn, options?: Option | AnyFn, fn?: AnyFn): void {
     if (!name) throw new TypeError('name is required');
 
     if (!fn) {
       if (options) {
-        if (
-          typeof options === 'object' &&
-          Object.hasOwnProperty.call(options, 'default') &&
-          typeof (options as any).default === 'function'
-        ) {
-          options = (options as any).default;
-        }
         if (typeof options === 'function') {
           fn = options;
 
-          if (typeof desc === 'object') {
-            // name, options, fn
+          if (typeof desc === 'object') { // name, options, fn
             options = desc;
             desc = '';
-          } else {
-            // name, desc, fn
+          } else { // name, desc, fn
             options = {};
           }
         } else {
-          console.log(options);
-          throw new TypeError(`Failed to register console "${name}": fn must be a function`);
+          throw new TypeError('fn must be a function');
         }
       } else {
         // name, fn
-        if (
-          typeof desc === 'object' &&
-          Object.hasOwnProperty.call(desc, 'default') &&
-          typeof (desc as any).default === 'function'
-        ) {
-          desc = (desc as any).default;
-        }
         if (typeof desc === 'function') {
           fn = desc;
           options = {};
           desc = '';
         } else {
-          throw new TypeError(`Failed to register console "${name}": fn must be a function`);
+          throw new TypeError('fn must be a function');
         }
       }
-    }
-
-    // Might be an object containing default export
-    if (
-      typeof fn === 'object' &&
-      Object.hasOwnProperty.call(fn, 'default') &&
-      typeof (fn as any).default === 'function'
-    ) {
-      fn = (fn as any).default;
     }
 
     if (fn.length > 1) {
@@ -142,4 +116,4 @@ class Console {
   }
 }
 
-export default Console;
+export = Console;

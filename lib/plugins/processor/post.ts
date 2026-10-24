@@ -1,16 +1,16 @@
-import { toDate, adjustDateForTimezone, isExcludedFile, isTmpFile, isHiddenFile, isMatch } from './common.js';
+import { toDate, adjustDateForTimezone, isExcludedFile, isTmpFile, isHiddenFile, isMatch } from './common';
 import Promise from 'bluebird';
 import { parse as yfm } from 'hexo-front-matter';
 import { extname, join, posix, sep } from 'path';
 import { stat, listDir } from 'hexo-fs';
 import { slugize, Pattern, Permalink } from 'hexo-util';
 import * as picocolors from 'picocolors';
-import type { _File } from '../../box/index.js';
-import type Hexo from '../../hexo/index.js';
+import type { _File } from '../../box';
+import type Hexo from '../../hexo';
 import type { Stats } from 'fs';
-import { PostAssetSchema, PostSchema } from '../../types.js';
-import type Document from 'warehouse/dist/document' with { 'resolution-mode': 'import' };
-import SourceIdIndex from './source_id_index.js';
+import { PostAssetSchema, PostSchema } from '../../types';
+import type Document from 'warehouse/dist/document';
+import SourceIdIndex from './source_id_index';
 
 const postDir = '_posts/';
 const draftDir = '_drafts/';
@@ -26,7 +26,7 @@ const preservedKeys = {
   hash: true
 };
 
-export default (ctx: Hexo) => {
+export = (ctx: Hexo) => {
   const postSourceIndex = new SourceIdIndex(ctx.model('Post'));
 
   return {

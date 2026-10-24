@@ -1,4 +1,4 @@
-import type { RenderData } from '../../../types.js';
+import type { RenderData } from '../../../types';
 
 const rExcerpt = /<!-- ?more ?-->/i;
 
@@ -20,4 +20,4 @@ function excerptFilter(data: RenderData): void {
   }
 }
 
-export default excerptFilter;
+export = excerptFilter;

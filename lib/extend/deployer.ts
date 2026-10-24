@@ -1,6 +1,6 @@
 import Promise from 'bluebird';
-import type { NodeJSLikeCallback } from '../types.js';
-import type Hexo from '../hexo/index.js';
+import type { NodeJSLikeCallback } from '../types';
+import type Hexo from '../hexo';
 
 interface StoreFunction {
   (this: Hexo, deployArg: { type: string; [key: string]: any }): Promise<any>;
@@ -51,4 +51,4 @@ class Deployer {
   }
 }
 
-export default Deployer;
+export = Deployer;

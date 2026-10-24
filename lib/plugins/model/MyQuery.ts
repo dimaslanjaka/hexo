@@ -1,8 +1,8 @@
 import Query from 'warehouse/dist/query';
 import Schema from 'warehouse/dist/schema';
 import Model from 'warehouse/dist/model';
-import type { TagSchema } from '../../types.js';
-import MyDocument from './MyDocument.js';
+import type { TagSchema } from '../../types';
+import MyDocument from './MyDocument';
 
 export default class MyQuery extends Query<TagSchema> {
   _model: Model<TagSchema>;

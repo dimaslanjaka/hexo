@@ -1,7 +1,7 @@
 import { Cache } from 'hexo-util';
-import type Hexo from '../../hexo/index.js';
+import type Hexo from '../../hexo';
 
-export default (ctx: Hexo) => {
+export = (ctx: Hexo) => {
   const cache = new Cache();
 
   // reset cache for watch mode

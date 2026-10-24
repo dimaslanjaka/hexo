@@ -1,7 +1,7 @@
-import type { StoreFunctionData } from '../../extend/renderer-d.js';
+import type { StoreFunctionData } from '../../extend/renderer';
 
 function jsonRenderer(data: StoreFunctionData): any {
   return JSON.parse(data.text);
 }
 
-export default jsonRenderer;
+export = jsonRenderer;

@@ -1,5 +1,5 @@
 import Promise from 'bluebird';
-import type { FilterOptions } from '../types.js';
+import { FilterOptions } from '../types';
 
 const typeAlias = {
   pre: 'before_post_render',
@@ -109,4 +109,4 @@ class Filter {
   }
 }
 
-export default Filter;
+export = Filter;

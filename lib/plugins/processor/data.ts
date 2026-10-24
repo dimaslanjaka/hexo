@@ -1,9 +1,9 @@
 import { Pattern } from 'hexo-util';
 import { extname } from 'path';
-import type Hexo from '../../hexo/index.js';
-import type { _File } from '../../box/index.js';
+import type Hexo from '../../hexo';
+import type { _File } from '../../box';
 
-export default (ctx: Hexo) => ({
+export = (ctx: Hexo) => ({
   pattern: new Pattern('_data/*path'),
 
   process: function dataProcessor(file: _File) {

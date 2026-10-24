@@ -1,19 +1,12 @@
 {
-  "ts-node": {
-    "experimentalResolver": true
-  },
   "compilerOptions": {
-    "module": "es2022",
-    "moduleResolution": "bundler",
+    "module": "commonjs",
     "target": "es2020",
     "sourceMap": true,
-    "outDir": "tmp/dist",
-    "rootDir": ".",
+    "outDir": "dist",
     "declaration": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "strict": false,
-    "noImplicitAny": false,
     "types": [
       "node",
       "mocha"

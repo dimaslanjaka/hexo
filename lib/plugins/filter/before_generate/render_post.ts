@@ -1,6 +1,6 @@
 import Promise from 'bluebird';
-import type Hexo from '../../../hexo/index.js';
-import type Model from 'warehouse/dist/model' with { 'resolution-mode': 'import' };
+import type Hexo from '../../../hexo';
+import type Model from 'warehouse/dist/model';
 
 function renderPostFilter(this: Hexo): Promise<[any[], any[]]> {
   const renderPosts = (model: Model<any>) => {
@@ -13,7 +13,10 @@ function renderPostFilter(this: Hexo): Promise<[any[], any[]]> {
     });
   };
 
-  return Promise.all([renderPosts(this.model('Post')), renderPosts(this.model('Page'))]);
+  return Promise.all([
+    renderPosts(this.model('Post')),
+    renderPosts(this.model('Page'))
+  ]);
 }
 
-export default renderPostFilter;
+export = renderPostFilter;

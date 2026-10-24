@@ -1,4 +1,4 @@
-import Hexo from '../../../hexo/index.js';
+import Hexo from '../../../hexo/index';
 
 /**
  * before_post_render `data` parameter

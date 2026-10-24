@@ -1,5 +1,4 @@
-import { StoreFunctionData } from '../../extend/renderer-d.js';
-import type Hexo from '../../hexo/index.js';
+import type Hexo from '../../hexo';
 
 /**
 * Pullquote tag
@@ -9,12 +8,10 @@ import type Hexo from '../../hexo/index.js';
 *   Quote string
 *   {% endpullquote %}
 */
-const pullquote = (ctx: Hexo) => function pullquoteTag(args: string[], content: string) {
+export = (ctx: Hexo) => function pullquoteTag(args: string[], content: string) {
   args.unshift('pullquote');
 
-  const result = ctx.render.renderSync({text: content, engine: 'markdown'} as StoreFunctionData);
+  const result = ctx.render.renderSync({text: content, engine: 'markdown'});
 
   return `<blockquote class="${args.join(' ')}">${result}</blockquote>`;
 };
-
-export default pullquote;

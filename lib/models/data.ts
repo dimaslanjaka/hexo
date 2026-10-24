@@ -1,10 +1,10 @@
 import warehouse from 'warehouse';
-import type Hexo from '../hexo/index.js';
-import type { DataSchema } from '../types.js';
+import type Hexo from '../hexo';
+import { DataSchema } from '../types';
 
-export default (_ctx: Hexo) => {
+export = (_ctx: Hexo) => {
   const Data = new warehouse.Schema<DataSchema>({
-    _id: { type: String, required: true },
+    _id: {type: String, required: true},
     data: Object
   });
 

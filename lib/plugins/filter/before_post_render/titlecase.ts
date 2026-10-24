@@ -1,4 +1,4 @@
-import type { RenderData } from '../../../types.js';
+import type { RenderData } from '../../../types';
 
 let titlecase;
 
@@ -9,4 +9,4 @@ function titlecaseFilter(data: RenderData): void {
   data.title = titlecase(data.title);
 }
 
-export default titlecaseFilter;
+export = titlecaseFilter;

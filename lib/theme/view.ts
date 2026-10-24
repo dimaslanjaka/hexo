@@ -2,10 +2,9 @@ import { dirname, extname, join } from 'path';
 import { parse as yfm } from 'hexo-front-matter';
 import Promise from 'bluebird';
 import type Theme from '.';
-import type { Helper } from '../extend/index.js';
-import type Render from '../hexo/render.js';
-import type { HexoRenderOptions } from '../hexo/render-d.js';
-import type { StoreFunctionData } from '../extend/renderer-d.js';
+import type Render from '../hexo/render';
+import type { NodeJSLikeCallback } from '../types';
+import type { Helper } from '../extend';
 
 const assignIn = (target: any, ...sources: any[]) => {
   const length = sources.length;
@@ -36,7 +35,7 @@ class View {
   public _helper: Helper;
   public _render: Render;
 
-  constructor(path: string, data: any) {
+  constructor(path: string, data: string) {
     this.path = path;
     this.source = join(this._theme.base, 'layout', path);
     this.data = typeof data === 'string' ? yfm(data) : data;
@@ -44,7 +43,9 @@ class View {
     this._precompile();
   }
 
-  render(options: Options | ((...args: any[]) => any) = {}, callback?: (...args: any[]) => any) {
+  render(callback: NodeJSLikeCallback<any>): Promise<any>;
+  render(options: Options, callback?: NodeJSLikeCallback<any>): Promise<any>;
+  render(options: Options | NodeJSLikeCallback<any> = {}, callback?: NodeJSLikeCallback<any>): Promise<any> {
     if (!callback && typeof options === 'function') {
       callback = options;
       options = {};
@@ -53,22 +54,20 @@ class View {
     const { layout = (options as Options).layout } = data;
     const locals = this._buildLocals(options as Options);
 
-    return this._compiled(this._bindHelpers(locals))
-      .then(result => {
-        if (result == null || !layout) return result;
+    return this._compiled(this._bindHelpers(locals)).then(result => {
+      if (result == null || !layout) return result;
 
-        const layoutView = this._resolveLayout(layout);
-        if (!layoutView) return result;
+      const layoutView = this._resolveLayout(layout);
+      if (!layoutView) return result;
 
-        const layoutLocals = {
-          ...locals,
-          body: result,
-          layout: false
-        };
+      const layoutLocals = {
+        ...locals,
+        body: result,
+        layout: false
+      };
 
-        return layoutView.render(layoutLocals, callback);
-      })
-      .asCallback(callback);
+      return layoutView.render(layoutLocals, callback);
+    }).asCallback(callback);
   }
 
   renderSync(options: Options = {}) {
@@ -92,15 +91,14 @@ class View {
   }
 
   _buildLocals(locals: Options) {
-    const { ...data } = this.data;
-    delete data.layout;
-    delete data._content;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { layout, _content, ...data } = this.data;
     return assignIn({}, locals, data, {
       filename: this.source
     });
   }
 
-  _bindHelpers(locals: { [x: string]: any; }) {
+  _bindHelpers(locals) {
     const helpers = this._helper.list();
     const keys = Object.keys(helpers);
 
@@ -148,19 +146,19 @@ class View {
     if (renderer && typeof renderer.compile === 'function') {
       const compiled = renderer.compile(data);
 
-      this._compiledSync = (locals: any) => {
+      this._compiledSync = locals => {
         const result = compiled(locals);
         return ctx.execFilterSync(...buildFilterArguments(result));
       };
 
-      this._compiled = (locals: any) =>
-        Promise.resolve(compiled(locals)).then(result => ctx.execFilter(...buildFilterArguments(result)));
+      this._compiled = locals => Promise.resolve(compiled(locals))
+        .then(result => ctx.execFilter(...buildFilterArguments(result)));
     } else {
-      this._compiledSync = (locals: Record<string, any>) => render.renderSync(data as StoreFunctionData, locals);
+      this._compiledSync = locals => render.renderSync(data, locals);
 
-      this._compiled = (locals: HexoRenderOptions) => render.render(data as StoreFunctionData, locals);
+      this._compiled = locals => render.render(data, locals);
     }
   }
 }
 
-export default View;
+export = View;

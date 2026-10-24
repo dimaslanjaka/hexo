@@ -1,6 +1,6 @@
 import { Pattern } from 'hexo-util';
-import * as common from '../../plugins/processor/common.js';
-import type { _File } from '../../box/index.js';
+import * as common from '../../plugins/processor/common';
+import type { _File } from '../../box';
 
 function process(file: _File) {
   const Asset = this.model('Asset');

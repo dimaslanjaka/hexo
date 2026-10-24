@@ -1,15 +1,15 @@
 import warehouse from 'warehouse';
 import { join, posix } from 'path';
-import type Hexo from '../hexo/index.js';
-import type { PostAssetSchema } from '../types.js';
+import type Hexo from '../hexo';
+import type { PostAssetSchema } from '../types';
 
-export default (ctx: Hexo) => {
+export = (ctx: Hexo) => {
   const PostAsset = new warehouse.Schema<PostAssetSchema>({
-    _id: { type: String, required: true },
-    slug: { type: String, required: true },
-    modified: { type: Boolean, default: true },
-    post: { type: warehouse.Schema.Types.CUID, ref: 'Post' },
-    renderable: { type: Boolean, default: true }
+    _id: {type: String, required: true},
+    slug: {type: String, required: true},
+    modified: {type: Boolean, default: true},
+    post: {type: warehouse.Schema.Types.CUID, ref: 'Post'},
+    renderable: {type: Boolean, default: true}
   });
 
   PostAsset.virtual('path').get(function() {

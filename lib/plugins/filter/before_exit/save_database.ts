@@ -1,4 +1,4 @@
-import type Hexo from '../../../hexo/index.js';
+import type Hexo from '../../../hexo';
 
 function saveDatabaseFilter(this: Hexo): Promise<void> {
   if (!this.env.init || !this._dbLoaded) return;
@@ -8,4 +8,4 @@ function saveDatabaseFilter(this: Hexo): Promise<void> {
   });
 }
 
-export default saveDatabaseFilter;
+export = saveDatabaseFilter;

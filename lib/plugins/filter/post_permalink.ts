@@ -1,7 +1,7 @@
 import { createSha1Hash, Permalink, slugize } from 'hexo-util';
 import { basename } from 'path';
-import type Hexo from '../../hexo/index.js';
-import type { PostSchema } from '../../types.js';
+import type Hexo from '../../hexo';
+import type { PostSchema } from '../../types';
 
 let permalink: Permalink;
 
@@ -19,26 +19,14 @@ function postPermalinkFilter(this: Hexo, data: PostSchema): string {
     return __permalink;
   }
 
-  const hash
-    = slug && date
-      ? createSha1Hash()
-        .update(slug + date.unix().toString())
-        .digest('hex')
-        .slice(0, 12)
-      : null;
-
-  const relativeSourcePath = data.source
-    // Normalize path to handle both / and \ (cross-platform)
-    .replace(/\\/g, '/')
-    // Remove leading "_posts/" or "_drafts/" if present
-    .replace(/^_(?:posts|drafts)\//, '')
-    // Remove any extension
-    .replace(/\.[^/.]+$/, '');
+  const hash = slug && date
+    ? createSha1Hash().update(slug + date.unix().toString()).digest('hex').slice(0, 12)
+    : null;
   const meta = {
     id: id || _id,
     title: slug,
     name: typeof slug === 'string' ? basename(slug) : '',
-    post_title: slugize(title, { transform: 1 }),
+    post_title: slugize(title, {transform: 1}),
     year: date.format('YYYY'),
     month: date.format('MM'),
     day: date.format('DD'),
@@ -49,8 +37,7 @@ function postPermalinkFilter(this: Hexo, data: PostSchema): string {
     i_day: date.format('D'),
     timestamp: date.format('X'),
     hash,
-    category: config.default_category,
-    filepath: relativeSourcePath
+    category: config.default_category
   };
 
   if (!permalink || permalink.rule !== config.permalink) {
@@ -90,4 +77,4 @@ function postPermalinkFilter(this: Hexo, data: PostSchema): string {
   return permalink_stringify;
 }
 
-export default postPermalinkFilter;
+export = postPermalinkFilter;
