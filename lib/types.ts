@@ -520,3 +520,9 @@ export interface FilterOptions {
   context?: any;
   args?: any[];
 }
+
+export type MaybePromise<T> = T | Promise<T>;
+
+export type GenericFunction<T, Args extends unknown[] = []> = (
+  ...args: Args
+) => MaybePromise<T>;
