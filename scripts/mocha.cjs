@@ -37,6 +37,14 @@ const files = patterns.length
 
 const uniqueFiles = [...new Set(files.map(file => path.resolve(file)))];
 
+process.on('beforeExit', code => {
+  console.log('[debug] beforeExit:', code);
+});
+
+process.on('exit', code => {
+  console.log('[debug] exit:', code);
+});
+
 if (uniqueFiles.length === 0) {
   console.error('No test files found.');
   process.exitCode = 1;

@@ -1,5 +1,5 @@
-import fs from 'fs-extra';
-import path from 'upath';
+import fs from 'fs';
+import path from 'path';
 import url from 'url';
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
@@ -22,7 +22,7 @@ async function walk(dir, cb) {
   }
 }
 
-const dirnameSnippet = `import NodePath from 'node:path';\nimport NodeUrl from 'node:url';\nconst __dirname = NodePath.dirname(NodeUrl.fileURLToPath(import.meta.url));\n\n`;
+const dirnameSnippet = 'import NodePath from \'node:path\';\nimport NodeUrl from \'node:url\';\nconst __dirname = NodePath.dirname(NodeUrl.fileURLToPath(import.meta.url));\n\n';
 
 async function processFile(file) {
   const content = await fs.readFile(file, 'utf8');
@@ -35,7 +35,7 @@ async function processFile(file) {
 
   let newContent = content;
 
-  const importsString = "import NodePath from 'node:path';\nimport NodeUrl from 'node:url';\n";
+  const importsString = 'import NodePath from \'node:path\';\nimport NodeUrl from \'node:url\';\n';
   const constString = 'const __dirname = NodePath.dirname(NodeUrl.fileURLToPath(import.meta.url));\n\n';
 
   // Insert imports at top (after shebang) if missing
@@ -70,15 +70,14 @@ async function run() {
   const cwd = process.cwd();
   const target = path.join(__dirname, '..', 'dist', 'esm');
 
-  if (!(await exists(target))) {
-    console.error(`Target directory not found: ${target}`);
-    process.exit(1);
+  if (await exists(target)) {
+    await walk(target, processFile);
+  } else {
+    console.error(`Target directory does not exist: ${target}`);
   }
-
-  await walk(target, processFile);
 }
 
-run().catch((err) => {
+run().catch(err => {
   console.error(err);
   process.exit(1);
 });
