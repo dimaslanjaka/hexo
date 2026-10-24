@@ -19,7 +19,7 @@ function toArray(value) {
   } else if (typeof value.toArray === 'function') {
     return value.toArray();
   } else if (value instanceof Map) {
-    const arr = [];
+    const arr: any[] = [];
     value.forEach(v => arr.push(v));
     return arr;
   } else if (value instanceof Set || typeof value === 'string') {
@@ -64,7 +64,7 @@ function njkCompile(data: StoreFunctionData): CompiledTemplate {
 
   return {
     env,
-    template: nunjucks.compile(text, env, data.path)
+    template: nunjucks.compile(text || '', env, data.path)
   };
 }
 
