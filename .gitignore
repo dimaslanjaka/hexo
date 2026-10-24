@@ -20,3 +20,4 @@ dist/
 .yarn/cache*
 .codebase-memory/
 .omo/
+packages/
