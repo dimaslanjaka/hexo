@@ -46,6 +46,14 @@ export interface RenderData {
   more?: string;
 }
 
+export interface StoreFunctionData {
+  path?: any;
+  text?: string;
+  engine?: string;
+  toString?: any;
+  onRenderEnd?: (data: string) => any;
+}
+
 // Schema
 export interface TagSchema {
   id?: string;
