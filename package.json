@@ -5,7 +5,7 @@
   "main": "dist/cjs/hexo/index.js",
   "module": "dist/esm/hexo/index.js",
   "types": "./dist/esm/hexo/index.d.ts",
-  "type": "module",
+  "type": "commonjs",
   "bin": "./bin/hexo",
   "scripts": {
     "build": "tsup && npm run build-tsc && npm run build-exports && node scripts/replace-version.mjs",
@@ -16,7 +16,9 @@
     "prepare": "husky",
     "prepublishOnly": "npm install && npm run clean && npm run build",
     "test-cov": "c8 --reporter=lcovonly npm test -- --no-parallel",
-    "test": "node --import=tsx --import=./scripts/resolve-ts.cjs ./node_modules/mocha/bin/mocha.js test/scripts/**/*.ts",
+    "test": "node scripts/mocha.cjs",
+    "test-esm": "node --import=tsx --import=./scripts/resolve-ts.cjs ./node_modules/mocha/bin/mocha.js test/scripts/**/*.ts",
+    "test2": "node -r ts-node/register --import=./scripts/resolve-ts.cjs ./node_modules/mocha/bin/mocha.js test/scripts/**/*.ts",
     "watch": "npx -y nodemon --delay 5 --watch \"build*.*js\" --watch lib --ext js,ts --exec \"yarn build > build.log 2>&1 && yarn workspace hexo-site exec \\\"hexo generate --verbose --debug\\\"\""
   },
   "files": [
@@ -52,6 +54,7 @@
     "bluebird": "^3.7.2",
     "fast-archy": "^1.0.0",
     "fast-text-table": "^1.0.1",
+    "glob": "^13.0.6",
     "hexo-cli": "^4.3.2",
     "hexo-front-matter": "^4.2.1",
     "hexo-fs": "^5.0.0",
@@ -225,6 +228,11 @@
       "import": "./dist/esm/hexo/default_config.js",
       "require": "./dist/cjs/hexo/default_config.js",
       "types": "./dist/esm/hexo/default_config.d.ts"
+    },
+    "./dist/hexo/findYarnRootWorkspace.txt": {
+      "import": "./dist/esm/hexo/findYarnRootWorkspace.txt",
+      "require": "./dist/cjs/hexo/findYarnRootWorkspace.txt",
+      "types": "./dist/esm/hexo/findYarnRootWorkspace.txt"
     },
     "./dist/hexo/global.d.txt": {
       "import": "./dist/esm/hexo/global.d.txt",
