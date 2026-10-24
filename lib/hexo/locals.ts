@@ -1,8 +1,12 @@
 import { Cache } from 'hexo-util';
+import { Model } from 'warehouse';
 
 class Locals {
   public cache: InstanceType<typeof Cache>;
-  public getters: Record<string, () => any>;
+  public getters: Record<string, (() => any) | null>;
+  public posts!: Model<any>;
+  public tags!: Model<any>;
+  public categories!: Model<any>;
 
   constructor() {
     this.cache = new Cache();
@@ -47,7 +51,7 @@ class Locals {
     return this;
   }
 
-  toObject(): Record<string, any> {
+  toObject(): Locals | Record<string, any> {
     const result = {};
     const keys = Object.keys(this.getters);
 
