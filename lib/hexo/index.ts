@@ -286,10 +286,10 @@ class Hexo extends EventEmitter {
   public source: Source;
   public theme: Theme;
   public locals: Locals;
-  public version: string;
-  public _watchBox: () => void;
-  public lib_dir: string;
-  public core_dir: string;
+  public version!: string;
+  public _watchBox!: null | (() => void);
+  public lib_dir!: string;
+  public core_dir!: string;
   static lib_dir: string;
   static core_dir: string;
   static version: string;
@@ -420,7 +420,7 @@ class Hexo extends EventEmitter {
     });
 
     locals.set('data', () => {
-      const obj = {};
+      const obj: Record<string, any> = {};
 
       db.model('Data').forEach(data => {
         obj[data._id] = data.data;
