@@ -7,7 +7,7 @@
   "types": "./dist/esm/hexo/index.d.ts",
   "bin": "./bin/hexo",
   "scripts": {
-    "build": "tsup && npm run build-tsc && npm run build-exports && node scripts/replace-version.mjs",
+    "build": "tsup && npm run build-tsc && npm run build-exports && node scripts/replace-version.mjs && cp package.json dist/package.json",
     "build-exports": "node scripts/build-package-exports.mjs",
     "build-tsc": "tsc -p tsconfig.build.json --outDir tmp/dist --declaration --noEmit false",
     "clean": "npx -y rimraf build-debug.log dist tmp/dist build.log",
