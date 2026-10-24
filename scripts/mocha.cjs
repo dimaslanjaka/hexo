@@ -1,4 +1,3 @@
-
 process.env.TS_NODE_COMPILER_OPTIONS = JSON.stringify({
   module: 'CommonJS',
   moduleResolution: 'Node',
@@ -16,6 +15,8 @@ require('ts-node').register({
     esModuleInterop: true
   }
 });
+
+require('./resolve-ts-require.cjs').install();
 
 const Mocha = require('mocha');
 const path = require('node:path');

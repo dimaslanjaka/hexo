@@ -38,18 +38,21 @@ registerHooks({
 
     try {
       const parentPath = fileURLToPath(context.parentURL);
-      const tsPath = path.resolve(
-        path.dirname(parentPath),
-        `${specifier.slice(0, -3)}.ts`
-      );
+      const basePath = path.resolve(path.dirname(parentPath), specifier.slice(0, -3));
+      const candidates = [
+        `${basePath}.ts`,
+        path.join(basePath, 'index.ts')
+      ];
 
-      if (fs.existsSync(tsPath)) {
-        log.info(`${specifier} -> ${tsPath}`);
+      for (const tsPath of candidates) {
+        if (fs.existsSync(tsPath)) {
+          log.info(`${specifier} -> ${tsPath}`);
 
-        return {
-          url: pathToFileURL(tsPath).href,
-          shortCircuit: true
-        };
+          return {
+            url: pathToFileURL(tsPath).href,
+            shortCircuit: true
+          };
+        }
       }
 
       return nextResolve(specifier, context);
