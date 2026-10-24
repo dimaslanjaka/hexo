@@ -19,7 +19,8 @@
     "test-cov": "c8 --reporter=lcovonly npm run test-all -- --no-parallel",
     "test-esm": "node --import=tsx --import=./scripts/resolve-ts-v3.cjs ./node_modules/mocha/bin/mocha.js test/scripts/**/*.ts",
     "test2": "node -r ts-node/register --import=./scripts/resolve-ts.cjs ./node_modules/mocha/bin/mocha.js test/scripts/**/*.ts",
-    "watch": "npx -y nodemon --delay 5 --watch \"build*.*js\" --watch lib --ext js,ts --exec \"yarn build > build.log 2>&1 && yarn workspace hexo-site exec \\\"hexo generate --verbose --debug\\\"\""
+    "watch": "npx -y nodemon --delay 5 --watch \"build*.*js\" --watch lib --ext js,ts --exec \"yarn build > build.log 2>&1 && yarn workspace hexo-site exec \\\"hexo generate --verbose --debug\\\"\"",
+    "pack": "npx -y tarball-packer --yarn --filename hexo --normalize-resolutions"
   },
   "files": [
     "dist/",
