@@ -8,7 +8,7 @@ const isDate = (value: moment.MomentInput | moment.Moment): boolean =>
 
 function getMoment(date: moment.MomentInput | moment.Moment, lang: string, timezone: string): moment.Moment {
   if (date == null) date = moment();
-  if (!isMoment(date)) date = moment(isDate(date) ? <Date>date : new Date(<string | number>date));
+  if (!isMoment(date)) date = moment(isDate(date) ? (date as Date) : new Date(date as string | number));
   lang = _toMomentLocale(lang);
 
   if (lang) date = date.locale(lang);
