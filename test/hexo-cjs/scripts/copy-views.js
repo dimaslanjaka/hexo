@@ -1,3 +1,4 @@
+/* global hexo */
 const path = require('path');
 const fs = require('fs-extra');
 const glob = require('glob');
@@ -11,15 +12,15 @@ const base_dir = path.join(__dirname, '..');
 async function main(hexo) {
   const views = path.join(hexo.base_dir, 'views');
   if (fs.existsSync(views)) {
-    const layouts = glob.sync('**/*.njk', { cwd: views, absolute: true }).map((src) => {
+    const layouts = glob.sync('**/*.njk', { cwd: views, absolute: true }).map(src => {
       const dest = path.join(hexo.theme_dir, 'layout', path.basename(src));
       return { src, dest };
     });
-    const css = glob.sync('**/*.{css,scss}', { cwd: views, absolute: true }).map((src) => {
+    const css = glob.sync('**/*.{css,scss}', { cwd: views, absolute: true }).map(src => {
       const dest = path.join(hexo.theme_dir, 'source/css', path.basename(src));
       return { src, dest };
     });
-    const js = glob.sync('**/*.js', { cwd: views, absolute: true }).map((src) => {
+    const js = glob.sync('**/*.js', { cwd: views, absolute: true }).map(src => {
       const dest = path.join(hexo.theme_dir, 'source/js', path.basename(src));
       return { src, dest };
     });
@@ -41,5 +42,5 @@ if (typeof hexo !== 'undefined') {
     .then(() => hexo.load())
     .then(() => main(hexo))
     .then(() => hexo.exit())
-    .catch((e) => hexo.exit(e));
+    .catch(e => hexo.exit(e));
 }

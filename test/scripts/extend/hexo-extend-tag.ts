@@ -1,5 +1,3 @@
-'use strict';
-
 import Tag from '../../../lib/extend/tag';
 import { htmlTag } from 'hexo-util';
 
