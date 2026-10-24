@@ -34,9 +34,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install Dependencies
-        run: npm install
+        run: touch yarn.lock && yarn install
       - name: Test
-        run: npm test -- --no-parallel
+        run: yarn test -- --no-parallel
         env:
           CI: true
   coverage:
@@ -55,9 +55,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install Dependencies
-        run: npm install
+        run: touch yarn.lock && yarn install
       - name: Coverage
-        run: npm run test-cov
+        run: yarn run test-cov
         env:
           CI: true
       - name: Coveralls
