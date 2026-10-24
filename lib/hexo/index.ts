@@ -440,15 +440,20 @@ class Hexo extends EventEmitter {
     this.log.debug('Working directory: %s', picocolors.magenta(tildify(this.base_dir)));
 
     // Load internal plugins
-    require('../plugins/console.js')(this);
-    require('../plugins/filter.js')(this);
-    require('../plugins/generator.js')(this);
-    require('../plugins/helper.js')(this);
-    require('../plugins/highlight.js')(this);
-    require('../plugins/injector.js')(this);
-    require('../plugins/processor.js')(this);
-    require('../plugins/renderer.js')(this);
-    require('../plugins/tag.js').default(this);
+    const loadPlugin = (name: string) => {
+      const plugin = require(`../plugins/${name}.js`);
+      (typeof plugin === 'function' ? plugin : plugin.default)(this);
+    };
+
+    loadPlugin('console');
+    loadPlugin('filter');
+    loadPlugin('generator');
+    loadPlugin('helper');
+    loadPlugin('highlight');
+    loadPlugin('injector');
+    loadPlugin('processor');
+    loadPlugin('renderer');
+    loadPlugin('tag');
 
     // Load config
     return Promise.each([
