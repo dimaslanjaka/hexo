@@ -12,7 +12,9 @@ module.exports = [
       'n/no-missing-require': 0,
       '@typescript-eslint/no-unused-vars': [
         'error', {
-          'argsIgnorePattern': '^_'
+          'varsIgnorePattern': '^_',
+          'argsIgnorePattern': '^_',
+          'caughtErrorsIgnorePattern': '^_'
         }
       ]
     }
