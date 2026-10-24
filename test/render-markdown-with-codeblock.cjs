@@ -1,6 +1,6 @@
-'use strict';
 
-const Hexo = require('../dist/hexo');
+
+const Hexo = require('../dist/cjs/hexo');
 const hexo = new Hexo(__dirname, { silent: false, debug: true });
 
 const main = async () => {
