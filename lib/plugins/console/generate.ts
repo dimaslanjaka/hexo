@@ -8,6 +8,7 @@ import { PassThrough, type Readable } from 'stream';
 import { createSha1Hash } from 'hexo-util';
 import type Hexo from '../../hexo';
 import type Router from '../../hexo/router';
+import { GenericFunction } from '../../types';
 
 interface GenerateArgs {
   f?: boolean
@@ -27,7 +28,7 @@ class Generator {
   public context: Hexo;
   public force: boolean;
   public bail: boolean;
-  public concurrency: string;
+  public concurrency: string | undefined;
   public watch: boolean;
   public deploy: boolean;
   public generatingFiles: Set<string>;
@@ -36,11 +37,11 @@ class Generator {
 
   constructor(ctx: Hexo, args: GenerateArgs) {
     this.context = ctx;
-    this.force = args.f || args.force;
-    this.bail = args.b || args.bail;
+    this.force = args.f || args.force || false;
+    this.bail = args.b || args.bail || false;
     this.concurrency = args.c || args.concurrency;
-    this.watch = args.w || args.watch;
-    this.deploy = args.d || args.deploy;
+    this.watch = args.w || args.watch || false;
+    this.deploy = args.d || args.deploy || false;
     this.generatingFiles = new Set();
     this.start = process.hrtime();
     this.args = args;
@@ -55,7 +56,7 @@ class Generator {
     // Lock the file
     generatingFiles.add(path);
 
-    let promise: Promise<boolean>;
+    let promise: Promise<boolean | undefined>;
 
     if (this.force) {
       promise = this.writeFile(path, true);
@@ -72,12 +73,12 @@ class Generator {
       generatingFiles.delete(path);
     });
   }
-  writeFile(path: string, force?: boolean): Promise<boolean> {
+  writeFile(path: string, force?: boolean): Promise<boolean | undefined> {
     const { route, log } = this.context;
     const publicDir = this.context.public_dir;
     const Cache = this.context.model('Cache');
     const dataStream = this.wrapDataStream(route.get(path));
-    const buffers = [];
+    const buffers: any[] = [];
     const hasher = createSha1Hash();
 
     const finishedPromise = new Promise<void>((resolve, reject) => {
@@ -169,8 +170,8 @@ class Generator {
 
       throw err;
     }).then(() => {
-      const task = (fn, path) => () => fn.call(this, path);
-      const doTask = fn => fn();
+      const task = (fn: GenericFunction<any, [string]>, path: string) => () => fn.call(this, path);
+      const doTask = (fn: GenericFunction<Promise<any>, []>) => fn();
       const routeList = route.list();
       const routeSet = new Set(routeList);
       const publicFiles = Cache.filter(item => item._id.startsWith('public/')).map(item => item._id.substring(7));
