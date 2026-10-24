@@ -26,6 +26,7 @@ function postPermalinkFilter(this: Hexo, data: PostSchema): string {
     id: id || _id,
     title: slug,
     name: typeof slug === 'string' ? basename(slug) : '',
+    filepath: data.source ? data.source.replace(/\\/g, '/').replace(/\.[^/.]+$/, '') : slug,
     post_title: slugize(title, {transform: 1}),
     year: date.format('YYYY'),
     month: date.format('MM'),
