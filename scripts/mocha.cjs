@@ -8,6 +8,7 @@ process.env.TS_NODE_COMPILER_OPTIONS = JSON.stringify({
 
 require('ts-node').register({
   transpileOnly: true,
+  experimentalResolver: true,
   compilerOptions: {
     module: 'CommonJS',
     moduleResolution: 'Node',
