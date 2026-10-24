@@ -44,7 +44,7 @@ class View {
     this._precompile();
   }
 
-  render(options: Options | ((...args: any[]) => any) = {}, callback: (...args: any[]) => any) {
+  render(options: Options | ((...args: any[]) => any) = {}, callback?: (...args: any[]) => any) {
     if (!callback && typeof options === 'function') {
       callback = options;
       options = {};
@@ -91,7 +91,7 @@ class View {
     return layoutView.renderSync(layoutLocals);
   }
 
-  _buildLocals(locals) {
+  _buildLocals(locals: Options) {
     const { ...data } = this.data;
     delete data.layout;
     delete data._content;
@@ -100,7 +100,7 @@ class View {
     });
   }
 
-  _bindHelpers(locals) {
+  _bindHelpers(locals: { [x: string]: any; }) {
     const helpers = this._helper.list();
     const keys = Object.keys(helpers);
 
