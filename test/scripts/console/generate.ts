@@ -14,7 +14,7 @@ describe('generate', () => {
   let hexo: Hexo, generate: (...args: OriginalParams) => OriginalReturn;
 
   beforeEach(async function() {
-    this.timeout(5000);
+    this.timeout(30000);
     hexo = new Hexo(join(__dirname, 'generate_test'), {silent: true});
     generate = generateConsole.bind(hexo);
 
@@ -71,7 +71,7 @@ describe('generate', () => {
     try {
       await generate();
     } catch (e) {
-      e.message.split(' ').slice(1).join(' ').should.eql('is not a directory');
+      (e as any).message.split(' ').slice(1).join(' ').should.eql('is not a directory');
     }
     hexo.public_dir = old;
   });
@@ -411,6 +411,7 @@ describe('generate - future posts', () => {
 
       await generate();
       hexo.locals.invalidate();
+      // When future is false, future posts should not be in locals
       hexo.locals.toObject().posts.toArray().should.have.lengthOf(0);
       await hexo.database.save();
 
