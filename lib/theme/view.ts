@@ -4,8 +4,8 @@ import Promise from 'bluebird';
 import type Theme from '.';
 import type { Helper } from '../extend/index.js';
 import type Render from '../hexo/render.js';
-import { HexoRenderOptions } from '../hexo/render-d.js';
-import { StoreFunctionData } from '../extend/renderer-d.js';
+import type { HexoRenderOptions } from '../hexo/render-d.js';
+import type { StoreFunctionData } from '../extend/renderer-d.js';
 
 const assignIn = (target: any, ...sources: any[]) => {
   const length = sources.length;

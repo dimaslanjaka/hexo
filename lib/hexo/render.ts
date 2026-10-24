@@ -4,7 +4,7 @@ import { readFile, readFileSync } from 'hexo-fs';
 import type Hexo from './index.js';
 import type { Renderer } from '../extend/index.js';
 import type { StoreFunction, StoreFunctionData, StoreSyncFunction } from '../extend/renderer.js';
-import { NodeJSLikeCallback } from '../types.js';
+import type { NodeJSLikeCallback } from '../types.js';
 
 const getExtname = (str: string): string => {
   if (typeof str !== 'string') return '';

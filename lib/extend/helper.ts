@@ -1,5 +1,5 @@
 import Hexo from '../hexo/index.js';
-import { PageSchema } from '../types.js';
+import type { PageSchema } from '../types.js';
 import * as hutil from 'hexo-util';
 
 interface HexoContext extends Hexo {
