@@ -20,15 +20,33 @@ const Mocha = require('mocha');
 const path = require('node:path');
 const glob = require('glob');
 
+const args = process.argv.slice(2);
+const noParallel = args.includes('--no-parallel');
+
+const patterns = args
+  .filter(arg => !arg.startsWith('--'))
+  .map(arg => arg.replace(/\\/g, '/'));
+
+const files = patterns.length
+  ? patterns.flatMap(pattern => glob.sync(pattern))
+  : glob.sync('test/scripts/**/*.ts');
+
 const mocha = new Mocha({
-  parallel: process.argv.includes('--no-parallel') ? false : undefined
+  parallel: noParallel ? false : undefined
 });
 
-for (const file of glob.sync('test/scripts/**/*.ts')) {
-  mocha.suite.emit('pre-require', global, file, mocha);
-  require(path.resolve(file));
+if (files.length === 0) {
+  console.error('No test files found.');
+  process.exitCode = 1;
+} else {
+  for (const file of [...new Set(files)]) {
+    const absolutePath = path.resolve(file);
+
+    mocha.suite.emit('pre-require', global, absolutePath, mocha);
+    require(absolutePath);
+  }
+
+  mocha.run(failures => {
+    process.exitCode = failures ? 1 : 0;
+  });
 }
-
-mocha.run(failures => {
-  process.exitCode = failures ? 1 : 0;
-});
