@@ -5,6 +5,9 @@ const { fileURLToPath, pathToFileURL } = require('node:url');
 const { registerHooks } = require('node:module');
 const pc = require('picocolors');
 
+// assign global __dirname for tsx to work properly
+// globalThis.__dirname ??= path.join(process.cwd(), 'tmp/test');
+
 const log = {
   info: message => console.error(
     `${pc.gray(new Date().toISOString())} ${pc.green('[resolve-ts]')} ${message}`
