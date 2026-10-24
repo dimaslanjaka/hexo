@@ -8,15 +8,10 @@
   "type": "module",
   "bin": "./bin/hexo",
   "scripts": {
-    "build": "npm run build-cjs && npm run build-esm && npm run build-tsc && npm run build-exports && node scripts/replace-version.mjs",
-    "build-cjs": "tsc -p tsconfig.cjs.json",
-    "build-dts": "tsc --emitDeclarationOnly --declaration --outDir dist",
-    "build-esm": "tsc -p tsconfig.esm.json && node scripts/fix-dirname-esm.mjs",
+    "build": "tsup && npm run build-tsc && npm run build-exports && node scripts/replace-version.mjs",
     "build-exports": "node scripts/build-package-exports.mjs",
-    "build-rollup": "npm run build-to-tmp && rollup -c -m",
-    "build-tsc": "tsc -p tsconfig.build.json --outDir dist --declaration --noEmit false",
-    "build-to-tmp": "tsc --outDir tmp/dist",
-    "clean": "npx -y rimraf build-debug.log dist build.log",
+    "build-tsc": "tsc -p tsconfig.build.json --outDir tmp/dist --declaration --noEmit false",
+    "clean": "npx -y rimraf build-debug.log dist tmp/dist build.log",
     "eslint": "eslint lib test",
     "prepare": "husky",
     "prepublishOnly": "npm install && npm run clean && npm run build",
@@ -75,17 +70,12 @@
     "strip-ansi": "^7.1.0",
     "tildify": "^3.0.0",
     "titlecase": "^1.1.3",
-    "warehouse": "^6.0.0"
+    "warehouse": "https://github.com/dimaslanjaka/warehouse/raw/20c740d/release/warehouse.tgz"
   },
   "devDependencies": {
     "0x": "^6.0.0",
     "@babel/core": "^7.29.0",
     "@babel/preset-env": "^7.29.0",
-    "@rollup/plugin-babel": "^6.1.0",
-    "@rollup/plugin-commonjs": "^29.0.0",
-    "@rollup/plugin-json": "^6.1.0",
-    "@rollup/plugin-node-resolve": "^16.0.3",
-    "@rollup/plugin-typescript": "^12.3.0",
     "@types/abbrev": "^1.1.3",
     "@types/babel__core": "^7",
     "@types/babel__preset-env": "^7",
@@ -111,9 +101,9 @@
     "husky": "^9.1.7",
     "lint-staged": "^15.3.0",
     "mocha": "^10.0.0",
-    "rollup": "^4.57.1",
     "sinon": "^17.0.1",
     "ts-node": "^10.9.1",
+    "tsup": "^9.0.0",
     "tsx": "^4.23.15",
     "typescript": "^5.3.2"
   },
@@ -235,11 +225,6 @@
       "import": "./dist/esm/hexo/default_config.js",
       "require": "./dist/cjs/hexo/default_config.js",
       "types": "./dist/esm/hexo/default_config.d.ts"
-    },
-    "./dist/hexo/findYarnRootWorkspace": {
-      "import": "./dist/esm/hexo/findYarnRootWorkspace.js",
-      "require": "./dist/cjs/hexo/findYarnRootWorkspace.js",
-      "types": "./dist/esm/hexo/findYarnRootWorkspace.d.ts"
     },
     "./dist/hexo/global.d.txt": {
       "import": "./dist/esm/hexo/global.d.txt",

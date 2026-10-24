@@ -7,7 +7,7 @@
     "moduleResolution": "bundler",
     "target": "es2020",
     "sourceMap": true,
-    "outDir": "dist",
+    "outDir": "tmp/dist",
     "rootDir": ".",
     "declaration": true,
     "skipLibCheck": true,

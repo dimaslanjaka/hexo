@@ -9,6 +9,7 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "noImplicitAny": false,
+    "strict": false,
     "types": ["node", "mocha"]
   },
   "include": ["lib/**/*.ts"],
