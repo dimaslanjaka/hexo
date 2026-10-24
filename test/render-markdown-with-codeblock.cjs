@@ -1,7 +1,17 @@
-
-
 const Hexo = require('../dist/cjs/hexo');
+const hashFiles = require('./util/hashFiles.cjs');
+const fs = require('fs');
+
 const hexo = new Hexo(__dirname, { silent: false, debug: true });
+
+// Expose helper to Hexo's Nunjucks tag environment
+// hexo.extend.helper.register('hashFiles', hashFiles.bind(hexo));
+// Expose helper to Hexo's Nunjucks tag environment
+hexo.extend.tag.env.addGlobal('hashFiles', hashFiles.bind(hexo));
+
+hexo.extend.tag.env.addGlobal('debugArgs', (...args) => {
+  return JSON.stringify(args);
+});
 
 const main = async () => {
   await hexo.init();
@@ -31,18 +41,19 @@ updated: 2023-10-04T09:26:26+07:00
 ---
 ## below is pretext
 
-inline codeblock \`build-\${{ hashFiles('package-lock.json') }}\`
+inline codeblock \`build-{{ hashFiles('render-markdown-with-codeblock.cjs') }}\`
+{{ debugArgs('render-markdown-with-codeblock.cjs') }}
 
 \`\`\`js
-const varx = \`build-\${{ hashFiles('package-lock.json') }}\`
+const varx = \`build-\${{ hashFiles('fixtures') }}\`
 \`\`\`
 
 \`\`\`ts
-const xvar = \`build-\${{ hashFiles('package-lock.json') }}\`
+const xvar = \`build-\${{ hashFiles('fixtures') }}\`
 \`\`\`
 
 \`\`\`
-const var = \`build-\${{ hashFiles('package-lock.json') }}\`
+const var = \`build-\${{ hashFiles('fixtures') }}\`
 \`\`\`
 
 ## below is meta info
@@ -55,7 +66,11 @@ const var = \`build-\${{ hashFiles('package-lock.json') }}\`
     content,
     engine: 'markdown'
   });
-  console.log(data.content.trim());
+  const file = 'tmp/test/render-markdown-with-codeblock.md';
+  fs.mkdirSync('tmp/test', { recursive: true });
+  fs.writeFileSync(file, data.content.trim(), 'utf-8');
+  console.log(`Rendered content:\n${data.content.trim()}`);
+  console.log(`Rendered content written to ${file}`);
 };
 
 main();
