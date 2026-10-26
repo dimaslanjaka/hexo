@@ -50,7 +50,7 @@ class Filter {
     if (typeof fn !== 'function') throw new TypeError('fn must be a function');
 
     type = typeAlias[type as string] || type;
-    priority = priority == null ? 10 : priority;
+    priority ??= 10;
 
     const store = this.store[type as string] || [];
     this.store[type as string] = store;
@@ -100,8 +100,8 @@ class Filter {
 
     args.unshift(data);
 
-    for (let i = 0, len = filtersLen; i < len; i++) {
-      const result = Reflect.apply(filters[i], ctx, args);
+    for (const filter of filters) {
+      const result = Reflect.apply(filter, ctx, args);
       args[0] = result == null ? args[0] : result;
     }
 
