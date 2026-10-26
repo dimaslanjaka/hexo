@@ -1,11 +1,11 @@
 {
   "/release/hexo.tgz": {
     "integrity": {
-      "sha1": "f807cf387b78383fc39845066c3048a4d8eea370",
-      "sha256": "tdOoXDzX+3QXPQb4BlxNmUQzx5FhOUWNJjtTZJt43Hg=",
-      "md5": "e355a055852c31729c154a494e5adcf9",
-      "sha512": "D7YE5y2xc+lc3gBVPZ8nUdHlD0033hcYiEBl9QIUghw8B/QgGLFZT5bAXYf17IKp5GEUXK4afRdksj1ZFoG8Dw=="
+      "sha1": "e6e268fb5066d079a01d06553893c86c70c4b621",
+      "sha256": "gZcstOlIRNkfF5XDf80JfuuKKWar2DiXFADSIJX7f3c=",
+      "md5": "ae938c884e78181fb0ccf8cdb9428bdc",
+      "sha512": "XZy6Y4vrgqEKfRBSVwKwWU1Mucivl5JsBwsygr78CDAmH3yTFYeRTgdlppWu0D+USChvc2/RrmFW+pw2Td221A=="
     },
-    "size": "358.04 KB"
+    "size": "357.20 KB"
   }
 }
