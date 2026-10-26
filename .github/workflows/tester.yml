@@ -35,6 +35,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install Dependencies
         run: touch yarn.lock && yarn install
+      - name: Build
+        run: yarn build
       - name: Test
         run: yarn test -- --no-parallel
         env:
@@ -56,6 +58,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install Dependencies
         run: touch yarn.lock && yarn install
+      - name: Build
+        run: yarn build
       - name: Coverage
         run: yarn run test-cov
         env:
