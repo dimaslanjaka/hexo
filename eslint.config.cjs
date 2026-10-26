@@ -28,7 +28,16 @@ module.exports = [
           'argsIgnorePattern': '^_',
           'caughtErrorsIgnorePattern': '^_'
         }
-      ]
+      ],
+      // Keep allowing the triple slashes from the spaced-comment rule
+      'spaced-comment': ['error', 'always', { 'line': { 'markers': ['/'] } }],
+
+      // Ban path-based triple-slash references (forces import style)
+      '@typescript-eslint/triple-slash-reference': ['error', {
+        'path': 'never',
+        'types': 'prefer-import',
+        'lib': 'always'
+      }]
     }
   },
   // Configurations applied only to test files
