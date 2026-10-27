@@ -6,7 +6,6 @@ import { Pattern } from 'hexo-util';
 import * as picocolors from 'picocolors';
 import type { _File } from '../../box';
 import type Hexo from '../../hexo';
-import type { Stats } from 'fs';
 import { PageSchema } from '../../types';
 import SourceIdIndex from './source_id_index';
 
@@ -19,7 +18,7 @@ export = (ctx: Hexo) => {
 
       return {
         renderable: ctx.render.isRenderable(path) && !isMatch(path, ctx.config.skip_render)
-      };
+      } as Record<string, any>;
     }),
 
     process: function assetProcessor(file: _File) {
@@ -58,7 +57,7 @@ function processPage(ctx: Hexo, file: _File, sourceIndex: SourceIdIndex<PageSche
   return Promise.all([
     file.stat(),
     file.read()
-  ]).spread((stats: Stats, content: string) => {
+  ]).then(([stats, content]) => {
     const data: PageSchema = yfm(content);
     const output = ctx.render.getOutput(path);
 
