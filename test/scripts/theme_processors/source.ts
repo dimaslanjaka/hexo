@@ -9,7 +9,7 @@ type SourceParams = Parameters<typeof source['process']>
 type SourceReturn = ReturnType<typeof source['process']>
 
 describe('source', () => {
-  const hexo = new Hexo(join(__dirname, 'source_test'), {silent: true});
+  const hexo = new Hexo(join(__dirname, 'source_test'), { silent: true });
   const process: (...args: SourceParams) => BluebirdPromise<SourceReturn> = BluebirdPromise.method(source.process.bind(hexo));
   const themeDir = join(hexo.base_dir, 'themes', 'test');
   const Asset = hexo.model('Asset');
@@ -17,7 +17,7 @@ describe('source', () => {
   function newFile(options) {
     const { path } = options;
 
-    options.params = {path};
+    options.params = { path };
     options.path = 'source/' + path;
     options.source = join(themeDir, options.path);
 
@@ -36,17 +36,18 @@ describe('source', () => {
 
   it('pattern', () => {
     const { pattern } = source;
+    const match = (input: string) => pattern.match(input) || false;
 
-    pattern.match('source/foo.jpg').should.eql({path: 'foo.jpg'});
-    pattern.match('source/_foo.jpg').should.be.false;
-    pattern.match('source/foo/_bar.jpg').should.be.false;
-    pattern.match('source/foo.jpg~').should.be.false;
-    pattern.match('source/foo.jpg%').should.be.false;
-    pattern.match('layout/foo.swig').should.be.false;
-    pattern.match('layout/foo.njk').should.be.false;
-    pattern.match('package.json').should.be.false;
-    pattern.match('node_modules/test/test.js').should.be.false;
-    pattern.match('source/node_modules/test/test.js').should.be.false;
+    match('source/foo.jpg').should.eql({ path: 'foo.jpg' });
+    match('source/_foo.jpg').should.equal(false);
+    match('source/foo/_bar.jpg').should.equal(false);
+    match('source/foo.jpg~').should.equal(false);
+    match('source/foo.jpg%').should.equal(false);
+    match('layout/foo.swig').should.equal(false);
+    match('layout/foo.njk').should.equal(false);
+    match('package.json').should.equal(false);
+    match('node_modules/test/test.js').should.equal(false);
+    match('source/node_modules/test/test.js').should.equal(false);
   });
 
   it('type: create', async () => {
