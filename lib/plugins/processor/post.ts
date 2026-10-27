@@ -7,7 +7,6 @@ import { slugize, Pattern, Permalink } from 'hexo-util';
 import * as picocolors from 'picocolors';
 import type { _File } from '../../box';
 import type Hexo from '../../hexo';
-import type { Stats } from 'fs';
 import { PostAssetSchema, PostSchema } from '../../types';
 import type Document from 'warehouse/dist/document';
 import SourceIdIndex from './source_id_index';
@@ -97,7 +96,7 @@ function processPost(ctx: Hexo, file: _File, sourceIndex: SourceIdIndex<PostSche
   return Promise.all([
     file.stat(),
     file.read()
-  ]).spread((stats: Stats, content: string) => {
+  ] as const).then(([stats, content]) => {
     const data: PostSchema = yfm(content);
     const info = parseFilename(config.new_post_name, path);
     const keys = Object.keys(info);
