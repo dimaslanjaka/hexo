@@ -1,6 +1,5 @@
 import moment from 'moment';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import picocolors from 'picocolors';
 import Hexo from '../../lib/hexo/index.js';
 import postPermalinkFilter from '../../lib/plugins/filter/post_permalink.js';
@@ -8,7 +7,7 @@ import postPermalinkFilter from '../../lib/plugins/filter/post_permalink.js';
 type PostPermalinkFilterParams = Parameters<typeof postPermalinkFilter>;
 type PostPermalinkFilterReturn = ReturnType<typeof postPermalinkFilter>;
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+// const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const hexo = new Hexo(path.resolve(__dirname, '../fixtures'));
 const postPermalink: (...args: PostPermalinkFilterParams) => PostPermalinkFilterReturn = postPermalinkFilter.bind(hexo);
 const permalinkPatterns = [':filepath.html'];
