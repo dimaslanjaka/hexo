@@ -118,7 +118,7 @@ export interface BasePagePostSchema {
   /**
    * Article last updated date
    */
-  updated: moment.Moment,
+  updated?: moment.Moment,
 
   /**
    * 	Comment enabled or not
@@ -174,7 +174,7 @@ export interface BasePagePostSchema {
   /**
    * Full (encoded) URL of the article
    */
-  permalink: string;
+  permalink?: string;
 
   /**
    * The photos of the article (Used in gallery posts)
