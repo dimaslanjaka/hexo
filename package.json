@@ -14,7 +14,7 @@
     "eslint": "eslint lib test",
     "prepare": "husky",
     "prepublishOnly": "npm install && npm run clean && npm run build",
-    "test": "mocha --require ts-node/register --require ./scripts/resolve-ts-require.cjs --timeout 60000",
+    "test": "mocha --require ts-node/register --require ./scripts/resolve-ts-v3.cjs --timeout 60000",
     "test-all": "npm test -- test/scripts/**/*.ts",
     "test-cov": "c8 --reporter=lcovonly npm run test-all -- --no-parallel",
     "test-esm": "node --import=tsx --import=./scripts/resolve-ts-v3.cjs ./node_modules/mocha/bin/mocha.js test/scripts/**/*.ts",
