@@ -1,6 +1,6 @@
 import { Pattern } from 'hexo-util';
-import * as common from '../../plugins/processor/common';
-import type { _File } from '../../box';
+import * as common from '../../plugins/processor/common.js';
+import type { _File } from '../../box/index.js';
 
 function process(file: _File) {
   const Asset = this.model('Asset');
@@ -23,14 +23,14 @@ function process(file: _File) {
   });
 }
 
-const pattern = new Pattern(path => {
-  if (!path.startsWith('source/')) return false;
+const pattern = new Pattern((path => {
+  if (!path.startsWith('source/')) return;
 
   path = path.substring(7);
-  if (common.isHiddenFile(path) || common.isTmpFile(path) || path.includes('node_modules')) return false;
+  if (common.isHiddenFile(path) || common.isTmpFile(path) || path.includes('node_modules')) return;
 
   return {path};
-});
+}) as (path: string) => Record<string, any> | undefined);
 
 export const source = {
   pattern,
