@@ -143,14 +143,16 @@ describe('External link', () => {
 });
 
 describe('External link - post', () => {
-  const Hexo = require('../../../lib/hexo');
+  const HexoModule = require('../../../lib/hexo');
+  const Hexo = HexoModule.default || HexoModule;
   const hexo = new Hexo();
 
   let externalLink: (...args: ExternalLinkPostParams) => ExternalLinkPostReturn;
 
   beforeEach(() => {
     decache('../../../lib/plugins/filter/after_post_render/external_link');
-    externalLink = require('../../../lib/plugins/filter/after_post_render/external_link').bind(hexo);
+    const extLinkModule = require('../../../lib/plugins/filter/after_post_render/external_link');
+    externalLink = (extLinkModule.default || extLinkModule).bind(hexo);
   });
 
   hexo.config = {

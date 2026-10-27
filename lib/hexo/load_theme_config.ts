@@ -1,8 +1,7 @@
 import { join, parse, basename, extname } from 'path';
-import tildify from 'tildify';
+import { tildify, deepMerge } from 'hexo-util';
 import { exists, readdir } from 'hexo-fs';
 import * as picocolors from 'picocolors';
-import { deepMerge } from 'hexo-util';
 import type Hexo from './index';
 import type Promise from 'bluebird';
 

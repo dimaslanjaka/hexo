@@ -1,6 +1,5 @@
 import Promise from 'bluebird';
 import { sep, join, dirname } from 'path';
-import tildify from 'tildify';
 import Database from 'warehouse';
 import * as picocolors from 'picocolors';
 import { EventEmitter } from 'events';
@@ -35,7 +34,7 @@ import Locals from './locals';
 import defaultConfig from './default_config';
 import loadDatabase from './load_database';
 import multiConfigPath from './multi_config_path';
-import { deepMerge, full_url_for } from 'hexo-util';
+import { deepMerge, full_url_for, tildify } from 'hexo-util';
 import type Box from '../box';
 import type { BaseGeneratorReturn, FilterOptions, LocalsType, NodeJSLikeCallback, SiteLocals } from '../types';
 import type { AddSchemaTypeOptions } from 'warehouse/dist/types';
@@ -127,9 +126,9 @@ interface Args {
    */
   draft?: boolean;
 
-    /**
-   * Enable to add drafts to the posts list.
-   */
+  /**
+ * Enable to add drafts to the posts list.
+ */
   drafts?: boolean;
   _?: string[];
   output?: string;
@@ -430,7 +429,6 @@ class Hexo extends EventEmitter {
 
   /**
    * Load configuration and plugins.
-   * @returns {Promise}
    * @link https://hexo.io/api#Initialize
    */
   init(): Promise<void> {
@@ -571,9 +569,9 @@ class Hexo extends EventEmitter {
     }).then(() => {
       mergeCtxThemeConfig(this);
 
-      this.source.on('processAfter', this._watchBox);
+      if (this._watchBox) this.source.on('processAfter', this._watchBox);
       this.theme.on('processAfter', () => {
-        this._watchBox();
+        if (this._watchBox) this._watchBox();
         mergeCtxThemeConfig(this);
       });
 
@@ -639,7 +637,7 @@ class Hexo extends EventEmitter {
 
       log.debug('Generator: %s', picocolors.magenta(key));
       return Reflect.apply(generator, this, [siteLocals]);
-    }).reduce((result, data) => {
+    }).reduce((result: any[], data) => {
       return data ? result.concat(data) : result;
     }, []);
   }
@@ -676,7 +674,7 @@ class Hexo extends EventEmitter {
   }
 
   _generate(options: { cache?: boolean } = {}): Promise<any> {
-    if (this._isGenerating) return;
+    if (this._isGenerating) return undefined as any;
 
     const useCache = options.cache;
 
@@ -689,7 +687,7 @@ class Hexo extends EventEmitter {
     // locals should be invalidated before before_generate filters because tags may use locals
     this.locals.invalidate();
     return this.execFilter('before_generate', null, { context: this })
-      .then(() => this._routerRefresh(this._runGenerators(), useCache)).then(() => {
+      .then(() => this._routerRefresh(this._runGenerators(), useCache || false)).then(() => {
         this.emit('generateAfter');
 
         // Run after_generate filters
@@ -743,4 +741,5 @@ declare global {
   const hexo: Hexo;
 }
 
-export = Hexo;
+export { Hexo };
+export default Hexo;

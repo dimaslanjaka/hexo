@@ -1,4 +1,4 @@
-import tildify from 'tildify';
+import { tildify } from 'hexo-util';
 import * as picocolors from 'picocolors';
 import { basename } from 'path';
 import Hexo from '../../hexo';

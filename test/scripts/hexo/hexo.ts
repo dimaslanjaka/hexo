@@ -41,7 +41,7 @@ describe('Hexo', () => {
 
   after(() => rmdir(hexo.base_dir));
 
-  hexo.extend.console.register('test', (args) => args);
+  hexo.extend.console.register('test', args => args);
 
   it('constructor', () => {
     const hexo = new Hexo(__dirname);
@@ -82,7 +82,7 @@ describe('Hexo', () => {
     data.should.eql({ foo: 'bar' });
   });
 
-  it('call() - callback', (callback) => {
+  it('call() - callback', callback => {
     hexo.call('test', { foo: 'bar' }, (err, data) => {
       should.not.exist(err);
       data.should.eql({ foo: 'bar' });
@@ -91,7 +91,7 @@ describe('Hexo', () => {
     });
   });
 
-  it('call() - callback without args', (callback) => {
+  it('call() - callback without args', callback => {
     hexo.call('test', (err, data) => {
       should.not.exist(err);
       data.should.eql({});
@@ -104,7 +104,7 @@ describe('Hexo', () => {
     try {
       await hexo.call('nothing');
       should.fail('Return value must be rejected');
-    } catch (err) {
+    } catch (err: any) {
       err.should.property('message', 'Console `nothing` has not been registered yet!');
     }
   });
@@ -237,7 +237,7 @@ describe('Hexo', () => {
   it('load() - merge theme config - filter', async () => {
     const hexo = new Hexo(__dirname, { silent: true });
 
-    const validateThemeConfig = function () {
+    const validateThemeConfig = function() {
       this.theme.config.a.b.should.eql(3);
     };
 
@@ -317,8 +317,8 @@ describe('Hexo', () => {
     listener.calledOnce.should.be.true;
   });
 
-  it('exit() - error handling - callback', (callback) => {
-    hexo.once('exit', (err) => {
+  it('exit() - error handling - callback', callback => {
+    hexo.once('exit', err => {
       err.should.eql({ foo: 'bar' });
       callback();
     });
@@ -330,7 +330,7 @@ describe('Hexo', () => {
     return BluebirdPromise.all([
       hexo.exit({ foo: 'bar' }),
       new BluebirdPromise((resolve, reject) => {
-        hexo.once('exit', (err) => {
+        hexo.once('exit', err => {
           try {
             err.should.eql({ foo: 'bar' });
             resolve();
@@ -356,7 +356,7 @@ describe('Hexo', () => {
     hexo.locals.get('posts').toArray().should.eql(posts);
     hexo.config.render_drafts = false;
 
-    posts.map((post) => Post.removeById(post._id));
+    posts.map(post => Post.removeById(post._id));
   });
 
   it('future posts', async () => {
@@ -379,7 +379,7 @@ describe('Hexo', () => {
     hexo.locals.invalidate();
     hexo.locals.get('posts').map(mapper).should.eql([posts[0]._id]);
 
-    posts.map((post) => Post.removeById(post._id));
+    posts.map(post => Post.removeById(post._id));
   });
 
   it('future pages', async () => {
@@ -401,7 +401,7 @@ describe('Hexo', () => {
     hexo.locals.invalidate();
     hexo.locals.get('pages').map(mapper).should.eql([pages[0]._id]);
 
-    pages.map((page) => Page.removeById(page._id));
+    pages.map(page => Page.removeById(page._id));
   });
 
   it('locals.data', async () => {
@@ -415,7 +415,7 @@ describe('Hexo', () => {
       comments: { bar: 2 }
     });
 
-    data.map((data) => data.remove());
+    data.map(data => data.remove());
   });
 
   it('_generate()', async () => {
@@ -527,7 +527,7 @@ describe('Hexo', () => {
   });
 
   it('_generate() - _after_html_render filter', async () => {
-    const hook = spy((result) => result.replace('foo', 'bar'));
+    const hook = spy(result => result.replace('foo', 'bar'));
     hexo.extend.filter.register('after_render:html', hook);
     hexo.theme.setView('test.njk', 'foo');
     hexo.extend.generator.register('test', () => ({
@@ -540,7 +540,7 @@ describe('Hexo', () => {
   });
 
   it('_generate() - after_render:html is alias of _after_html_render', async () => {
-    const hook = spy((result) => result.replace('foo', 'bar'));
+    const hook = spy(result => result.replace('foo', 'bar'));
     hexo.extend.filter.register('after_render:html', hook);
     hexo.theme.setView('test.njk', 'foo');
     hexo.extend.generator.register('test', () => ({
@@ -597,7 +597,7 @@ describe('Hexo', () => {
     await checkStream(route.get(path), full_url_for.call(hexo, path));
   });
 
-  it("_generate() - do nothing if it's generating", () => {
+  it('_generate() - do nothing if it\'s generating', () => {
     const hook = spy();
     hexo.extend.generator.register('test', hook);
 
@@ -676,7 +676,7 @@ describe('Hexo', () => {
   });
 
   it('execFilter()', async () => {
-    const fn = (str) => {
+    const fn = str => {
       return str + 'foo';
     };
     hexo.extend.filter.register('exec_test', fn);
@@ -687,7 +687,7 @@ describe('Hexo', () => {
   });
 
   it('execFilter() - promise', async () => {
-    const fn = (str) => {
+    const fn = str => {
       return new BluebirdPromise((resolve, _reject) => {
         resolve(str + 'bar');
       });
@@ -700,7 +700,7 @@ describe('Hexo', () => {
   });
 
   it('execFilterSync()', () => {
-    hexo.extend.filter.register('exec_sync_test', (data) => {
+    hexo.extend.filter.register('exec_sync_test', data => {
       data.should.eql('');
       return data + 'foo';
     });

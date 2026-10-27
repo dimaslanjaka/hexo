@@ -1,10 +1,9 @@
 import { sep, resolve, join, parse, basename, extname } from 'path';
-import tildify from 'tildify';
+import { tildify, deepMerge } from 'hexo-util';
 import Theme from '../theme';
 import Source from './source';
 import { exists, readdir } from 'hexo-fs';
 import * as picocolors from 'picocolors';
-import { deepMerge } from 'hexo-util';
 import validateConfig from './validate_config';
 import type Hexo from './index';
 
@@ -65,7 +64,7 @@ export = async (ctx: Hexo): Promise<void> => {
   ctx.theme = new Theme(ctx, { ignored });
 };
 
-async function findConfigPath(path: string): Promise<string> {
+async function findConfigPath(path: string): Promise<string | undefined> {
   const { dir, name } = parse(path);
 
   const files = await readdir(dir);

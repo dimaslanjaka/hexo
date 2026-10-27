@@ -1,4 +1,4 @@
-import tildify from 'tildify';
+import { tildify } from 'hexo-util';
 import * as picocolors from 'picocolors';
 import type Hexo from '../../hexo';
 import type Promise from 'bluebird';

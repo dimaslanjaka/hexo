@@ -1,5 +1,5 @@
 import { resolve } from 'path';
-import tildify from 'tildify';
+import { tildify } from 'hexo-util';
 import prettyHrtime from 'pretty-hrtime';
 import { writeFile } from 'hexo-fs';
 import * as picocolors from 'picocolors';

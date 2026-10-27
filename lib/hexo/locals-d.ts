@@ -1,5 +1,5 @@
 import type { Config } from './index-d';
-export type HexoLocalsFunc = import('../hexo/index')['_generateLocals'];
+export type HexoLocalsFunc = typeof import('../hexo/index').Hexo.prototype['_generateLocals'];
 export type HexoLocalsData = {
   [key: string]: any;
   page: {
