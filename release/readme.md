@@ -2,7 +2,7 @@
 ## Releases
 | version | tarball url |
 | :--- | :--- |
-| latest | https://github.com/dimaslanjaka/hexo/raw/a8617849/release/hexo.tgz |
+| latest | https://github.com/dimaslanjaka/hexo/raw/2144cc62/release/hexo.tgz |
 | latest | https://github.com/dimaslanjaka/hexo/raw/v8/release/hexo.tgz |
 
 use this tarball with `resolutions`:
