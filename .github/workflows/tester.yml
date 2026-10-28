@@ -38,7 +38,7 @@ jobs:
       - name: Build
         run: yarn build
       - name: Test
-        run: yarn test -- --no-parallel
+        run: yarn test-all -- --no-parallel
         env:
           CI: true
   coverage:
